@@ -1,0 +1,4 @@
+# Keep checksum inputs identical on every host. Unified-diff context lines
+# intentionally contain a leading space even when the original line is empty.
+* text eol=lf
+*.patch -whitespace

@@ -1,0 +1,34 @@
+-2b7495b8535bdcb306dac29b9ded4cfb679d7e5c lib/CMSIS_5
+-45dab712ad84f8cbbf2b7bfc089c19088507df6f lib/CMSIS_6
+-63698efe8567eed115fe620d5e5de75f460310d7 lib/alif-security-toolkit
+-450314044646ad4b56c588b52b68eb6fe7d7caa7 lib/alif_ensemble-cmsis-dfp
+-8312406d6cd1a19683500f153b33fba7a8414127 lib/arduino-lib
+-84f56af13292d8f32c40acbd949bde698ddd4507 lib/asf4
+-531cab9c278c947d268bd4c94ecab9153a961b43 lib/axtls
+-0f3bb6947c2f57233916dccd7bb425d7bf86e5a6 lib/berkeley-db-1.xx
+ 77e752abd6a0992334047a48038a5a3960e5c6bc lib/btstack (v1.4-2373-g77e752abd)
+ 055d64274b014dd7b1c2fc94d26e8a18face7124 lib/cyw43-driver (v1.1.1)
+-e78939d32d1ccea9f0ba8bb42c51aceffd386b9b lib/fsp
+-3d0ce1e6fcf19f853894862abcbac0ae78a7be60 lib/libffi
+-173f728ee2c627f80fd0322473e16467f259558d lib/libhydrogen
+-0cb7d293a7f25394a06847a28d0f0ace9862936e lib/libmetal
+ 77dcd25a72509eb83f72b033d219b1d40cd8eb95 lib/lwip (STABLE-2_2_1_RELEASE)
+ 0bebf8b8c7f07abe3571ded48a11aa907a1ffb20 lib/mbedtls (v3.6.6)
+ ee4bb8ff139e24c42b739935fbd8ec7c4d061e02 lib/micropython-lib (v0.1-1452-gee4bb8f)
+-42849560ba7906f023f61e5f7ff3709ba2c1dfca lib/mynewt-nimble
+-11f57e578c7feea13f21c79ea0efab2630ac68c7 lib/nrfx
+-a298e8a3cad2df737de020bbeac4ee2147d189ca lib/nxp_driver
+-1904dee18da85400e72b8f55c5c99e872a486573 lib/open-amp
+ 98a542c1a62fb549ffb5d66a3e5892b06276b670 lib/pico-sdk (2.3.0)
+-abc67a11c6db271bedbb9f58be85d6f4e2ea8389 lib/protobuf-c
+-41147b656e87c9c195f243c39d8f5575909982c8 lib/psoc-edge/TARGET_KIT_PSE84_AI
+-d4d7f347f8b5e3a7c8feb6089fa2ba3b9aba822c lib/psoc-edge/async-transfer
+-b2a7ce7e3a96265358cc3512c883befa24d0da06 lib/psoc-edge/core-lib
+-15d032bd4cd1090a10f544a881ae7d0aa4869caf lib/psoc-edge/mtb-dsl-pse8xxgp
+-760f4772bd4b37abe08062d7229de91e9a23a54f lib/psoc-edge/mtb-ipc
+-3c43b49a7e001836d63b60daa19d2616396e014a lib/psoc-edge/mtb-srf
+-5da80102ec10b8a3e1676aed02073f7f9dcae3f5 lib/psoc-edge/se-rt-services-utils
+-ae90b884dd16959230c33e5368d18a09bee0df72 lib/psoc-edge/serial-memory
+-07619754261b571fb2f7c9f36ab94c203880d9fb lib/stm32lib
+ b549ac1d84cbbe550c9590951e2290098b3fb16c lib/tinyusb (0.21.0-micropython1)
+-0803fc519ad7227e841287fb3638d6c8b2f111a1 lib/wiznet5k

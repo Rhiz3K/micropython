@@ -1,0 +1,814 @@
+diff --git a/tests/ports/rp2/deepsleep/README.md b/tests/ports/rp2/deepsleep/README.md
+new file mode 100644
+index 000000000..84231e8ef
+--- /dev/null
++++ b/tests/ports/rp2/deepsleep/README.md
+@@ -0,0 +1,218 @@
++# RP2350 timed deepsleep hardware checks (opt-in)
++
++These scripts are **prepared hardware tests, not evidence that tests passed**.
++They are outside the normal test runner because they replace a board's `main.py`,
++reset it repeatedly, change its RTC and overwrite all user backup registers.
++They do not flash firmware, measure current or prove a power-domain transition.
++Record actual results against exact firmware and SDK revisions separately.
++
++`device.py` runs independently on each boot. It stores cycle progress in the
++eight POWMAN scratch words (`machine.mem_backup(2)`), never in flash. A sentinel
++file and the program/configuration are written only at installation. The device
++temporarily owns these eight words as application test data; the firmware must
++not reserve or overwrite any of them for wake markers or diagnostics.
++The device repeats a JSON boot result until the host acknowledges it; USB re-enumeration
++therefore cannot silently lose a successful cycle. The host never soft-resets a
++running test. A test failure repeats its JSON result until Ctrl-C returns to REPL,
++so failures before USB enumeration are also observable.
++
++The suite requires the RP2350 `machine.mem_backup` regions and tests their
++advertised layout. It observes, but does not require, retention of watchdog
++scratch regions 0 and 1: a SWCORE power-down may lose those regions. The suite
++requires POWMAN retention. On an unmodified baseline use `expect_deep_cause:
++false`; on a patch use `true` to require `machine.DEEPSLEEP_RESET` for each timed
++wake. After the requested cycles, an ordinary `machine.reset()` must clear this
++cause. A fresh `main.py` invocation, successful USB exchange, file sentinel,
++RTC observation and optional Wi-Fi transaction are checked after each wake.
++Boot records also include read-only raw `POWMAN_CHIP_RESET` and
++`POWMAN_LAST_SWCORE_PWRUP` values, using offsets from the pinned SDK's RP2350
++register headers. Firmware startup may already have cleared reset flags; these
++values must be interpreted with that firmware's reset-cause handling. They do
++not independently prove the state of every power domain or its current draw.
++
++## Identify, authorize and back up first
++
++Do not infer permission from finding a connected serial port. Record the board
++model, RP2350 stepping if available, ARM/RISC-V build, device unique ID, USB
++serial number, firmware SHA-256 and revision, and the owner's permission.
++Back up the current firmware and complete filesystem **before installing or
++flashing anything**. Validate backup readability and checksums. Save any useful
++backup-register data separately: these tests intentionally overwrite it.
++
++BOOTSEL recovery must be available: hold BOOTSEL while connecting USB (or use
++an appropriate documented reset procedure), identify that board's boot volume,
++then copy a known-good firmware UF2 for that board. A UF2 firmware image alone
++is not a filesystem backup. A separate filesystem restore may be needed.
++Stop other serial clients and disconnect the debugger for power tests.
++
++Example manifest (all values must describe the actual identified board):
++
++```json
++{
++  "authorized": true,
++  "bootsel_recovery_confirmed": true,
++  "usb_serial": "REPLACE",
++  "unique_id": "REPLACE_WITH_machine.unique_id_HEX",
++  "machine_contains": "Raspberry Pi Pico 2 W with RP2350",
++  "firmware_backup": {"path": "original-firmware.bin", "sha256": "REPLACE"},
++  "filesystem_backup": {"path": "original-filesystem.tar", "sha256": "REPLACE"}
++}
++```
++
++Paths are relative to the manifest. The host verifies hashes, matches the USB
++serial before opening a port, then checks the unique ID and board description
++before installation. A matching serial is used on every reconnect, followed by
++the unique ID reported by the freshly booted program. This does not establish
++that a backup represents the board; that provenance is the operator's duty.
++`list` only enumerates USB metadata; it does not open a serial port.
++
++## Install once, then observe
++
++Use a private directory for the manifest, backups, credentials and logs. Install
++CPython `pyserial`; the installer uses this repository's `tools/pyboard.py`.
++
++```sh
++python3 -m venv /tmp/rp2350-hwtest
++/tmp/rp2350-hwtest/bin/pip install pyserial
++T=tests/ports/rp2/deepsleep
++/tmp/rp2350-hwtest/bin/python "$T/host.py" list
++```
++
++Example `config.json`:
++
++```json
++{
++  "run": "pico2w-arm-patch-100",
++  "cycles": 100,
++  "sleep_ms": 2500,
++  "expect_deep_cause": true
++}
++```
++
++```sh
++/tmp/rp2350-hwtest/bin/python "$T/host.py" install \
++  --manifest private/manifest.json --config private/config.json --allow-write
++/tmp/rp2350-hwtest/bin/python "$T/host.py" run \
++  --manifest private/manifest.json --allow-run --log private/100-cycles.jsonl
++```
++
++An existing `main.py` is refused unless `--replace-main` is also given; its exact
++contents are saved next to the manifest. This supplements the full backup.
++An existing `boot.py` still executes and may interfere with the test: inspect it
++and arrange a suitable test filesystem rather than silently modifying it.
++Install validates arguments before writing. Zero and 1 ms are accepted only
++with `expect_deep_cause: false`, since they request ordinary immediate resets.
++The first sleep sets RTC to 2026-09-25
++23:59:58 so the series crosses both a minute and midnight. Inspect the logged
++before/after RTC times; host-controlled waiting also advances RTC. Coarse
++whole-second RTC checks do not measure oscillator accuracy. For long sleeps
++set `rtc_tolerance_s` explicitly and report the host/RTC difference, rather
++than assuming LPOSC has crystal accuracy.
++
++The log is created exclusively, with no overwriting of an earlier run. A timeout
++or missing final `PASS` is incomplete/failed, never a successful test. The
++timeout is per boot; set it longer than the requested sleep plus boot and network
++setup. A PASS means only the implemented checks passed; it is not a current or
++power-domain measurement. The final normal reset leaves the suite stopped.
++
++## Scenarios and initially unexecuted results
++
++Each independent run requires a distinct run name/configuration/log and a new
++installation to reset its scratch state. Installation writes are per run, not
++per cycle. Preserve the complete logs and firmware hashes.
++
++| Scenario | Configuration / command | Initial result |
++| --- | --- | --- |
++| 100 short resets, RTC, file, POWMAN, USB, reset cause | Default above | NOT RUN |
++| Watchdog scratch retention | Reported independently in each wake record | NOT RUN |
++| Active CPU1 and caller on CPU1 | Add `"thread": true`; expects `OSError(EBUSY)` then successful deep sleep after CPU1 exits | NOT RUN |
++| Active watchdog | `"watchdog": true, "cycles": 1`; rejection must leave watchdog running and reboot with `WDT_RESET` | NOT RUN |
++| Active DMA | Add `"dma": true`; a fixed-address RAM copy must be stopped by deep-sleep teardown | NOT RUN |
++| Lightsleep immediately before deep sleep | Add `"lightsleep_before": true`; calls `lightsleep(20)` before every deep sleep | NOT RUN |
++| Wi-Fi, DHCP, DNS, HTTP, repeated reconnect | Add Wi-Fi configuration below | NOT RUN |
++| 30 minutes | `"cycles": 1, "sleep_ms": 1800000`, `--timeout 1920` | NOT RUN |
++| Beyond 72 minutes (75 minutes) | `"cycles": 1, "sleep_ms": 4500000`, `--timeout 4620` | NOT RUN |
++| Negative/overflow arguments, hard IRQ rejection, lightsleep clock/time | Explicitly run `regressions.py` on a stopped suite | NOT RUN |
++| Zero and 1 ms | Separate suite runs with `"sleep_ms": 0` / `1`, `"cycles": 1`, `"expect_deep_cause": false` | NOT RUN |
++| No argument | Run separately with manual recovery; no timed wake is promised | NOT RUN |
++| Existing lightsleep tests | Run repository `rp2_lightsleep*.py`, `rp2_machine_idle.py`, `machine_rtc_sleep.py` against both builds | NOT RUN |
++| Measured sleep current and complete cycle energy | External instrumentation; see below | NOT RUN |
++
++The CPU1/watchdog cases deliberately expect rejection in this initial patch.
++They are not evidence of automatic shutdown of an active second Python thread
++or continued watchdog protection during a deep sleep. A fresh boot caused by
++an unexpectedly accepted CPU1 call is a failure, not a completed cycle.
++The scripts compare `OSError` to errno 16 when `errno.EBUSY` is not exported by
++the RP2 Python module; 16 is `MP_EBUSY` in `py/mperrno.h`.
++
++Wi-Fi configuration uses an operator-approved, controlled HTTP endpoint that
++returns `200`, to make DHCP/DNS/HTTP repeatable. Do not use a public site as a
++load target. The network remains active when `deepsleep` is called.
++Optional `dns_host` selects a separate DNS lookup name (default: `host`), so
++HTTP can target a controlled local server by IP while still testing DNS.
++The log records DNS and HTTP addresses separately, without Wi-Fi credentials.
++`connect_timeout_ms` optionally changes the 30-second connection/DHCP timeout
++(maximum ten minutes). A timeout reports `wlan.status()`; a successful connection
++reports elapsed milliseconds, status and RSSI when supported. The test does not
++retry a failed connection automatically.
++
++```json
++"wifi": {
++  "ssid": "TEST_AP",
++  "password": "PRIVATE",
++  "host": "test-server.example",
++  "dns_host": "test-server.example",
++  "port": 80,
++  "path": "/health"
++}
++```
++
++Run `regressions.py` explicitly using `mpremote ... run`, then recheck the
++device identity after any reset. It checks `ValueError` for `-1` and
++`-2147483647`, integer conversion `OverflowError` at/below `-2147483648` and
++at/above `2147483648`, and
++`OSError(EBUSY)` from an actual hard Timer callback. Zero/1 ms use their own
++reset-spanning suite configurations above. Test `machine.deepsleep()` last: it uses the
++legacy non-timed path and needs an externally arranged wake or recovery.
++The no-argument case is manual because it can hang until an external event.
++`1 << 100` must fail integer conversion; the tool does not
++start a multi-day sleep merely to test the maximum accepted duration.
++The MPZ integer converter accepts magnitudes up to `2147483647`, so even the
++signed 32-bit minimum fails conversion before duration validation. A strict
++`expect_deep_cause: true` test can fail for a very short positive delay whose
++deadline expires during teardown; that ordinary-reset outcome must be recorded
++as such, not presented as a successful power-down.
++
++## Comparison and power measurements
++
++Use the same board, supply, Wi-Fi state, peripherals, flash contents, USB and
++debugger arrangement for all measurements. Test Pico 2 separately from Pico 2 W;
++do not infer chip current from a whole-board reading.
++
++* A: `"mode": "sleep_reset", "expect_deep_cause": false` calls `time.sleep_ms`
++  then resets to provide a comparable complete cycle.
++* B: `"mode": "lightsleep_reset", "expect_deep_cause": false` calls lightsleep
++  then reset; also run baseline firmware's `"mode": "deepsleep"` with the same
++  expectation to record its actual existing behavior.
++* C: `"mode": "deepsleep", "expect_deep_cause": true` runs the new implementation.
++
++Record supply voltage, supply entry point, current measurement point, instrument
++and resolution/bandwidth, Wi-Fi state, attached peripherals, USB and debugger.
++Record sleep current separately from the integral of voltage times current over
++one complete cycle, including startup, DHCP/DNS/HTTP and awake waiting. The USB
++host handshake introduces variable awake time; define and record equal cycle
++boundaries/dwell times for a fair energy comparison. Do not treat these scripts
++as an energy analyzer. Measure with USB disconnected as well where possible;
++reconnect it to retrieve the repeated boot result after a single long sleep.
++The script waits for the next GO, so it does not silently run unobserved cycles.
++
++Correlate wake cause and the implementation's POWMAN state-transition evidence
++with measurement. Neither lower current nor a successful WFI alone proves
++that SWCORE/XIP/SRAM domains powered off. Repeat with debugger physically
++disconnected: debug power requests can inhibit the intended state. Pin-level
++logic/probe changes require a separate wiring review for the actual board.
++
++After testing, restore the saved entry point/configuration and any backup data,
++or restore the complete filesystem and original firmware. Do not indiscriminately
++delete files matching a prefix. Retain the test log, tool versions, board identity,
++backup hashes, firmware hashes, any scope traces and a PASS/FAIL/NOT RUN table.
+diff --git a/tests/ports/rp2/deepsleep/device.py b/tests/ports/rp2/deepsleep/device.py
+new file mode 100644
+index 000000000..c874d9df0
+--- /dev/null
++++ b/tests/ports/rp2/deepsleep/device.py
+@@ -0,0 +1,288 @@
++# Install as main.py on an identified, backed-up test board. See README.md.
++# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
++import binascii
++import errno
++import json
++import machine
++import os
++import select
++import sys
++import time
++
++MAGIC = 0x44535032
++SENTINEL = b"RP2350 deepsleep filesystem sentinel\n"
++PREFIX = "DEEPSLEEP_TEST "
++# RP2 may omit EBUSY from the Python errno module; py/mperrno.h defines it as 16.
++EBUSY = getattr(errno, "EBUSY", 16)
++last_record = {}
++
++
++def rtc_seconds():
++    r = machine.RTC().datetime()
++    return time.mktime((r[0], r[1], r[2], r[4], r[5], r[6], 0, 0))
++
++
++def check(condition, description):
++    if not condition:
++        raise AssertionError(description)
++
++
++def backup_pattern(region, index):
++    return 0x23450000 + region * 256 + index
++
++
++def emit(record):
++    print(PREFIX + json.dumps(record))
++
++
++def wait_for_host(record):
++    # No reset/soft-reset by the host: each boot runs main.py independently.
++    # Repeat until acknowledged so USB enumeration cannot lose the boot result.
++    poll = select.poll()
++    poll.register(sys.stdin, select.POLLIN)
++    line = ""
++    next_emit = time.ticks_ms()
++    while True:
++        if time.ticks_diff(time.ticks_ms(), next_emit) >= 0:
++            emit(record)
++            next_emit = time.ticks_add(time.ticks_ms(), 1000)
++        for _, events in poll.poll(100):
++            # HUP/error is not input. Read one available ASCII character so a
++            # disconnect or partial host command cannot block the next report.
++            if events & select.POLLIN:
++                char = sys.stdin.read(1)
++                if char == "\n":
++                    if line.strip() == "GO " + record["run"]:
++                        return
++                    line = ""
++                elif char != "\r":
++                    line = (line + char)[-128:]
++
++
++def wifi_test(config):
++    import network
++    import socket
++
++    wlan = network.WLAN(network.STA_IF)
++    wlan.active(True)
++    timeout = config.get("connect_timeout_ms", 30000)
++    check(0 < timeout <= 600000, "Wi-Fi timeout must be in 1..600000 ms")
++    started = time.ticks_ms()
++    wlan.connect(config["ssid"], config["password"])
++    deadline = time.ticks_add(started, timeout)
++    while not wlan.isconnected():
++        if time.ticks_diff(deadline, time.ticks_ms()) <= 0:
++            raise AssertionError(
++                "Wi-Fi/DHCP timeout after {} ms, status {}".format(timeout, wlan.status())
++            )
++        time.sleep_ms(100)
++    connected_ms = time.ticks_diff(time.ticks_ms(), started)
++    host = config["host"]
++    address = socket.getaddrinfo(host, config.get("port", 80))[0][-1]
++    dns_host = config.get("dns_host", host)
++    dns_address = address if dns_host == host else socket.getaddrinfo(dns_host, 80)[0][-1]
++    sock = socket.socket()
++    try:
++        sock.settimeout(10)
++        sock.connect(address)
++        request = "GET {} HTTP/1.0\r\nHost: {}\r\n\r\n".format(config.get("path", "/"), host)
++        sock.write(request.encode())
++        status = sock.readline()
++        check(status.startswith(b"HTTP/") and b" 200 " in status, "HTTP status")
++    finally:
++        sock.close()
++    # Leave WLAN active to test shutdown of CYW43, lwIP and their background work.
++    result = {
++        "address": wlan.ifconfig()[0],
++        "connect_elapsed_ms": connected_ms,
++        "status": wlan.status(),
++        "dns_host": dns_host,
++        "dns_address": str(dns_address),
++        "http_address": str(address),
++        "http": 200,
++    }
++    try:
++        result["rssi"] = wlan.status("rssi")
++    except (OSError, ValueError, TypeError):
++        pass
++    return result
++
++
++def expect_busy():
++    try:
++        machine.deepsleep(2000)
++    except OSError as exc:
++        check(exc.args[0] == EBUSY, "expected EBUSY, got " + repr(exc))
++    else:
++        raise AssertionError("deepsleep accepted an unsafe caller")
++
++
++def thread_test():
++    import _thread
++
++    shared = [False, False, None]
++
++    def worker():
++        try:
++            expect_busy()  # Must also reject deepsleep called from CPU1.
++        except Exception as exc:
++            shared[2] = repr(exc)
++        shared[0] = True
++        while not shared[1]:
++            time.sleep_ms(1)
++
++    _thread.start_new_thread(worker, ())
++    try:
++        deadline = time.ticks_add(time.ticks_ms(), 5000)
++        while not shared[0]:
++            check(time.ticks_diff(deadline, time.ticks_ms()) > 0, "CPU1 did not respond")
++            time.sleep_ms(1)
++        check(shared[2] is None, "CPU1 rejection: " + str(shared[2]))
++        expect_busy()  # CPU0 while CPU1 is still active.
++    finally:
++        shared[1] = True
++        # Let the thread return through runtime cleanup even if a check failed.
++        time.sleep_ms(100)
++
++
++def sleep_with_dma(config):
++    import rp2
++
++    # A long fixed-address RAM copy stays active until deepsleep aborts it.
++    # No peripheral pins, flash addresses, ring alignment or DMA IRQs are used.
++    source = bytearray(b"test")
++    destination = bytearray(4)
++    dma = rp2.DMA()
++    try:
++        ctrl = dma.pack_ctrl(size=2, inc_read=False, inc_write=False)
++        dma.config(read=source, write=destination, count=0x0FFFFFFF, ctrl=ctrl, trigger=True)
++        check(dma.active(), "DMA not active before deepsleep")
++        machine.deepsleep(config["sleep_ms"])
++    finally:
++        # Keep buffers referenced until DMA is stopped if the sleep call fails.
++        dma.close()
++
++
++def run():
++    global last_record
++    with open("deepsleep-config.json") as f:
++        config = json.load(f)
++    regions = machine.mem_backup(-1)
++    check(len(regions) == 3 and len(regions[2]) == 8, "requires RP2350 backup regions")
++    state = regions[2]
++    # State: magic, completed, RTC before sleep, phase, reserved, boots,
++    # reserved, sentinel. Only POWMAN scratch is persistent in the deep state.
++    if state[0] != MAGIC:
++        for i in range(len(state)):
++            state[i] = 0
++        state[0] = MAGIC
++        state[7] = 0x13579BDF
++    state[5] += 1
++    record = {
++        "run": config["run"],
++        "uid": binascii.hexlify(machine.unique_id()).decode(),
++        "boot": state[5],
++        "completed": state[1],
++        "cause": machine.reset_cause(),
++        "rtc": machine.RTC().datetime(),
++        # Read-only evidence from pico-sdk RP2350 hardware/regs/{addressmap,powman}.h.
++        # Startup may already have consumed/cleared CHIP_RESET status flags.
++        "powman_chip_reset": machine.mem32[0x40100000 + 0x2C],
++        "powman_last_swcore_pwrup": machine.mem32[0x40100000 + 0xA0],
++        "status": "READY",
++    }
++    last_record = record
++    check(state[7] == 0x13579BDF, "POWMAN scratch sentinel")
++    check(state[4] == 0 and state[6] == 0, "POWMAN scratch unused test words changed")
++    with open("deepsleep-sentinel.bin", "rb") as f:
++        check(f.read() == SENTINEL, "filesystem sentinel changed")
++    phase = state[3]
++    record["phase"] = phase
++    check(phase != 6, "deepsleep accepted an active CPU1")
++    if phase in (1, 4, 5):
++        expected = machine.WDT_RESET if phase == 4 else getattr(machine, "DEEPSLEEP_RESET", -1)
++        if phase == 5 or (phase == 1 and not config.get("expect_deep_cause", True)):
++            check(record["cause"] != expected, "stale DEEPSLEEP_RESET after machine.reset")
++        else:
++            check(record["cause"] == expected, "unexpected reset cause")
++        record["watchdog_scratch_retained"] = [
++            all(value == backup_pattern(r, i) for i, value in enumerate(regions[r]))
++            for r in (0, 1)
++        ]
++        if phase == 1:
++            elapsed = rtc_seconds() - state[2]
++            target = config["sleep_ms"] / 1000
++            tolerance = config.get("rtc_tolerance_s", 3)
++            lower = max(1 if target >= 1 else 0, target - tolerance)
++            record["rtc_before_epoch_s"] = state[2]
++            record["rtc_elapsed_s"] = elapsed
++            record["crossed_minute"] = state[2] // 60 != rtc_seconds() // 60
++            record["crossed_day"] = state[2] // 86400 != rtc_seconds() // 86400
++            check(lower <= elapsed <= target + tolerance + 10, "RTC duration")
++            state[1] += 1
++            record["completed"] = state[1]
++        if phase in (4, 5):
++            record["status"] = "PASS"
++            state[3] = 2
++            wait_for_host(record)
++            return
++    elif phase == 2:
++        record["status"] = "STOPPED"
++        emit(record)
++        return
++    if config.get("wifi"):
++        record["wifi"] = wifi_test(config["wifi"])
++    wait_for_host(record)
++    if state[1] >= config.get("cycles", 100):
++        state[3] = 5
++        machine.reset()  # Verify lifetime of the deep-wake indication.
++    if config.get("thread"):
++        state[3] = 6
++        thread_test()
++    if config.get("watchdog"):
++        state[3] = 4
++        machine.WDT(timeout=2000)
++        expect_busy()
++        # A rejected call must leave the watchdog running. Expect WDT_RESET.
++        while True:
++            pass
++    for r in (0, 1):
++        for i in range(len(regions[r])):
++            regions[r][i] = backup_pattern(r, i)
++    os.sync()
++    if config.get("lightsleep_before"):
++        machine.lightsleep(20)
++    if state[1] == 0:
++        # Set just before sleeping, after USB/Wi-Fi preparation, to ensure the
++        # default first sleep crosses midnight rather than host waiting doing so.
++        machine.RTC().datetime((2026, 9, 25, 4, 23, 59, 58, 0))
++    state[2] = rtc_seconds()
++    state[3] = 1
++    emit({"run": config["run"], "status": "SLEEP", "completed": state[1]})
++    mode = config.get("mode", "deepsleep")
++    if mode == "sleep_reset":
++        time.sleep_ms(config["sleep_ms"])
++        machine.reset()
++    elif mode == "lightsleep_reset":
++        machine.lightsleep(config["sleep_ms"])
++        machine.reset()
++    else:
++        check(mode == "deepsleep", "unknown comparison mode")
++        if config.get("dma"):
++            sleep_with_dma(config)
++        else:
++            machine.deepsleep(config["sleep_ms"])
++    raise AssertionError("deepsleep returned")
++
++
++try:
++    run()
++except Exception as exc:
++    # Stop on failure, leave raw/friendly REPL recoverable, never write a log to flash.
++    last_record.update({"status": "FAIL", "error": repr(exc)})
++    sys.print_exception(exc)
++    # A failure during boot can precede USB enumeration. Repeat it until an
++    # operator interrupts with Ctrl-C; KeyboardInterrupt remains uncaught.
++    while True:
++        emit(last_record)
++        time.sleep_ms(1000)
+diff --git a/tests/ports/rp2/deepsleep/host.py b/tests/ports/rp2/deepsleep/host.py
+new file mode 100644
+index 000000000..f46a6a7a4
+--- /dev/null
++++ b/tests/ports/rp2/deepsleep/host.py
+@@ -0,0 +1,210 @@
++#!/usr/bin/env python3
++# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
++"""Install/observe the opt-in RP2350 reset-spanning test. Never flashes firmware."""
++
++import argparse
++import hashlib
++import json
++from pathlib import Path
++import sys
++import time
++
++HERE = Path(__file__).resolve().parent
++PREFIX = b"DEEPSLEEP_TEST "
++
++
++def ports():
++    from serial.tools import list_ports
++
++    return list(list_ports.comports())
++
++
++def load_manifest(path):
++    data = json.loads(path.read_text())
++    if not data.get("authorized") or not data.get("bootsel_recovery_confirmed"):
++        raise ValueError("manifest must attest authorization and BOOTSEL recovery")
++    for key in ("usb_serial", "unique_id", "machine_contains"):
++        if not data.get(key):
++            raise ValueError("missing identity field: " + key)
++    for key in ("firmware_backup", "filesystem_backup"):
++        backup = data[key]
++        source = (path.parent / backup["path"]).resolve()
++        digest = hashlib.sha256(source.read_bytes()).hexdigest()
++        if digest != backup["sha256"]:
++            raise ValueError("backup checksum mismatch: " + str(source))
++    return data
++
++
++def port_for(manifest):
++    found = [p for p in ports() if p.serial_number == manifest["usb_serial"]]
++    if len(found) > 1:
++        raise ValueError("USB serial is not unique")
++    return found[0].device if found else None
++
++
++def install(args, manifest):
++    if not args.allow_write:
++        raise ValueError("installation requires --allow-write")
++    config = json.loads(args.config.read_text())
++    if not isinstance(config["sleep_ms"], int) or not 0 <= config["sleep_ms"] <= 2147483647:
++        raise ValueError("suite needs sleep_ms in 0..2147483647")
++    if config["sleep_ms"] <= 1 and config.get("expect_deep_cause", True):
++        raise ValueError("zero/1ms only request ordinary resets: set expect_deep_cause=false")
++    if not config.get("run") or config.get("cycles", 100) < 1:
++        raise ValueError("config requires a run name and positive cycle count")
++    sys.path.insert(0, str(HERE.parents[3] / "tools"))
++    from pyboard import Pyboard
++
++    port = port_for(manifest)
++    if port is None:
++        raise ValueError("authorized device is not connected")
++    board = Pyboard(port)
++    try:
++        board.enter_raw_repl(soft_reset=False)
++        identity = json.loads(
++            board.exec_(
++                "import machine, binascii, json, sys, os; "
++                "print(json.dumps({'uid':binascii.hexlify(machine.unique_id()).decode(),"
++                "'machine':sys.implementation._machine}))"
++            )
++        )
++        if identity["uid"].lower() != manifest["unique_id"].lower():
++            raise ValueError("machine.unique_id mismatch")
++        if manifest["machine_contains"] not in identity["machine"]:
++            raise ValueError("board/architecture description mismatch: " + identity["machine"])
++        existing = json.loads(board.exec_("print(json.dumps(os.listdir()))"))
++        if "main.py" in existing and not args.replace_main:
++            raise ValueError("main.py exists; backed-up replacement requires --replace-main")
++        if any(name.startswith("deepsleep-") for name in existing) and not args.replace_main:
++            raise ValueError("test files exist; use a new backup and --replace-main")
++        # The manifest attests a full backup; also retain the exact overwritten entry point.
++        if "main.py" in existing:
++            destination = args.manifest.parent / (config["run"] + "-main-before-install.py")
++            if destination.exists():
++                raise ValueError("refusing to overwrite " + str(destination))
++            board.fs_get("main.py", str(destination))
++        board.fs_put(str(HERE / "device.py"), "main.py")
++        board.exec_(
++            "with open('deepsleep-config.json','w') as f: f.write(%r)\n"
++            "with open('deepsleep-sentinel.bin','wb') as f: f.write(%r)\n"
++            "os.sync()\nmachine.mem_backup(2)[0] = 0\n"
++            % (json.dumps(config), b"RP2350 deepsleep filesystem sentinel\n")
++        )
++        board.exec_raw_no_follow("machine.reset()")
++    finally:
++        board.close()
++    print("Installed once. Start 'run'; per-cycle progress uses POWMAN scratch only.")
++
++
++def observe(args, manifest):
++    import serial
++
++    if not args.allow_run:
++        raise ValueError("sleep/reset execution requires --allow-run")
++    seen = set()
++    started = time.monotonic()
++    last_progress = started
++    connection = None
++    buffer = b""
++    with args.log.open("x", buffering=1) as log:
++        log.write(
++            json.dumps({"host_start": time.time(), "usb_serial": manifest["usb_serial"]}) + "\n"
++        )
++        try:
++            while time.monotonic() - last_progress < args.timeout:
++                try:
++                    if connection is None:
++                        port = port_for(manifest)
++                        if port is None:
++                            time.sleep(0.2)
++                            continue
++                        connection = serial.Serial(port, 115200, timeout=0.2, exclusive=True)
++                        buffer = b""
++                        # Establish host presence after DTR/enumeration. This
++                        # also terminates a partial line from an earlier client.
++                        connection.write(b"\nHELLO\n")
++                        connection.flush()
++                    buffer += connection.read(connection.in_waiting or 1)
++                    while b"\n" in buffer:
++                        line, buffer = buffer.split(b"\n", 1)
++                        index = line.find(PREFIX)
++                        if index < 0:
++                            continue
++                        record = json.loads(line[index + len(PREFIX) :])
++                        record["host_elapsed_s"] = time.monotonic() - started
++                        status = record.get("status")
++                        if status in ("FAIL", "STOPPED"):
++                            log.write(json.dumps(record) + "\n")
++                            raise RuntimeError(str(record))
++                        if status == "SLEEP":
++                            log.write(json.dumps(record) + "\n")
++                            continue
++                        if record.get("uid", "").lower() != manifest["unique_id"].lower():
++                            raise ValueError("reconnected target identity mismatch")
++                        key = (record["run"], record["boot"])
++                        if key not in seen:
++                            seen.add(key)
++                            last_progress = time.monotonic()
++                            log.write(json.dumps(record) + "\n")
++                            print(json.dumps(record), flush=True)
++                        connection.write(("GO " + record["run"] + "\n").encode())
++                        connection.flush()
++                        if status == "PASS":
++                            return
++                    if len(buffer) > 65536:
++                        raise RuntimeError("unbounded non-test serial output")
++                    if port_for(manifest) is None:
++                        connection.close()
++                        connection = None
++                except (OSError, serial.SerialException):
++                    if connection is not None:
++                        connection.close()
++                        connection = None
++                    time.sleep(0.2)
++            raise TimeoutError("No boot progress within timeout; log is incomplete, not PASS")
++        finally:
++            if connection is not None:
++                connection.close()
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    sub = parser.add_subparsers(dest="command", required=True)
++    sub.add_parser("list", help="enumerate USB metadata without opening devices")
++    for name in ("install", "run"):
++        command = sub.add_parser(name)
++        command.add_argument("--manifest", type=Path, required=True)
++        if name == "install":
++            command.add_argument("--config", type=Path, required=True)
++            command.add_argument("--allow-write", action="store_true")
++            command.add_argument("--replace-main", action="store_true")
++        else:
++            command.add_argument("--allow-run", action="store_true")
++            command.add_argument("--log", type=Path, required=True)
++            command.add_argument(
++                "--timeout", type=float, default=90, help="per-boot timeout, seconds"
++            )
++    args = parser.parse_args()
++    if args.command == "list":
++        for port in ports():
++            print(
++                json.dumps(
++                    {
++                        "port": port.device,
++                        "usb_serial": port.serial_number,
++                        "vid": port.vid,
++                        "pid": port.pid,
++                        "description": port.description,
++                    }
++                )
++            )
++        return
++    manifest = load_manifest(args.manifest.resolve())
++    if args.command == "install":
++        install(args, manifest)
++    else:
++        observe(args, manifest)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tests/ports/rp2/deepsleep/regressions.py b/tests/ports/rp2/deepsleep/regressions.py
+new file mode 100644
+index 000000000..67246f84c
+--- /dev/null
++++ b/tests/ports/rp2/deepsleep/regressions.py
+@@ -0,0 +1,74 @@
++# Run explicitly via mpremote, with the installed sleep suite stopped.
++# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
++import errno
++import machine
++import micropython
++import time
++
++# RP2 may omit EBUSY from the Python errno module; py/mperrno.h defines it as 16.
++EBUSY = getattr(errno, "EBUSY", 16)
++
++
++def expect_exception(value, types):
++    try:
++        machine.deepsleep(value)
++    except types:
++        print("PASS argument", value)
++    else:
++        raise AssertionError("argument accepted: " + str(value))
++
++
++expect_exception(-1, ValueError)
++expect_exception(-((1 << 31) - 1), ValueError)
++expect_exception(-(1 << 31), OverflowError)
++expect_exception(-(1 << 31) - 1, OverflowError)
++expect_exception(1 << 31, OverflowError)
++expect_exception(1 << 100, OverflowError)
++
++
++def test_hard_irq():
++    micropython.alloc_emergency_exception_buf(100)
++    result = [0]
++
++    def callback(_):
++        try:
++            machine.deepsleep(2000)
++        except OSError as exc:
++            result[0] = exc.args[0]
++        except Exception:
++            result[0] = -1
++        else:
++            result[0] = -2
++
++    timer = machine.Timer()
++    try:
++        timer.init(mode=machine.Timer.ONE_SHOT, period=10, callback=callback, hard=True)
++        deadline = time.ticks_add(time.ticks_ms(), 2000)
++        while result[0] == 0 and time.ticks_diff(deadline, time.ticks_ms()) > 0:
++            time.sleep_ms(1)
++        assert result[0] == EBUSY, result[0]
++        print("PASS hard IRQ rejected with EBUSY")
++    finally:
++        timer.deinit()
++
++
++test_hard_irq()
++
++original = machine.freq()
++try:
++    machine.freq(100_000_000)
++    rtc_before = time.time()
++    for duration in (0, 1, 250, 1500):
++        target = time.ticks_add(time.ticks_ms(), duration)
++        machine.lightsleep(duration)
++        # Interrupts may end lightsleep early; this is permitted by its API.
++        while True:
++            remaining = time.ticks_diff(target, time.ticks_ms())
++            if remaining <= 0:
++                break
++            machine.lightsleep(remaining)
++        assert machine.freq() == 100_000_000
++    assert time.time() >= rtc_before + 1
++    print("PASS lightsleep clock restoration and time progress")
++finally:
++    machine.freq(original)

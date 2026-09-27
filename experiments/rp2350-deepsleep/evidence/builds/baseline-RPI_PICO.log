@@ -1,0 +1,722 @@
+make: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2'
+Use make V=1 or set BUILD_VERBOSE in your environment to increase build verbosity.
+PICO_SDK_PATH is /tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk
+Target board (PICO_BOARD) is 'pico'.
+Using board configuration from /tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/boards/include/boards/pico.h
+Pico Platform (PICO_PLATFORM) is 'rp2040'.
+Detected GCC so defaulting PICO_COMPILER to `pico_arm_cortex_m0plus_gcc`
+Configuring toolchain based on PICO_COMPILER 'pico_arm_cortex_m0plus_gcc'
+Defaulting PICO_GCC_TRIPLE to 'arm-none-eabi'
+-- The C compiler identification is GNU 14.3.1
+-- The CXX compiler identification is GNU 14.3.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /tmp/rp2350-reproduce-20260925/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /tmp/rp2350-reproduce-20260925/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The ASM compiler identification is GNU
+-- Found assembler: /tmp/rp2350-reproduce-20260925/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc
+Build type is MinSizeRel
+-- Found Python3: /tmp/rp2350-reproduce-20260925/venv/bin/python3.12 (found version "3.12.3") found components: Interpreter
+-- Detected emulated TLS (__emutls_get_address)
+TinyUSB available at /tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/hw/bsp/rp2040; enabling build support for USB.
+BTstack available at /tmp/rp2350-reproduce-20260925/micropython/lib/btstack
+lwIP available at /tmp/rp2350-reproduce-20260925/micropython/lib/lwip
+C library type is newlib
+Found User C Module(s):
+Forcing fetch of picotool from git
+CMake Warning at /tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/tools/Findpicotool.cmake:30 (message):
+  No installed picotool with version 2.3.0 found - building from source
+
+  It is recommended to build and install picotool separately, or to set
+  PICOTOOL_FETCH_FROM_GIT_PATH to a common directory for all your SDK
+  projects
+Call Stack (most recent call first):
+  /tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/tools/CMakeLists.txt:180 (find_package)
+  /tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/tools/CMakeLists.txt:712 (pico_init_picotool)
+  /tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/cmake/on_device.cmake:81 (picotool_postprocess_binary)
+  CMakeLists.txt:710 (pico_add_extra_outputs)
+
+
+Downloading Picotool
+Using picotool from /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool/picotool
+-- Configuring done (3.4s)
+-- Generating done (0.2s)
+-- Build files have been written to: /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO
+make[1]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[2]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  0%] Building ASM object pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.o
+[  0%] Built target picotoolForceReconfigure
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  0%] Creating directories for 'picotoolBuild'
+[  0%] Linking ASM executable bs2_default.elf
+[  0%] No download step for 'picotoolBuild'
+[  0%] No update step for 'picotoolBuild'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  0%] Built target bs2_default
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  0%] No patch step for 'picotoolBuild'
+[  1%] Generating bs2_default.bin
+[  1%] Generating bs2_default_padded_checksummed.S
+[  2%] Performing configure step for 'picotoolBuild'
+The --no-warn-unused-cli option is deprecated.  Use -Wno-unused-cli instead.
+GEN /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/genhdr/mpversion.h
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  2%] Built target BUILD_VERSION_HEADER
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  2%] Building ASM object pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default_library.dir/bs2_default_padded_checksummed.S.o
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  3%] Generating genhdr/pins.h, pins_RPI_PICO.c
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  3%] Built target bs2_default_library
+-- The C compiler identification is GNU 13.3.0
+[  3%] Generating genhdr/qstr.i.last
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using the single-header code from /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-src/lib/nlohmann_json/single_include/
+lib/mbedtls submodule needs to be initialized for bintool hashing/signing
+mbedtls not found - no signing/hashing support will be built
+PICOTOOL_NO_LIBUSB is set - no USB support will be built
+-- Configuring done (0.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build
+[  3%] Performing build step for 'picotoolBuild'
+make[4]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[5]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 10%] Built target unreadable_rom_data
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- The ASM compiler identification is GNU
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+-- Found assembler: /usr/bin/cc
+-- Detecting C compiler ABI info
+[ 17%] Built target errors
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+Using precompiled enc_bootloader.elf
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build/enc_bootloader
+make[7]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build/enc_bootloader'
+make[7]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build/enc_bootloader'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 44%] Built target enc_bootloader
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 48%] Built target embedded_data_no_libusb
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 55%] Built target model
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[  3%] Generating genhdr/root_pointers.split
+[  3%] Generating genhdr/qstr.split
+[  4%] Generating genhdr/root_pointers.collected
+[  4%] Generating genhdr/qstrdefs.collected.h
+Root pointer registrations updated
+QSTR updated
+[  4%] Generating genhdr/root_pointers.h
+[  4%] Generating genhdr/qstrdefs.preprocessed.h
+[  4%] Generating genhdr/qstrdefs.generated.h
+MPY rp2.py
+MPY _boot.py
+MPY _boot_fat.py
+MPY asyncio/__init__.py
+MPY asyncio/core.py
+MPY asyncio/event.py
+MPY asyncio/funcs.py
+MPY asyncio/lock.py
+MPY asyncio/stream.py
+MPY uasyncio.py
+MPY onewire.py
+MPY ds18x20.py
+MPY dht.py
+MPY neopixel.py
+GEN /tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/frozen_content.c
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  4%] Built target BUILD_FROZEN_CONTENT
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 62%] Built target elf
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 68%] Built target elf2uf2
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 75%] Built target bintool
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[100%] Built target picotool
+make[5]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[4]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[  4%] Performing install step for 'picotoolBuild'
+make[4]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[5]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[7]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build/enc_bootloader'
+[ 10%] Built target unreadable_rom_data
+[ 17%] Built target errors
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[7]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build/enc_bootloader'
+[ 24%] Built target model
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 55%] Built target enc_bootloader
+[ 58%] Built target elf
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[ 62%] Built target embedded_data_no_libusb
+[ 75%] Built target bintool
+[ 75%] Built target elf2uf2
+make[6]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+make[6]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[100%] Built target picotool
+make[5]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+Install the project...
+-- Install configuration: "Release"
+make[4]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO/_deps/picotool-build'
+[  5%] Performing test step for 'picotoolBuild'
+picotool v2.3.0 (Linux, GNU-13.3.0, Release)
+
+This version of picotool was compiled without USB support. Some commands are not available.
+[  5%] Completed 'picotoolBuild'
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  5%] Built target picotoolBuild
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  5%] Generating genhdr/moduledefs.split
+[  5%] Generating genhdr/compressed.split
+[  5%] Generating genhdr/moduledefs.collected
+[  6%] Generating genhdr/compressed.collected
+Module registrations updated
+Compressed data updated
+[  6%] Generating genhdr/moduledefs.h
+[  6%] Generating genhdr/compressed.data.h
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[3]: Entering directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[  6%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmbase.c.o
+[  6%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/argcheck.c.o
+[  6%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmarm.c.o
+[  7%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmrv32.c.o
+[  7%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmthumb.c.o
+[  7%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmx64.c.o
+[  7%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmx86.c.o
+[  7%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/asmxtensa.c.o
+[  7%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/binary.c.o
+[  8%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/bc.c.o
+[  8%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/builtinevex.c.o
+[  8%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/builtinhelp.c.o
+[  8%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/builtinimport.c.o
+[  9%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/compile.c.o
+[  9%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/cstack.c.o
+[  9%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitbc.c.o
+[  9%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitcommon.c.o
+[  9%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitglue.c.o
+[ 10%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitinlinerv32.c.o
+[ 10%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitinlinethumb.c.o
+[ 10%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitinlinextensa.c.o
+[ 10%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnarm.c.o
+[ 10%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitndebug.c.o
+[ 11%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnrv32.c.o
+[ 11%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnthumb.c.o
+[ 11%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnx64.c.o
+[ 11%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnx86.c.o
+[ 11%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnxtensa.c.o
+[ 12%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/emitnxtensawin.c.o
+[ 12%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/formatfloat.c.o
+[ 12%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/frozenmod.c.o
+[ 12%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/gc.c.o
+[ 12%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/lexer.c.o
+[ 13%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/malloc.c.o
+[ 13%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/map.c.o
+[ 13%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modarray.c.o
+[ 13%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modbuiltins.c.o
+[ 13%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modcmath.c.o
+[ 14%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modcollections.c.o
+[ 14%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modgc.c.o
+[ 14%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modio.c.o
+[ 14%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modmath.c.o
+[ 14%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modmicropython.c.o
+[ 15%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modstring.c.o
+[ 15%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modstruct.c.o
+[ 15%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modsys.c.o
+[ 15%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modthread.c.o
+[ 15%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/moderrno.c.o
+[ 16%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/modweakref.c.o
+[ 16%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/mpprint.c.o
+[ 16%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/mpstate.c.o
+[ 16%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/mpz.c.o
+[ 16%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nativeglue.c.o
+[ 17%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlr.c.o
+[ 17%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlraarch64.c.o
+[ 17%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrloong64.c.o
+[ 17%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrmips.c.o
+[ 17%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrpowerpc.c.o
+[ 18%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrrv32.c.o
+[ 18%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrrv64.c.o
+[ 18%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrsetjmp.c.o
+[ 18%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrthumb.c.o
+[ 18%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrx64.c.o
+[ 19%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrx86.c.o
+[ 19%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/nlrxtensa.c.o
+[ 19%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/obj.c.o
+[ 19%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objarray.c.o
+[ 19%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objbool.c.o
+[ 20%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objattrtuple.c.o
+[ 20%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objboundmeth.c.o
+[ 20%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objcode.c.o
+[ 20%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objcell.c.o
+[ 21%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objclosure.c.o
+[ 21%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objcomplex.c.o
+[ 21%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objdeque.c.o
+[ 21%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objdict.c.o
+[ 21%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objenumerate.c.o
+[ 22%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objexcept.c.o
+[ 22%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objfilter.c.o
+[ 22%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objfloat.c.o
+[ 22%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objfun.c.o
+[ 23%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objgenerator.c.o
+[ 23%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objgetitemiter.c.o
+[ 23%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objint.c.o
+[ 23%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objint_longlong.c.o
+[ 23%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objint_mpz.c.o
+[ 23%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objlist.c.o
+[ 24%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objmap.c.o
+[ 24%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objmodule.c.o
+[ 24%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objnamedtuple.c.o
+[ 24%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objnone.c.o
+[ 24%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objobject.c.o
+[ 25%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objpolyiter.c.o
+[ 25%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objproperty.c.o
+[ 25%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objrange.c.o
+[ 25%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objreversed.c.o
+[ 25%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objringio.c.o
+[ 26%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objset.c.o
+[ 26%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objsingleton.c.o
+[ 26%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objslice.c.o
+[ 26%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objstr.c.o
+[ 26%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objstringio.c.o
+[ 27%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objstrunicode.c.o
+[ 27%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objtemplate.c.o
+[ 27%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objtuple.c.o
+[ 27%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objtype.c.o
+[ 27%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/objzip.c.o
+[ 28%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/opmethods.c.o
+[ 28%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/pairheap.c.o
+[ 28%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/parse.c.o
+[ 28%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/parsenum.c.o
+[ 28%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/parsenumbase.c.o
+[ 29%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/persistentcode.c.o
+[ 29%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/profile.c.o
+[ 29%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/pystack.c.o
+[ 29%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/qstr.c.o
+[ 29%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/reader.c.o
+[ 30%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/repl.c.o
+[ 30%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/ringbuf.c.o
+[ 30%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/runtime.c.o
+[ 30%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/runtime_utils.c.o
+[ 30%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/scheduler.c.o
+[ 31%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/scope.c.o
+[ 31%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/sequence.c.o
+[ 31%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/showbc.c.o
+[ 31%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/smallint.c.o
+[ 31%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/stackctrl.c.o
+[ 32%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/stream.c.o
+[ 32%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/unicode.c.o
+[ 32%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/vm.c.o
+[ 32%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/vstr.c.o
+[ 32%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/py/warning.c.o
+[ 33%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/libc/abort_.c.o
+[ 33%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/libc/printf.c.o
+[ 33%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/btstack/modbluetooth_btstack.c.o
+[ 33%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_adc.c.o
+[ 33%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_adc_block.c.o
+[ 34%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_bitstream.c.o
+[ 34%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_can.c.o
+[ 34%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_i2c.c.o
+[ 34%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_i2c_target.c.o
+[ 34%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_i2s.c.o
+[ 35%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_mem.c.o
+[ 35%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_pulse.c.o
+[ 35%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_pwm.c.o
+[ 35%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_signal.c.o
+[ 35%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_spi.c.o
+[ 36%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_uart.c.o
+[ 36%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_usb_device.c.o
+[ 36%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/machine_wdt.c.o
+[ 36%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modbluetooth.c.o
+[ 36%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modframebuf.c.o
+[ 37%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modlwip.c.o
+[ 37%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modmachine.c.o
+[ 37%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modmarshal.c.o
+[ 37%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modnetwork.c.o
+[ 37%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modonewire.c.o
+[ 38%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modasyncio.c.o
+[ 38%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modbinascii.c.o
+[ 38%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modcryptolib.c.o
+[ 38%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/moductypes.c.o
+[ 38%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/moddeflate.c.o
+[ 39%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modhashlib.c.o
+[ 39%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modheapq.c.o
+[ 39%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modjson.c.o
+[ 39%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modos.c.o
+[ 40%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modplatform.c.o
+[ 40%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modrandom.c.o
+[ 40%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modre.c.o
+[ 40%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modselect.c.o
+[ 40%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modsocket.c.o
+[ 41%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modtls_axtls.c.o
+[ 41%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modtls_mbedtls.c.o
+[ 41%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modtime.c.o
+[ 41%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modvfs.c.o
+[ 41%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modwebsocket.c.o
+[ 42%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/modwebrepl.c.o
+[ 42%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/network_cyw43.c.o
+[ 42%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/network_lwip.c.o
+[ 42%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/network_ninaw10.c.o
+[ 42%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/network_ppp_lwip.c.o
+[ 43%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/network_usbd_ncm.c.o
+[ 43%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/network_wiznet5k.c.o
+[ 43%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/os_dupterm.c.o
+[ 43%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs.c.o
+[ 43%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_blockdev.c.o
+[ 44%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_fat.c.o
+[ 44%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_fat_diskio.c.o
+[ 44%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_fat_file.c.o
+[ 44%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_lfs.c.o
+[ 44%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_rom.c.o
+[ 45%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_rom_file.c.o
+[ 45%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_posix.c.o
+[ 45%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_posix_file.c.o
+[ 45%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/vfs_reader.c.o
+[ 45%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/virtpin.c.o
+[ 46%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/nimble/modbluetooth_nimble.c.o
+[ 46%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/extmod/mbedtls/mbedtls_alt.c.o
+[ 46%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/littlefs/lfs1.c.o
+[ 46%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/littlefs/lfs1_util.c.o
+[ 46%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/littlefs/lfs2.c.o
+[ 47%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/littlefs/lfs2_util.c.o
+[ 47%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/oofatfs/ff.c.o
+[ 47%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/oofatfs/ffunicode.c.o
+[ 47%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/netutils/dhcpserver.c.o
+[ 47%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/netutils/netutils.c.o
+[ 48%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/netutils/trace.c.o
+[ 48%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/readline/readline.c.o
+[ 48%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/gchelper_native.c.o
+[ 48%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/interrupt_char.c.o
+[ 48%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/mpirq.c.o
+[ 50%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/pyexec.c.o
+[ 50%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/stdout_helpers.c.o
+[ 50%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/softtimer.c.o
+[ 50%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/sys_stdio_mphal.c.o
+[ 50%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/timeutils/timeutils.c.o
+[ 51%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/tinyusb/mp_usbd.c.o
+[ 51%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/tinyusb/mp_usbd_cdc.c.o
+[ 51%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/tinyusb/mp_usbd_descriptor.c.o
+[ 51%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/tinyusb/mp_usbd_runtime.c.o
+[ 51%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/shared/runtime/gchelper_thumb1.s.o
+[ 52%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/drivers/bus/softspi.c.o
+[ 52%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/drivers/dht/dht.c.o
+[ 52%] Building C object CMakeFiles/firmware.dir/clocks_extra.c.o
+[ 52%] Building C object CMakeFiles/firmware.dir/datetime_patch.c.o
+[ 52%] Building C object CMakeFiles/firmware.dir/fatfs_port.c.o
+[ 53%] Building C object CMakeFiles/firmware.dir/help.c.o
+[ 53%] Building C object CMakeFiles/firmware.dir/machine_bitstream.c.o
+[ 53%] Building C object CMakeFiles/firmware.dir/machine_i2c.c.o
+[ 53%] Building C object CMakeFiles/firmware.dir/machine_pin.c.o
+[ 53%] Building C object CMakeFiles/firmware.dir/machine_rtc.c.o
+[ 54%] Building C object CMakeFiles/firmware.dir/machine_spi.c.o
+[ 54%] Building C object CMakeFiles/firmware.dir/machine_timer.c.o
+[ 54%] Building C object CMakeFiles/firmware.dir/main.c.o
+[ 54%] Building C object CMakeFiles/firmware.dir/modrp2.c.o
+[ 54%] Building C object CMakeFiles/firmware.dir/mphalport.c.o
+[ 55%] Building C object CMakeFiles/firmware.dir/mpnetworkport.c.o
+[ 55%] Building C object CMakeFiles/firmware.dir/mpthreadport.c.o
+[ 55%] Building C object CMakeFiles/firmware.dir/mutex_extra.c.o
+[ 55%] Building C object CMakeFiles/firmware.dir/pendsv.c.o
+[ 55%] Building C object CMakeFiles/firmware.dir/rp2_flash.c.o
+[ 56%] Building C object CMakeFiles/firmware.dir/rp2_pio.c.o
+[ 56%] Building C object CMakeFiles/firmware.dir/rp2_dma.c.o
+[ 56%] Building C object CMakeFiles/firmware.dir/uart.c.o
+[ 56%] Building C object CMakeFiles/firmware.dir/usbd.c.o
+[ 56%] Building C object CMakeFiles/firmware.dir/msc_disk.c.o
+[ 57%] Building C object CMakeFiles/firmware.dir/mbedtls/mbedtls_port.c.o
+[ 57%] Building C object CMakeFiles/firmware.dir/pins_RPI_PICO.c.o
+[ 57%] Building C object CMakeFiles/firmware.dir/frozen_content.c.o
+[ 57%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls_errors/mp_mbedtls_errors.c.o
+[ 57%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/aes.c.o
+[ 58%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/aesni.c.o
+[ 58%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/asn1parse.c.o
+[ 58%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/asn1write.c.o
+[ 58%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/bignum_core.c.o
+[ 58%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/base64.c.o
+[ 59%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/bignum_mod.c.o
+[ 59%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/bignum_mod_raw.c.o
+[ 59%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/camellia.c.o
+[ 59%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/bignum.c.o
+[ 59%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ccm.c.o
+[ 60%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/chacha20.c.o
+[ 60%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/chachapoly.c.o
+[ 60%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/cipher.c.o
+[ 60%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/cipher_wrap.c.o
+[ 61%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/nist_kw.c.o
+[ 61%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/aria.c.o
+[ 61%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/cmac.c.o
+[ 61%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/mps_reader.c.o
+[ 62%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ctr_drbg.c.o
+[ 62%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/mps_trace.c.o
+[ 62%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/debug.c.o
+[ 62%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/des.c.o
+[ 62%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/dhm.c.o
+[ 62%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ecdh.c.o
+[ 63%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ecdsa.c.o
+[ 63%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ecjpake.c.o
+[ 63%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ecp.c.o
+[ 63%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ecp_curves.c.o
+[ 63%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/entropy.c.o
+[ 64%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/entropy_poll.c.o
+[ 64%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/gcm.c.o
+[ 64%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/hmac_drbg.c.o
+[ 64%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/md5.c.o
+[ 64%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/md.c.o
+[ 65%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/oid.c.o
+[ 65%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/padlock.c.o
+[ 65%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pem.c.o
+[ 65%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pk.c.o
+[ 65%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pkcs12.c.o
+[ 66%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pkcs5.c.o
+[ 66%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pkparse.c.o
+[ 66%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pk_ecc.c.o
+[ 66%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pk_wrap.c.o
+[ 66%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/pkwrite.c.o
+[ 67%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/platform.c.o
+[ 67%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/platform_util.c.o
+[ 67%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/poly1305.c.o
+[ 67%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ripemd160.c.o
+[ 67%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/rsa.c.o
+[ 68%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/rsa_alt_helpers.c.o
+[ 68%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/sha1.c.o
+[ 68%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/sha256.c.o
+[ 68%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/sha512.c.o
+[ 68%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_cache.c.o
+[ 69%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_ciphersuites.c.o
+[ 69%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_tls12_client.c.o
+[ 69%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_tls12_server.c.o
+[ 69%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_client.c.o
+[ 69%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_cookie.c.o
+[ 70%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_debug_helpers_generated.c.o
+[ 70%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_msg.c.o
+[ 70%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_ticket.c.o
+[ 70%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/ssl_tls.c.o
+[ 70%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/timing.c.o
+[ 71%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/constant_time.c.o
+[ 71%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509.c.o
+[ 71%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509_create.c.o
+[ 71%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509_crl.c.o
+[ 71%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509_crt.c.o
+[ 72%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509_csr.c.o
+[ 72%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509write_crt.c.o
+[ 72%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/mbedtls/library/x509write_csr.c.o
+[ 72%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_adc/adc.c.o
+[ 72%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2040/pico_platform/platform.c.o
+[ 73%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_platform_common/common.c.o
+[ 73%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_platform_panic/panic.c.o
+[ 73%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_platform_panic/custom_panic_function.S.o
+[ 73%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/hardware_claim/claim.c.o
+[ 73%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_sync/sync.c.o
+[ 74%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+[ 74%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.o
+[ 74%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_irq/irq.c.o
+[ 74%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.o
+[ 74%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_sync/sem.c.o
+[ 75%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_sync/lock_core.c.o
+[ 75%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_sync/mutex.c.o
+[ 75%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_sync/critical_section.c.o
+[ 75%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_time/time.c.o
+[ 75%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_time/timeout_helper.c.o
+[ 76%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_timer/timer.c.o
+[ 76%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_util/datetime.c.o
+[ 76%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_util/fixed_bitset.c.o
+[ 76%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_util/pheap.c.o
+[ 76%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/common/pico_util/queue.c.o
+[ 77%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+[ 77%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.o
+[ 77%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_pll/pll.c.o
+[ 77%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_vreg/vreg.c.o
+[ 77%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_watchdog/watchdog.c.o
+[ 78%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_ticks/ticks.c.o
+[ 78%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_bootrom/bootrom.c.o
+[ 78%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+[ 78%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_xosc/xosc.c.o
+[ 78%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_flash/flash.c.o
+[ 79%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_dma/dma.c.o
+[ 79%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_flash/flash.c.o
+[ 79%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+[ 79%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_i2c/i2c.c.o
+[ 79%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_pio/pio.c.o
+[ 80%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_spi/spi.c.o
+[ 80%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_uart/uart.c.o
+[ 80%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_aon_timer/aon_timer.c.o
+[ 80%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_rtc/rtc.c.o
+[ 81%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_multicore/multicore.c.o
+[ 81%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_rand/rand.c.o
+[ 81%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_unique_id/unique_id.c.o
+[ 81%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_runtime/runtime.c.o
+[ 81%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init.c.o
+[ 82%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+[ 82%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
+[ 82%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
+[ 82%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_divider/divider_hardware.S.o
+[ 82%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
+[ 82%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_double/double_math.c.o
+[ 83%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
+[ 83%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
+[ 83%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
+[ 83%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/hardware_divider/divider.S.o
+[ 84%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/acoshf.c.o
+[ 84%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/asinfacosf.c.o
+[ 84%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/asinhf.c.o
+[ 84%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/atan2f.c.o
+[ 84%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/atanf.c.o
+[ 85%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/atanhf.c.o
+[ 85%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/ef_rem_pio2.c.o
+[ 85%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/erf_lgamma.c.o
+[ 85%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/fmodf.c.o
+[ 85%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/kf_cos.c.o
+[ 86%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/kf_rem_pio2.c.o
+[ 86%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/kf_sin.c.o
+[ 86%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/kf_tan.c.o
+[ 86%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/log1pf.c.o
+[ 86%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/math.c.o
+[ 87%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/nearbyintf.c.o
+[ 87%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/roundf.c.o
+[ 87%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_cos.c.o
+[ 87%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_erf.c.o
+[ 87%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_frexp.c.o
+[ 88%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_ldexp.c.o
+[ 88%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_modf.c.o
+[ 88%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_sin.c.o
+[ 88%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/sf_tan.c.o
+[ 88%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/wf_lgamma.c.o
+[ 89%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/wf_tgamma.c.o
+[ 89%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/libm/ef_sqrt.c.o
+[ 89%] Building C object CMakeFiles/firmware.dir/libm_extra.c.o
+[ 89%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
+[ 89%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
+[ 90%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
+[ 90%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_malloc/malloc.c.o
+[ 90%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
+[ 90%] Building CXX object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+[ 90%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_atomic/atomic.c.o
+[ 91%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+[ 91%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_printf/printf.c.o
+[ 91%] Building ASM object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_crt0/crt0.S.o
+[ 91%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+[ 91%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_clib_interface/cxa_guard.c.o
+[ 92%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_stdio/stdio.c.o
+[ 92%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_stdio_uart/stdio_uart.c.o
+[ 92%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_thread_local/thread_local.c.o
+[ 92%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.o
+[ 92%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/tusb.c.o
+[ 93%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/common/tusb_fifo.c.o
+[ 93%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+[ 93%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+[ 93%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/device/usbd.c.o
+[ 93%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/audio/audio_device.c.o
+[ 93%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/dfu/dfu_device.c.o
+[ 94%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/cdc/cdc_device.c.o
+[ 94%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
+[ 94%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/hid/hid_device.c.o
+[ 94%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/midi/midi_device.c.o
+[ 95%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/midi/midi2_device.c.o
+[ 95%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/msc/msc_device.c.o
+[ 95%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/mtp/mtp_device.c.o
+[ 95%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
+[ 95%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/net/ncm_device.c.o
+[ 96%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/printer/printer_device.c.o
+[ 96%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
+[ 96%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/vendor/vendor_device.c.o
+[ 96%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/tinyusb/src/class/video/video_device.c.o
+[ 96%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
+[ 97%] Building C object CMakeFiles/firmware.dir/tmp/rp2350-reproduce-20260925/micropython/lib/pico-sdk/src/rp2_common/cmsis/stub/CMSIS/Device/RP2040/Source/system_RP2040.c.o
+[ 97%] Linking CXX executable firmware.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:      342144 B       640 KB     52.21%
+     FLASH_ROMFS:           0 B          0 B
+        FLASH_FS:           0 B      1408 KB      0.00%
+         XIP_RAM:           0 B        16 KB      0.00%
+             RAM:       24884 B       256 KB      9.49%
+       SCRATCH_X:           0 B          0 B
+       SCRATCH_Y:          8 KB         8 KB    100.00%
+make[3]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+[100%] Built target firmware
+make[2]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make[1]: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-baseline-RPI_PICO'
+make: Leaving directory '/tmp/rp2350-reproduce-20260925/micropython/ports/rp2'

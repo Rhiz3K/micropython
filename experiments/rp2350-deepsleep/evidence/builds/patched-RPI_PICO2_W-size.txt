@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+ 899972	      0	  46232	 946204	  e701c	/tmp/rp2350-reproduce-20260925/micropython/ports/rp2/build-patched-RPI_PICO2_W/firmware.elf

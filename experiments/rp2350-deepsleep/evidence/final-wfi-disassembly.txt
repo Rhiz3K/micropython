@@ -1,0 +1,51 @@
+20000120 <machine_deepsleep_prepare_wfi>:
+20000120:	b570      	push	{r4, r5, r6, lr}
+20000122:	f3ef 8410 	mrs	r4, PRIMASK
+20000126:	b672      	cpsid	i
+20000128:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
+2000012c:	4b0e      	ldr	r3, [pc, #56]	@ (20000168 <machine_deepsleep_prepare_wfi+0x48>)
+2000012e:	480f      	ldr	r0, [pc, #60]	@ (2000016c <machine_deepsleep_prepare_wfi+0x4c>)
+20000130:	681e      	ldr	r6, [r3, #0]
+20000132:	f8c3 2080 	str.w	r2, [r3, #128]	@ 0x80
+20000136:	685d      	ldr	r5, [r3, #4]
+20000138:	f8c3 2084 	str.w	r2, [r3, #132]	@ 0x84
+2000013c:	f44f 4280 	mov.w	r2, #16384	@ 0x4000
+20000140:	f8c3 2184 	str.w	r2, [r3, #388]	@ 0x184
+20000144:	605a      	str	r2, [r3, #4]
+20000146:	6901      	ldr	r1, [r0, #16]
+20000148:	f021 0104 	bic.w	r1, r1, #4
+2000014c:	6101      	str	r1, [r0, #16]
+2000014e:	4908      	ldr	r1, [pc, #32]	@ (20000170 <machine_deepsleep_prepare_wfi+0x50>)
+20000150:	600a      	str	r2, [r1, #0]
+20000152:	bf30      	wfi
+20000154:	f8c3 2084 	str.w	r2, [r3, #132]	@ 0x84
+20000158:	f8c3 2184 	str.w	r2, [r3, #388]	@ 0x184
+2000015c:	601e      	str	r6, [r3, #0]
+2000015e:	605d      	str	r5, [r3, #4]
+20000160:	f384 8810 	msr	PRIMASK, r4
+20000164:	bd70      	pop	{r4, r5, r6, pc}
+20000166:	bf00      	nop
+20000168:	e000e100 	.word	0xe000e100
+2000016c:	e000ed00 	.word	0xe000ed00
+20000170:	e000e204 	.word	0xe000e204
+
+20000174 <mp_usbd_schedule_task>:
+20000174:	4901      	ldr	r1, [pc, #4]	@ (2000017c <mp_usbd_schedule_task+0x8>)
+20000176:	4802      	ldr	r0, [pc, #8]	@ (20000180 <mp_usbd_schedule_task+0xc>)
+20000178:	f003 bd72 	b.w	20003c60 <__mp_sched_schedule_node_veneer>
+2000017c:	1003130d 	.word	0x1003130d
+20000180:	200084dc 	.word	0x200084dc
+
+20000184 <tud_event_hook_cb>:
+20000184:	f7ff bff6 	b.w	20000174 <mp_usbd_schedule_task>
+
+20000188 <machine_bitstream_high_low>:
+20000188:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
+2000018c:	4606      	mov	r6, r0
+2000018e:	b089      	sub	sp, #36	@ 0x24
+20000190:	2005      	movs	r0, #5
+20000192:	460f      	mov	r7, r1
+20000194:	4615      	mov	r5, r2
+20000196:	469b      	mov	fp, r3
+20000198:	f003 fd32 	bl	20003c00 <__clock_get_hz_veneer>
+2000019c:	4b45      	ldr	r3, [pc, #276]	@ (200002b4 <machine_bitstream_high_low+0x12c>)

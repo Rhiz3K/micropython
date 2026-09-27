@@ -1,0 +1,2 @@
+{"host_start": 1790347834.0448668, "usb_serial": "test-board-1"}
+{"powman_chip_reset": 33554432, "run": "patch-wifi-repeat-5", "boot": 1, "rtc": [2026, 9, 26, 5, 0, 5, 37, 0], "powman_last_swcore_pwrup": 64, "status": "FAIL", "cause": 3, "completed": 0, "uid": "test-board-1", "phase": 0, "error": "AssertionError('Wi-Fi/DHCP timeout after 60000 ms, status 2',)", "host_elapsed_s": 61.10029405998648}

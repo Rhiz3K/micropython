@@ -1,0 +1,8 @@
+PASS argument -1
+PASS argument -2147483647
+PASS argument -2147483648
+PASS argument -2147483649
+PASS argument 2147483648
+PASS argument 1267650600228229401496703205376
+PASS hard IRQ rejected with EBUSY
+PASS lightsleep clock restoration and time progress
