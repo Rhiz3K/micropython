@@ -1,5 +1,6 @@
 // Board and hardware specific configuration
 #define MICROPY_HW_BOARD_NAME                   "Raspberry Pi Pico 2 W"
+#define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP       (PICO_ARM)
 
 // Enable networking.
 #define MICROPY_PY_NETWORK 1

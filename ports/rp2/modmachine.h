@@ -3,6 +3,7 @@
 
 #include "py/obj.h"
 
+void machine_deepsleep_init(void);
 void machine_pin_init(void);
 void machine_pin_deinit(void);
 void machine_i2s_init0(void);

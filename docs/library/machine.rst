@@ -124,7 +124,8 @@ To always read a positive integer
    .. note::
 
       On esp32 and rp2, data persists across :ref:`soft_reset`,
-      `machine.reset()` and `machine.deepsleep()` wake but is lost on
+      `machine.reset()` and `machine.deepsleep()` wake (subject to the RP2350
+      region restriction below), but is lost on
       power-off and on poweron-style resets. On esp32 in particular this
       includes pressing the EN/RESET button on most dev boards, which the
       chip reports as a power-on reset.
@@ -140,6 +141,9 @@ To always read a positive integer
    rp2     powman scratch[0..7]  Region 2 on RP2350 only
    stm32   BKP registers         Region 1 on BKPSRAM families (F4/F7/H5/H7/U5/N6)
    ======  ====================  ================================================
+
+   On RP2350, a deep sleep which powers off the switched-core domain retains
+   only POWMAN region 2. Watchdog regions 0 and 1 are lost in that state.
 
    Use ``machine.mem_backup(-1)`` to discover available regions and their sizes.
 
