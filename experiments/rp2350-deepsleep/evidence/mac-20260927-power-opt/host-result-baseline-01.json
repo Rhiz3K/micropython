@@ -1,0 +1,66 @@
+{
+  "result": "PASS",
+  "label": "baseline-01",
+  "mode": "deepsleep",
+  "requested_ms": 300000,
+  "usb_absence_s": 302.4685756249819,
+  "rtc_elapsed_s": 302,
+  "start_event": {
+    "ticks_ms": 10463,
+    "label": "baseline-01",
+    "mode": "deepsleep",
+    "event": "RUN",
+    "duration_ms": 300000,
+    "entry_delay_ms": 100,
+    "host_monotonic": 341659.063592083,
+    "host_utc": "2026-09-27T14:52:03.318249+00:00"
+  },
+  "removed_event": {
+    "event": "USB_REMOVED",
+    "label": "baseline-01",
+    "host_monotonic": 341659.180209875,
+    "host_utc": "2026-09-27T14:52:03.434867+00:00"
+  },
+  "returned_event": {
+    "event": "USB_RETURNED",
+    "label": "baseline-01",
+    "host_monotonic": 341961.6487855,
+    "host_utc": "2026-09-27T14:57:05.902703+00:00"
+  },
+  "wake_state": {
+    "boot_counter": 2,
+    "watchdog_enabled": false,
+    "uid": "test-board-2",
+    "freq_hz": 150000000,
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "chip_reset": 33554432,
+    "rtc_epoch_s": 1790521024,
+    "last_swcore_pwrup": 64,
+    "machine": "Raspberry Pi Pico 2 W with RP2350",
+    "cause": 4,
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      14,
+      57,
+      4,
+      0
+    ]
+  },
+  "stopped_repl": true,
+  "early_window": {
+    "start_monotonic": 341664.063592083,
+    "end_monotonic": 341699.063592083,
+    "duration_s": 35
+  },
+  "late_window": {
+    "start_monotonic": 341894.063592083,
+    "end_monotonic": 341954.063592083,
+    "duration_s": 60
+  },
+  "analysis_window_note": "Windows use host RUN receipt, not device sample timestamps. Early/late comparison tests drift; the late window is not assumed settled.",
+  "host_monotonic": 341962.321819291,
+  "host_utc": "2026-09-27T14:57:06.575726+00:00"
+}

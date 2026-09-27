@@ -1,0 +1,31 @@
+{
+  "result": "PASS",
+  "original_files_verified": 29,
+  "main_restored": true,
+  "app_started": false,
+  "test_files_removed": [
+    "/deepsleep-config.json",
+    "/deepsleep-sentinel.bin",
+    "/main.py"
+  ],
+  "state": {
+    "backup_zero": true,
+    "wifi_active": false,
+    "ap_active": false,
+    "uid": "test-board-2",
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      12,
+      8,
+      13,
+      0
+    ],
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)"
+  },
+  "stopped_repl": true,
+  "completed_utc": "2026-09-27T12:08:14.423700+00:00",
+  "note": "Firmware remains experimental. RTC set from host UTC. Original volatile backup registers unavailable; test patterns cleared."
+}

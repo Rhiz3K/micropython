@@ -1,0 +1,9 @@
+test_sleep_en_regs (__main__.Test) ...
+0xbfffffff 0x7fffffef
+0xbfffffff 0x7fffffef
+ ok
+----------------------------------------------------------------------
+Ran 1 tests
+
+OK
+Local directory <redacted-local-path> is mounted at /remote

@@ -1,0 +1,75 @@
+{
+  "result": "PASS_FOR_SELECTED_NO_LOAD_WINDOW",
+  "overall_capture_result": "FAIL",
+  "overall_meter_result": "ERROR",
+  "overall_meter_error": "OSError: read error",
+  "board": "test-board-2",
+  "created_utc": "2026-09-27T14:36:57.061995+00:00",
+  "scope": "Meter output cable remained attached to meter; only Pico USB disconnected, meter input/PC cable/hub untouched. Owner confirmed approximately 30-second unplug and normal reconnect.",
+  "owner_confirmation": {
+    "result": "CONFIRMED",
+    "confirmed_by": "owner",
+    "statement": "Only Pico USB cable disconnected for approximately 30 seconds and reconnected normally. Meter input, PC cable and hub remained connected.",
+    "host_recorded_utc": "2026-09-27T14:35:06.560063+00:00",
+    "applies_to": "Current no-load-v2 capture; not the earlier timed-out attempt."
+  },
+  "usb_removal": {
+    "host_monotonic": 340593.138436666,
+    "host_utc": "2026-09-27T14:34:17.398889+00:00"
+  },
+  "usb_return_timestamp_recorded": false,
+  "window_seconds_after_observed_USB_removal": [
+    5,
+    20
+  ],
+  "window_duration_s": 15,
+  "selection_rationale": "Fixed 15-second interior of owner-confirmed approximately 30-second physical unplug, excluding the first 5 seconds; ends over 10 seconds before final received frame and subsequent HID read error.",
+  "samples": 1504,
+  "mean_mA": 0.055412234042553195,
+  "min_mA": 0.04,
+  "max_mA": 0.08,
+  "median_mA": 0.060000000000000005,
+  "zero_samples": 0,
+  "mean_voltage_V": 5.075545252659575,
+  "mean_power_mW": 0.2812470948138298,
+  "first_sample_utc": "2026-09-27T14:34:22.398904+00:00",
+  "last_sample_utc": "2026-09-27T14:34:37.398749+00:00",
+  "first_sample_from_window_start_s": 2.274999860674143e-05,
+  "last_sample_before_window_end_s": 0.0001141660031862557,
+  "maximum_interframe_gap_s": 0.04462816700106487,
+  "audited_raw_frames": 1256,
+  "audited_capture_samples": 5020,
+  "invalid_frames": 0,
+  "zero_or_outlier_filter": false,
+  "offset_subtracted_from_sleep_tests": false,
+  "independent_calibration": false,
+  "interpretation": "Observed nonzero no-load indication in this wiring; does not identify calibration error, meter self-consumption, leakage or another cause. Not an independent calibration; original sleep readings remain unchanged.",
+  "device_timestamps_known": false,
+  "samples_per_host_timestamp": 4,
+  "pico_serial_opened": false,
+  "pico_files_modified": false,
+  "original_application_may_start_after_reconnect": true,
+  "source_sha256": {
+    "result.json": "b2aaddbfcd1aa95861af42514c95e02bb430e813f13b7d1d53d7a1e978fba8a2",
+    "removed.json": "629ae03c986e86c16097287ca3dd1fb0a640f8d9cd67581772f230474a83476c",
+    "owner-confirmation.json": "bf4b122f83237ae530d65b49959dce51046d02b142a4fa54d0899c8d5187b3ca",
+    "meter/summary.json": "ebafa3d6eae9f52064fe42220dac25cfea68fe929ffdf15c6537b1eb0a47e716",
+    "meter/frames.jsonl": "25d9fdb5af15e90b914074855abc80fefd532e283c248ff9a067b72af25dafd0",
+    "meter/samples.jsonl": "f1af1755ca65aa0d2c6a43ab040568cb2023479756b2375224be0de239d7ffc0",
+    "meter/events.jsonl": "0be90045a2b51a5c5f419e42f3e4df8b029daaec6abc578fa822842df1234ddf",
+    "post-capture-enumeration.json": "61b1654ec6a0a5354d961d947f9592da73ed92f5a84528038cfe5e8129c71ef8"
+  },
+  "script_sha256": {
+    "no_load_v2.py": "29d2aee31e5e005b7f920c530cfec3d9130cd7ef87327b1f551c2db88c922dc1",
+    "analyze_no_load_v2.py": "80991e917b7ab0c2c74b8d822d811a9e4e0fbfd9f133357b21ad67397c3d2909",
+    "meter_reader_stoppable.py": "b290757a5253e929fc15cb47732a178a517b8884e30bfe36a38bb82bc0cbb009"
+  },
+  "later_passive_enumeration": {
+    "host_utc": "2026-09-27T14:39:25.752535+00:00",
+    "pico_UID_matched_CDC_count": 1,
+    "meter_identity_matched_HID_count": 1,
+    "pico_REPL_opened": false,
+    "pico_files_modified": false,
+    "application_runtime_verified": false
+  }
+}

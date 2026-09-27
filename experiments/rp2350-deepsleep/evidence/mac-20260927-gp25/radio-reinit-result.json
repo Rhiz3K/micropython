@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "label": "radio-reinit",
+  "scope": "driver_initialization_only",
+  "scan_requested": false,
+  "association_requested": false,
+  "connection_proven": false,
+  "driver_restored_cs_high": true,
+  "final_radio_off_cs_low": true,
+  "all_backup_words_unchanged": true,
+  "inventory_unchanged": true,
+  "inventory_file_count": 35,
+  "stopped_repl": true,
+  "board_helper_sha256": "d608365023871c590bea346cb64bf149b02f9e6b6ef5a0363b2724e8b75dcfd6",
+  "host_script_sha256": "ef2b995662b8a22d95ec92be9b3e8275b2a4a83375de8b926024e5e78268f301",
+  "init_elapsed_ms": 926,
+  "elapsed_s": 2.587282166990917,
+  "wall_timeout_s": 85,
+  "host_monotonic": 347959.137131666,
+  "host_utc": "2026-09-27T16:37:03.388150+00:00"
+}

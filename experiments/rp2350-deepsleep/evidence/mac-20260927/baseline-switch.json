@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "target": "baseline",
+  "source_commit": "09f5bb4475",
+  "uf2_sha256": "6b5f157ff16ca2844f1578eb7173a2aa92317638cc5e007809639feb2f6597c3",
+  "filesystem_byte_preserved": true,
+  "completed_utc": "2026-09-27T12:00:15.705766+00:00",
+  "identity": {
+    "version": "v1.30.0-preview.85.g09f5bb4475 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "sta": false,
+    "ap": false,
+    "uid": "test-board-2"
+  }
+}

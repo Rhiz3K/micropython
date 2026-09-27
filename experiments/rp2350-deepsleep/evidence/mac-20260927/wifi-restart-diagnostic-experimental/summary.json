@@ -1,0 +1,13 @@
+{
+  "result": "FAIL",
+  "label": "experimental",
+  "completed_operations": [
+    "probe1",
+    "reset"
+  ],
+  "own_board_config_may_remain": false,
+  "failed_operation": "probe2",
+  "worker_exit_code": 3,
+  "host_timeout": false,
+  "utc_end": "2026-09-27T11:59:08.917043+00:00"
+}

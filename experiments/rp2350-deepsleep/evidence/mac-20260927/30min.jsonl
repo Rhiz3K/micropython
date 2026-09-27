@@ -1,0 +1,5 @@
+{"host_start":1790503884.408066,"usb_serial":"test-board-2"}
+{"powman_chip_reset":33554432,"powman_last_swcore_pwrup":64,"phase":0,"boot":1,"rtc":[2026,9,26,5,0,0,53,0],"status":"READY","completed":0,"cause":3,"run":"mac-20260927-pico2w-30min","uid":"test-board-2","host_elapsed_s":0.4457266670069657}
+{"run":"mac-20260927-pico2w-30min","completed":0,"status":"SLEEP","host_elapsed_s":0.4545841249637306}
+{"crossed_day":true,"completed":1,"uid":"test-board-2","phase":1,"boot":2,"run":"mac-20260927-pico2w-30min","watchdog_scratch_retained":[false,false],"crossed_minute":true,"cause":4,"status":"READY","rtc_elapsed_s":1800,"rtc":[2026,9,26,5,0,29,58,0],"powman_last_swcore_pwrup":64,"powman_chip_reset":33554432,"rtc_before_epoch_s":1790380798,"host_elapsed_s":1816.5690685000154}
+{"powman_chip_reset":33554432,"run":"mac-20260927-pico2w-30min","watchdog_scratch_retained":[false,false],"boot":3,"rtc":[2026,9,26,5,0,29,59,0],"powman_last_swcore_pwrup":64,"status":"PASS","cause":3,"completed":1,"uid":"test-board-2","phase":5,"host_elapsed_s":1817.8435528330156}

@@ -1,0 +1,333 @@
+{
+  "result": "PASS",
+  "label": "panel-hiz-300-01",
+  "variant": "panel_hiz",
+  "created_utc": "2026-09-27T15:09:36.048094+00:00",
+  "requested_ms": 300000,
+  "wake_verification": {
+    "result": "PASS",
+    "alarm_cause": 4,
+    "last_swcore_pwrup": 64,
+    "had_swcore_powerdown": true,
+    "retained_counter_plus_one": true,
+    "usb_absence_s": 302.7681256670039,
+    "rtc_elapsed_s": 301
+  },
+  "raw_audit": {
+    "result": "PASS",
+    "frames": 7761,
+    "samples": 31040,
+    "recording_samples": 30924,
+    "all_crc_verified": true,
+    "exact_frame_to_sample_mapping_verified": true,
+    "invalid_frames": 0
+  },
+  "coverage_limits": {
+    "minimum_samples_per_second": 95,
+    "boundary_tolerance_s": 0.1,
+    "maximum_interframe_receipt_gap_s": 0.2
+  },
+  "sampling": {
+    "nominal_hz": 100,
+    "samples_per_frame": 4,
+    "timestamp_origin": "Actual host frame receipt; four ordered samples share a timestamp.",
+    "device_timestamps_known": false,
+    "exact_dropped_samples": null,
+    "outlier_filter": false,
+    "zero_filter": false
+  },
+  "meter_recording_gaps_over_200ms": [],
+  "windows_identical": false,
+  "early_window": {
+    "start_monotonic_s": 342172.387652291,
+    "end_monotonic_s": 342207.387652291,
+    "duration_s": 35.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 3500,
+      "frames": 875,
+      "minimum_required_samples": 3325,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.029297250031959265,
+      "last_receipt_before_end_s": 0.019138915988150984,
+      "maximum_interframe_receipt_gap_s": 0.05537133396137506,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 3500,
+      "mean": 0.6028857142857142,
+      "median": 0.6,
+      "min": 0.57,
+      "max": 0.62,
+      "p05": 0.5900000000000001,
+      "p95": 0.62,
+      "population_stddev": 0.009707939103262475
+    },
+    "voltage_V": {
+      "count": 3500,
+      "mean": 5.0827795714285715,
+      "median": 5.08278,
+      "min": 5.08231,
+      "max": 5.08325,
+      "p05": 5.08243,
+      "p95": 5.0831,
+      "population_stddev": 0.00020611949179532852
+    },
+    "power_mW": {
+      "count": 3500,
+      "mean": 3.0643351085714285,
+      "median": 3.049764,
+      "min": 2.8973214,
+      "max": 3.151522,
+      "p05": 2.9987281,
+      "p95": 3.1512988,
+      "population_stddev": 0.04933816443212738
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 342172.387652291,
+      "end_monotonic_s": 342177.387652291,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.029297250031959265,
+        "last_receipt_before_end_s": 0.010736499971244484,
+        "maximum_interframe_receipt_gap_s": 0.040213167027104646,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.6058,
+        "median": 0.61,
+        "min": 0.58,
+        "max": 0.62,
+        "p05": 0.5900000000000001,
+        "p95": 0.62,
+        "population_stddev": 0.009399999999999993
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0829607999999995,
+        "median": 5.08298,
+        "min": 5.08255,
+        "max": 5.08325,
+        "p05": 5.08267,
+        "p95": 5.08317,
+        "population_stddev": 0.00016219543766694854
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.079257364,
+        "median": 3.1005446,
+        "min": 2.9481052,
+        "max": 3.151522,
+        "p05": 2.9988166,
+        "p95": 3.1513236,
+        "population_stddev": 0.04776094585315392
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 342202.387652291,
+      "end_monotonic_s": 342207.387652291,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.02094029198633507,
+        "last_receipt_before_end_s": 0.019138915988150984,
+        "maximum_interframe_receipt_gap_s": 0.048026375006884336,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.6,
+        "median": 0.6,
+        "min": 0.5900000000000001,
+        "max": 0.62,
+        "p05": 0.5900000000000001,
+        "p95": 0.62,
+        "population_stddev": 0.008944271909999125
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0826232,
+        "median": 5.0825700000000005,
+        "min": 5.08235,
+        "max": 5.0831,
+        "p05": 5.08235,
+        "p95": 5.08302,
+        "population_stddev": 0.0001952991551441353
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.049572956,
+        "median": 3.04953,
+        "min": 2.9985865,
+        "max": 3.1512058,
+        "p05": 2.9987045,
+        "p95": 3.1511313999999997,
+        "population_stddev": 0.04539570431951534
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.005800000000000027
+  },
+  "late_window": {
+    "start_monotonic_s": 342402.387652291,
+    "end_monotonic_s": 342462.387652291,
+    "duration_s": 60.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 6000,
+      "frames": 1500,
+      "minimum_required_samples": 5700,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.010736791999079287,
+      "last_receipt_before_end_s": 0.029950790980365127,
+      "maximum_interframe_receipt_gap_s": 0.05925816699163988,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 6000,
+      "mean": 0.6000166666666666,
+      "median": 0.6,
+      "min": 0.58,
+      "max": 0.62,
+      "p05": 0.5900000000000001,
+      "p95": 0.62,
+      "population_stddev": 0.009891059374786654
+    },
+    "voltage_V": {
+      "count": 6000,
+      "mean": 5.0829322999999995,
+      "median": 5.08294,
+      "min": 5.08239,
+      "max": 5.08349,
+      "p05": 5.08263,
+      "p95": 5.08325,
+      "population_stddev": 0.00019932814653226565
+    },
+    "power_mW": {
+      "count": 6000,
+      "mean": 3.049844155833333,
+      "median": 3.049716,
+      "min": 2.9479254,
+      "max": 3.1516894,
+      "p05": 2.9987753,
+      "p95": 3.151398,
+      "population_stddev": 0.05027937611300284
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 342402.387652291,
+      "end_monotonic_s": 342407.387652291,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.010736791999079287,
+        "last_receipt_before_end_s": 0.02936333295656368,
+        "maximum_interframe_receipt_gap_s": 0.04019991704262793,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.6072000000000001,
+        "median": 0.61,
+        "min": 0.5900000000000001,
+        "max": 0.62,
+        "p05": 0.5900000000000001,
+        "p95": 0.62,
+        "population_stddev": 0.009806120537704995
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0828868,
+        "median": 5.08286,
+        "min": 5.08263,
+        "max": 5.08325,
+        "p05": 5.08267,
+        "p95": 5.08317,
+        "population_stddev": 0.00015709156565517287
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.086329044,
+        "median": 3.1004958,
+        "min": 2.998793,
+        "max": 3.1515654,
+        "p05": 2.9988874,
+        "p95": 3.151522,
+        "population_stddev": 0.049854542316788576
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 342457.387652291,
+      "end_monotonic_s": 342462.387652291,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.01015141699463129,
+        "last_receipt_before_end_s": 0.029950790980365127,
+        "maximum_interframe_receipt_gap_s": 0.04336700000567362,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5966,
+        "median": 0.5900000000000001,
+        "min": 0.58,
+        "max": 0.62,
+        "p05": 0.5900000000000001,
+        "p95": 0.61,
+        "population_stddev": 0.008627861844049161
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0829392,
+        "median": 5.08292,
+        "min": 5.08259,
+        "max": 5.08321,
+        "p05": 5.08263,
+        "p95": 5.08317,
+        "population_stddev": 0.00018817906366010333
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.0324816660000002,
+        "median": 2.9990938999999996,
+        "min": 2.948198,
+        "max": 3.151522,
+        "p05": 2.9987516999999997,
+        "p95": 3.1007336999999997,
+        "population_stddev": 0.043865509112306515
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.010600000000000054
+  },
+  "steady_state_established": false,
+  "no_load_offset_subtracted": false,
+  "energy_integrated": false,
+  "scope": "USB input of Pico 2 W with attached e-paper; Wi-Fi deinitialized and panel sleep command sent.",
+  "evidence_sha256": {
+    "panel-hiz-300-01/result.json": "968818b73c132a76b7f5cf94cf077600b72c5dfdce94feb55050e2ec2700952c",
+    "panel-hiz-300-01/events.jsonl": "e57a86f360c14b0c8daa4c73a415d3b3667676fcd140ebf2f762b4bfa0fafe2a",
+    "capture-panel-hiz-300-01/result.json": "1be12b212a8ab9b06acc870a6fefa62d3be616c76ba8b4fdc1fdb3cbafaa3857",
+    "capture-panel-hiz-300-01/meter/frames.jsonl": "6d80a8dd920193910e765adc25fe98e8bd656521e10d6dc8a947bfa777003db4",
+    "capture-panel-hiz-300-01/meter/samples.jsonl": "c62fb5667cbd814277514ba8b46c39aef80f34e05ee1eea38c116a372192bc1b",
+    "capture-panel-hiz-300-01/meter/summary.json": "d7d729892f6c9b34b05c7c97ba1bbe6c33dd1dd8a17c1463348b85f0791cc073",
+    "meter_reader_stoppable.py": "b290757a5253e929fc15cb47732a178a517b8884e30bfe36a38bb82bc0cbb009",
+    "analyze_variant.py": "30ea908e474c0c2360a1ad53fe9b323a24f8f9e59d7457ba0c0a39cd9fa3f236"
+  }
+}

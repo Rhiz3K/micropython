@@ -1,0 +1,21 @@
+{
+  "diagnostic": "raw-REPL Wi-Fi probes separated by one machine.reset; no soft reset",
+  "label": "experimental",
+  "source_commit_prefix": "9a8542bb24",
+  "source_commit_is_not_flash_hash": true,
+  "utc_start": "2026-09-27T11:58:25.919534+00:00",
+  "script_sha256": "1ffc3d8454f962639921aa5af971a0034f2133ab570ca13ca12bf2fbf8ac3103",
+  "long_sleeps": {
+    "30min": {
+      "run": "mac-20260927-pico2w-30min"
+    },
+    "75min": {
+      "run": "mac-20260927-pico2w-75min"
+    }
+  },
+  "probe_connect_timeout_ms": 35000,
+  "socket_timeout_s": 10,
+  "probe_worker_timeout_s": 90,
+  "reset_worker_timeout_s": 20,
+  "dns_bounded_by": "outer host worker timeout, not socket.settimeout"
+}

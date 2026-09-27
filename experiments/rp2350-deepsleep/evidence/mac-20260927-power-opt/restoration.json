@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "original_files_verified": 29,
+  "comparison": "Fresh inventory immediately before these power tests",
+  "original_main_restored": true,
+  "backup_words_restored": true,
+  "app_started": false,
+  "stopped_repl": true,
+  "host_monotonic": 343283.322275083,
+  "host_utc": "2026-09-27T15:19:07.577518+00:00",
+  "state": {
+    "uid": "test-board-2",
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      15,
+      19,
+      7,
+      0
+    ],
+    "sta": false,
+    "ap": false,
+    "wl_reg_on": 0,
+    "panel_rst": 0,
+    "sio_out": 33555200,
+    "sio_oe": 41947136,
+    "display_pad_controls": [
+      18,
+      18,
+      18,
+      18,
+      18,
+      18
+    ]
+  },
+  "private_file_inventory_exported": false
+}

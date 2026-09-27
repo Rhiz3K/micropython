@@ -1,0 +1,18 @@
+{"kind": "identity", "machine": "Raspberry Pi Pico 2 W with RP2350", "operation": "probe1", "source_commit_prefix": "09f5bb4475", "stopped_boot": 6, "stopped_run": "mac-20260927-pico2w-75min", "uid_verified": true, "version": "v1.30.0-preview.85.g09f5bb4475 on 2026-09-27 (GNU 14.3.1 MinSizeRel)"}
+{"active": false, "dhcp4": false, "elapsed_ms": 1, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe1", "probe": 1, "status": 0, "ticks_ms": 17754}
+{"active": true, "dhcp4": true, "elapsed_ms": 1429, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe1", "probe": 1, "status": 0, "ticks_ms": 19182}
+{"active": true, "dhcp4": true, "elapsed_ms": 1437, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe1", "probe": 1, "status": 1, "ticks_ms": 19190}
+{"active": true, "dhcp4": true, "elapsed_ms": 4474, "has_dhcp4": true, "isconnected": true, "kind": "state", "operation": "probe1", "probe": 1, "status": 3, "ticks_ms": 22227}
+{"kind": "dns", "name": "<redacted-network>", "ok": true, "operation": "probe1", "probe": 1}
+{"kind": "http", "operation": "probe1", "probe": 1, "status": 200}
+{"elapsed_ms": 4512, "kind": "probe_result", "ok": true, "operation": "probe1", "probe": 1}
+{"kind": "identity", "machine": "Raspberry Pi Pico 2 W with RP2350", "operation": "reset", "source_commit_prefix": "09f5bb4475", "stopped_boot": 6, "stopped_run": "mac-20260927-pico2w-75min", "uid_verified": true, "version": "v1.30.0-preview.85.g09f5bb4475 on 2026-09-27 (GNU 14.3.1 MinSizeRel)"}
+{"kind": "reset", "operation": "reset", "previous_boot": 6, "sent": true, "usb_disconnected": true}
+{"kind": "identity", "machine": "Raspberry Pi Pico 2 W with RP2350", "operation": "probe2", "source_commit_prefix": "09f5bb4475", "stopped_boot": 7, "stopped_run": "mac-20260927-pico2w-75min", "uid_verified": true, "version": "v1.30.0-preview.85.g09f5bb4475 on 2026-09-27 (GNU 14.3.1 MinSizeRel)"}
+{"active": false, "dhcp4": false, "elapsed_ms": 1, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe2", "probe": 2, "status": 0, "ticks_ms": 660}
+{"active": true, "dhcp4": true, "elapsed_ms": 928, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe2", "probe": 2, "status": 0, "ticks_ms": 1587}
+{"active": true, "dhcp4": true, "elapsed_ms": 935, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe2", "probe": 2, "status": 1, "ticks_ms": 1594}
+{"active": true, "dhcp4": true, "elapsed_ms": 4150, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe2", "probe": 2, "status": -1, "ticks_ms": 4809}
+{"active": false, "dhcp4": false, "elapsed_ms": 36086, "has_dhcp4": false, "isconnected": false, "kind": "state", "operation": "probe2", "probe": 2, "status": -1, "ticks_ms": 36745}
+{"kind": "cleanup", "ok": true, "operation": "probe2", "owned_config_removed": true, "probe": 2, "radio_inactive": true}
+{"elapsed_ms": 36094, "failure": "connect_timeout", "kind": "probe_result", "ok": false, "operation": "probe2", "probe": 2}

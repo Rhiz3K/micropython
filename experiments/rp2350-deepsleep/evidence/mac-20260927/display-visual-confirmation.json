@@ -1,0 +1,10 @@
+{
+  "visual_result": "PASS",
+  "basis": "owner_confirmation_in_chat",
+  "recorded_utc": "2026-09-27T13:03:05.840366+00:00",
+  "display_run": "20260927T120622Z",
+  "confirmed_text": "B: AFTER ALARM BOOT",
+  "black_rectangle_position": "right",
+  "readable_and_correct": true,
+  "scope": "Final phase B image only; no claim of observed phase A, current measurement or automatic application integration."
+}

@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "phase": "B",
+  "reported_text": "B: GP25 SLEEP OK",
+  "right_rectangle_confirmed": true,
+  "confirmed_by": "assistant",
+  "host_utc": "2026-09-27T16:40:38.792003+00:00",
+  "confirmation_method": "user_supplied_photo",
+  "photo_sha256": "54add2e760b291f0bd92fda80f5d748d9eb4487e0ed6352391a178e937aa30dc"
+}

@@ -1,0 +1,333 @@
+{
+  "result": "PASS",
+  "label": "panel-hiz-usb-45-01",
+  "variant": "panel_hiz_usb",
+  "created_utc": "2026-09-27T15:12:23.854570+00:00",
+  "requested_ms": 45000,
+  "wake_verification": {
+    "result": "PASS",
+    "alarm_cause": 4,
+    "last_swcore_pwrup": 64,
+    "had_swcore_powerdown": true,
+    "retained_counter_plus_one": true,
+    "usb_absence_s": 45.88043833296979,
+    "rtc_elapsed_s": 47
+  },
+  "raw_audit": {
+    "result": "PASS",
+    "frames": 1339,
+    "samples": 5352,
+    "recording_samples": 5232,
+    "all_crc_verified": true,
+    "exact_frame_to_sample_mapping_verified": true,
+    "invalid_frames": 0
+  },
+  "coverage_limits": {
+    "minimum_samples_per_second": 95,
+    "boundary_tolerance_s": 0.1,
+    "maximum_interframe_receipt_gap_s": 0.2
+  },
+  "sampling": {
+    "nominal_hz": 100,
+    "samples_per_frame": 4,
+    "timestamp_origin": "Actual host frame receipt; four ordered samples share a timestamp.",
+    "device_timestamps_known": false,
+    "exact_dropped_samples": null,
+    "outlier_filter": false,
+    "zero_filter": false
+  },
+  "meter_recording_gaps_over_200ms": [],
+  "windows_identical": true,
+  "early_window": {
+    "start_monotonic_s": 342794.357576041,
+    "end_monotonic_s": 342829.357576041,
+    "duration_s": 35.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 3500,
+      "frames": 875,
+      "minimum_required_samples": 3325,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.020429875003173947,
+      "last_receipt_before_end_s": 0.02007983298972249,
+      "maximum_interframe_receipt_gap_s": 0.05332566698780283,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 3500,
+      "mean": 0.5783999999999999,
+      "median": 0.58,
+      "min": 0.55,
+      "max": 0.5900000000000001,
+      "p05": 0.5599999999999999,
+      "p95": 0.5900000000000001,
+      "population_stddev": 0.009636834097802676
+    },
+    "voltage_V": {
+      "count": 3500,
+      "mean": 5.083060342857143,
+      "median": 5.0831,
+      "min": 5.08239,
+      "max": 5.08364,
+      "p05": 5.08267,
+      "p95": 5.08337,
+      "population_stddev": 0.00021836508654177525
+    },
+    "power_mW": {
+      "count": 3500,
+      "mean": 2.940041997142857,
+      "median": 2.9481748,
+      "min": 2.795529,
+      "max": 2.9992590999999997,
+      "p05": 2.8465135999999998,
+      "p95": 2.9990938999999996,
+      "population_stddev": 0.04897827016991505
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 342794.357576041,
+      "end_monotonic_s": 342799.357576041,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.020429875003173947,
+        "last_receipt_before_end_s": 0.019618624995928258,
+        "maximum_interframe_receipt_gap_s": 0.04027966700959951,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5796,
+        "median": 0.58,
+        "min": 0.55,
+        "max": 0.5900000000000001,
+        "p05": 0.5599999999999999,
+        "p95": 0.5900000000000001,
+        "population_stddev": 0.010762899237659012
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0831582,
+        "median": 5.08317,
+        "min": 5.08278,
+        "max": 5.08341,
+        "p05": 5.08298,
+        "p95": 5.08333,
+        "population_stddev": 0.00012415619195189586
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 2.946198578,
+        "median": 2.9482154,
+        "min": 2.7957875,
+        "max": 2.9992119,
+        "p05": 2.8465528,
+        "p95": 2.9991647,
+        "population_stddev": 0.05471468873931124
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 342824.357576041,
+      "end_monotonic_s": 342829.357576041,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.02038345899200067,
+        "last_receipt_before_end_s": 0.02007983298972249,
+        "maximum_interframe_receipt_gap_s": 0.042354334029369056,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5741999999999999,
+        "median": 0.57,
+        "min": 0.5599999999999999,
+        "max": 0.5900000000000001,
+        "p05": 0.5599999999999999,
+        "p95": 0.5900000000000001,
+        "population_stddev": 0.007769169839822038
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0829914,
+        "median": 5.08302,
+        "min": 5.08267,
+        "max": 5.08325,
+        "p05": 5.08278,
+        "p95": 5.08321,
+        "population_stddev": 0.0001317575045300629
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 2.918653358,
+        "median": 2.8973841,
+        "min": 2.8463792,
+        "max": 2.998911,
+        "p05": 2.8464464,
+        "p95": 2.9988874,
+        "population_stddev": 0.039467883800893604
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.005400000000000071
+  },
+  "late_window": {
+    "start_monotonic_s": 342794.357576041,
+    "end_monotonic_s": 342829.357576041,
+    "duration_s": 35.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 3500,
+      "frames": 875,
+      "minimum_required_samples": 3325,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.020429875003173947,
+      "last_receipt_before_end_s": 0.02007983298972249,
+      "maximum_interframe_receipt_gap_s": 0.05332566698780283,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 3500,
+      "mean": 0.5783999999999999,
+      "median": 0.58,
+      "min": 0.55,
+      "max": 0.5900000000000001,
+      "p05": 0.5599999999999999,
+      "p95": 0.5900000000000001,
+      "population_stddev": 0.009636834097802676
+    },
+    "voltage_V": {
+      "count": 3500,
+      "mean": 5.083060342857143,
+      "median": 5.0831,
+      "min": 5.08239,
+      "max": 5.08364,
+      "p05": 5.08267,
+      "p95": 5.08337,
+      "population_stddev": 0.00021836508654177525
+    },
+    "power_mW": {
+      "count": 3500,
+      "mean": 2.940041997142857,
+      "median": 2.9481748,
+      "min": 2.795529,
+      "max": 2.9992590999999997,
+      "p05": 2.8465135999999998,
+      "p95": 2.9990938999999996,
+      "population_stddev": 0.04897827016991505
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 342794.357576041,
+      "end_monotonic_s": 342799.357576041,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.020429875003173947,
+        "last_receipt_before_end_s": 0.019618624995928258,
+        "maximum_interframe_receipt_gap_s": 0.04027966700959951,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5796,
+        "median": 0.58,
+        "min": 0.55,
+        "max": 0.5900000000000001,
+        "p05": 0.5599999999999999,
+        "p95": 0.5900000000000001,
+        "population_stddev": 0.010762899237659012
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0831582,
+        "median": 5.08317,
+        "min": 5.08278,
+        "max": 5.08341,
+        "p05": 5.08298,
+        "p95": 5.08333,
+        "population_stddev": 0.00012415619195189586
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 2.946198578,
+        "median": 2.9482154,
+        "min": 2.7957875,
+        "max": 2.9992119,
+        "p05": 2.8465528,
+        "p95": 2.9991647,
+        "population_stddev": 0.05471468873931124
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 342824.357576041,
+      "end_monotonic_s": 342829.357576041,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.02038345899200067,
+        "last_receipt_before_end_s": 0.02007983298972249,
+        "maximum_interframe_receipt_gap_s": 0.042354334029369056,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5741999999999999,
+        "median": 0.57,
+        "min": 0.5599999999999999,
+        "max": 0.5900000000000001,
+        "p05": 0.5599999999999999,
+        "p95": 0.5900000000000001,
+        "population_stddev": 0.007769169839822038
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.0829914,
+        "median": 5.08302,
+        "min": 5.08267,
+        "max": 5.08325,
+        "p05": 5.08278,
+        "p95": 5.08321,
+        "population_stddev": 0.0001317575045300629
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 2.918653358,
+        "median": 2.8973841,
+        "min": 2.8463792,
+        "max": 2.998911,
+        "p05": 2.8464464,
+        "p95": 2.9988874,
+        "population_stddev": 0.039467883800893604
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.005400000000000071
+  },
+  "steady_state_established": false,
+  "no_load_offset_subtracted": false,
+  "energy_integrated": false,
+  "scope": "USB input of Pico 2 W with attached e-paper; Wi-Fi deinitialized and panel sleep command sent.",
+  "evidence_sha256": {
+    "panel-hiz-usb-45-01/result.json": "07f102eba58b80dda644003f53a44e78f924301a06f93a494cf7049fc2cc512d",
+    "panel-hiz-usb-45-01/events.jsonl": "8daeb87f6decc975bb931bebab4ab0e413563b64c71f770b72e161f67311abc5",
+    "capture-panel-hiz-usb-45-01/result.json": "90f62f684efe608eaac02a8b99089f6b4ce4f0ad43be3c49db362326c67514d9",
+    "capture-panel-hiz-usb-45-01/meter/frames.jsonl": "6cc6917098e55a999c6473069198ea49e1d8d5e9af0f6414203099606fab27cc",
+    "capture-panel-hiz-usb-45-01/meter/samples.jsonl": "edbf83ad32df99af8c7c62ec0c1166f0c30ad9cbb1315a937258771b468a4a43",
+    "capture-panel-hiz-usb-45-01/meter/summary.json": "50ac578aebd80e02cb71e386793fabd39b3e81b8a7677f2a0c86ea1461be5633",
+    "meter_reader_stoppable.py": "b290757a5253e929fc15cb47732a178a517b8884e30bfe36a38bb82bc0cbb009",
+    "analyze_variant.py": "30ea908e474c0c2360a1ad53fe9b323a24f8f9e59d7457ba0c0a39cd9fa3f236"
+  }
+}

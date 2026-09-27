@@ -1,0 +1,88 @@
+{
+  "result": "PASS",
+  "label": "long-300s-deepsleep",
+  "mode": "deepsleep",
+  "requested_ms": 300000,
+  "usb_absence_s": 302.97307183401426,
+  "rtc_elapsed_s": 302,
+  "start_event": {
+    "ticks_ms": 102781,
+    "label": "long-300s-deepsleep",
+    "mode": "deepsleep",
+    "event": "RUN",
+    "duration_ms": 300000,
+    "entry_delay_ms": 100,
+    "host_monotonic": 336868.261812583,
+    "host_utc": "2026-09-27T13:32:12.525429+00:00"
+  },
+  "removed_event": {
+    "event": "USB_REMOVED",
+    "label": "long-300s-deepsleep",
+    "host_monotonic": 336868.376759291,
+    "host_utc": "2026-09-27T13:32:12.640376+00:00"
+  },
+  "returned_event": {
+    "event": "USB_RETURNED",
+    "label": "long-300s-deepsleep",
+    "host_monotonic": 337171.349831125,
+    "host_utc": "2026-09-27T13:37:15.612835+00:00"
+  },
+  "wake_state": {
+    "backup": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        1347899954,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "watchdog_enabled": false,
+    "uid": "test-board-2",
+    "freq_hz": 150000000,
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "chip_reset": 33554432,
+    "rtc_epoch_s": 1790516232,
+    "last_swcore_pwrup": 64,
+    "machine": "Raspberry Pi Pico 2 W with RP2350",
+    "cause": 4,
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      13,
+      37,
+      12,
+      0
+    ]
+  },
+  "stopped_repl": true,
+  "early_window": {
+    "start_monotonic": 336873.261812583,
+    "end_monotonic": 336908.261812583,
+    "duration_s": 35
+  },
+  "late_window": {
+    "start_monotonic": 337103.261812583,
+    "end_monotonic": 337163.261812583,
+    "duration_s": 60
+  },
+  "analysis_window_note": "Windows use host RUN receipt, not device sample timestamps. Early/late comparison tests drift; the late window is not assumed settled.",
+  "host_monotonic": 337172.0341145,
+  "host_utc": "2026-09-27T13:37:16.297107+00:00"
+}

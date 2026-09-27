@@ -3,9 +3,56 @@
 Stav k 27. 9. 2026. Fork: [Rhiz3K/micropython](https://github.com/Rhiz3K/micropython),
 větev `rp2/rp2350-timed-deepsleep`.
 
-**Experimentální firmware. Funkční testy proběhly na jedné jiné Pico 2 W;
-spotřeba a energie cyklu nejsou změřené. Wi-Fi není spolehlivě ověřená.**
-Nová sestava na Macu dosud nebyla sestavena, zálohována ani testována.
+**Experimentální firmware; energie úplného aplikačního cyklu není změřená.
+Wi-Fi reconnect není spolehlivý.** Nativní Mac build už byl sestaven a nová
+Pico 2 W identifikována, plně zálohována a testována. Aktuální průběh a důkazy
+jsou v [samostatných výsledcích z Macu](RESULTS-MAC-20260927.md): krátké sady,
+regrese i skutečné 30minutové a 75minutové spánky prošly. Samostatná Wi-Fi
+diagnostika reprodukovala selhání po běžném restartu i na nezměněném základu.
+Displejový test se dvěma obrazy a jedním 5s alarmovým bootem má automatické
+kontroly PASS; majitel následně potvrdil správný čitelný obraz B a černý
+obdélník vpravo, takže vizuální kontrola fáze B má také PASS.
+Majitel upřesnil, že displej zůstává připojený. Krátké/dlouhé spánkové sady jej
+neobsluhovaly; dřívější fyzické odpojení nebylo doložené, nejde o ověřený test
+holé desky. Následný displejový test je samostatný výsledek.
+
+Navazující [měření přes JT-UM120](POWER-MAC-20260927.md) porovnalo tři 45s
+opakování aktivního CPU, běžného čekání, lightsleep a deepsleep. Celá sestava
+s vypnutým rádiem a uspaným panelem měla v pozdním okně samostatného 300s
+deepsleep průměr **3,81 mA / 19,38 mW** na USB vstupu. Všechny režimy i návraty
+prošly. Pozdější 15s nezatížená reference ukázala 0,05541 mA; celý její záznam
+skončil HID chybou až po tomto platném úseku. Měření holé desky a energie
+úplného cyklu chybí; nulová reference není kalibrace a nebyla odečtena.
+
+Pozdější [optimalizace s připojeným displejem](POWER-OPT-MAC-20260927.md)
+snížila odběr na **0,6000 a 0,5999 mA / přibližně 3,05 mW** ve dvou 300s
+testech, asi o **84 %** proti nově zopakovanému základu 3,8195 mA. Pomohlo
+uvolnění datových pinů po dokončeném panel sleep; firmware se neměnil.
+Všech osm nových alarmových návratů a nové A/B překreslení prošly automatickými
+kontrolami. Majitel následně potvrdil správný nový text `B: OPTIMIZED SLEEP OK`
+i černý obdélník vpravo: vizuální kontrola také PASS.
+[Ověřený helper](pico_epaper29_lowpower.py) vyžaduje úplné uspání panelu
+před voláním a obnovení všech GPIO/SPI při dalším použití displeje.
+**Původní aplikace tuto optimalizaci zatím nevolá.**
+
+Další [A/B test GP25](POWER-GP25-MAC-20260927.md) snížil odběr z **0,5983 na
+0,3708 mA / 1,8849 mW**, dalších **38,0 %**, při stále připojeném displeji.
+Po úplném vypnutí rádia GP25 LOW vypíná měřicí cestu VSYS. Tři krátké
+HIGH/LOW/HIGH a dvě 300s srovnání mají PASS, stejně jako nové A/B překreslení
+a opětovná inicializace ovladače rádia. Dodaná fotografie potvrzuje nový
+text `B: GP25 SLEEP OK` a černý obdélník vpravo: vizuální kontrola PASS.
+Nový [board helper](pico2w_vsys_lowpower.py) je ověřený společně s panelovým
+helperem; původní aplikace je automaticky nepoužívá. Kontrola inicializace
+ovladače netestovala připojení k AP a neopravuje známý Wi-Fi reconnect.
+
+**Poslední ověřená obnova nové desky:** v **16:37:40 UTC** zůstal firmware
+`9a8542bb24`, původní `main.py` a všech 29 původních souborů byly obnoveny
+a hashově ověřeny vůči nové záloze bezprostředně před GP25 testy.
+Šest testovacích souborů bylo odstraněno, UTC RTC a uložené backup hodnoty
+obnoveny a ověřeny. Aplikace je zastavená ve friendly REPL, STA/AP neaktivní,
+WL_REG_ON=0, GP25 LOW, panel uspaný, RST=0 a datové piny uvolněné. Pico nyní není
+v deepsleep; uvedených 0,37 mA je naměřená hodnota spánku. Další reset spustí
+původní aplikaci. Host testy, záznam měřáku a HTTP endpoint skončily.
 
 ## Co přebíráš
 
@@ -63,9 +110,12 @@ Model i unique ID ověř na nové desce; staré sériové číslo/manifest nepř
 Nezaměňuj ji s Pico WH/Pico W (RP2040, stará cesta) nebo Pico 2 bez Wi-Fi
 (`BOARD=RPI_PICO2`).
 
-Displej je samostatná navazující integrace; patch žádný driver nepřidává.
-Nejdřív otestuj samotnou desku bez displeje. Displej připojuj/odpojuj při
-odpojeném napájení. Před přidáním driveru ověř potisk/revizi a její schéma.
+Displej je samostatná integrace; patch žádný driver nepřidává. Starší fotografie
+identifikuje B/W V2, 296×128; aktuální polohu propojek z ní nelze odvodit.
+Při nové izolované validaci nejdřív otestuj samotnou desku bez displeje;
+dokončené Mac sady tuto podmínku nedokládají. Displej připojuj/odpojuj při
+odpojeném napájení. Konkrétní test s připnutým vendor driverem a omezeným BUSY
+je popsán v Mac reportu; automatický běh původní aplikace tím ověřen není.
 Zachovaný obraz e-paperu sám o sobě nedokazuje spánek procesoru ani nízký odběr.
 Při měření porovnávej zvlášť holou desku a celou sestavu včetně displeje,
 jeho řadiče a napájení.
@@ -85,14 +135,18 @@ uvádějí toto zapojení; před použitím porovnej fyzickou revizi:
 Schéma obsahuje řízení napájecího obvodu navázané na RST; nevymýšlej samostatný
 volný GPIO EN ani bez měření netvrď úplné odpojení napájení. Demo `sleep()`
 pošle příkaz `0x10`, data `0x01`, počká dvě sekundy a stáhne RST. Pro pozdější
-integraci dokonči refresh/BUSY, zavolej ověřené `epd.sleep()` a pak teprve
-`machine.deepsleep(5000)`. Po novém bootu displej resetuj a inicializuj. Vendor
+integraci dokonči refresh/BUSY, zavolej ověřené `epd.sleep()`, poté
+`pico_epaper29_lowpower.park_after_sleep()` a pak teprve časovaný
+`machine.deepsleep(...)`. Po novém bootu obnov všechny směry GPIO a SPI,
+displej resetuj a inicializuj; samotné `init()` původního driveru GPIO
+neobnovuje. Vendor
 `ReadBusy()` nemá timeout: integrační test musí čekání omezit, aby zamrzlý
 displej neskrýval chybu uspávání. Vendor UF2 není náhradou tohoto firmwaru.
 
 ## Klon a prostředí na Macu
 
-Následující příkazy jsou postup pro nový host; **na macOS zde nebyly spuštěné**.
+Následující příkazy jsou postup pro nový host. Pro skutečně provedený nativní
+Mac build a přesné verze viz [výsledky z Macu](RESULTS-MAC-20260927.md).
 Nejprve ověř `uname -m` a dostupnost Command Line Tools (`xcode-select -p`).
 Pokud chybí, nainstaluj je `xcode-select --install`. S dostupným Homebrew:
 
@@ -245,7 +299,8 @@ Pro dlouhé sady použij vždy `cycles=1`, nový run/log a větší host timeout
 `sleep_ms=4500000` s `--timeout 4800`. Výchozích 90 sekund nestačí.
 Nastav také explicitní `rtc_tolerance_s` podle plánované tolerance a zaznamenej
 skutečný rozdíl RTC vůči host času; LPOSC nemá garantovanou přesnost krystalu.
-Oba dlouhé testy jsou při tomto předání stále NEPROVEDENO.
+Aktuální výsledky dlouhých testů jsou v [záznamu z Macu](RESULTS-MAC-20260927.md);
+historické linuxové výsledky je neobsahují.
 
 ## Návrat a další předání
 
@@ -259,7 +314,8 @@ picotool reboot --ser NEW_BOOTSEL_SERIAL
 
 Původní firmware/filesystem nové desky lze obnovit jen její vlastní zálohou.
 Veřejný fork neobsahuje zálohy ani credentials. Pro budoucí upstream bude
-potřeba lidská revize, přezkoumání změny retence mem_backup, měření spotřeby,
+potřeba lidská revize, přezkoumání změny retence mem_backup, doplnění měření
+holé desky a energie úplného aplikačního cyklu,
 vyřešení síťové stability a commit message/DCO podle upstream pravidel.
 Existující autorství při předání nebylo přepisováno.
 
@@ -267,9 +323,24 @@ Text pro dalšího asistenta:
 
 > Pokračuj ve forku Rhiz3K/micropython, větev rp2/rp2350-timed-deepsleep.
 > Nejdřív přečti experiments/rp2350-deepsleep/HANDOVER.cs.md a RESULTS.md.
-> Mám Mac, jinou Pico 2 W s headery a Waveshare Pico-ePaper-2.9; revizi displeje,
-> firmware/UID desky a zálohu musíš ověřit před zápisem. Původní deska na Linuxu
-> po USB trace neodpovídá, její stav nesměšuj s touto deskou. Nejdřív testuj
-> samostatnou desku, potom Wi-Fi a teprve potom displej. Výsledek je experiment,
-> bez měření spotřeby; neoznačuj nové testy za PASS, dokud skutečně neproběhnou.
+> Mám Mac, jinou Pico 2 W s headery a Waveshare Pico-ePaper-2.9 B/W V2.
+> Přečti také RESULTS-MAC-20260927.md, POWER-MAC-20260927.md,
+> POWER-OPT-MAC-20260927.md, POWER-GP25-MAC-20260927.md a privátní STATUS.cs.md
+> v pracovním adresáři této desky. Identifikace a plná záloha už existují.
+> Testy včetně obou dlouhých spánků a obou optimalizací jsou dokončené;
+> před dalším zápisem ověř aktuální stav. Poslední obnova v 16:37:40 UTC
+> zachovala experimentální firmware a hashově ověřila všech 29 původních
+> souborů. Aplikace zůstala zastavená v REPL, rádio off, GP25 LOW a panel
+> uspaný s uvolněnými datovými piny. Naměřených 0,3708 mA je odběr při
+> deepsleep, nikoli v konečném REPL. Další reset spustí původní aplikaci,
+> která ověřené helpery zatím automaticky nepoužívá.
+> Displej je podle majitele připojený; předchozí odpojení nebylo doložené.
+> Wi-Fi po restartu selhala i na nezměněném baseline; příčina zůstává otevřená.
+> Nejnovější obraz B: GP25 SLEEP OK a obdélník vpravo prošly automatickou
+> kontrolou i vizuální kontrolou dodané fotografie. Inicializace ovladače
+> rádia prošla, připojení k AP tím ověřené není.
+> Původní deska na Linuxu po USB trace neodpovídá, její stav nesměšuj s touto
+> deskou. Další izolované testy koordinuj se zapojením. Výsledek je experiment,
+> s měřením USB odběru celé sestavy, bez energie úplného aplikačního cyklu.
+> Neoznačuj nové testy za PASS, dokud skutečně neproběhnou.
 > Upstream PR zatím nevytvářej; aplikační firmware a webový instalátor jsou mimo rozsah.

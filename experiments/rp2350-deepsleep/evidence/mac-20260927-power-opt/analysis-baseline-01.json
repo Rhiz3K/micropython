@@ -1,0 +1,333 @@
+{
+  "result": "PASS",
+  "label": "baseline-01",
+  "variant": null,
+  "created_utc": "2026-09-27T14:59:08.059598+00:00",
+  "requested_ms": 300000,
+  "wake_verification": {
+    "result": "PASS",
+    "alarm_cause": 4,
+    "last_swcore_pwrup": 64,
+    "had_swcore_powerdown": true,
+    "retained_counter_plus_one": true,
+    "usb_absence_s": 302.4685756249819,
+    "rtc_elapsed_s": 302
+  },
+  "raw_audit": {
+    "result": "PASS",
+    "frames": 7734,
+    "samples": 30932,
+    "recording_samples": 30888,
+    "all_crc_verified": true,
+    "exact_frame_to_sample_mapping_verified": true,
+    "invalid_frames": 0
+  },
+  "coverage_limits": {
+    "minimum_samples_per_second": 95,
+    "boundary_tolerance_s": 0.1,
+    "maximum_interframe_receipt_gap_s": 0.2
+  },
+  "sampling": {
+    "nominal_hz": 100,
+    "samples_per_frame": 4,
+    "timestamp_origin": "Actual host frame receipt; four ordered samples share a timestamp.",
+    "device_timestamps_known": false,
+    "exact_dropped_samples": null,
+    "outlier_filter": false,
+    "zero_filter": false
+  },
+  "meter_recording_gaps_over_200ms": [],
+  "windows_identical": false,
+  "early_window": {
+    "start_monotonic_s": 341664.063592083,
+    "end_monotonic_s": 341699.063592083,
+    "duration_s": 35.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 3500,
+      "frames": 875,
+      "minimum_required_samples": 3325,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.015111832995899022,
+      "last_receipt_before_end_s": 0.025356833008117974,
+      "maximum_interframe_receipt_gap_s": 0.04884295800002292,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 3500,
+      "mean": 5.3714571428571425,
+      "median": 5.36,
+      "min": 4.7299999999999995,
+      "max": 6.119999999999999,
+      "p05": 4.819999999999999,
+      "p95": 6.029999999999999,
+      "population_stddev": 0.38493619826497727
+    },
+    "voltage_V": {
+      "count": 3500,
+      "mean": 5.079983211428572,
+      "median": 5.08001,
+      "min": 5.07927,
+      "max": 5.08056,
+      "p05": 5.0795,
+      "p95": 5.08044,
+      "population_stddev": 0.00028017928114629274
+    },
+    "power_mW": {
+      "count": 3500,
+      "mean": 27.28683862417143,
+      "median": 27.230944,
+      "min": 24.0278797,
+      "max": 31.0867848,
+      "p05": 24.4856482,
+      "p95": 30.6298674,
+      "population_stddev": 1.9544157874278694
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 341664.063592083,
+      "end_monotonic_s": 341669.063592083,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.015111832995899022,
+        "last_receipt_before_end_s": 0.025040625012479722,
+        "maximum_interframe_receipt_gap_s": 0.04316224996000528,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 5.9742,
+        "median": 5.96,
+        "min": 5.84,
+        "max": 6.119999999999999,
+        "p05": 5.87,
+        "p95": 6.11,
+        "population_stddev": 0.08323677072063757
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.07969628,
+        "median": 5.0797,
+        "min": 5.07927,
+        "max": 5.08017,
+        "p05": 5.07927,
+        "p95": 5.08013,
+        "population_stddev": 0.0002449819617848655
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 30.347111075199997,
+        "median": 30.2768596,
+        "min": 29.6647472,
+        "max": 31.0867848,
+        "p05": 29.8173694,
+        "p95": 31.035011800000003,
+        "population_stddev": 0.42206003315986196
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 341694.063592083,
+      "end_monotonic_s": 341699.063592083,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.014823124976828694,
+        "last_receipt_before_end_s": 0.025356833008117974,
+        "maximum_interframe_receipt_gap_s": 0.04142170801060274,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 4.83312,
+        "median": 4.83,
+        "min": 4.7299999999999995,
+        "max": 4.8999999999999995,
+        "p05": 4.74,
+        "p95": 4.8999999999999995,
+        "population_stddev": 0.05226725169740596
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.080159,
+        "median": 5.08017,
+        "min": 5.07977,
+        "max": 5.08056,
+        "p05": 5.07989,
+        "p95": 5.08052,
+        "population_stddev": 0.00019153328692422586
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 24.5530253596,
+        "median": 24.5368347,
+        "min": 24.0278797,
+        "max": 24.894744,
+        "p05": 24.0781098,
+        "p95": 24.894548,
+        "population_stddev": 0.2662026575342516
+      }
+    },
+    "last_minus_first_mean_current_mA": -1.1410799999999997
+  },
+  "late_window": {
+    "start_monotonic_s": 341894.063592083,
+    "end_monotonic_s": 341954.063592083,
+    "duration_s": 60.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 6000,
+      "frames": 1500,
+      "minimum_required_samples": 5700,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.004501542018260807,
+      "last_receipt_before_end_s": 0.036238082975614816,
+      "maximum_interframe_receipt_gap_s": 0.04296020802576095,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 6000,
+      "mean": 3.8195,
+      "median": 3.82,
+      "min": 3.75,
+      "max": 3.87,
+      "p05": 3.78,
+      "p95": 3.8600000000000003,
+      "population_stddev": 0.02290742237791071
+    },
+    "voltage_V": {
+      "count": 6000,
+      "mean": 5.07287812,
+      "median": 5.0729,
+      "min": 5.07235,
+      "max": 5.07341,
+      "p05": 5.07259,
+      "p95": 5.07317,
+      "population_stddev": 0.0001803435580588944
+    },
+    "power_mW": {
+      "count": 6000,
+      "mean": 19.37585826813333,
+      "median": 19.378478,
+      "min": 19.023075,
+      "max": 19.6331679,
+      "p05": 19.174806,
+      "p95": 19.58109292,
+      "population_stddev": 0.11625698856087525
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 341894.063592083,
+      "end_monotonic_s": 341899.063592083,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.004501542018260807,
+        "last_receipt_before_end_s": 0.035633667022921145,
+        "maximum_interframe_receipt_gap_s": 0.040270207973662764,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 3.8342400000000003,
+        "median": 3.8400000000000003,
+        "min": 3.79,
+        "max": 3.8600000000000003,
+        "p05": 3.79,
+        "p95": 3.8600000000000003,
+        "population_stddev": 0.023281374529868424
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.072983,
+        "median": 5.07298,
+        "min": 5.07262,
+        "max": 5.07329,
+        "p05": 5.0727,
+        "p95": 5.07321,
+        "population_stddev": 0.00016164467204336734
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 19.451033457599998,
+        "median": 19.4793984,
+        "min": 19.2256846,
+        "max": 19.582590600000003,
+        "p05": 19.2267458,
+        "p95": 19.5822818,
+        "population_stddev": 0.1179630275581566
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 341949.063592083,
+      "end_monotonic_s": 341954.063592083,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.003848374995868653,
+        "last_receipt_before_end_s": 0.036238082975614816,
+        "maximum_interframe_receipt_gap_s": 0.04037029104074463,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 3.82548,
+        "median": 3.82,
+        "min": 3.79,
+        "max": 3.8600000000000003,
+        "p05": 3.79,
+        "p95": 3.8600000000000003,
+        "population_stddev": 0.02122191320310223
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.07291976,
+        "median": 5.07294,
+        "min": 5.07239,
+        "max": 5.07309,
+        "p05": 5.07251,
+        "p95": 5.07309,
+        "population_stddev": 0.00015227850275065867
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 19.4063536204,
+        "median": 19.379203800000003,
+        "min": 19.226442600000002,
+        "max": 19.581972999999998,
+        "p05": 19.226594199999997,
+        "p95": 19.5818572,
+        "population_stddev": 0.10775595491605089
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.008760000000000101
+  },
+  "steady_state_established": false,
+  "no_load_offset_subtracted": false,
+  "energy_integrated": false,
+  "scope": "USB input of Pico 2 W with attached e-paper; Wi-Fi deinitialized and panel sleep command sent.",
+  "evidence_sha256": {
+    "baseline-01/result.json": "80c4755e4a5f6256b4334c91fa67fe91d9f6bbcec371f796413a66b033daef09",
+    "baseline-01/events.jsonl": "1240619ac9d6f98ea21e514f9f793d05ad2b70ee45c2ea92485e9bc1eb1284bc",
+    "capture-baseline-01/result.json": "b6fc95c6dacf96bf18f9114f4ae98d7e0e30e466f0c48b20cd72bb61134ecdc0",
+    "capture-baseline-01/meter/frames.jsonl": "4d96346029bc17e08d1731a16d7f84f7ec1e06e031a690a3b497ce4800b33755",
+    "capture-baseline-01/meter/samples.jsonl": "9219c95e6635fd539884c5bf3449ef6db2bf0ff8b0ce9aac68b646a19ed5786f",
+    "capture-baseline-01/meter/summary.json": "8ccce9e717e4dbeab5b90964fc8fe8768f1db246309f7d13d6311f26e135e2cf",
+    "meter_reader_stoppable.py": "b290757a5253e929fc15cb47732a178a517b8884e30bfe36a38bb82bc0cbb009",
+    "analyze_variant.py": "30ea908e474c0c2360a1ad53fe9b323a24f8f9e59d7457ba0c0a39cd9fa3f236"
+  }
+}

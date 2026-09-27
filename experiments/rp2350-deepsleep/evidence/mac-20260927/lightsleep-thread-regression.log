@@ -1,0 +1,8 @@
+test_cpu0_busy (__main__.LightSleepInThread) ... ok
+test_cpu0_sleeping (__main__.LightSleepInThread) ... ok
+test_cpu0_also_lightsleep (__main__.LightSleepInThread) ... ok
+----------------------------------------------------------------------
+Ran 3 tests
+
+OK
+Local directory <redacted-local-path> is mounted at /remote

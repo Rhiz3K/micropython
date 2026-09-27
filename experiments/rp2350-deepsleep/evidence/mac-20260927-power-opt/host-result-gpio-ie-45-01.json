@@ -1,0 +1,66 @@
+{
+  "result": "PASS",
+  "label": "gpio-ie-45-01",
+  "mode": "deepsleep",
+  "requested_ms": 45000,
+  "usb_absence_s": 45.972217292001005,
+  "rtc_elapsed_s": 47,
+  "start_event": {
+    "ticks_ms": 10022,
+    "label": "gpio-ie-45-01",
+    "mode": "deepsleep",
+    "event": "RUN",
+    "duration_ms": 45000,
+    "entry_delay_ms": 100,
+    "host_monotonic": 342042.278779625,
+    "host_utc": "2026-09-27T14:58:26.532492+00:00"
+  },
+  "removed_event": {
+    "event": "USB_REMOVED",
+    "label": "gpio-ie-45-01",
+    "host_monotonic": 342042.390863583,
+    "host_utc": "2026-09-27T14:58:26.644574+00:00"
+  },
+  "returned_event": {
+    "event": "USB_RETURNED",
+    "label": "gpio-ie-45-01",
+    "host_monotonic": 342088.363080875,
+    "host_utc": "2026-09-27T14:59:12.616680+00:00"
+  },
+  "wake_state": {
+    "boot_counter": 4,
+    "watchdog_enabled": false,
+    "uid": "test-board-2",
+    "freq_hz": 150000000,
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "chip_reset": 33554432,
+    "rtc_epoch_s": 1790521150,
+    "last_swcore_pwrup": 64,
+    "machine": "Raspberry Pi Pico 2 W with RP2350",
+    "cause": 4,
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      14,
+      59,
+      10,
+      0
+    ]
+  },
+  "stopped_repl": true,
+  "early_window": {
+    "start_monotonic": 342047.278779625,
+    "end_monotonic": 342082.278779625,
+    "duration_s": 35
+  },
+  "late_window": {
+    "start_monotonic": 342047.278779625,
+    "end_monotonic": 342082.278779625,
+    "duration_s": 35
+  },
+  "analysis_window_note": "Both windows are the same RUN+5..40 second screen; no late settling claim.",
+  "host_monotonic": 342089.046462416,
+  "host_utc": "2026-09-27T14:59:13.300057+00:00"
+}

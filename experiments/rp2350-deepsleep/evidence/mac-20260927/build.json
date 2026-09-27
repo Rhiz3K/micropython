@@ -1,0 +1,26 @@
+{
+  "source": "9a8542bb242d04bcf20ddfb7b09b8047759bfa92",
+  "board": "RPI_PICO2_W",
+  "platform": "rp2350-arm-s",
+  "sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+  "picotool_build": "6f6458d792b93685a11423b244a585eaa99eafcf",
+  "gcc": "14.3.1",
+  "native_build": "PASS",
+  "host": {
+    "os": "macOS 27.2",
+    "architecture": "arm64",
+    "python": "3.14.7",
+    "pyserial": "3.5"
+  },
+  "artifacts": {
+    "uf2": {
+      "size_bytes": 1780224,
+      "sha256": "33ccf3abf94a3a2a784c0d6d08f32d4d722cf9a89a7074331b33788c60cfbe60"
+    },
+    "bin": {
+      "size_bytes": 889712,
+      "sha256": "5b66bbba5981774e8066924bd005182fea7523e36dcf795e623863e3b55ba881"
+    }
+  },
+  "note": "Build identity only. Hardware outcomes are recorded in RESULTS-MAC-20260927.md and the accompanying logs; the private build-time manifest predates hardware validation."
+}

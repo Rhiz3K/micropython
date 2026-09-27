@@ -1,0 +1,49 @@
+{
+  "result": "PASS",
+  "visual_result": "NOT_VERIFIED",
+  "uid": "test-board-2",
+  "app_started": false,
+  "firmware_changed": false,
+  "scratch_written_by_probe": false,
+  "temporary_files_removed": [
+    "rp2350_epd_vendor.py",
+    "rp2350_epd_probe.py"
+  ],
+  "main_config_unchanged": true,
+  "display_refreshes": 2,
+  "panel_rst": 0,
+  "state": {
+    "uid": "test-board-2",
+    "phase": 2,
+    "last_swcore_pwrup": 64,
+    "rtc_epoch_s": 1790385946,
+    "scratch": [
+      1146310706,
+      1,
+      1790380798,
+      2,
+      0,
+      10,
+      0,
+      324508639
+    ],
+    "boot": 10,
+    "cause": 4,
+    "automatic_checks": "PASS",
+    "chip_reset": 33554432,
+    "visual_result": "NOT_VERIFIED",
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      1,
+      25,
+      46,
+      0
+    ],
+    "rst": 0,
+    "event": "COMPLETE",
+    "app_started": false
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "result": "PASS",
+  "label": "gp25-high-45-02",
+  "variant": "gp25_high",
+  "created_utc": "2026-09-27T16:25:35.632547+00:00",
+  "requested_ms": 45000,
+  "gpio25_verification": {
+    "result": "PASS",
+    "gpio25_level": 1,
+    "gpio25_sio_output": true,
+    "gpio25_status": 67248640,
+    "gpio25_ctrl": 5,
+    "radio_reg_on_low_output": true,
+    "panel_high_z_verified": true,
+    "gpio29_ctrl": 8,
+    "gpio29_status": 8192,
+    "gpio29_mux_function": 8,
+    "gpio29_output_enabled_to_pad": true,
+    "gpio29_output_level_to_pad": false,
+    "note": "Actual IO_BANK0 output status is recorded; SIO_OE alone is not used to infer GPIO29 direction."
+  },
+  "wake_verification": {
+    "result": "PASS",
+    "alarm_cause": 4,
+    "last_swcore_pwrup": 64,
+    "had_swcore_powerdown": true,
+    "retained_counter_plus_one": true,
+    "usb_absence_s": 45.9083337909542,
+    "rtc_elapsed_s": 47
+  },
+  "raw_audit": {
+    "result": "PASS",
+    "frames": 1339,
+    "samples": 5352,
+    "recording_samples": 5232,
+    "all_crc_verified": true,
+    "exact_frame_to_sample_mapping_verified": true,
+    "invalid_frames": 0
+  },
+  "coverage_limits": {
+    "minimum_samples_per_second": 95,
+    "boundary_tolerance_s": 0.1,
+    "maximum_interframe_receipt_gap_s": 0.2
+  },
+  "sampling": {
+    "nominal_hz": 100,
+    "samples_per_frame": 4,
+    "timestamp_origin": "Actual host frame receipt; four ordered samples share a timestamp.",
+    "device_timestamps_known": false,
+    "exact_dropped_samples": null,
+    "outlier_filter": false,
+    "zero_filter": false
+  },
+  "meter_recording_gaps_over_200ms": [],
+  "windows_identical": true,
+  "early_window": {
+    "start_monotonic_s": 347186.988495958,
+    "end_monotonic_s": 347221.988495958,
+    "duration_s": 35.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 3500,
+      "frames": 875,
+      "minimum_required_samples": 3325,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.028692500025499612,
+      "last_receipt_before_end_s": 0.011937916977331042,
+      "maximum_interframe_receipt_gap_s": 0.0470742920297198,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 3500,
+      "mean": 0.6017314285714286,
+      "median": 0.6,
+      "min": 0.58,
+      "max": 0.63,
+      "p05": 0.5900000000000001,
+      "p95": 0.62,
+      "population_stddev": 0.01185034710591262
+    },
+    "voltage_V": {
+      "count": 3500,
+      "mean": 5.0834916,
+      "median": 5.08352,
+      "min": 5.08302,
+      "max": 5.08384,
+      "p05": 5.08313,
+      "p95": 5.08376,
+      "population_stddev": 0.00018209655209726434
+    },
+    "power_mW": {
+      "count": 3500,
+      "mean": 3.0588970724,
+      "median": 3.050094,
+      "min": 2.9481516,
+      "max": 3.202668,
+      "p05": 2.9990703,
+      "p95": 3.1518568,
+      "population_stddev": 0.060262228537055436
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 347186.988495958,
+      "end_monotonic_s": 347191.988495958,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.028692500025499612,
+        "last_receipt_before_end_s": 0.011636874987743795,
+        "maximum_interframe_receipt_gap_s": 0.0470742920297198,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.6023200000000001,
+        "median": 0.6,
+        "min": 0.5900000000000001,
+        "max": 0.62,
+        "p05": 0.5900000000000001,
+        "p95": 0.62,
+        "population_stddev": 0.008753148005146465
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.08357454,
+        "median": 5.0836,
+        "min": 5.08333,
+        "max": 5.0838,
+        "p05": 5.08341,
+        "p95": 5.08372,
+        "population_stddev": 0.00010245188334034332
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.0619383094,
+        "median": 3.05016,
+        "min": 2.9992768,
+        "max": 3.1518568,
+        "p05": 2.9993239999999997,
+        "p95": 3.1517638,
+        "population_stddev": 0.04447629434140766
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 347216.988495958,
+      "end_monotonic_s": 347221.988495958,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.02822316699894145,
+        "last_receipt_before_end_s": 0.011937916977331042,
+        "maximum_interframe_receipt_gap_s": 0.04132575000403449,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5959800000000001,
+        "median": 0.5900000000000001,
+        "min": 0.5900000000000001,
+        "max": 0.63,
+        "p05": 0.5900000000000001,
+        "p95": 0.61,
+        "population_stddev": 0.009361602426935215
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.08352858,
+        "median": 5.08352,
+        "min": 5.08313,
+        "max": 5.0838,
+        "p05": 5.08325,
+        "p95": 5.08376,
+        "population_stddev": 0.00017204936384653064
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.0296809797999997,
+        "median": 2.9993711999999997,
+        "min": 2.9991411,
+        "max": 3.2025734999999997,
+        "p05": 2.9991411,
+        "p95": 3.1010936,
+        "population_stddev": 0.04756508327926792
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.006340000000000012
+  },
+  "late_window": {
+    "start_monotonic_s": 347186.988495958,
+    "end_monotonic_s": 347221.988495958,
+    "duration_s": 35.0,
+    "coverage": {
+      "result": "PASS",
+      "samples": 3500,
+      "frames": 875,
+      "minimum_required_samples": 3325,
+      "samples_per_window_second": 100.0,
+      "first_receipt_after_start_s": 0.028692500025499612,
+      "last_receipt_before_end_s": 0.011937916977331042,
+      "maximum_interframe_receipt_gap_s": 0.0470742920297198,
+      "samples_zero_current": 0
+    },
+    "current_mA": {
+      "count": 3500,
+      "mean": 0.6017314285714286,
+      "median": 0.6,
+      "min": 0.58,
+      "max": 0.63,
+      "p05": 0.5900000000000001,
+      "p95": 0.62,
+      "population_stddev": 0.01185034710591262
+    },
+    "voltage_V": {
+      "count": 3500,
+      "mean": 5.0834916,
+      "median": 5.08352,
+      "min": 5.08302,
+      "max": 5.08384,
+      "p05": 5.08313,
+      "p95": 5.08376,
+      "population_stddev": 0.00018209655209726434
+    },
+    "power_mW": {
+      "count": 3500,
+      "mean": 3.0588970724,
+      "median": 3.050094,
+      "min": 2.9481516,
+      "max": 3.202668,
+      "p05": 2.9990703,
+      "p95": 3.1518568,
+      "population_stddev": 0.060262228537055436
+    },
+    "first_5seconds": {
+      "start_monotonic_s": 347186.988495958,
+      "end_monotonic_s": 347191.988495958,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.028692500025499612,
+        "last_receipt_before_end_s": 0.011636874987743795,
+        "maximum_interframe_receipt_gap_s": 0.0470742920297198,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.6023200000000001,
+        "median": 0.6,
+        "min": 0.5900000000000001,
+        "max": 0.62,
+        "p05": 0.5900000000000001,
+        "p95": 0.62,
+        "population_stddev": 0.008753148005146465
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.08357454,
+        "median": 5.0836,
+        "min": 5.08333,
+        "max": 5.0838,
+        "p05": 5.08341,
+        "p95": 5.08372,
+        "population_stddev": 0.00010245188334034332
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.0619383094,
+        "median": 3.05016,
+        "min": 2.9992768,
+        "max": 3.1518568,
+        "p05": 2.9993239999999997,
+        "p95": 3.1517638,
+        "population_stddev": 0.04447629434140766
+      }
+    },
+    "last_5seconds": {
+      "start_monotonic_s": 347216.988495958,
+      "end_monotonic_s": 347221.988495958,
+      "duration_s": 5.0,
+      "coverage": {
+        "result": "PASS",
+        "samples": 500,
+        "frames": 125,
+        "minimum_required_samples": 475,
+        "samples_per_window_second": 100.0,
+        "first_receipt_after_start_s": 0.02822316699894145,
+        "last_receipt_before_end_s": 0.011937916977331042,
+        "maximum_interframe_receipt_gap_s": 0.04132575000403449,
+        "samples_zero_current": 0
+      },
+      "current_mA": {
+        "count": 500,
+        "mean": 0.5959800000000001,
+        "median": 0.5900000000000001,
+        "min": 0.5900000000000001,
+        "max": 0.63,
+        "p05": 0.5900000000000001,
+        "p95": 0.61,
+        "population_stddev": 0.009361602426935215
+      },
+      "voltage_V": {
+        "count": 500,
+        "mean": 5.08352858,
+        "median": 5.08352,
+        "min": 5.08313,
+        "max": 5.0838,
+        "p05": 5.08325,
+        "p95": 5.08376,
+        "population_stddev": 0.00017204936384653064
+      },
+      "power_mW": {
+        "count": 500,
+        "mean": 3.0296809797999997,
+        "median": 2.9993711999999997,
+        "min": 2.9991411,
+        "max": 3.2025734999999997,
+        "p05": 2.9991411,
+        "p95": 3.1010936,
+        "population_stddev": 0.04756508327926792
+      }
+    },
+    "last_minus_first_mean_current_mA": -0.006340000000000012
+  },
+  "steady_state_established": false,
+  "no_load_offset_subtracted": false,
+  "energy_integrated": false,
+  "scope": "USB input of Pico 2 W with attached e-paper; Wi-Fi deinitialized and panel sleep command sent.",
+  "evidence_sha256": {
+    "gp25-high-45-02/result.json": "65caf0d731dccf7295db5723e22cf381cb32322e0179dfbbd6a29df164675559",
+    "gp25-high-45-02/events.jsonl": "298c6f97001be8555ac52370be142386b782ef849c1c312453c867b033b21264",
+    "capture-gp25-high-45-02/result.json": "47b23e60c146991f73dd2d28ec16d04092364da2a347c1e13dc7e7bd54fc3ee7",
+    "capture-gp25-high-45-02/meter/frames.jsonl": "f0517feda563d4cc68fc31b104bb19620e438b5b6f2650df741edbc622fabbd0",
+    "capture-gp25-high-45-02/meter/samples.jsonl": "67f90867704094677aa40075cfe17edf5df1e97565e3526e23f8579d4813b680",
+    "capture-gp25-high-45-02/meter/summary.json": "c323e005ce939f580804610fe779a73225c98614fbf4f1cac21a9ab33a2777ff",
+    "meter_reader_stoppable.py": "b290757a5253e929fc15cb47732a178a517b8884e30bfe36a38bb82bc0cbb009",
+    "analyze_variant.py": "56c9aea53ba1ad8cd569af21f7d23eaa475fdc4350321b950885de56833ddfff"
+  }
+}

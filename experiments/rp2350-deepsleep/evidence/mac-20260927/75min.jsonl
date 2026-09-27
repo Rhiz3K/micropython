@@ -1,0 +1,5 @@
+{"host_start": 1790505706.713987, "usb_serial": "test-board-2"}
+{"boot": 1, "cause": 3, "completed": 0, "host_elapsed_s": 0.4545030409935862, "phase": 0, "powman_chip_reset": 33554432, "powman_last_swcore_pwrup": 64, "rtc": [2026, 9, 26, 5, 0, 30, 5, 0], "run": "mac-20260927-pico2w-75min", "status": "READY", "uid": "test-board-2"}
+{"completed": 0, "host_elapsed_s": 0.46367016597650945, "run": "mac-20260927-pico2w-75min", "status": "SLEEP"}
+{"boot": 2, "cause": 4, "completed": 1, "crossed_day": true, "crossed_minute": true, "host_elapsed_s": 4540.617238291015, "phase": 1, "powman_chip_reset": 33554432, "powman_last_swcore_pwrup": 64, "rtc": [2026, 9, 26, 5, 1, 14, 58, 0], "rtc_before_epoch_s": 1790380798, "rtc_elapsed_s": 4500, "run": "mac-20260927-pico2w-75min", "status": "READY", "uid": "test-board-2", "watchdog_scratch_retained": [false, false]}
+{"boot": 3, "cause": 3, "completed": 1, "host_elapsed_s": 4541.880027375009, "phase": 5, "powman_chip_reset": 33554432, "powman_last_swcore_pwrup": 64, "rtc": [2026, 9, 26, 5, 1, 14, 59, 0], "run": "mac-20260927-pico2w-75min", "status": "PASS", "uid": "test-board-2", "watchdog_scratch_retained": [false, false]}

@@ -1,0 +1,11 @@
+{
+  "result": "FAIL",
+  "error_type": "RuntimeError",
+  "reason": "Pico removal not observed",
+  "host_monotonic": 337437.254015291,
+  "host_utc": "2026-09-27T13:41:41.516494+00:00",
+  "measurement": "Optional no-load reference",
+  "valid_reference_obtained": false,
+  "offset_subtracted": false,
+  "sleep_test_failure": false
+}

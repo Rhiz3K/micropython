@@ -1,0 +1,29 @@
+{
+  "result": "PASS",
+  "phase": "A",
+  "render": {
+    "text": "A: BEFORE OPT SLEEP",
+    "block": [
+      12,
+      64,
+      52,
+      44
+    ],
+    "footer": "300s TIMER TEST"
+  },
+  "full_refresh_count": 1,
+  "visual_result": "NOT_VERIFIED",
+  "helper_sha256": "52d992cb94ab9fe8ebb0b6cc80a0cde7155bbc1879f81d3ee6746d57a3ff0dd0",
+  "helper_size": 1840,
+  "backup_words_preserved": true,
+  "file_inventory_unchanged": true,
+  "reset_cause": 4,
+  "last_swcore_pwrup": 64,
+  "chip_reset": 33554432,
+  "guard_counter": 8,
+  "panel_parked": true,
+  "stopped_repl": true,
+  "event_time_note": "Host times reflect receipt after the bounded command; they are not display transition timestamps.",
+  "host_monotonic": 342940.19674325,
+  "host_utc": "2026-09-27T15:13:24.452484+00:00"
+}

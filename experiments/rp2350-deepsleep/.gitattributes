@@ -2,3 +2,10 @@
 # intentionally contain a leading space even when the original line is empty.
 * text eol=lf
 *.patch -whitespace
+
+# Preserve exact evidence bytes for SHA256 manifests, including PNG and CSV.
+evidence/mac-20260927*/** -text
+# CSV exports use CRLF; retain it without treating CR as trailing whitespace.
+evidence/mac-20260927*/*.csv whitespace=cr-at-eol
+# Keep generated SVG path formatting intact.
+evidence/mac-20260927*/*.svg -whitespace

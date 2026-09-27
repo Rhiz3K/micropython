@@ -1,8 +1,24 @@
 # RP2350 timed deepsleep: recorded results
 
-Updated 2026-09-27. **Experimental; sleep current and cycle energy have not
-been measured.** Functional testing on one Pico 2 W is not validation of the
-new Pico 2 WH/display assembly. No upstream PR has been submitted.
+Updated 2026-09-27. **Experimental; the original Linux tests did not measure
+sleep current or cycle energy.** This document records those Pico 2 W tests;
+they do not by themselves validate another board/display assembly.
+No upstream PR has been submitted.
+
+For subsequent native macOS testing on a second Pico 2 W, see the separate
+[2026-09-27 Mac results](RESULTS-MAC-20260927.md). The historical matrix below
+remains scoped to the original Linux test board and its dated observations.
+USB current of the second board with its attached display was subsequently
+measured in the [JT-UM120 power report](POWER-MAC-20260927.md). A subsequent
+[display pin optimization](POWER-OPT-MAC-20260927.md) reduced measured deep-sleep
+USB current from about 3.82 to 0.60 mA with the display still attached.
+A further [GP25 comparison](POWER-GP25-MAC-20260927.md) measured 0.5983 versus
+0.3708 mA over matching late windows of two 300 s sleeps, another 38.0%
+reduction. Alarm wake, display refresh and driver reinitialization passed;
+a supplied photograph also confirmed the new phase-B image. Wi-Fi association
+was not tested by that driver check. The original application was restored
+without integrating either helper.
+Complete application-cycle energy remains unmeasured.
 
 ## Source and artifacts
 

@@ -1,0 +1,58 @@
+{
+  "result": "PASS",
+  "original_files_verified": 29,
+  "comparison": "Fresh inventory immediately before these power tests",
+  "original_main_restored": true,
+  "temporary_files_removed": [
+    "/main.py",
+    "/device_measure.py",
+    "/rp2350_epd_vendor.py",
+    "/rp2350_epd_probe.py"
+  ],
+  "backup_words_restored": true,
+  "app_started": false,
+  "stopped_repl": true,
+  "state": {
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      13,
+      46,
+      6,
+      0
+    ],
+    "wl_reg_on": 0,
+    "panel_rst": 0,
+    "backup": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "sta": false,
+    "uid": "test-board-2",
+    "ap": false,
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)"
+  },
+  "host_monotonic": 337702.513047583,
+  "host_utc": "2026-09-27T13:46:06.775365+00:00"
+}
