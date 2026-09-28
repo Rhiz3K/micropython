@@ -1,0 +1,38 @@
+[
+  {
+    "boot": 1,
+    "cause": 3,
+    "cycle": 1,
+    "deep_ms": 0,
+    "detach_ms": 250,
+    "gone_s": 0.44090620800852776,
+    "host_monotonic": 405175.629592583,
+    "host_utc": "2026-09-28T08:30:39.782670+00:00",
+    "result": "PASS",
+    "returned_s": 1.2362846659962088
+  },
+  {
+    "boot": 2,
+    "cause": 3,
+    "cycle": 2,
+    "deep_ms": 0,
+    "detach_ms": 250,
+    "gone_s": 0.3186171670095064,
+    "host_monotonic": 405177.083251,
+    "host_utc": "2026-09-28T08:30:41.236322+00:00",
+    "result": "PASS",
+    "returned_s": 1.0284310419810936
+  },
+  {
+    "boot": 3,
+    "cause": 3,
+    "cycle": 3,
+    "deep_ms": 0,
+    "detach_ms": 250,
+    "gone_s": 0.37534412497188896,
+    "host_monotonic": 405178.647635083,
+    "host_utc": "2026-09-28T08:30:42.800701+00:00",
+    "result": "PASS",
+    "returned_s": 1.1384637499577366
+  }
+]

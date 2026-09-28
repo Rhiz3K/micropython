@@ -1,0 +1,23 @@
+{
+  "result": "PASS",
+  "compiled_core_unchanged": true,
+  "core_sha256": {
+    "ports/rp2/modmachine.c": "31271e7ce42ed01a70085e8aca63acc611552f9568b21f6693e73f7d9af4fae7",
+    "ports/rp2/mpconfigport.h": "e07a2158281328425d8ad1d89ccabd2809c04183b5f27cb5f47a2e1cf5217e9d",
+    "ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h": "d21b69eaa6619fab237dbdcc7613c5c68359e8a539db4823cb684305bccf87e4",
+    "ports/rp2/boards/RPI_PICO2/mpconfigboard.h": "37cf349743c114a528ec002f7bf4c49ca545b9f23efb1058846057c90c563262",
+    "ports/rp2/main.c": "b5bdba53231557d58fd858f4b125f0ab90f1ec4c09e24e5ab0a1f5977523a7b2",
+    "ports/rp2/modmachine.h": "7ce83d70308780192090988bdc538e36db93d779ecd26a2a7e8474fdc6e32db9"
+  },
+  "final_host_sha256": "13b7c499acae9b39ca33ba8c5645efbe4008c91dbf8095bbe7eb266799756d16",
+  "tested_device_sha256": "598dd701a2456bf7e1f8d25479a7e94aec8bd2bd1679fd4c94ed0f92a8e629e7",
+  "formatted_device_sha256": "1e06bdc531f7350f2f2cd47a0f53a5dec09881a457002d4e8f006bc041686aa3",
+  "device_ast_unchanged": true,
+  "combined_patch_sha256": "f172eaac338ba2be14ca31ecc94fbed54c5ab29ecdf066ac7e04c241bda9cef9",
+  "combined_patch_apply_check_base": "09f5bb447504a058376c62fe991b3613531837e6",
+  "ruff_version": "0.11.6",
+  "ruff_check": "PASS",
+  "ruff_format": "PASS",
+  "c_format_tool": "micropython-uncrustify 1.0.0.post1",
+  "c_format_unchanged": true
+}

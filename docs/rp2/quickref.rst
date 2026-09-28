@@ -123,9 +123,14 @@ continues using the low-power oscillator during sleep, so its accuracy differs
 from the crystal used while awake. No particular board current is guaranteed.
 
 USB disconnects and must enumerate again. Pico 2 W turns off CYW43; the new
-program must reconnect Wi-Fi. GPIO pads retain their output state during power
-down; external devices and the board regulator/flash remain powered. This is
-not a board-wide power switch. GPIO wake is not configured by this path.
+program must reconnect Wi-Fi. After powering off CYW43, Pico 2 W also drives
+GP25 (wireless CS) low to disable the board's VSYS monitor path. Normal wireless
+initialisation after wake reclaims this pin. This preparation applies only to
+timed deep sleep, not to ``WLAN.active(False)`` or ``machine.lightsleep()``.
+GPIO pads retain their output state during power down; external devices and
+the board regulator/flash remain powered. Applications must prepare their own
+external peripherals for sleep. This is not a board-wide power switch. GPIO
+wake is not configured by this path.
 
 Only ``machine.mem_backup(2)`` (the eight POWMAN words) survives this power-down.
 The watchdog scratch regions 0 and 1, Python heap and peripheral state do not.

@@ -1,0 +1,6 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "deep-abrupt-before", "mode": "none", "phase": "initial", "sta_active": false, "ticks_ms": 88296, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cycle": 1, "kind": "cycle_start", "label": "deep-abrupt-before", "ticks_ms": 88297}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "deep-abrupt-before", "status": 1, "ticks_ms": 89229}
+{"connect_elapsed_ms": 3046, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "deep-abrupt-before", "status": 3, "ticks_ms": 92269}
+{"body_verified": true, "connect_elapsed_ms": 3046, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "deep-abrupt-before", "ticks_ms": 92308}
+{"cleanup_mode": "none", "cleanup_ok": true, "completed": 1, "kind": "result", "label": "deep-abrupt-before", "left_connected": true, "no_filesystem_writes": true, "no_reset": true, "ok": true, "requested": 1, "ticks_ms": 92309}

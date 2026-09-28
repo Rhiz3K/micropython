@@ -1,0 +1,11 @@
+{
+  "backup_sha256": "dd92c7ab0329a9b33bdd4a69068eb97887068ace99b81b4468bf5101a70911bb",
+  "boot": 46,
+  "files_verified": 30,
+  "filesystem_bytes_preserved": true,
+  "firmware_sha256": "b404a1771bf0097a07709848cd296ff6a2eb755f1d7cf25a10395a8f346f0a43",
+  "host_monotonic": 406307.798673791,
+  "host_utc": "2026-09-28T08:49:31.949570+00:00",
+  "result": "PASS",
+  "version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)"
+}

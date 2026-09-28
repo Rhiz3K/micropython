@@ -1,0 +1,329 @@
+{
+  "cases": [
+    {
+      "case": "first_ap_failed_install",
+      "counts": {
+        "descriptor_fragment_invalid": 1,
+        "enumeration_failed": 1,
+        "failed_to_address_device": 7,
+        "hardware_connection_lost": 1,
+        "persistent_enumeration_failure": 1,
+        "pipe_stalled": 13,
+        "set_address_code_25": 7,
+        "successful_enumeration": 0
+      },
+      "supporting_log_lines": [
+        {
+          "message": "AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 4 (Board in FS mode@TARGET_PICO_PORT) endpoint 0x82: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+          "utc": "2026-09-27T20:42:28.962588+00:00"
+        },
+        {
+          "message": "AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 4 (Board in FS mode@TARGET_PICO_PORT) endpoint 0x00: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+          "utc": "2026-09-27T20:42:28.963387+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-27T20:42:28.971301+00:00"
+        },
+        {
+          "message": "IOUSBHostDevice@TARGET_PICO_PORT: IOUSBHostDevice::start_block_invoke: device descriptor fragment is invalid",
+          "utc": "2026-09-27T20:42:29.454127+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumeration failed",
+          "utc": "2026-09-27T20:42:29.454512+00:00"
+        },
+        {
+          "message": "AppleT8130USBXHCICommandRing: AppleUSBXHCICommandRing::setAddress: completed with result code 25",
+          "utc": "2026-09-27T20:42:32.564888+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSB20HubPort::resetAndCreateDevice: failed to address device, disabling port",
+          "utc": "2026-09-27T20:42:32.565116+00:00"
+        },
+        {
+          "message": "AppleT8130USBXHCICommandRing: AppleUSBXHCICommandRing::setAddress: completed with result code 25",
+          "utc": "2026-09-27T20:42:35.685273+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSB20HubPort::resetAndCreateDevice: failed to address device, disabling port",
+          "utc": "2026-09-27T20:42:35.685525+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::disconnect: persistent enumeration failures",
+          "utc": "2026-09-27T20:42:51.432469+00:00"
+        }
+      ],
+      "window_end_utc": "2026-09-27T20:43:00+00:00",
+      "window_start_utc": "2026-09-27T20:42:26+00:00"
+    },
+    {
+      "case": "ordinary_no_radio_reset_failure",
+      "counts": {
+        "descriptor_fragment_invalid": 1,
+        "enumeration_failed": 1,
+        "failed_to_address_device": 7,
+        "hardware_connection_lost": 1,
+        "persistent_enumeration_failure": 1,
+        "pipe_stalled": 3,
+        "set_address_code_25": 7,
+        "successful_enumeration": 0
+      },
+      "supporting_log_lines": [
+        {
+          "message": "AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 5 (Board in FS mode@TARGET_PICO_PORT) endpoint 0x00: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+          "utc": "2026-09-27T20:50:48.018119+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-27T20:50:48.020115+00:00"
+        },
+        {
+          "message": "AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 5 (Board in FS mode@TARGET_PICO_PORT) endpoint 0x82: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+          "utc": "2026-09-27T20:50:48.025896+00:00"
+        },
+        {
+          "message": "IOUSBHostDevice@TARGET_PICO_PORT: IOUSBHostDevice::start_block_invoke: device descriptor fragment is invalid",
+          "utc": "2026-09-27T20:50:48.528964+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumeration failed",
+          "utc": "2026-09-27T20:50:48.529396+00:00"
+        },
+        {
+          "message": "AppleT8130USBXHCICommandRing: AppleUSBXHCICommandRing::setAddress: completed with result code 25",
+          "utc": "2026-09-27T20:50:51.635364+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSB20HubPort::resetAndCreateDevice: failed to address device, disabling port",
+          "utc": "2026-09-27T20:50:51.635608+00:00"
+        },
+        {
+          "message": "AppleT8130USBXHCICommandRing: AppleUSBXHCICommandRing::setAddress: completed with result code 25",
+          "utc": "2026-09-27T20:50:54.751705+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSB20HubPort::resetAndCreateDevice: failed to address device, disabling port",
+          "utc": "2026-09-27T20:50:54.751904+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::disconnect: persistent enumeration failures",
+          "utc": "2026-09-27T20:51:10.480567+00:00"
+        }
+      ],
+      "window_end_utc": "2026-09-27T20:51:14+00:00",
+      "window_start_utc": "2026-09-27T20:50:46+00:00"
+    },
+    {
+      "case": "sta_ble_failed_install",
+      "counts": {
+        "descriptor_fragment_invalid": 1,
+        "enumeration_failed": 1,
+        "failed_to_address_device": 7,
+        "hardware_connection_lost": 1,
+        "persistent_enumeration_failure": 1,
+        "pipe_stalled": 7,
+        "set_address_code_25": 7,
+        "successful_enumeration": 0
+      },
+      "supporting_log_lines": [
+        {
+          "message": "AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 4 (Board in FS mode@TARGET_PICO_PORT) endpoint 0x82: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+          "utc": "2026-09-27T20:57:44.555709+00:00"
+        },
+        {
+          "message": "AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 4 (Board in FS mode@TARGET_PICO_PORT) endpoint 0x00: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+          "utc": "2026-09-27T20:57:44.558235+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-27T20:57:44.560214+00:00"
+        },
+        {
+          "message": "IOUSBHostDevice@TARGET_PICO_PORT: IOUSBHostDevice::start_block_invoke: device descriptor fragment is invalid",
+          "utc": "2026-09-27T20:57:45.049508+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumeration failed",
+          "utc": "2026-09-27T20:57:45.050084+00:00"
+        },
+        {
+          "message": "AppleT8130USBXHCICommandRing: AppleUSBXHCICommandRing::setAddress: completed with result code 25",
+          "utc": "2026-09-27T20:57:48.160155+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSB20HubPort::resetAndCreateDevice: failed to address device, disabling port",
+          "utc": "2026-09-27T20:57:48.160383+00:00"
+        },
+        {
+          "message": "AppleT8130USBXHCICommandRing: AppleUSBXHCICommandRing::setAddress: completed with result code 25",
+          "utc": "2026-09-27T20:57:51.279214+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSB20HubPort::resetAndCreateDevice: failed to address device, disabling port",
+          "utc": "2026-09-27T20:57:51.279408+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::disconnect: persistent enumeration failures",
+          "utc": "2026-09-27T20:58:07.024068+00:00"
+        }
+      ],
+      "window_end_utc": "2026-09-27T20:58:08+00:00",
+      "window_start_utc": "2026-09-27T20:57:42+00:00"
+    },
+    {
+      "case": "recent_detach_250ms_three_pass",
+      "counts": {
+        "descriptor_fragment_invalid": 0,
+        "enumeration_failed": 0,
+        "failed_to_address_device": 0,
+        "hardware_connection_lost": 3,
+        "persistent_enumeration_failure": 0,
+        "pipe_stalled": 0,
+        "set_address_code_25": 0,
+        "successful_enumeration": 3
+      },
+      "supporting_log_lines": [
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-28T08:30:38.625960+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumerated 0x2e8a/0005/0100 (Board in FS mode / 4) at 12 Mbps",
+          "utc": "2026-09-28T08:30:39.124941+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-28T08:30:40.161883+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumerated 0x2e8a/0005/0100 (Board in FS mode / 4) at 12 Mbps",
+          "utc": "2026-09-28T08:30:40.657903+00:00"
+        }
+      ],
+      "window_end_utc": "2026-09-28T08:30:44+00:00",
+      "window_start_utc": "2026-09-28T08:30:37+00:00"
+    },
+    {
+      "case": "recent_plain_ten_pass",
+      "counts": {
+        "descriptor_fragment_invalid": 0,
+        "enumeration_failed": 0,
+        "failed_to_address_device": 0,
+        "hardware_connection_lost": 10,
+        "persistent_enumeration_failure": 0,
+        "pipe_stalled": 0,
+        "set_address_code_25": 0,
+        "successful_enumeration": 10
+      },
+      "supporting_log_lines": [
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-28T08:31:09.797889+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumerated 0x2e8a/0005/0100 (Board in FS mode / 7) at 12 Mbps",
+          "utc": "2026-09-28T08:31:09.807625+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+          "utc": "2026-09-28T08:31:11.076425+00:00"
+        },
+        {
+          "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumerated 0x2e8a/0005/0100 (Board in FS mode / 4) at 12 Mbps",
+          "utc": "2026-09-28T08:31:11.086997+00:00"
+        }
+      ],
+      "window_end_utc": "2026-09-28T08:31:23+00:00",
+      "window_start_utc": "2026-09-28T08:31:09+00:00"
+    }
+  ],
+  "created_utc": "2026-09-28T08:36:06.958774+00:00",
+  "current_pass_sources": [
+    "usb-detach-initial/cycles.json",
+    "usb-plain-control/cycles.json"
+  ],
+  "device_opened": false,
+  "interpretation": [
+    "Three prior failed ordinary resets have the same descriptor-fragment invalid, endpoint-0 STALL and repeated SET_ADDRESS failure followed by persistent enumeration failure; these are failed USB enumeration, not only missing serial port.",
+    "Current passing plain and250ms-detach resets emit hardware-connection-lost messages followed by successful enumeration, with no pipe-stalled, descriptor-invalid, failed-to-address or persistent-enumeration-failure messages in these windows. Hardware-connection-lost alone is a normal part of reset.",
+    "The complete upstream USB2 and USB3 hubs also disconnect during later manual recovery intervals; causality is not established. The earlier failed reset itself is limited to the Pico port.",
+    "These logs do not prove MCU crash, identify radio behavior, or establish whether the cause is firmware timing, host or hub."
+  ],
+  "ordinary_failure_time_source": {
+    "error": "RuntimeError: Matching serial did not return",
+    "note": "Host script times out after25seconds; log transition begins20:50:48UTC.",
+    "source": "extended-20260927T200750Z/regressions-initial-reset-failure/idle-reset.log",
+    "source_mtime_utc": "2026-09-27T20:51:13.680114+00:00"
+  },
+  "queries": [
+    {
+      "command_template": [
+        "/usr/bin/log",
+        "show",
+        "--start",
+        "START",
+        "--end",
+        "END",
+        "--style",
+        "ndjson",
+        "--info",
+        "--predicate",
+        "process == \"kernel\" AND (eventMessage CONTAINS[c] \"TARGET_PICO_PORT\" OR eventMessage CONTAINS[c] \"AppleUSBHostPort::terminateDevice\" OR eventMessage CONTAINS[c] \"setAddress\")"
+      ],
+      "end_utc_argument": "2026-09-27 21:20:00+0000",
+      "exit_code": 0,
+      "matching_records": 928,
+      "start_utc_argument": "2026-09-27 20:40:00+0000",
+      "timeout_s": 28
+    },
+    {
+      "command_template": [
+        "/usr/bin/log",
+        "show",
+        "--start",
+        "START",
+        "--end",
+        "END",
+        "--style",
+        "ndjson",
+        "--info",
+        "--predicate",
+        "process == \"kernel\" AND (eventMessage CONTAINS[c] \"TARGET_PICO_PORT\" OR eventMessage CONTAINS[c] \"AppleUSBHostPort::terminateDevice\" OR eventMessage CONTAINS[c] \"setAddress\")"
+      ],
+      "end_utc_argument": "2026-09-28 08:31:30+0000",
+      "exit_code": 0,
+      "matching_records": 857,
+      "start_utc_argument": "2026-09-28 08:30:30+0000",
+      "timeout_s": 28
+    }
+  ],
+  "read_only": true,
+  "timestamp_handling": "log show accepted UTC +0000 input; returned local +0200 timestamps converted to UTC. Exact messages retained except physical port aliases, USB serial IDs and memory addresses. No claim that kernel hardware connection lost means user unplugged cable.",
+  "upstream_hub_disconnects_during_manual_recovery_intervals": [
+    {
+      "message": "usb-drd-hs-hub-port1@USB2_HUB_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2109/2817/9023 (USB2.0 Hub): hardware connection lost",
+      "utc": "2026-09-27T20:47:51.644170+00:00"
+    },
+    {
+      "message": "usb-drd-port-ss@USB3_HUB_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2109/0817/9023 (USB3.0 Hub): hardware connection lost",
+      "utc": "2026-09-27T20:47:51.777747+00:00"
+    },
+    {
+      "message": "usb-drd-hs-hub-port1@USB2_HUB_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2109/2817/9023 (USB2.0 Hub): hardware connection lost",
+      "utc": "2026-09-27T20:52:47.128559+00:00"
+    },
+    {
+      "message": "usb-drd-port-ss@USB3_HUB_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2109/0817/9023 (USB3.0 Hub): hardware connection lost",
+      "utc": "2026-09-27T20:52:47.248287+00:00"
+    },
+    {
+      "message": "usb-drd-hs-hub-port1@USB2_HUB_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2109/2817/9023 (USB2.0 Hub): hardware connection lost",
+      "utc": "2026-09-27T21:17:56.807625+00:00"
+    },
+    {
+      "message": "usb-drd-port-ss@USB3_HUB_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2109/0817/9023 (USB3.0 Hub): hardware connection lost",
+      "utc": "2026-09-27T21:17:56.928388+00:00"
+    }
+  ]
+}

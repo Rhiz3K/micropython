@@ -1,0 +1,16 @@
+{
+  "ap": false,
+  "connected_before": true,
+  "files_verified": 30,
+  "gp25_ctrl": 5,
+  "gp25_status": 8192,
+  "host_monotonic": 406225.420839708,
+  "host_utc": "2026-09-28T08:48:09.571891+00:00",
+  "label": "helper-combined-3",
+  "ms": 225,
+  "reg_on": 0,
+  "result": "PASS",
+  "source_sha256": "47cee7235cab22ffbcc756a2094741630ef0571d57f9bf9a0f1d4df96d29d1b8",
+  "sta": false,
+  "version": "v1.30.0-preview.88.g764de396cf.dirty on 2026-09-27 (GNU 14.3.1 MinSizeRel)"
+}

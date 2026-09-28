@@ -1,0 +1,27 @@
+{
+  "backup_preserved": true,
+  "cleanup": "none",
+  "cycles": 1,
+  "device": {
+    "cleanup_mode": "none",
+    "cleanup_ok": true,
+    "completed": 1,
+    "kind": "result",
+    "label": "app-soft-1",
+    "left_connected": true,
+    "no_filesystem_writes": true,
+    "no_reset": true,
+    "ok": true,
+    "requested": 1,
+    "ticks_ms": 118488
+  },
+  "device_source_sha256": "b22024b6e154f4251449a91c394f3e9cbf4559b6a13119897a22b11aefd37f98",
+  "discarded_unknown_lines": 0,
+  "filesystem_verified": 30,
+  "host_monotonic": 407279.462010583,
+  "host_utc": "2026-09-28T09:05:43.612673+00:00",
+  "label": "app-soft-1",
+  "reset_cause_preserved": true,
+  "result": "PASS",
+  "stopped_repl": true
+}

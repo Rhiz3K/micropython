@@ -1,0 +1,16 @@
+{
+  "candidate_application_changed": false,
+  "failed_attempt_radio_state": "STA remained associated; no reset or sleep issued",
+  "first_attempt": "app-queue-1",
+  "fixes": [
+    "Inject original network global",
+    "Only exact original success info is accepted without warning"
+  ],
+  "hardware_reset_requested": false,
+  "issues": [
+    "RAM namespace omitted network dependency",
+    "Logger counted expected success info as warning"
+  ],
+  "result": "FIXED",
+  "retry_labels": "app-verified-*"
+}

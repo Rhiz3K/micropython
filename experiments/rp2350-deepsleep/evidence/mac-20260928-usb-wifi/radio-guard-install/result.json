@@ -1,0 +1,9 @@
+{
+  "action": "install",
+  "filesystem_verified": 30,
+  "host_monotonic": 405842.211444166,
+  "host_utc": "2026-09-28T08:41:46.363230+00:00",
+  "reset_performed": false,
+  "result": "PASS",
+  "source_sha256": "7fc5accb3598964597f999ebe6d5a590d368c7ef64c837c6e3af1844cc2fed27"
+}

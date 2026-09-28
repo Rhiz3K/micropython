@@ -1,0 +1,41 @@
+{
+  "result": "PASS",
+  "original_files_verified": 29,
+  "original_main_restored": true,
+  "backup_words_restored": true,
+  "app_started": false,
+  "stopped_repl": true,
+  "state": {
+    "ap": false,
+    "wl_reg_on": 0,
+    "sta": false,
+    "sio_out": 768,
+    "sio_oe": 41947136,
+    "panel_rst": 0,
+    "gp25_ctrl": 5,
+    "uid": "test-board-2",
+    "gp25_status": 8192,
+    "version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "display_pad_controls": [
+      18,
+      18,
+      18,
+      18,
+      18,
+      18
+    ],
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      21,
+      21,
+      8,
+      0
+    ]
+  },
+  "host_monotonic": 365004.561264333,
+  "host_utc": "2026-09-27T21:21:08.784101+00:00",
+  "private_file_inventory_exported": false
+}

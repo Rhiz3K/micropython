@@ -1,0 +1,5 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "app-verified-seed", "mode": "none", "phase": "initial", "sta_active": true, "ticks_ms": 412574, "wl_reg_on": 1}
+{"cleanup_mode": "none", "cycle": 1, "kind": "cycle_start", "label": "app-verified-seed", "ticks_ms": 412575}
+{"connect_elapsed_ms": 11, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "app-verified-seed", "status": 3, "ticks_ms": 412586}
+{"body_verified": true, "connect_elapsed_ms": 11, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "app-verified-seed", "ticks_ms": 412736}
+{"cleanup_mode": "none", "cleanup_ok": true, "completed": 1, "kind": "result", "label": "app-verified-seed", "left_connected": true, "no_filesystem_writes": true, "no_reset": true, "ok": true, "requested": 1, "ticks_ms": 412737}

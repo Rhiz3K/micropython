@@ -1,0 +1,122 @@
+[
+  {
+    "boot": 4,
+    "cause": 3,
+    "cycle": 1,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.6071205830085091,
+    "host_monotonic": 405206.265986666,
+    "host_utc": "2026-09-28T08:31:10.419003+00:00",
+    "result": "PASS",
+    "returned_s": 0.8681854999740608
+  },
+  {
+    "boot": 5,
+    "cause": 3,
+    "cycle": 2,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.5973860419471748,
+    "host_monotonic": 405207.515494333,
+    "host_utc": "2026-09-28T08:31:11.668506+00:00",
+    "result": "PASS",
+    "returned_s": 0.8201378329540603
+  },
+  {
+    "boot": 6,
+    "cause": 3,
+    "cycle": 3,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.5869024589774199,
+    "host_monotonic": 405208.795108458,
+    "host_utc": "2026-09-28T08:31:12.948116+00:00",
+    "result": "PASS",
+    "returned_s": 0.8433421669760719
+  },
+  {
+    "boot": 7,
+    "cause": 3,
+    "cycle": 4,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.6051550839911215,
+    "host_monotonic": 405210.0839395,
+    "host_utc": "2026-09-28T08:31:14.236946+00:00",
+    "result": "PASS",
+    "returned_s": 0.8590441669803113
+  },
+  {
+    "boot": 8,
+    "cause": 3,
+    "cycle": 5,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.6145991669618525,
+    "host_monotonic": 405211.380398875,
+    "host_utc": "2026-09-28T08:31:15.533401+00:00",
+    "result": "PASS",
+    "returned_s": 0.879112874972634
+  },
+  {
+    "boot": 9,
+    "cause": 3,
+    "cycle": 6,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.5749020419898443,
+    "host_monotonic": 405212.5992975,
+    "host_utc": "2026-09-28T08:31:16.752300+00:00",
+    "result": "PASS",
+    "returned_s": 0.8125377499964088
+  },
+  {
+    "boot": 10,
+    "cause": 3,
+    "cycle": 7,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.21165170898893848,
+    "host_monotonic": 405213.965354833,
+    "host_utc": "2026-09-28T08:31:18.118367+00:00",
+    "result": "PASS",
+    "returned_s": 0.9449408340151422
+  },
+  {
+    "boot": 11,
+    "cause": 3,
+    "cycle": 8,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.5445434169960208,
+    "host_monotonic": 405215.220002833,
+    "host_utc": "2026-09-28T08:31:19.372998+00:00",
+    "result": "PASS",
+    "returned_s": 0.8166318329749629
+  },
+  {
+    "boot": 12,
+    "cause": 3,
+    "cycle": 9,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.6022867080173455,
+    "host_monotonic": 405216.514055166,
+    "host_utc": "2026-09-28T08:31:20.667048+00:00",
+    "result": "PASS",
+    "returned_s": 0.8658169160480611
+  },
+  {
+    "boot": 13,
+    "cause": 3,
+    "cycle": 10,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.5765269590192474,
+    "host_monotonic": 405217.774590666,
+    "host_utc": "2026-09-28T08:31:21.927582+00:00",
+    "result": "PASS",
+    "returned_s": 0.8252799590118229
+  }
+]

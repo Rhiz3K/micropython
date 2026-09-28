@@ -1,0 +1,6 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "app-soft-2", "mode": "none", "phase": "initial", "sta_active": false, "ticks_ms": 125411, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cycle": 1, "kind": "cycle_start", "label": "app-soft-2", "ticks_ms": 125412}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "app-soft-2", "status": 1, "ticks_ms": 126344}
+{"connect_elapsed_ms": 3041, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "app-soft-2", "status": 3, "ticks_ms": 129379}
+{"body_verified": true, "connect_elapsed_ms": 3041, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "app-soft-2", "ticks_ms": 129446}
+{"cleanup_mode": "none", "cleanup_ok": true, "completed": 1, "kind": "result", "label": "app-soft-2", "left_connected": true, "no_filesystem_writes": true, "no_reset": true, "ok": true, "requested": 1, "ticks_ms": 129447}

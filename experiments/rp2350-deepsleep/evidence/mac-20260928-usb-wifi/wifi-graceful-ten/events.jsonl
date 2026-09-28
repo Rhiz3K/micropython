@@ -1,0 +1,52 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "initial", "sta_active": false, "ticks_ms": 223619, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 1, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 223620}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 224553}
+{"connect_elapsed_ms": 3043, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 227589}
+{"body_verified": true, "connect_elapsed_ms": 3043, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 227657}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 227883, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 2, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 227884}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 2, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 228816}
+{"connect_elapsed_ms": 3046, "connected": true, "cycle": 2, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 231856}
+{"body_verified": true, "connect_elapsed_ms": 3046, "cycle": 2, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 231958}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 232184, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 3, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 232185}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 3, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 233117}
+{"connect_elapsed_ms": 3046, "connected": true, "cycle": 3, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 236157}
+{"body_verified": true, "connect_elapsed_ms": 3046, "cycle": 3, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 236257}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 236484, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 4, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 236484}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 4, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 237417}
+{"connect_elapsed_ms": 3044, "connected": true, "cycle": 4, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 240455}
+{"body_verified": true, "connect_elapsed_ms": 3044, "cycle": 4, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 240560}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 240786, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 5, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 240787}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 5, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 241719}
+{"connect_elapsed_ms": 3041, "connected": true, "cycle": 5, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 244754}
+{"body_verified": true, "connect_elapsed_ms": 3041, "cycle": 5, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 244889}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 245116, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 6, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 245117}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 6, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 246049}
+{"connect_elapsed_ms": 3052, "connected": true, "cycle": 6, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 249095}
+{"body_verified": true, "connect_elapsed_ms": 3052, "cycle": 6, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 249162}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 249388, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 7, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 249389}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 7, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 250321}
+{"connect_elapsed_ms": 3042, "connected": true, "cycle": 7, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 253357}
+{"body_verified": true, "connect_elapsed_ms": 3042, "cycle": 7, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 253461}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 253687, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 8, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 253688}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 8, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 254620}
+{"connect_elapsed_ms": 3043, "connected": true, "cycle": 8, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 257657}
+{"body_verified": true, "connect_elapsed_ms": 3043, "cycle": 8, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 257764}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 257991, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 9, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 257991}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 9, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 258924}
+{"connect_elapsed_ms": 3040, "connected": true, "cycle": 9, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 261958}
+{"body_verified": true, "connect_elapsed_ms": 3040, "cycle": 9, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 262062}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "intercycle", "sta_active": false, "ticks_ms": 262289, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cycle": 10, "kind": "cycle_start", "label": "graceful-ten", "ticks_ms": 262290}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 10, "has_dhcp4": false, "kind": "state", "label": "graceful-ten", "status": 1, "ticks_ms": 263222}
+{"connect_elapsed_ms": 3039, "connected": true, "cycle": 10, "has_dhcp4": true, "kind": "state", "label": "graceful-ten", "status": 3, "ticks_ms": 266255}
+{"body_verified": true, "connect_elapsed_ms": 3039, "cycle": 10, "http_status": 200, "kind": "cycle_pass", "label": "graceful-ten", "ticks_ms": 266365}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-ten", "mode": "graceful", "phase": "final", "sta_active": false, "ticks_ms": 266591, "wl_reg_on": 0}
+{"cleanup_mode": "graceful", "cleanup_ok": true, "completed": 10, "kind": "result", "label": "graceful-ten", "left_connected": false, "no_filesystem_writes": true, "no_reset": true, "ok": true, "requested": 10, "ticks_ms": 266592}

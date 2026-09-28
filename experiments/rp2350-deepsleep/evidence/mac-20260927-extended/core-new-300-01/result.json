@@ -1,0 +1,66 @@
+{
+  "result": "PASS",
+  "label": "core-new-300-01",
+  "mode": "deepsleep",
+  "requested_ms": 300000,
+  "usb_absence_s": 302.5455818339833,
+  "rtc_elapsed_s": 302,
+  "start_event": {
+    "ticks_ms": 47605,
+    "label": "core-new-300-01",
+    "mode": "deepsleep",
+    "event": "RUN",
+    "duration_ms": 300000,
+    "entry_delay_ms": 100,
+    "host_monotonic": 361284.15411425,
+    "host_utc": "2026-09-27T20:19:08.382455+00:00"
+  },
+  "removed_event": {
+    "event": "USB_REMOVED",
+    "label": "core-new-300-01",
+    "host_monotonic": 361284.271922291,
+    "host_utc": "2026-09-27T20:19:08.500262+00:00"
+  },
+  "returned_event": {
+    "event": "USB_RETURNED",
+    "label": "core-new-300-01",
+    "host_monotonic": 361586.817504125,
+    "host_utc": "2026-09-27T20:24:11.045340+00:00"
+  },
+  "wake_state": {
+    "test_guard_verified": true,
+    "boot_counter": 5,
+    "watchdog_enabled": false,
+    "uid": "test-board-2",
+    "freq_hz": 150000000,
+    "version": "v1.30.0-preview.88.g764de396cf.dirty on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+    "chip_reset": 33554432,
+    "rtc_epoch_s": 1790540693,
+    "last_swcore_pwrup": 64,
+    "machine": "Raspberry Pi Pico 2 W with RP2350",
+    "cause": 4,
+    "rtc": [
+      2026,
+      9,
+      27,
+      6,
+      20,
+      24,
+      53,
+      0
+    ]
+  },
+  "stopped_repl": true,
+  "early_window": {
+    "start_monotonic": 361289.15411425,
+    "end_monotonic": 361324.15411425,
+    "duration_s": 35
+  },
+  "late_window": {
+    "start_monotonic": 361519.15411425,
+    "end_monotonic": 361579.15411425,
+    "duration_s": 60
+  },
+  "host_monotonic": 361587.504596125,
+  "host_utc": "2026-09-27T20:24:11.732430+00:00"
+}

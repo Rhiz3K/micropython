@@ -1,0 +1,52 @@
+{
+  "baseline_commit": "b549ac1d84cbbe550c9590951e2290098b3fb16c",
+  "baseline_full_usbd": {
+    "exit_code": 1,
+    "failed": 2,
+    "note": "Expected queued-setup failure leaves state pending and contaminates following test; isolated official regression separately reproduced.",
+    "tested": 7
+  },
+  "baseline_targeted": {
+    "exit_code": 1,
+    "failed": 1,
+    "tested": 1
+  },
+  "excluded_commit": "a52562b: not applied",
+  "isolation": "Only copies under this task root were mutated; gems installed under usb-unit-tests/gems. No system config or repository/submodule changes. No hardware touched.",
+  "limitations": [
+    "Unit fixture mocks the DCD hardware; no RP2350 USB controller or Mac hub in test.",
+    "Proves pinned TinyUSB queue-full bug and a024 recovery, not that observed hardware failures had this cause."
+  ],
+  "logs": [
+    "baseline-build.log",
+    "patched-build.log",
+    "baseline-targeted.log",
+    "patched-targeted.log",
+    "patched-ordering-build.log"
+  ],
+  "official_fix_commit": "a0249ada9096365697340031a7b4a285beb18a2b",
+  "official_patch_sha256": "ffbadfaa2a51af420e64e1bdb4fad55f1621646eb3bcd98e3d93eaa921076e4e",
+  "patched_full_usbd": {
+    "exit_code": 0,
+    "failed": 0,
+    "tested": 7
+  },
+  "patched_targeted": {
+    "exit_code": 0,
+    "failed": 0,
+    "tested": 1
+  },
+  "patched_with_local_reset_then_queued_setup_regression": {
+    "exit_code": 0,
+    "failed": 0,
+    "tested": 8
+  },
+  "production_delta": "+4/-2 lines, src/device/usbd.c only",
+  "result": "PASS: native C regression reproduced and fixed",
+  "tools": {
+    "ceedling": "1.0.0",
+    "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "ruby": "4.0.7 (existing Homebrew portable runtime)"
+  },
+  "utc": "2026-09-28T08:45:34.911452+00:00"
+}

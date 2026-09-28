@@ -1,0 +1,16 @@
+[
+  {
+    "exit_code": 1,
+    "output": "queue_event 431: ASSERT FAILED\nusbd_control_xfer_cb 904: ASSERT FAILED\ntest_usbd.c:280:test_usbd_setup_dropped_by_full_queue_recovers:FAIL:Function dcd_edpt0_status_complete.  Called fewer times than expected.\n\n-----------------------\n1 Tests 1 Failures 0 Ignored \nFAIL\n",
+    "production_source_sha256": "38de54351d81878e6543f2b022d0c39f45d28c8f0888491796398dec45e727be",
+    "test_source_sha256": "2fdf3d24b88e3611e4c1b99debdfb005bf800105081ffb72980ac28b117c9653",
+    "variant": "baseline"
+  },
+  {
+    "exit_code": 0,
+    "output": "queue_event 431: ASSERT FAILED\ntest_usbd.c:280:test_usbd_setup_dropped_by_full_queue_recovers:PASS\n\n-----------------------\n1 Tests 0 Failures 0 Ignored \nOK\n",
+    "production_source_sha256": "79abb088c6dbecb1a4c8a3872baf518ce84cc24a3e4d22c63ce024b463746a19",
+    "test_source_sha256": "2fdf3d24b88e3611e4c1b99debdfb005bf800105081ffb72980ac28b117c9653",
+    "variant": "patched"
+  }
+]

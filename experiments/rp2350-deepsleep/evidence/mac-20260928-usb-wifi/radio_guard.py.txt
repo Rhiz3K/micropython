@@ -1,0 +1,163 @@
+# Private one-shot boot diagnostic. No filesystem writes and no automatic retry.
+import machine
+
+_r = machine.mem_backup(2)
+_magic = 0x55535746
+_owned = 100
+_enable = 0x40000000
+_ctrl = 0x400D8000
+
+
+def _disable_owned():
+    # Only this diagnostic may stop its own watchdog; never disable an unknown one.
+    assert _r[0] == _magic and _r[6] == _owned
+    machine.mem32[_ctrl + 0x3000] = _enable
+    assert not machine.mem32[_ctrl] & _enable
+
+
+def _emit(kind, error_type=""):
+    import json
+
+    print("RADIO_BOOT_DIAG " + json.dumps({
+        "kind": kind, "boot": _r[1], "stage": _r[5],
+        "outcome": _r[6], "failure_stage": _r[7],
+        "wdt_ctrl": machine.mem32[_ctrl],
+        "wdt_reason": machine.mem32[_ctrl + 8],
+        "error_type": error_type,
+    }))
+
+
+def _wait_command(command, kind, timeout_ms, error_type=""):
+    import select
+    import sys
+    import time
+
+    poll = select.poll()
+    poll.register(sys.stdin, select.POLLIN)
+    deadline = time.ticks_add(time.ticks_ms(), timeout_ms)
+    next_emit = time.ticks_ms()
+    line = ""
+    while time.ticks_diff(deadline, time.ticks_ms()) > 0:
+        if time.ticks_diff(time.ticks_ms(), next_emit) >= 0:
+            _emit(kind, error_type)
+            next_emit = time.ticks_add(time.ticks_ms(), 1000)
+        for _, events in poll.poll(50):
+            if events & select.POLLIN:
+                ch = sys.stdin.read(1)
+                if ch == "\n":
+                    if line == command:
+                        return True
+                    line = ""
+                elif ch != "\r":
+                    line = (line + ch)[-64:]
+    return False
+
+
+def _finish(kind, error_type=""):
+    # Repeat only the terminal report, never the test. Enumeration may finish
+    # after the radio body. The watchdog is already disabled before this wait.
+    _wait_command("DONE RADIO_DIAG", kind, 10000, error_type)
+
+
+def _radio_body(use_ble):
+    # No print, sleep, or explicit MP event yield before activation in EARLY mode.
+    assert not machine.mem32[_ctrl] & _enable
+    _r[6] = _owned
+    _r[5] = 9
+    watchdog = machine.WDT(timeout=8000)
+    sta = ap = ble = None
+    error_type = ""
+    try:
+        _r[5] = 10
+        import network
+        import bluetooth
+
+        _r[5] = 11
+        sta = network.WLAN(network.STA_IF)
+        ap = network.WLAN(network.AP_IF)
+        ble = bluetooth.BLE()
+        assert not sta.active() and not ap.active() and not ble.active()
+        watchdog.feed()
+        _r[5] = 20
+        sta.active(True)
+        _r[5] = 21
+        assert sta.active() and not ap.active()
+        watchdog.feed()
+        if use_ble:
+            _r[5] = 40
+            ble.active(True)
+            _r[5] = 41
+            assert ble.active()
+            watchdog.feed()
+    except BaseException as error:
+        _r[7] = _r[5]
+        error_type = type(error).__name__
+    # A blocking cleanup is also bounded by this same watchdog. Never feed from
+    # IRQs or background timers, and never automatically repeat an armed test.
+    try:
+        watchdog.feed()
+        _r[5] = 60
+        if ble is not None:
+            ble.active(False)
+        _r[5] = 61
+        watchdog.feed()
+        if sta is not None:
+            sta.active(False)
+        _r[5] = 62
+        watchdog.feed()
+        if ap is not None:
+            ap.active(False)
+        _r[5] = 63
+        watchdog.feed()
+        if sta is not None:
+            sta.deinit()
+        _r[5] = 64
+        watchdog.feed()
+        assert not machine.Pin(23).value()
+        if sta is not None:
+            assert not sta.active() and not ap.active() and not ble.active()
+        _r[5] = 65
+    except BaseException as error:
+        if not _r[7]:
+            _r[7] = _r[5]
+        error_type = type(error).__name__
+        # We cannot prove cleanup completed: leave our bounded watchdog running.
+        # Its single recovery boot will expose the last stage, without retrying.
+        while True:
+            pass
+    _disable_owned()
+    _r[5] = 90
+    _r[6] = 2 if error_type else 1
+    _finish("complete", error_type)
+
+
+def _main():
+    if _r[0] != _magic:
+        print("USB_WIFI_GUARD_BAD_MAGIC")
+        return
+    _r[1] += 1
+    _r[2] = 100
+    machine.Pin(12, machine.Pin.OUT, value=0)
+    token = _r[4]
+    _r[4] = 0  # Consume before imports, printing, host waiting, or radio work.
+    if _r[6] == _owned:
+        # Expired diagnostic watchdog, interrupted diagnostic, or unexpected
+        # reset. Preserve the exact last stage. No second radio attempt.
+        _disable_owned()
+        _r[6] = 3
+        _finish("recovered")
+        return
+    if token not in (101, 102, 201, 202):
+        _emit("idle")
+        return
+    _r[5] = 0
+    _r[6] = 0
+    _r[7] = 0
+    if token >= 200 and not _wait_command("GO RADIO_DIAG", "ready", 15000):
+        _r[6] = 4
+        _finish("host_timeout")
+        return
+    _radio_body(token % 100 == 2)
+
+
+_main()

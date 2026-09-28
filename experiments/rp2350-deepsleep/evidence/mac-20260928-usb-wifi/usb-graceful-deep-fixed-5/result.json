@@ -1,0 +1,8 @@
+{
+  "cycles": 1,
+  "deep_ms": 2500,
+  "detach_ms": 0,
+  "host_monotonic": 405824.963570125,
+  "host_utc": "2026-09-28T08:41:29.115389+00:00",
+  "result": "PASS"
+}

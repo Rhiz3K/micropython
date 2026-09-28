@@ -1,0 +1,14 @@
+[
+  {
+    "boot": 112,
+    "cause": 3,
+    "cycle": 1,
+    "deep_ms": 0,
+    "detach_ms": 0,
+    "gone_s": 0.6151057080132887,
+    "host_monotonic": 407120.348711,
+    "host_utc": "2026-09-28T09:03:04.499610+00:00",
+    "result": "PASS",
+    "returned_s": 0.8808273749891669
+  }
+]

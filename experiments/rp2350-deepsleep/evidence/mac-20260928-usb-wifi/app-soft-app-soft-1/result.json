@@ -1,0 +1,14 @@
+{
+  "elapsed_s": 3.288683040998876,
+  "files_verified": 30,
+  "guard_boot_increment": 1,
+  "hardware_reset_cause_unchanged": true,
+  "host_monotonic": 407242.62529475,
+  "host_utc": "2026-09-28T09:05:06.776010+00:00",
+  "label": "app-soft-1",
+  "lightsleep_ms": 2500,
+  "measured_sleep_ms": 2501,
+  "result": "PASS",
+  "soft_reset_confirmed": true,
+  "version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)"
+}

@@ -1,0 +1,15 @@
+{
+  "ap": false,
+  "connected": true,
+  "failure_class": "host_fixture_false_rejection",
+  "failure_reason": "RAM fixture omitted network global; function caught NameError and logged error; radio remained connected; no reset requested",
+  "fixture_loaded": true,
+  "host_monotonic": 407070.154995541,
+  "host_utc": "2026-09-28T09:02:14.305961+00:00",
+  "label": "app-queue-1",
+  "reg_on": 1,
+  "result": "FAIL",
+  "sta": true,
+  "warnings_count": 1,
+  "wdt_enabled": false
+}

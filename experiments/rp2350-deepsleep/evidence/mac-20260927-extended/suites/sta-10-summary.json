@@ -1,0 +1,18 @@
+{
+  "label": "sta-10",
+  "started_utc": "2026-09-27T20:40:03.258417+00:00",
+  "requested_cycles": 10,
+  "sleep_ms": 2500,
+  "radio": "sta",
+  "source_hashes": {
+    "tests/ports/rp2/deepsleep/host.py": "7a307a55477f387f137391cf6183fcb586aefc2e9c9738848d9277477dec5a65",
+    "tests/ports/rp2/deepsleep/device.py": "598dd701a2456bf7e1f8d25479a7e94aec8bd2bd1679fd4c94ed0f92a8e629e7"
+  },
+  "result": "PASS",
+  "completed_utc": "2026-09-27T20:42:26.552340+00:00",
+  "deep_wakes": 10,
+  "unique_boots": 12,
+  "final_cause": 3,
+  "installation_transport_error_recorded": true,
+  "recovery": "Observation resumed without reinstalling; the initial installation failure is retained separately."
+}

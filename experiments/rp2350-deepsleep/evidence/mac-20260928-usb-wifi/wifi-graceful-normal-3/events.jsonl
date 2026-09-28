@@ -1,0 +1,7 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "graceful-normal-3", "mode": "none", "phase": "initial", "sta_active": false, "ticks_ms": 2036, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cycle": 1, "kind": "cycle_start", "label": "graceful-normal-3", "ticks_ms": 2037}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "graceful-normal-3", "status": 1, "ticks_ms": 2969}
+{"connect_elapsed_ms": 3049, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "graceful-normal-3", "status": 3, "ticks_ms": 6012}
+{"body_verified": true, "connect_elapsed_ms": 3049, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "graceful-normal-3", "ticks_ms": 6101}
+{"ap_active": false, "down_observed": true, "kind": "cleanup", "label": "graceful-normal-3", "mode": "graceful", "phase": "final", "sta_active": false, "ticks_ms": 6327, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cleanup_ok": true, "completed": 1, "kind": "result", "label": "graceful-normal-3", "left_connected": false, "no_filesystem_writes": true, "no_reset": true, "ok": true, "requested": 1, "ticks_ms": 6328}

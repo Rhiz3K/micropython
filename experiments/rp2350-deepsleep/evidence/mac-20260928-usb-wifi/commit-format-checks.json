@@ -1,0 +1,27 @@
+{
+  "result": "PASS",
+  "scope": "Commit preparation only; no device access",
+  "hardware_tested_helper_sha256": "47cee7235cab22ffbcc756a2094741630ef0571d57f9bf9a0f1d4df96d29d1b8",
+  "formatted_helper_sha256": "079e5d0ac2a403bc0112a961d4caf0a8eeeb4b6c81e55191f18eb6d93ec41f19",
+  "helper_ast_identical": true,
+  "hardware_tested_source_copy_preserved": true,
+  "core_format_unchanged": true,
+  "core_sha256": {
+    "ports/rp2/modmachine.c": "31271e7ce42ed01a70085e8aca63acc611552f9568b21f6693e73f7d9af4fae7",
+    "ports/rp2/mpconfigport.h": "e07a2158281328425d8ad1d89ccabd2809c04183b5f27cb5f47a2e1cf5217e9d",
+    "ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h": "d21b69eaa6619fab237dbdcc7613c5c68359e8a539db4823cb684305bccf87e4"
+  },
+  "ruff_version": "0.11.6",
+  "offline_checks": {
+    "passed": 6,
+    "failed": 0,
+    "cases": [
+      "connected STA/AP ordering",
+      "timeout powers off then raises",
+      "never-active interface",
+      "ticks wrap",
+      "board gate",
+      "physical GP23 gate"
+    ]
+  }
+}

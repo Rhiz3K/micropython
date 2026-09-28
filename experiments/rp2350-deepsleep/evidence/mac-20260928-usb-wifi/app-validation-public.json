@@ -1,0 +1,61 @@
+{
+  "authorized_change_ast_comparison": "PASS after normalizing _shutdown_wifi function and exactly original lines2320-2322 to one _shutdown_wifi() call; all remaining AST identical.",
+  "behavior": [
+    "Only active STA is disconnected; poll link-down status0 and notconnected at20ms intervals for up to500ms.",
+    "If link-down times out or disconnect/status raises, report a warning through existing log and continue existing best-effort power-off contract.",
+    "Do not call active(False) on already inactive STA/AP; keep existing deinit and exception handling.",
+    "No lightsleep/deepsleep/reset/GP25/portal/autostart changes.",
+    "Normal successful download/display path now routes its earlier direct STA shutdown through the shared helper before rendering. Existing caller try/except preserved."
+  ],
+  "bounded_wait_limit": "500ms polling budget starts after disconnect() returns; disconnect() itself is a synchronous driver call and is not bounded by this helper.",
+  "candidate_sha256": "dd5d46130dd872b5849c4328e17ce06363067d72356778542fb7deaf50b3d6b9",
+  "changed_functions": [
+    "_shutdown_wifi",
+    "test_bmp_download (one callsite only)"
+  ],
+  "compile_check": "PASS",
+  "full_original_application_end_to_end_run": false,
+  "isolated_function_tests": [
+    {
+      "case": "connected_immediate",
+      "result": "PASS",
+      "wait_ms": 0,
+      "warning_count": 0
+    },
+    {
+      "case": "connected_delayed",
+      "result": "PASS",
+      "wait_ms": 100,
+      "warning_count": 0
+    },
+    {
+      "case": "linkdown_timeout",
+      "result": "PASS",
+      "wait_ms": 500,
+      "warning_count": 1
+    },
+    {
+      "case": "already_inactive",
+      "result": "PASS",
+      "wait_ms": 0,
+      "warning_count": 0
+    },
+    {
+      "case": "active_ap",
+      "result": "PASS",
+      "wait_ms": 0,
+      "warning_count": 0
+    },
+    {
+      "case": "disconnect_error",
+      "result": "PASS",
+      "wait_ms": 0,
+      "warning_count": 1
+    }
+  ],
+  "line_delta": 8,
+  "other_function_and_module_ast_identical": true,
+  "required_globals_bound_at_module_scope": true,
+  "result": "PASS",
+  "source_sha256": "88e7cc2c216c58e13ec2005647b6ea6532a3163d7ed391a91e025d0ad59a96d4"
+}

@@ -1,0 +1,7 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "deep-abrupt-after", "mode": "none", "phase": "initial", "sta_active": false, "ticks_ms": 2123, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cycle": 1, "kind": "cycle_start", "label": "deep-abrupt-after", "ticks_ms": 2124}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "deep-abrupt-after", "status": 1, "ticks_ms": 3057}
+{"connect_elapsed_ms": 3308, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "deep-abrupt-after", "status": -1, "ticks_ms": 6359}
+{"error_type": "AssertionError", "kind": "error", "label": "deep-abrupt-after", "stage": "terminal_link_failure", "ticks_ms": 6360}
+{"ap_active": false, "down_observed": false, "kind": "cleanup", "label": "deep-abrupt-after", "mode": "graceful", "phase": "final", "sta_active": false, "ticks_ms": 7015, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cleanup_ok": true, "completed": 0, "kind": "result", "label": "deep-abrupt-after", "left_connected": false, "no_filesystem_writes": true, "no_reset": true, "ok": false, "requested": 1, "ticks_ms": 7016}

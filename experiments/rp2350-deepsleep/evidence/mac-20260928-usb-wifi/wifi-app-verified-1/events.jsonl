@@ -1,0 +1,6 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "app-verified-1", "mode": "none", "phase": "initial", "sta_active": false, "ticks_ms": 2076, "wl_reg_on": 0}
+{"cleanup_mode": "none", "cycle": 1, "kind": "cycle_start", "label": "app-verified-1", "ticks_ms": 2083}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "app-verified-1", "status": 1, "ticks_ms": 3015}
+{"connect_elapsed_ms": 3053, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "app-verified-1", "status": 3, "ticks_ms": 6062}
+{"body_verified": true, "connect_elapsed_ms": 3053, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "app-verified-1", "ticks_ms": 6149}
+{"cleanup_mode": "none", "cleanup_ok": true, "completed": 1, "kind": "result", "label": "app-verified-1", "left_connected": true, "no_filesystem_writes": true, "no_reset": true, "ok": true, "requested": 1, "ticks_ms": 6150}

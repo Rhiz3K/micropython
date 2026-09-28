@@ -1,0 +1,172 @@
+# RAM-only diagnostic. No filesystem writes, reset, sleep or credential logging.
+import json
+import machine
+import network
+import socket
+import time
+
+_WIFI_PREFIX = "RP2350_WIFI "
+
+
+def _wifi_emit(label, kind, **fields):
+    fields.update(label=label, kind=kind, ticks_ms=time.ticks_ms())
+    print(_WIFI_PREFIX + json.dumps(fields))
+
+
+def _wifi_cleanup(label, phase, mode):
+    sta = network.WLAN(network.STA_IF)
+    ap = network.WLAN(network.AP_IF)
+    down_observed = None
+    was_connected = sta.isconnected()
+    if mode == "graceful":
+        if sta.active():
+            sta.disconnect()
+            start = time.ticks_ms()
+            while time.ticks_diff(time.ticks_ms(), start) < 500:
+                if sta.status() == 0 and not sta.isconnected():
+                    break
+                time.sleep_ms(20)
+            down_observed = sta.status() == 0 and not sta.isconnected()
+            sta.active(False)
+        if ap.active():
+            ap.active(False)
+        sta.deinit()
+    elif mode == "poweroff":
+        # Deinit does not clear network_cyw43.c's if_active[] cache.
+        sta.deinit()
+    elif mode != "none":
+        raise ValueError()
+    reg_on = (machine.mem32[0xD0000010] >> 23) & 1
+    _wifi_emit(
+        label,
+        "cleanup",
+        phase=phase,
+        mode=mode,
+        down_observed=down_observed,
+        sta_active=sta.active(),
+        ap_active=ap.active(),
+        wl_reg_on=reg_on,
+    )
+    if mode != "none" and reg_on != 0:
+        raise AssertionError()
+    if mode == "graceful" and was_connected and not down_observed:
+        raise AssertionError()
+
+
+def _wifi_http(sta, endpoint, label, cycle):
+    # Numeric operator-controlled local endpoint: no unbounded DNS lookup.
+    path = "/health/{}-{}".format(label, cycle)
+    expected = b"RP2350_DIAG_OK " + path.encode() + b"\n"
+    sock = socket.socket()
+    try:
+        sock.settimeout(5)
+        sock.connect((endpoint["host"], endpoint["port"]))
+        request = "GET {} HTTP/1.0\r\nHost: {}\r\nConnection: close\r\n\r\n".format(
+            path, endpoint["host"]
+        ).encode()
+        written = sock.write(request)
+        if written != len(request):
+            raise AssertionError()
+        status = sock.readline()
+        if not status.startswith(b"HTTP/") or b" 200 " not in status:
+            raise AssertionError()
+        for _ in range(32):
+            line = sock.readline()
+            if line in (b"\r\n", b"\n"):
+                break
+            if not line or len(line) > 1024:
+                raise AssertionError()
+        else:
+            raise AssertionError()
+        body = sock.read(len(expected) + 1)
+        if body != expected:
+            raise AssertionError()
+        if not sta.isconnected() or sta.status() != 3:
+            raise AssertionError()
+    finally:
+        sock.close()
+
+
+def wifi_probe(credentials, endpoint, label, cycles, cleanup, leave_connected=False):
+    sta = network.WLAN(network.STA_IF)
+    completed = 0
+    successful = False
+    stage = "initial_cleanup"
+    cleanup_ok = False
+    try:
+        _wifi_cleanup(label, "initial", cleanup)
+        for cycle in range(1, cycles + 1):
+            stage = "activate"
+            _wifi_emit(label, "cycle_start", cycle=cycle, cleanup_mode=cleanup)
+            sta.active(True)
+            stage = "connect"
+            start = time.ticks_ms()
+            sta.connect(credentials["ssid"], credentials["password"])
+            previous = None
+            while True:
+                status = sta.status()
+                connected = sta.isconnected()
+                has_ip = bool(sta.ipconfig("has_dhcp4"))
+                current = (status, connected, has_ip)
+                elapsed = time.ticks_diff(time.ticks_ms(), start)
+                if current != previous:
+                    _wifi_emit(
+                        label,
+                        "state",
+                        cycle=cycle,
+                        status=status,
+                        connected=connected,
+                        has_dhcp4=has_ip,
+                        connect_elapsed_ms=elapsed,
+                    )
+                    previous = current
+                if status == 3 and connected and has_ip:
+                    break
+                if status < 0:
+                    stage = "terminal_link_failure"
+                    raise AssertionError()
+                if elapsed >= 35000:
+                    stage = "connect_timeout"
+                    raise AssertionError()
+                time.sleep_ms(100)
+            stage = "http"
+            _wifi_http(sta, endpoint, label, cycle)
+            completed += 1
+            _wifi_emit(
+                label,
+                "cycle_pass",
+                cycle=cycle,
+                connect_elapsed_ms=elapsed,
+                http_status=200,
+                body_verified=True,
+            )
+            if cycle < cycles:
+                stage = "intercycle_cleanup"
+                _wifi_cleanup(label, "intercycle", cleanup)
+        successful = True
+    except BaseException as error:
+        # Only the class name is emitted; messages can contain credentials.
+        _wifi_emit(label, "error", stage=stage, error_type=type(error).__name__)
+    finally:
+        if successful and leave_connected:
+            cleanup_ok = sta.isconnected() and sta.status() == 3
+        else:
+            try:
+                _wifi_cleanup(label, "final", "graceful")
+                cleanup_ok = True
+            except BaseException as error:
+                _wifi_emit(label, "error", stage="final_cleanup", error_type=type(error).__name__)
+        # Erase this local reference; host also clears its credential dictionary.
+        credentials = None
+        _wifi_emit(
+            label,
+            "result",
+            ok=successful and cleanup_ok,
+            completed=completed,
+            requested=cycles,
+            cleanup_ok=cleanup_ok,
+            cleanup_mode=cleanup,
+            left_connected=bool(successful and leave_connected and cleanup_ok),
+            no_reset=True,
+            no_filesystem_writes=True,
+        )

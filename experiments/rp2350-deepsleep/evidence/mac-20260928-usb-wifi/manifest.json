@@ -1,0 +1,1686 @@
+{
+  "created_utc": "2026-09-28T09:10:56.992762+00:00",
+  "exporter_sha256": "53c71dbeef03c6b0e86a7bf22e890e3e4a341f6dc70b6cc0f04066c632b41c58",
+  "files": {
+    "app-check-app-queue-1/result.json": {
+      "bytes": 475,
+      "private_original_sha256": "6b3b19567a6a8068fc5ad4d958a823e05dcb056e4d1a594cf89c31b2134a5bda",
+      "sha256": "030ed2860adaeadfb878566d90796be258424aca51f98ff449fc68b62e8c8a04"
+    },
+    "app-check-app-soft-1/result.json": {
+      "bytes": 515,
+      "private_original_sha256": "f05559074776939cae3b7f1d3fb4ccfaf7bfbb8db535b161b754d06ddecf2e44",
+      "sha256": "9f2747a6042230922a4d2d0c9191b1ccbe7a9fb2ee1eff304b8b6d1ed13076d0"
+    },
+    "app-check-app-soft-2/result.json": {
+      "bytes": 515,
+      "private_original_sha256": "de66841534109201e0d2665a188faf2bc88431f8e10a43dab871fc4939c63483",
+      "sha256": "d5ccb4c17e15c5247db1c4439a5d55b2b58672aae5150805436255b799f86b1f"
+    },
+    "app-check-app-soft-3/result.json": {
+      "bytes": 515,
+      "private_original_sha256": "bda46d3907aeef615929f6d40b566063b12389a3518d36bccaa8a48c0fa1aa8b",
+      "sha256": "9d8ba34c30877ab2237a40db617718316dea2052bfa8cbbd3e009b74efce1d95"
+    },
+    "app-check-app-verified-1/result.json": {
+      "bytes": 517,
+      "private_original_sha256": "4776782d2e5b64d59dd5e671cd4404eca781ba15bc6b0254ace266f2ad8f2348",
+      "sha256": "5539c0ce3e3dcd1853f1d695f3876bd7c30538dac8a11e2fca097e8abca54734"
+    },
+    "app-check-app-verified-2/result.json": {
+      "bytes": 518,
+      "private_original_sha256": "1894595084039adcaa0aeea6858d9b282b7e9279f7b719efce60187cb8c45807",
+      "sha256": "a52bf8b9c6b8571aec3f3a1c568763a04d14fea31a111dcaebc9ad53b619db81"
+    },
+    "app-check-app-verified-3/result.json": {
+      "bytes": 516,
+      "private_original_sha256": "ef3414aebc1e07748b149959a21a915463020f0b1a1fa206bb4617fb5edd218a",
+      "sha256": "6f6fda1fcc576758215ef71d71489bc0f149a85cc8806ff6946440ffdc3065ff"
+    },
+    "app-check-app-verified-4/result.json": {
+      "bytes": 519,
+      "private_original_sha256": "e7a5aa81ec47cf119f77c39969ca76388c32b67eb3435275bc572d7880903614",
+      "sha256": "baade7550cb480f2d8587efd9410518a062e25cc49406b4ce465c437c264c8ed"
+    },
+    "app-check-app-verified-5/result.json": {
+      "bytes": 519,
+      "private_original_sha256": "272d645eb5d9385b5d681bf260d3b00eb36768954a6df140b2102ac0dfb22a8b",
+      "sha256": "1a1d3137e7996dcdb22f16ba6339c5a84fc756b1c3b625d939f61e9be0529072"
+    },
+    "app-check-app-verified-final/result.json": {
+      "bytes": 523,
+      "private_original_sha256": "2bf9514c2f61816f10b34c4c5bdc5e8d0db534ae025ce2c7bce36316a5b48732",
+      "sha256": "891d0a778548fddb1d95c8f526579c1d9f37a06d6928e13c08d4ae2ee04c760c"
+    },
+    "app-fixture-fix.json": {
+      "bytes": 502,
+      "private_original_sha256": "954a966bf4ed3eb23b6eee6c870747d0666c3ef170745e67a44a539e49a2e00d",
+      "sha256": "3e13da57815d90af4175d1ec6d96fb35bd29eaab9649cc3e06f8f854a82fa238"
+    },
+    "app-soft-app-soft-1/result.json": {
+      "bytes": 447,
+      "private_original_sha256": "783b41cc73e5c0b4e5c3ba1ce8920181e4d2d6320eda1f0645cea11fcf5d473d",
+      "sha256": "893ab2ac15f3bd7e0da735472ce8be108056fe701af5bf18ada8e3bbaf83c0e3"
+    },
+    "app-soft-app-soft-2/result.json": {
+      "bytes": 449,
+      "private_original_sha256": "76d3ec3bda346e22df5043bd265ed6efee61df74e36fc4ed42a2a345bbff1b94",
+      "sha256": "001cb0a06d08f1ee3cf2a93192713418a1d74b18d1f1780eacf31039dd1ba827"
+    },
+    "app-soft-app-soft-3/result.json": {
+      "bytes": 448,
+      "private_original_sha256": "cae13023c9c38318ea19e65750b0ea12ba2436fcdf681c9437f6e04037359fe9",
+      "sha256": "1aa81dbb450df8bcc929856d1bcebe4a3ce5c28be468bb151c1ae8f69144b33f"
+    },
+    "app-validation-public.json": {
+      "bytes": 2208,
+      "private_original_sha256": "38f96ab0323a90e9e19b2020f9349c395e092023a4f572d9f99b412eb8fe436c",
+      "sha256": "eb3232873293e1cc29e60233ab785acb0d5bd7e803b96c28116af2082e288f69"
+    },
+    "deployment-result-public.json": {
+      "bytes": 742,
+      "private_original_sha256": "7ff4f41aa595eb78a1f759be1c819be576a69e73fc0f19ad4b48c9e81f6fe76d",
+      "sha256": "c3a3bb7a2ffc745ca4aaa618190ae2b4bb6dee7452b5ac7d7ae0385edba45966"
+    },
+    "helper-helper-combined-1/result.json": {
+      "bytes": 473,
+      "private_original_sha256": "76b2225a574ecb9c5bce7cb5d194f5db86d4bb9cb8fdbead1540db32bd507222",
+      "sha256": "58d790f4554d356ddc26efb10e870e233711853bf9718d0537befc77775286c6"
+    },
+    "helper-helper-combined-2/result.json": {
+      "bytes": 473,
+      "private_original_sha256": "19d7033eca0f2643934ebe3a90ff79776699180bb6eb34a2476b097d5e4057fe",
+      "sha256": "e864190c0e0ca847e8e0302c553a66b3449ba1596251a517cbe6b6a755537780"
+    },
+    "helper-helper-combined-3/result.json": {
+      "bytes": 473,
+      "private_original_sha256": "c968e008a00627d163f6d98bcfbfc45ddf3a32eb88dbc44385e773d8fa956ecc",
+      "sha256": "e641acc11dc4e4517dedb7b0fbb7447bb7fed10c55334297d1796f93a535d7d8"
+    },
+    "helper-helper-combined-final/result.json": {
+      "bytes": 477,
+      "private_original_sha256": "17a882e5955d394efd267c0a67db1d05930f93f0b7b3690b6d3d4285040ad481",
+      "sha256": "5973d241f2c8b439aa411e2883b1d80b1b3d194d5ebb12e45d8de65ded6230f6"
+    },
+    "helper-helper-queue-deep-1/result.json": {
+      "bytes": 481,
+      "private_original_sha256": "e86da49a8a940e44ad348f6b324fa36a50f0067a4e92144ca5c893ec6ff80f53",
+      "sha256": "e7093d2c8074423184f87dc1c8b6a4d011b9bcc34fb3a754ea072e57784a2d2c"
+    },
+    "helper-helper-queue-deep-2/result.json": {
+      "bytes": 481,
+      "private_original_sha256": "bd585e9e226825c784537abbede8843fbe34aeffdd88b8dfd0339e4aad94d2bc",
+      "sha256": "3af63133b5ec9c318701bf694e968e8452e4b80fefe44107231675bb601ae787"
+    },
+    "helper-helper-queue-deep-3/result.json": {
+      "bytes": 478,
+      "private_original_sha256": "56182ad244780ca9609e3f11799c69737e99bbb019ae2bdee924d0803b8d37e0",
+      "sha256": "abf84c0d8583b893b4f4e31d4e61c0b7bf069f0f6e0a4cc92609d695a7c1ae7e"
+    },
+    "helper-helper-queue-deep-4/result.json": {
+      "bytes": 481,
+      "private_original_sha256": "f2cea46341fdf3ccae63654ce29597d8a2985f0d52afc31950eab04783d4ba73",
+      "sha256": "e250c8dc56abcf34295a2707a33c6bae8cb75ecb7c3b6f54287c691124641186"
+    },
+    "helper-helper-queue-deep-5/result.json": {
+      "bytes": 481,
+      "private_original_sha256": "3ec811bb23dd6b11352e330e7deb2006c7d5e16fc1986ef8a6a15e87c688887f",
+      "sha256": "87458b3218b018626f803ff0941225962402ed8e94a2bda69065c5d19c135ac9"
+    },
+    "helper-helper-queue-deep-final/result.json": {
+      "bytes": 485,
+      "private_original_sha256": "1690d61d7b85dee78ed166e0fa92fb8e1e2f723db5f02b3a52ad08e879a8f8be",
+      "sha256": "2d9850849e8a70c8ca5a23ae604c0d3a2aaa609d853de6879fabfcedbaf8063f"
+    },
+    "helper-helper-queue-normal-1/result.json": {
+      "bytes": 480,
+      "private_original_sha256": "be2c3bab90543c4ef8f8a8c1a2ac2eb5cac7a039650563f827d196ad945a8d2c",
+      "sha256": "54fbb30632f5151e1248543a6198e28867e88d34a2fe6cab67a35096cb8d350f"
+    },
+    "helper-helper-queue-normal-2/result.json": {
+      "bytes": 483,
+      "private_original_sha256": "40b6a3ea74913d6a13a67e86d9d66c1f05c2cfc9a885f5c601d6fa958a88984d",
+      "sha256": "df2f731ee16dbec4fba779a10fe0ca089b3178ab5b629c5b490029b1c48c5864"
+    },
+    "helper-helper-queue-normal-3/result.json": {
+      "bytes": 483,
+      "private_original_sha256": "783151375bfc1a538242db2ee227a204ae99ba9e76123b169591fe028c9399ad",
+      "sha256": "7e52b15ffb8e37452d25f3a1b7b61f5677dca4b4d336b431430ce1f1a8e424d5"
+    },
+    "helper-helper-queue-normal-4/result.json": {
+      "bytes": 483,
+      "private_original_sha256": "a2352b35468492e771799af6ea42e4b18dcbb0e9eca1a78c736b59312f65d5ed",
+      "sha256": "d91870a2e9084a4273d20c20e036e1d117ce74f693486b93b6cb04beaff1761e"
+    },
+    "helper-helper-queue-normal-5/result.json": {
+      "bytes": 483,
+      "private_original_sha256": "c83f84b465d7df12d7678c83f918939316a6d0fb7cf2285eb772733f5ac7c9af",
+      "sha256": "978bdef4cc6589ad1fef523baf8e7cda66fd748489a92cd7401df6071350ecb5"
+    },
+    "helper-helper-queue-normal-final/result.json": {
+      "bytes": 487,
+      "private_original_sha256": "c10186cf8e8461ffd7f503dceae39803e3975b42eb64922be9abd37cc62f3124",
+      "sha256": "14075a46dbdf9fe28a215fa16bad7128b2d493aa0c7bfb56d8fb14e735fe2b18"
+    },
+    "helper-source.py.txt": {
+      "bytes": 3487,
+      "sha256": "47cee7235cab22ffbcc756a2094741630ef0571d57f9bf9a0f1d4df96d29d1b8"
+    },
+    "host-usb-candidate-log-evidence.json": {
+      "bytes": 2497,
+      "private_original_sha256": "d4efbbbe6dbd3baa225b2d745aa27cc97b06f2f536b419eaa908ac3109035bf3",
+      "sha256": "5dbcf13fe3161f52fa4a42f8da4e9ac8083086cb9de827180e816f6a45b3f497"
+    },
+    "host-usb-log-evidence.json": {
+      "bytes": 15528,
+      "private_original_sha256": "56a43adb8a43a4fbf79970985e3ce11d5cf66b1a798f4e9c1988d5a2a2e9ddb3",
+      "sha256": "ed185e52e5c352e71a2e18d41901835c8409980e66c2e77f555a4088ad442d4a"
+    },
+    "radio-early-combined-stable-1/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "881f5a8fdf3f7fe44d9b7aae47cf0fa1380f80b40d143125e67e273e18668d10",
+      "sha256": "2aa2beeba17ca0e3fe98bd5a7045e46d8ddf2e556683e11c890bc01e880f46b6"
+    },
+    "radio-early-combined-stable-1/result.json": {
+      "bytes": 822,
+      "private_original_sha256": "7750d8afabaa07fb09c23c98fc6e9ea3174d4b2c297fa0ea31e4487d7f3d732a",
+      "sha256": "11dad0f0104f03e2f021ce7c8df908876b44a3fb2807cbff117235b103d7ffdb"
+    },
+    "radio-early-combined-stable-10/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "568fe67093e50588ecbeb281c74ed71762fb62ecaf32d93f392a7c0801f8a3ee",
+      "sha256": "55854cdc665a2832dcebe257ef271703041d215e0b79261b28f918e9e1659ddc"
+    },
+    "radio-early-combined-stable-10/result.json": {
+      "bytes": 824,
+      "private_original_sha256": "7da35b85288e3dd1599d31f1078c46e84d2c2b1808884d0c578273d1a59e2dd5",
+      "sha256": "32f743f5dc2464c3febc0e4ebca25faa6ae0556e2820e880f4aa3b328d9a5bcd"
+    },
+    "radio-early-combined-stable-2/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "46841284c24d163862f7536eb3450232ec1e6cb1848693e5da86f4bb76f88681",
+      "sha256": "79d1646a919246701eb37f25e9e692ebb6de5570b09bda110bf567d0cfb0826d"
+    },
+    "radio-early-combined-stable-2/result.json": {
+      "bytes": 823,
+      "private_original_sha256": "d6af0925dbb68df9d85a0e6a9d489a793c85bc0f481a246dfc34804a79065ba6",
+      "sha256": "273b7cedf5176f5094a625d954fc19edb6fc4f96fd7b9003d048536f3bf88bd5"
+    },
+    "radio-early-combined-stable-3/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "2c90905f8d12810f6d8c12e30ec0044e0e402fe78e29414b79ef6106d8c3ed0a",
+      "sha256": "e72b473937835f271b0eed9fe29fd495c58963363c9a5c76dc670cae1f6cdf48"
+    },
+    "radio-early-combined-stable-3/result.json": {
+      "bytes": 822,
+      "private_original_sha256": "2f4e10caf71f998c0dd67b0762f0ae6ab61b3a3f5a4d4a297c6a32ac34f8480f",
+      "sha256": "53af89ce9891afc168daa77250c3cbe588e4656dc03a53c924184cdc4aad12dd"
+    },
+    "radio-early-combined-stable-4/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "d7074470a07f6d7ec512024487994091a2406cc29500d59c437f88df0962bdb6",
+      "sha256": "6b531dc18b38a2605e14f386b713f7e5dc8acc0a320cf077ff897db5e2d8d82b"
+    },
+    "radio-early-combined-stable-4/result.json": {
+      "bytes": 824,
+      "private_original_sha256": "0c848efb5f4ad62b4708d4388138318d294c40f1f2b4d911967a6554f41ba125",
+      "sha256": "bcbc989c1cae23d8c95ed3abe434c4772880bccb917fffe5002a14f3e2fd6a4e"
+    },
+    "radio-early-combined-stable-5/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "f79fa807fc3b0511bb716ed92ff9bf7e31765923b60153a3020f254caf8097e0",
+      "sha256": "371623e113636a9a9dd42be4706383ed1c4819efec0bfb1d7e1d12fe81afc6d1"
+    },
+    "radio-early-combined-stable-5/result.json": {
+      "bytes": 822,
+      "private_original_sha256": "36e7af249ef4dc2309d5dfc7164ab9be3d506a590717df4bdba41aa84353a872",
+      "sha256": "699f643d71391281d701739f3f543b0c87057506a0cbda1d280a381a6080ef16"
+    },
+    "radio-early-combined-stable-6/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "b70a87b4af906c65f6c12b6e68dd158d24eb4160c2c357ec913e18584939aa44",
+      "sha256": "f64e3fc2c1be141bbab55b8f295e560e684976455f17cdb3a3cf9a8248e1f0d7"
+    },
+    "radio-early-combined-stable-6/result.json": {
+      "bytes": 822,
+      "private_original_sha256": "be3b3fd6ea479c626a8293ed07d359d2742136d4f75c96fbfb01a9d7d68441d0",
+      "sha256": "5613650eaae4b06996077be3f2a0d4dd3d5a57a0bcb6c87fa5285b3d481c913c"
+    },
+    "radio-early-combined-stable-7/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "1e7b154f51ecfdec0258682dca92eb3926119d876edb178f965bb89ae4a4497e",
+      "sha256": "61d9bd255aff50ae44b4af04eedc17810a4bfc7d765064e8b4d9297b19b5b03e"
+    },
+    "radio-early-combined-stable-7/result.json": {
+      "bytes": 823,
+      "private_original_sha256": "3793c854e910d4836cbd894af020651e9009d088e9d2c7baf15e125cfbbe8d2e",
+      "sha256": "5631e2937053194931fa89daa498038f59ffa9522f248879c2edb620c27b79c4"
+    },
+    "radio-early-combined-stable-8/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "fe336860b783e7b61429778df24297537077c6b1aff158242671310312823bdd",
+      "sha256": "6df5473199c3ea7720485db7d625564ac24ca9a0b4681a06a7552f5e40c46bfd"
+    },
+    "radio-early-combined-stable-8/result.json": {
+      "bytes": 821,
+      "private_original_sha256": "59d6fd442cf081b285384d8cee74c920588a7e2e96944edb3e642fb40c55e852",
+      "sha256": "ef0046a41810bdea892fd88be136c2d838e679a87a6abad1ce222b5f78c9726d"
+    },
+    "radio-early-combined-stable-9/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "c58a637948e38d42b61c8f0898a4a5d1ba6996acb21db21d835c5c5f996b6f86",
+      "sha256": "565d162191089d9ea2f0109c2cad3e89989d86c952406a0dc4bbea3c2ef926cf"
+    },
+    "radio-early-combined-stable-9/result.json": {
+      "bytes": 822,
+      "private_original_sha256": "27d3677739600ebc08a09beb2d02d63fb39a11760176210e46b16c94a58b4b2d",
+      "sha256": "3a84e004b8d0e24c1df25a8d86a3b4a6196a091247220a759d5a9f2ed7ee50de"
+    },
+    "radio-early-stable-sta-1/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "e7f1405d73a04abe2fb01be6c10cd7bd6b97869ef20399c98b749684e995b681",
+      "sha256": "159f68432ef5940cbde4affd4f4d76c6388d15c197c666ded10e5d754246cc4e"
+    },
+    "radio-early-stable-sta-1/result.json": {
+      "bytes": 814,
+      "private_original_sha256": "a3a3dfab265edf83a01f45d4c2f6c67e862c14ddf4e90ea2f5e8cecc716dcfad",
+      "sha256": "cb7072da79c492edc52ac028e0e31cb038b49534f17bb61454b5a19ea417134c"
+    },
+    "radio-early-stable-stable-1/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "3586274d11e4c8617f566906676dbe0aaa9828f22bbced1ff923334687c68454",
+      "sha256": "3c0ad3a21ab4aeab803433198be08cdf92bdbae66b5e384750d0d19fcc1f8956"
+    },
+    "radio-early-stable-stable-1/result.json": {
+      "bytes": 821,
+      "private_original_sha256": "f31b4fd236e9656064b3020fe70a7fee7ee7a3933ad9d6d2085d5803e65141ba",
+      "sha256": "af7761461a4b972adf3701d4d910817631ea5a0693a073aca59bcb7a0320f54e"
+    },
+    "radio-early-stable-stable-2/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "18c26ed7cc8ae1601de8446ba79d7b3c60e0fb7d8807a9c9edb50d682b08f315",
+      "sha256": "357db7e048580ba4f202ef305bddc5abbfb2b398ffc0496a94872f05996b88db"
+    },
+    "radio-early-stable-stable-2/result.json": {
+      "bytes": 822,
+      "private_original_sha256": "08d2a14e83a940dbfad0825659bdc40bf6a5feeca843c474c993bb58e65ed51c",
+      "sha256": "528a31450d561c64a45ef3915882398cc6ea56b64d680bcc6f43230bd0d44a48"
+    },
+    "radio-early-stable-stable-3/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "f9e479cce22bf37dcdfc37f887a3c50a00d292aec54231f49ae171011459b339",
+      "sha256": "f09730aac85919c67b3be83b83a797b1f40c43dcfe48c21fe0141644722b06a2"
+    },
+    "radio-early-stable-stable-3/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "ca97109e1607a1267b7caa33b189bb2c603aaa8101759aa4a316918771169ab0",
+      "sha256": "9d04272c8700cf2a6995eaf50404e8311d898f055a0a7dde66aa5b33e8769480"
+    },
+    "radio-guard-install/result.json": {
+      "bytes": 278,
+      "private_original_sha256": "7754fa2c064d82256b5412bf9e63fd90f274ed27f70c3ce1f16b21a7c61c5b87",
+      "sha256": "8293660681f6b37f4642ef123e823a5b70a829e92733c3b647f1d2df06607880"
+    },
+    "radio-late-stable-sta-1/events.jsonl": {
+      "bytes": 338,
+      "private_original_sha256": "783c92273acd09e89df818813a0ccd791e6b7aac6bbbcbec95c45ba45cb1540c",
+      "sha256": "246a83a8ee2179e6e3d65487847f2a3f027b3bc0d541bd7c9569161f7f79f9b0"
+    },
+    "radio-late-stable-sta-1/result.json": {
+      "bytes": 808,
+      "private_original_sha256": "90a993a7b8f59c10858de3d9282e4d3e953bed78badec2ac8dddf49f96369c1f",
+      "sha256": "1db24985a06f8147ceaac77620090dff9cb8bdbbe3fc02af400b6114f66685e8"
+    },
+    "radio-late-stable-stable-1/events.jsonl": {
+      "bytes": 337,
+      "private_original_sha256": "b8c6ba8793c496af98b27f80f371632c9e19bfef17df45f7f13626b98954e782",
+      "sha256": "fb8babfa2a56c0f455091b0a3efef110373dbb10e83bc2f388e9ac10923eeb73"
+    },
+    "radio-late-stable-stable-1/result.json": {
+      "bytes": 817,
+      "private_original_sha256": "c50fb06d3aff95f41760f2914c0be41f21069ae5e10381a08e1f8418b7cd1c54",
+      "sha256": "9a8b91b0e83834e08fbfe771b7e97e2b798d04ff377d3bd8d0787abed98eb693"
+    },
+    "radio-queue-early-stable-1/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "7c095c1875951a13b6dc1ce1b9787e6edeb01824a40c97ea34766c71e3074e55",
+      "sha256": "a1223dd8b2db6d9b5f8063b30654ace59d804dfe1a3e97342837d0d026b6197e"
+    },
+    "radio-queue-early-stable-1/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "c3f097f2e0ef22833de75256ea9fb8440a0028621e53998df400314d8d5075ae",
+      "sha256": "0a9b54530b488c2335848ab9ed59dce7e6a703e04c47e28c171121b4241437ee"
+    },
+    "radio-queue-early-stable-10/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "5b6356b5793506b55abe9a233e93b0dd8e870484a0314d4f557a16393c04c8ce",
+      "sha256": "563ba9d25623921d0e254eb990f27a8fa61f76e798824f291996b256a1c6d7b5"
+    },
+    "radio-queue-early-stable-10/result.json": {
+      "bytes": 821,
+      "private_original_sha256": "70bf4ec8ab421636cd628389de50a4d7c3951b69a4f260332641c13b3c634c76",
+      "sha256": "1d304169c33cb42c3d017e8e2b4dde974eed148e6c04ea9281d8336466185fae"
+    },
+    "radio-queue-early-stable-11/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "782f4c07ae5538a3ccf186afd482f0c697b351388cf4c76971b51e2b813a1ed7",
+      "sha256": "f33fe445551695a79f80f0d7ca11effacdecd03f3e8acc0ec941d81246f70b33"
+    },
+    "radio-queue-early-stable-11/result.json": {
+      "bytes": 817,
+      "private_original_sha256": "1229c987218c40f9c004b197a70d9710f955131b318e27adea5980f83238e669",
+      "sha256": "41b23b91e65774e1c342ffeda69b6e18a5d9db5935664f43530513abe10155c8"
+    },
+    "radio-queue-early-stable-12/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "15694e76181213ffc24369c6a8253640cd1d82498a2f4cde792217f278ed8481",
+      "sha256": "5857a4bd0ca5713988f7dc25fb6aef30f8a564ca3e508c3562f33b11f08fc7cb"
+    },
+    "radio-queue-early-stable-12/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "eeb03cc5bc3e97eebab121f8aa5068c1c60737ee4daf0d9c842398b112a272bd",
+      "sha256": "d15d8cf1354e4b88c1d1797ceeb70e345ed8307574a72a9cb7494b7b1852d358"
+    },
+    "radio-queue-early-stable-13/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "f0bceb1cd6f009e93eb236038cddc3071830b8cf17a410daef3c10366ebdc4fb",
+      "sha256": "996f7a9e393d7679790a6507dceca4b22a136248fda7920a0ef1b6cb002b3290"
+    },
+    "radio-queue-early-stable-13/result.json": {
+      "bytes": 821,
+      "private_original_sha256": "74b2020d64db596184124a5fbf1831863a1007c4cc43fadbdc05e395a8f0ebf1",
+      "sha256": "c195860092f63cbe2b0b2a557e80dca3c0b6e678c9482c0d36b14710272db845"
+    },
+    "radio-queue-early-stable-14/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "f5df84caf3525f6fe9bbf89f6826d185a0ac14850332ad64a22b1a6a92e2a499",
+      "sha256": "a7dab93e2e510d95d0f2a12368132c854e32b862419d8f9d5cbca3f92ba555bc"
+    },
+    "radio-queue-early-stable-14/result.json": {
+      "bytes": 821,
+      "private_original_sha256": "27419d37702f5cc25f886af33fdd2a726916584bdebf5b9e2a230ff260d180ba",
+      "sha256": "6632f0544fdbebd71b7e71317a77d31dc9a7b38de1dceaa936afbcef9398738f"
+    },
+    "radio-queue-early-stable-15/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "7f470fbe490514931e34a40be742c1c1a9cef271321f04569c22ac3901d406dc",
+      "sha256": "b6e11cc1e7b4ee9b48801a4d1e712686aa9863e2780f8bf72a5173d7037c2af4"
+    },
+    "radio-queue-early-stable-15/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "9f6f1bd93d658072532ee252d92811e96e813d6f897355afef3127a66a757c99",
+      "sha256": "3044a8c742a38ce48d6c62726407a63dccca4a714383bac1d3c360037e3489c0"
+    },
+    "radio-queue-early-stable-16/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "9893d1bafe9cf6aaa90ad974a46debf82c1a91c5c7645e165237f69f7e02518e",
+      "sha256": "21ea188fd58fbfedd3ae5f48589ad5b97157c504e33dc495e5571ca55b574036"
+    },
+    "radio-queue-early-stable-16/result.json": {
+      "bytes": 821,
+      "private_original_sha256": "608357f3d38a9624ccc83b044ff618830db2c84ba51642d870ae936d7397fdd0",
+      "sha256": "e662b85efe530fe07b7f8d26c01df270f2d3ad06fa7a1baf348d88dfccf12f2e"
+    },
+    "radio-queue-early-stable-17/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "4cf49196bcfde011d2deb9270f1ba6f68e679d32c847798d4690ab50e8762857",
+      "sha256": "7b89262368b401b7ef2200cc5fa5996b374522e36480bbc85c60d0081108893f"
+    },
+    "radio-queue-early-stable-17/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "8e79d0160639ef0b3e557176708549cf6c42763282fea949d30b28f81456dfe4",
+      "sha256": "38da8c28979fdfc9d3f1c19de446af146d112445f922d79b1ab3466168ad07ee"
+    },
+    "radio-queue-early-stable-18/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "d8cd44bb76a52f88b5d6348430e7ad7607acffb72b2171d1e1de3404ed2716b9",
+      "sha256": "b80e6fb3488821abb563294f9119720a4f1e98b0e73a78b2d9ef2790542dc6bd"
+    },
+    "radio-queue-early-stable-18/result.json": {
+      "bytes": 818,
+      "private_original_sha256": "f229ea079fdc3c9fb40ff546ed4ed6641b72ff7ed6d63af7df779eee1a581cc5",
+      "sha256": "6607247d6c225fc316673c0213eabbfa18249b38b6f759299ef16e7a5e00115b"
+    },
+    "radio-queue-early-stable-19/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "d3ed59230e8af9db66d210da700a4cef07034079b1a2c7a18b1d32f871b63318",
+      "sha256": "82b55702a35048ac2b4831a4b0dbdf8b4b3282f999160832d1191892204cf82b"
+    },
+    "radio-queue-early-stable-19/result.json": {
+      "bytes": 819,
+      "private_original_sha256": "dfb4f06f0618d41c189d69ecd86bf6e9771a1a080062a56b14a6f328916a7b86",
+      "sha256": "7082baf9efad463f1827245d0b5e0a5b1fe7d31316ce14b03536b0172a25de63"
+    },
+    "radio-queue-early-stable-2/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "4730c58753c8f3224f12f6aa5cf12eb26c1bd733466412f2a70736341d3ba2e0",
+      "sha256": "ef2b6802f5ccb2d37cfadaaceed50f74e1b400feeb4b03dd5086b368356b617d"
+    },
+    "radio-queue-early-stable-2/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "d504563fe9b3d8be6a2308a4fd24c9cce95035c65e63ebc263f467cd825b9d61",
+      "sha256": "f274d077bcffee0285d46746bdeec770e5241abc331b5f9657f5e1b409cd9644"
+    },
+    "radio-queue-early-stable-20/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "4ad41c28c074c6297230ace88346080828ca32d2c5e5001f9bf1f5763079ada2",
+      "sha256": "0b9e40b2351675b73cb7fbc6ad84bcdac4fccf4f826b27ca73faa1023f8c7285"
+    },
+    "radio-queue-early-stable-20/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "82f8346469ece714e96c87bbc5736babe0752e99f20b87197eb1a5afbe199e45",
+      "sha256": "3944602a048645273fb979005a44e76f1fc77393dc2ff2379feeb500a516f37d"
+    },
+    "radio-queue-early-stable-3/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "6b81b075a601e691aa25e01664b98706c1ba418b2c97dc73dfe4a6450ae9d466",
+      "sha256": "40a648baa8d692399c760de50a0be1a65353d63ee6461286daedef56ca492f02"
+    },
+    "radio-queue-early-stable-3/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "7dae290e8ba3d3b166a89928c8f0bcef365610eb26cf59fef1013281c7cc9a50",
+      "sha256": "37e40c0dd13e4b1e5d4cd1e5191df2bbb8187ab65ee159400ab7bfb5d59f4f39"
+    },
+    "radio-queue-early-stable-4/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "de0863354a6ab5eb52fce8e411ae43745d4edd08a61eddb700e1d1a6f840e7c3",
+      "sha256": "fd377d89bb8eca85a53d2c4adbd6aed3ec2de2a319c9e36f162c55bb5560c5d6"
+    },
+    "radio-queue-early-stable-4/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "de21fa405874e512a6fc3f6cc281449a07273191e3da3dd443b48fcc769aa102",
+      "sha256": "1738f55c8ed912e387720ec07b13ae50723742c563e7ea9d4e13e1725383aeb0"
+    },
+    "radio-queue-early-stable-5/events.jsonl": {
+      "bytes": 172,
+      "private_original_sha256": "1ba95c151f7a870d46c3c06d404ddb875fce9536d5a8dfde857d273eacb7b40e",
+      "sha256": "9f1d327fd6bcc82b395c5e08f9b5ed270a79506c80169b8146e73ec4d2560829"
+    },
+    "radio-queue-early-stable-5/result.json": {
+      "bytes": 819,
+      "private_original_sha256": "9f31a738f90ba2bf27350619ce3d295d8fa2ad41e65f8f56b7be8b1aa589ff67",
+      "sha256": "098800b4d3e8c33e2bdf55aa0ac8a7459216bbd75fb35989dd66722b7ed3d94d"
+    },
+    "radio-queue-early-stable-6/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "8b714dd2e6c8d13d0f673db982f6854bcd02d4b65bc9868c41da6520860dc065",
+      "sha256": "37196001b68f226e2119506bc239341d53954cb54dedaf70609e5e9d11455792"
+    },
+    "radio-queue-early-stable-6/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "45f7f5a99b08bf822c5b5e23efde44116ee8f52e72e5556e729568603ea5d6df",
+      "sha256": "f6ffe19e40bc6201544c975ef01c4a0e83088160c6af31fec730abd5ccbb7bce"
+    },
+    "radio-queue-early-stable-7/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "f54649aa37257cee050a108138a4be83b5b0b8aa3a923cda2c60c5a4f96c2129",
+      "sha256": "3bb28e859cf5fc806d3c19d44929de21b55bc97310cb5c10851a5b9b8e220643"
+    },
+    "radio-queue-early-stable-7/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "cb65b1c8a338001ba2375aaa3ad0383dc6350558a430fa87d9ab9d8f6f69f68c",
+      "sha256": "21fd02465f3d6410f88dbc35b201a9ac3fd9ad52f5410a7fd4ee5f452c7cb2cc"
+    },
+    "radio-queue-early-stable-8/events.jsonl": {
+      "bytes": 174,
+      "private_original_sha256": "bf653d7a4751b5e56b66f0771e8fd7396d2de26cdd965974428b6927994e0fbb",
+      "sha256": "aa4e4759335c4b770f34dce496fa47728e987e3727fedf05af02d9e0fda7ed71"
+    },
+    "radio-queue-early-stable-8/result.json": {
+      "bytes": 820,
+      "private_original_sha256": "25df668593233db1b1f84e22eb0613a9d24f54ad07cb0f128b17e66ae90469b0",
+      "sha256": "c00d8b29ba78905d28ec9cdab09279d107c4b9c5f5c0fa24c17b245eba22265a"
+    },
+    "radio-queue-early-stable-9/events.jsonl": {
+      "bytes": 173,
+      "private_original_sha256": "58aaef17a23aa22e08a5643867ee7de9ad18660269323d800e6d483a06a9743c",
+      "sha256": "2facb20864b1bb4bd63671f263d5be6373c326df2b46ff6145a056411c74e4eb"
+    },
+    "radio-queue-early-stable-9/result.json": {
+      "bytes": 819,
+      "private_original_sha256": "c94250355ea8d9bd2aedb6e917ce2667eb9fcedaa0dcf182a2884919bdc67479",
+      "sha256": "b6d711edbf9281b55db55a0a0a1141bdf5a22207b1bbd609a7109650aac2e638"
+    },
+    "radio-queue-late-stable-1/events.jsonl": {
+      "bytes": 337,
+      "private_original_sha256": "7b3ebb735a582e101e4b4527bdc0928dd3439c4c4f29b5dd7890efa94b3f05d8",
+      "sha256": "f2ebe77a6c2c7369013cbb4aeac5726e5613afdf606672c3c470bd5d0d2f63f0"
+    },
+    "radio-queue-late-stable-1/result.json": {
+      "bytes": 815,
+      "private_original_sha256": "656cd78e2548d2cae15d8760531ee54749146b66e3f99057ea8bb1fc32f1ec55",
+      "sha256": "8b7d86e44fe4d235eb8a788330369cf250fee13f850f7d73ff40f0c4500fcf30"
+    },
+    "radio-queue-late-stable-2/events.jsonl": {
+      "bytes": 338,
+      "private_original_sha256": "db1146785a78331c28f95fcde02d1a64298396a9710072b98c7ce844c4da1c5c",
+      "sha256": "0390087dc5fcabec80e3e201f75ae652aba56f996d497eed7b424c2abff61e1e"
+    },
+    "radio-queue-late-stable-2/result.json": {
+      "bytes": 818,
+      "private_original_sha256": "4f1a1bb9e67d4e020091944897a521639160e8c0dfd3d65a6be927fbaf2e0f8e",
+      "sha256": "526314f02c37789a874863b88c41bb01325cf0f72378fa6052be02ba5f773efb"
+    },
+    "radio-queue-late-stable-3/events.jsonl": {
+      "bytes": 337,
+      "private_original_sha256": "ea32f3e5dd2a70a0e573b33de38173c508988fbc25b15a369b1e44874e196767",
+      "sha256": "293cc0edd8566bc5180be0970ddbc558285631e61e3b5569b9606ae730ffcc2a"
+    },
+    "radio-queue-late-stable-3/result.json": {
+      "bytes": 816,
+      "private_original_sha256": "401e49963c3d7ba284c9a6c4e945981e4cfaaceee448441f2a3685d96f35e3d4",
+      "sha256": "107c34fa4257383763cd6bd685db165a88a13c3da5b92023d0cbb3de4c9b8daf"
+    },
+    "radio-queue-late-stable-4/events.jsonl": {
+      "bytes": 340,
+      "private_original_sha256": "8681aa9f0c966d0e5f70494da646067a4010d0e7a9dfdcb9c475204accca6991",
+      "sha256": "ac4ecdf8a86df829af4b9bf67a85c81c985ab8efd8d0001229243167104a8550"
+    },
+    "radio-queue-late-stable-4/result.json": {
+      "bytes": 818,
+      "private_original_sha256": "0c08297d21c6efb3fb977e18cf38379294edf777b5ab0e2fa84ccc1779286533",
+      "sha256": "9a900ee4b51c777ad3a034f5a0d357577fbed95749d57f1c1399013aeab7a42d"
+    },
+    "radio-queue-late-stable-5/events.jsonl": {
+      "bytes": 340,
+      "private_original_sha256": "55e8540af789d064860382136900a8af44412c73dcd2299865a3e0443a1ba1cc",
+      "sha256": "454f585f22605c7547691254e6d63725ec9ae8fc0b393fa9959b8faae9c8378c"
+    },
+    "radio-queue-late-stable-5/result.json": {
+      "bytes": 817,
+      "private_original_sha256": "380120bf1e279f716c0923b4dde8eb902ff900b81d33f008cf38a3ef2cc06b65",
+      "sha256": "6e800c6aa22e93a86f9fa8dbcc483c53fc8d8de0c50f552908eeae6ae5be0e1b"
+    },
+    "radio_guard.py.txt": {
+      "bytes": 4898,
+      "sha256": "7fc5accb3598964597f999ebe6d5a590d368c7ef64c837c6e3af1844cc2fed27"
+    },
+    "switch-combined-control/result.json": {
+      "bytes": 454,
+      "private_original_sha256": "3cf0afec1860ab3094ecebf39707c76dbd4a9125cefd79320d193a4e2dee7361",
+      "sha256": "0ad0602af082f61b3654ccbba2c2a05ca7862cf5ca52cb9ceced7babdbb02d07"
+    },
+    "switch-usb-queue-fixed/result.json": {
+      "bytes": 460,
+      "private_original_sha256": "6162632644c9827b9c2db2c067c2725b21aa3f38e93f31530e57951b9c1ee69e",
+      "sha256": "829bccafb60f5ebfbf15bf6391c6d8fa34ae78d31acd5061527959f217547314"
+    },
+    "usb-abrupt-wifi/cycles.json": {
+      "bytes": 283,
+      "private_original_sha256": "35572264e82fe9544912d433fa75233b2daa4a95d509d9b4c185d53a152f1472",
+      "sha256": "93286edbce5e625900a279a52d409ba92d41b3ac71e88b76532de4281942717c"
+    },
+    "usb-abrupt-wifi/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "ab70b089dfbdaea33c23a4471eff66ac0095f3f54cbaba61fcdd4f47bb6cfc9f",
+      "sha256": "40d15700d0238fb40869a45239044a9e88cb0f7e20ef0fea8f6aa024b270e456"
+    },
+    "usb-app-verified-1/cycles.json": {
+      "bytes": 281,
+      "private_original_sha256": "dc6e3cc29f895bf3c39dfbf8c01b68cbc19958bae96e977493c4e5ec6edc6916",
+      "sha256": "ee9026151f3ab82f969f6b35b5d30f3cea74e9b0dc88d92f153ac2121877624b"
+    },
+    "usb-app-verified-1/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "b3147deeb032572c844d3e201b9d899d065e566f17e6f29c46440b6cf9d318ee",
+      "sha256": "47d13f69be1ef81760b11bdb38fe5be16c1c5767710465a764a5a30508d52934"
+    },
+    "usb-app-verified-2/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "40021f16ef360907fa167cdd6a2c935ac699b96a572761ecad5a712e9f05c25c",
+      "sha256": "54d81e1a4b01663415a729d8e2af1154c3d2d94780bb5b87ca9d9727c03abe31"
+    },
+    "usb-app-verified-2/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "7c1264ba5ce1eed42c82af877afa418be9db199f4f14116ff24c1525033f0f87",
+      "sha256": "fb466d3a6b8474c4fe8afcc3a44e133289d108961223a2f3009fc6e21463a4dc"
+    },
+    "usb-app-verified-3/cycles.json": {
+      "bytes": 287,
+      "private_original_sha256": "a17994b63f1da865b44a31e122ff3218ea87030e3403989dee0e2f61db4a2e53",
+      "sha256": "329ea957c5f9e2372711839e248efa5331b22db2549bd900aee6d59333057661"
+    },
+    "usb-app-verified-3/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "aca8a77fa1d6066c1350eff56f1ba7965f0c91058eff2b7175ab1f0a5cbb0fb3",
+      "sha256": "b38314fb46b8bc70509738af42a6fd2ba3ff438618dc2803bc61f507927e4a07"
+    },
+    "usb-app-verified-4/cycles.json": {
+      "bytes": 287,
+      "private_original_sha256": "c6e6bdcd29e0937046b7bac2daf6d7e3fef83b53ba92ceaa6f91861713f31d46",
+      "sha256": "fc6626eb84bb7776701067106b49b9ea7ad982240c6f3db621a5a31656237182"
+    },
+    "usb-app-verified-4/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "77f9b4ff1035eb48a83dd460e4092ee57b36abf00dec65514220473a9666a046",
+      "sha256": "ce99e0eb15d0df5595597338eeb7904ba6a8a99ae45d5f0d00e51485ed1d96b2"
+    },
+    "usb-app-verified-5/cycles.json": {
+      "bytes": 286,
+      "private_original_sha256": "e78ea1112ab71caf29f813535ae081d6df958af7eb0a56004d960b035dfab61f",
+      "sha256": "61438284d09c89af034b2c10fc3deeb2492a885df87f254f3977af025ac7d0f2"
+    },
+    "usb-app-verified-5/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "b11bb6751b3a662125f5853462c4f9ea0ee9ec6eb083e08531eb77d8e05b7d4b",
+      "sha256": "5e99c87f34089ca840088b85746b5b18c5d5ee864a4d2680139799295f12e586"
+    },
+    "usb-deep-abrupt-wifi/cycles.json": {
+      "bytes": 285,
+      "private_original_sha256": "1a1964909ddecf4660d9e5e6174b526f9d52afe616dae5843255c41248ec1a65",
+      "sha256": "72a3831ce0f976d5cabd902dff9f50a04581c126137a34468cce141d03a80ddf"
+    },
+    "usb-deep-abrupt-wifi/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "488a4b5346819b0412593a8705127bc79732fbfa917ed37a091d3027d9389bb7",
+      "sha256": "3ea85743c771772a607fd0ed8b1c3fc46cd78d1cb6e4e04ff0df17fbec6e3a88"
+    },
+    "usb-detach-initial/cycles.json": {
+      "bytes": 845,
+      "private_original_sha256": "1b6d0cd48a1bdece9324ab736954d5261d13daeb520b9dfbb66bce6d991df76a",
+      "sha256": "978d9ffa24a54ca31f523fbd6771ab1cb7552bc990da7498ac19cc795541f3f7"
+    },
+    "usb-detach-initial/result.json": {
+      "bytes": 162,
+      "private_original_sha256": "f0f6a2088b270486521f40e3cf91b6610e8980c671c8c3a74bda9f8392b1ba5a",
+      "sha256": "28d25610aa75374e0245614a75396d31878de35020a4eb97537861e6d80d7d69"
+    },
+    "usb-fix-build/build-result.json": {
+      "bytes": 6556,
+      "private_original_sha256": "d91b9001099172b979076c8c64cbd42b97db17edb949abfb6f905999d738dbd2",
+      "sha256": "0c35cc0db9be7d560d40d89da36dcfd984ef2a3823cb5957a1de8f8ba191c5f2"
+    },
+    "usb-graceful-deep-1/result.json": {
+      "bytes": 184,
+      "private_original_sha256": "7e26df422165b8b9025b41d81c9570b51b92dd6f29ad55e1566dde6f6fc55c09",
+      "sha256": "b5a48cfcf7e01bce4192bb5778d9d3dcb25fc19f9a9b12a24d7580c364977ade"
+    },
+    "usb-graceful-deep-fixed-1/cycles.json": {
+      "bytes": 287,
+      "private_original_sha256": "c787c38b586c0dfd9db6291e02918dcd24c825b20b7f75ff2da6eee2988bfd19",
+      "sha256": "7fe331a618e6c4688fbcc24c4f17cc10f3f3a094cfc89b8bb39769fa1faac3cc"
+    },
+    "usb-graceful-deep-fixed-1/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "196fd6e4ad4d23dbe95edbdbea5859018d7ba8750f938f6ff2018e2134ef9237",
+      "sha256": "fa45a101737f2bd92f5d41b053287aa5cc2a0e364592a712a0142e93e7ac526d"
+    },
+    "usb-graceful-deep-fixed-2/cycles.json": {
+      "bytes": 286,
+      "private_original_sha256": "9ab0030fbcbdb4a74b7d6f25d1b0e692c9ba06d76e3eb13dfe26b71b699f2aef",
+      "sha256": "b6f574f628ff4fbbf2f91cca0189aa634c100c0a2b6ffb92676bf8ba7ff0aa97"
+    },
+    "usb-graceful-deep-fixed-2/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "29bd2422d0576dec75730d6be04e0245bc4c030844c218a6f4e1af0b801554ca",
+      "sha256": "1fa2da1e8b6e94c3264526aea8ae30ef824000fe0d4036ef6692d7c3ae0bc2d8"
+    },
+    "usb-graceful-deep-fixed-3/cycles.json": {
+      "bytes": 285,
+      "private_original_sha256": "6e6e3734c3dcaec0cb133766289560360a7071ae98ea72f3e64ce3c002070ce8",
+      "sha256": "8bea30ae47c2f38cf354b6b069ef6c22a5e933ae0d96743ba2b830d94dabc850"
+    },
+    "usb-graceful-deep-fixed-3/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "b84934a823badc36cc487ed1d80523edc5152085ed253c12cf49d9ad0067b90b",
+      "sha256": "9e66d20091c528750d524c668b5aa3eab2dc16fd4a0565c7a3c4a20756c1fb3c"
+    },
+    "usb-graceful-deep-fixed-4/cycles.json": {
+      "bytes": 287,
+      "private_original_sha256": "36b0ca7fb69a8b8949e6993063b60442d166e79a280afa38e8a3ab4ddf00943b",
+      "sha256": "3df98d0bcaf69cf2374a4404ac770e2102d19135e73c9f38a98c99dd5e8cb7ba"
+    },
+    "usb-graceful-deep-fixed-4/result.json": {
+      "bytes": 162,
+      "private_original_sha256": "df41ffb81feaa64d077c76180f93eccb3d2ebf04850c3813f3bcd3f144e6b818",
+      "sha256": "aabaf6af967aab8950f3a87d396a78257c40807fc3598e65cf767d619987e671"
+    },
+    "usb-graceful-deep-fixed-5/cycles.json": {
+      "bytes": 286,
+      "private_original_sha256": "84e959836bd84dc41509015619020de8df1c03c3a363af0c4188ef37aff0cfa8",
+      "sha256": "4e11bc8a47e0402f3e667179b641604cf706ad50383ff7ea8a971d98e69a6416"
+    },
+    "usb-graceful-deep-fixed-5/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "667400cf4554771e476cb3e0ac621cb688b60f1e32ecdf6f2f7464d0102a541a",
+      "sha256": "32ebf1c8491abbab0a3c3ccdb74c396bc4c1477d832709d741307fe9ebe3ddb3"
+    },
+    "usb-graceful-normal-1/cycles.json": {
+      "bytes": 282,
+      "private_original_sha256": "5f68d64bf42301afed6ba2e69513d39d4be05ded8724e66e6787e25058906c85",
+      "sha256": "015cfcd94454aef43eb3cf7baa3b45487d7267016e9d961d018fb95ef02c7595"
+    },
+    "usb-graceful-normal-1/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "3b0d1e270a8e6efa9ebbebafdb3daa825b77e67ae495d2205f906db81abf8940",
+      "sha256": "636f6c75e1a274858c030f35bbbb1f68ae19eb2cd780c816b5d12e77180df863"
+    },
+    "usb-graceful-normal-2/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "fe39c09ec788fe8b69409ff9ce095e85497295fed84c66222c82eb9928f3d2e3",
+      "sha256": "6a6db3dfd20c7604af405000cffcf69881cbea3796fc2da51b712fbe7ddbf464"
+    },
+    "usb-graceful-normal-2/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "e3cfeca3c7c10c310e030e657808c9caa1920b4f0aaf92efc975d39ceef7501c",
+      "sha256": "8b0e1bef0f8c2cca4122ad24bb8bfb805d62bc3106d163ef34b0736ab5af7e83"
+    },
+    "usb-graceful-normal-3/cycles.json": {
+      "bytes": 282,
+      "private_original_sha256": "b1c63ca6c6ea4d8aa6d76831613086529f37dcfa6a4fd329ed1a14fbeaf578b2",
+      "sha256": "dfd5f921e6c45005627898994c56f371e8e35867a915078899046ae86e991b56"
+    },
+    "usb-graceful-normal-3/result.json": {
+      "bytes": 158,
+      "private_original_sha256": "d0360d472de4172257bb0409938abf35cae35b28c9ceed57cc4c17ec5339e939",
+      "sha256": "1b085b968ad29d0e559ef0ae7e2034e5eda417a6810dbf5b6015f6bad14336a8"
+    },
+    "usb-graceful-normal-4/cycles.json": {
+      "bytes": 283,
+      "private_original_sha256": "9fe23374d00a3f8a0de5bd0d0fd8eafc436e37352ace28eafb8841bc4a44a53f",
+      "sha256": "153f31429950a8b032475157b231447c9f90210e63fa20b8eb7560fe8465f9b4"
+    },
+    "usb-graceful-normal-4/result.json": {
+      "bytes": 158,
+      "private_original_sha256": "cf4cdc89ffea5996e8245f43097499de47e24db57dd92285c510d205e24de85b",
+      "sha256": "7df755a1cc6e0b99338f9fcf2428efccf3da4dc4f37c39ce6f0bfda90de5723a"
+    },
+    "usb-graceful-normal-5/cycles.json": {
+      "bytes": 280,
+      "private_original_sha256": "2f8c9cea1b5012a3442a140bd850fe81349d4537911d53f49f62bea9f8e71f3f",
+      "sha256": "5b130ed083e39eacb8540c46be3f22aa0f551173d10efa98fd3265cdb2555ac1"
+    },
+    "usb-graceful-normal-5/result.json": {
+      "bytes": 159,
+      "private_original_sha256": "611531e4ed7dd11d131dbe71ad30808e60e66fb22bf86c711e3ee39bff48f7cd",
+      "sha256": "8201a4e2e32674c754ec7b00b4e0ea6a1b68c99c559707995a775934a9cac46d"
+    },
+    "usb-helper-combined-1/cycles.json": {
+      "bytes": 286,
+      "private_original_sha256": "396007864349456c257d733adfc746b31627b33067827a4300f038b66b4026d7",
+      "sha256": "a25ed1f54d17d1e1f9db913e16c7f63e79ba97a65d3009b4ccf045701c8144cd"
+    },
+    "usb-helper-combined-1/result.json": {
+      "bytes": 159,
+      "private_original_sha256": "ef951025e07e1a8e3dfb9a76508a86dd809a2ab6ec5856dae5c72fdb3f83c7fc",
+      "sha256": "58ab789e368b9f1f36a357c69f363e30508de6a24ca0a214170b040fce9a0ae0"
+    },
+    "usb-helper-combined-2/cycles.json": {
+      "bytes": 286,
+      "private_original_sha256": "9782fda35d010c7a811ff7026f4dd2ee2e7bf85cd8ed1e2c5dcec58c2536af36",
+      "sha256": "1a50e50261f140f373f2ad7cc1c66c96085c1b49219e2a1dcb9e845cd18f88ad"
+    },
+    "usb-helper-combined-2/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "fd434cb9667d67c47e9dc4f6ceaca19fcc8c3080d8de2f00d43218b399e3716e",
+      "sha256": "4310900a19490ea33aca0af4f93a0facabf1113bcef7961547824088c872bd77"
+    },
+    "usb-helper-combined-3/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "703ebc3c373d5ac2ae8d2b3253b55f09db7a549c16b5a973f86355798231c965",
+      "sha256": "524b4c26b2672f4d787cfd187f1aac8ee6aba343e636358503b7646727d767ec"
+    },
+    "usb-helper-combined-3/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "5c58586d09269eebed76f93fcffdf76c2cdafe6d884e59a4347d34b01d2870ad",
+      "sha256": "9fa4bc1dd3db40866fcee3fe77788c7adf2091e472f45f52ec5ddb7b69abce0c"
+    },
+    "usb-helper-queue-deep-1/cycles.json": {
+      "bytes": 286,
+      "private_original_sha256": "2df8881a12ca1c2fdc1115bb1bb606a7d719efada149ea18c645ce7907ac0529",
+      "sha256": "b95211cb82e530158a9356a14a73f23bbb24942b684b71e3ce48fc89a11d1d26"
+    },
+    "usb-helper-queue-deep-1/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "598ab06708568d39d0a4e6fa86a8f1c8abf1209f049f34188963b4ecbf83ec32",
+      "sha256": "25b7eae784eaf0da2ec5147ce97e2f442ca78fa68fecf3fcef74a84cd22a4274"
+    },
+    "usb-helper-queue-deep-2/cycles.json": {
+      "bytes": 287,
+      "private_original_sha256": "94194a18e5b17c5e0f96da2c13853a057bc68e3f6f2018dd5c58c414ff6573cd",
+      "sha256": "b50d053499a0de630b882895f88596c231f37743a51b33601f48987e38ab982f"
+    },
+    "usb-helper-queue-deep-2/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "0c74943a4bd0c0c26bed19116a8cad6d2a82e58f9da8b414c910a6e6fc673d17",
+      "sha256": "4ad6c796e7b064d2948390c250409147b96786b093900fb5e97ee594adfbd7d7"
+    },
+    "usb-helper-queue-deep-3/cycles.json": {
+      "bytes": 285,
+      "private_original_sha256": "441c81bba39db9de47b2894f7b434fd6abb9545e2e50615d579d047ad4b7abea",
+      "sha256": "0542eec6d3bd65fc3fdcccef88f3211e8e6d48b3085eb10d69dcc05e0413052e"
+    },
+    "usb-helper-queue-deep-3/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "e824c7db45c76c5e0623d162c0f54426d58580c0ee007a752d98072533c169f2",
+      "sha256": "f7751087b58f0873f665f8939148371ece3de48d2033c984c15e77a84c54bccd"
+    },
+    "usb-helper-queue-deep-4/cycles.json": {
+      "bytes": 288,
+      "private_original_sha256": "429eb10a4d2935dab4e912c0ae73119b945cbc4e736bcff4f9a4b24ed8ae4bfc",
+      "sha256": "bafdcacab91e67b2d6379b791927791d118691f18e13ea7273b9beb24413a623"
+    },
+    "usb-helper-queue-deep-4/result.json": {
+      "bytes": 163,
+      "private_original_sha256": "e96f18edc2c86c0598bda04ce2a6d48288b64bfc8efb511d93ac4933d1c78fb1",
+      "sha256": "847706658c3d9569e37f7785708a24a9207031e4955d208456cbaf8ab7015fe2"
+    },
+    "usb-helper-queue-deep-5/cycles.json": {
+      "bytes": 285,
+      "private_original_sha256": "511c0e7851cd2c3e091a06bf621036eb95263676fda85a4fa22276ddb25e7a16",
+      "sha256": "f86e364d917fbae5d51c47b9712fe22d54decfd98c11beaaaff2cb26a53e3599"
+    },
+    "usb-helper-queue-deep-5/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "7eaef646079fc609e8519c7c36f817f087599e68b45cf5beece9199d32b3ff9f",
+      "sha256": "02a04dc25bb747f5955133d249d3e7644a18e41dfd3de0f2af70cdca3f09be99"
+    },
+    "usb-helper-queue-normal-1/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "68a765961f476f7f054babe22e06e3913d91e2612d89f3c563978b4f57dcb873",
+      "sha256": "107b94d2f98914906f6db3445053cad4b01c2d0879c8a7892887cfefa13fbb5e"
+    },
+    "usb-helper-queue-normal-1/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "038867ed3c17a0133d09c28fc80e2b1bcadfb30d0c300d2efdb347a701495180",
+      "sha256": "6fa03938ddc39ea81a173c0f436fedb57d50622cb4980a784cbe9ece78d21922"
+    },
+    "usb-helper-queue-normal-2/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "39c27cc5e095c615fcd9d4169fdf2e1f70e79298ce60477c6f9c0311bfd6675c",
+      "sha256": "ab5dc0f989670c6e1b211d2434fc2d19be988c80a655d593ccc75e1b17e2e48a"
+    },
+    "usb-helper-queue-normal-2/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "bb5820512a5226b066005c8a73051b9e59d4062040eb78c3ed8b5d7ab3a33ffd",
+      "sha256": "23ee1b1b525b573ceef11c88b6159739f54211a99d3bd33af10aebed4922d82d"
+    },
+    "usb-helper-queue-normal-3/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "58c73e6867c0bc744908aed5c74efb56297194ac2f9e14de35c9628ad55e501f",
+      "sha256": "390e0bc8cd88dcca5a146326a29055a2f362e9880f0cd7414931cae931eaedce"
+    },
+    "usb-helper-queue-normal-3/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "3127b57343d614d50df83be985caca8a04d6f82580ff59c3619d87235fdea34f",
+      "sha256": "db8f4eb520447d19c5d854509039afff4475a8485f1d71d471f79c1d17747637"
+    },
+    "usb-helper-queue-normal-4/cycles.json": {
+      "bytes": 285,
+      "private_original_sha256": "4837b27713fc75e05c4a4a67c6020048a82cd874129c098016e5d07b09e2fdfe",
+      "sha256": "b9f509faec6b002d67e6ac5cac9a4d3f47cbf567d160e756788b92bce69b47da"
+    },
+    "usb-helper-queue-normal-4/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "7dc00e3d8091dcb3fdc293d10d5a46293f9dac99e2c35e5e0f813965db8336a1",
+      "sha256": "b5fff6063476a424e1e4f48861c463ad73f3c184b409048f798515013be2063a"
+    },
+    "usb-helper-queue-normal-5/cycles.json": {
+      "bytes": 284,
+      "private_original_sha256": "faf6f7dddcb7b66553718932e2ddfbb3790c2bfe3747ea7d32f82f8001f2bce5",
+      "sha256": "ed69215c64c3a834d8cb6d494025c8f516135af73999bffc760c9514cbad347a"
+    },
+    "usb-helper-queue-normal-5/result.json": {
+      "bytes": 160,
+      "private_original_sha256": "1791c577ced3187524a0efbf047b3a0dfc54b4497faaf0809507d90b81a31dbb",
+      "sha256": "2961e8cdff1abf5671f67b1cff8208b5f69423ad257cbc56f267f5e1a141489c"
+    },
+    "usb-plain-control/cycles.json": {
+      "bytes": 2794,
+      "private_original_sha256": "40438b701134300a77e167c112ed936b2453e1f66f9b0aa9b5a23cca42a326cd",
+      "sha256": "6e5aa8a09d7516675de5da6ff93fb91bf9dcf75e9ad7c013ff269709fea6539c"
+    },
+    "usb-plain-control/result.json": {
+      "bytes": 161,
+      "private_original_sha256": "4202d4d1462b2681cfaae8733f8e9ed20629a1de4a5174c100aa456e90e73a0e",
+      "sha256": "6cfadf4d30a060507cff4a3a4ace73f691bf1e8b07a90d34f2475aef62c465b8"
+    },
+    "usb-queue-plain-30/cycles.json": {
+      "bytes": 8410,
+      "private_original_sha256": "19ec5f4f8b546a617f0841ea419245d5a781c39f9024e24fd703297c4a047b91",
+      "sha256": "da23c96d651505acb2f17d5193c8028ff831da1220a5eb8f4662764ace955567"
+    },
+    "usb-queue-plain-30/result.json": {
+      "bytes": 161,
+      "private_original_sha256": "4d9fc9c1bd208aa9a8e70f5c477dda8b2081573bc57a38f8b0b794057b214e0a",
+      "sha256": "9a29a5e343d7bea3b89f2c0311b47eec8957bae448ad21af1f96048e26642679"
+    },
+    "usb-unit-tests/native-results.json": {
+      "bytes": 4841,
+      "private_original_sha256": "4e8700a06b1831acd01ade2f950edf939d98e61d8b582a54d60329880e2ebc34",
+      "sha256": "82e2e6734a40d060ffe1d02e32772ac8bfa7c748bb2748007318d789935dfa19"
+    },
+    "usb-unit-tests/summary.json": {
+      "bytes": 1776,
+      "private_original_sha256": "f98aa5812d1f4837bd1c3b969ae423a2b40ec848bff39142a2d425490091e732",
+      "sha256": "0282a608a751b92ee9399a33e41fb092047f4078b796fd2e058acfd8d349cac4"
+    },
+    "usb-unit-tests/targeted-results.json": {
+      "bytes": 976,
+      "private_original_sha256": "913e7c0cbaec385edf9d4eff5ad247f650b66daae9afb1060bd4f61af2fa4b01",
+      "sha256": "42c8608a7cfc787284974dc278a58dd2d11446a774a5acb1d2db3337c2355d36"
+    },
+    "wdt-precondition-fix.json": {
+      "bytes": 333,
+      "private_original_sha256": "353eca2326e20f6a8931c479f3031fd86f6921a0db9dfbdff420bac709194b2c",
+      "sha256": "da98d7846ff0e24ed4e731d34e0aa6bab237c8b4b74429e8f055d7eb8489c73e"
+    },
+    "wifi-abrupt-after/events.jsonl": {
+      "bytes": 1121,
+      "private_original_sha256": "93d7391963ffb1b53c95a86e2197d1ebb3d47d6a910307350db8ab1164d6b514",
+      "sha256": "e108f44e92d38950b1a7bebfdf42f8ad74ba86cb8c217f7e0e00471aadcacbdd"
+    },
+    "wifi-abrupt-after/result.json": {
+      "bytes": 766,
+      "private_original_sha256": "a9ec2205a94a8c51e76097367bf65546265835f51effc96ccc54299b7ac9c21c",
+      "sha256": "0607c9425b3074546e433c3ab79ecb1df570598f6f52f9a662a4bac9dcb4b254"
+    },
+    "wifi-abrupt-before/events.jsonl": {
+      "bytes": 974,
+      "private_original_sha256": "c4c17e0eafe329d04edceaf34c678cd103507e4df6be4552c6e3fc73696272d3",
+      "sha256": "ac0709629cea88d96fd3afbbad86aa1eb2b3c8bb1675e3b965aa8a5ae315967f"
+    },
+    "wifi-abrupt-before/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "9041cc069382893b8a92d5f85676172c3b1fc245c20c7e2ac989bf030851ce26",
+      "sha256": "223fe00e659b85b1ad04a00e5c938ca6c81612c00e5b167edc1514e7330897bd"
+    },
+    "wifi-app-queue-seed/events.jsonl": {
+      "bytes": 974,
+      "private_original_sha256": "fb426d7d6fe757af5183bec6de92edc7abea5743266a309da9104faf32befaf7",
+      "sha256": "1bda653f5f84577cdc3ad65718f0e0575d722dbc3d14b4da23c80c3cae886cfe"
+    },
+    "wifi-app-queue-seed/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "9366349daf0f4704aca55e3ed11dc9b584772599eeb06729d5633bb6d06ee09d",
+      "sha256": "775d1a8f51c4f004fdc120da831e995ecfe041b61c7d082a79ae400a243cb587"
+    },
+    "wifi-app-soft-1/events.jsonl": {
+      "bytes": 956,
+      "private_original_sha256": "439a0caa32af230aeb3f8b68ce0e1218e9c0684c76d5758b34d3050538f4e7a9",
+      "sha256": "37cf92bbda8c6edef248edbdda8cc5f926bdc295d934c84ddf0d03c374a57171"
+    },
+    "wifi-app-soft-1/result.json": {
+      "bytes": 695,
+      "private_original_sha256": "7654e680dfb8649533399bebbe8442bfa56bf8399a5eef89a2703fe59b486e0b",
+      "sha256": "89adf04a39b6b4b5407f0f096617b3ddb1a40ec9f66c1a253666a9e6bd490173"
+    },
+    "wifi-app-soft-2/events.jsonl": {
+      "bytes": 956,
+      "private_original_sha256": "cb2dbface2f8f7350c9f54eeb3410baceb47b2ddc23575447bbe8f266c6cdc85",
+      "sha256": "657309a110399c5a0d391021e84308d8c777d79bd9abfb06f952d0e32293beb7"
+    },
+    "wifi-app-soft-2/result.json": {
+      "bytes": 695,
+      "private_original_sha256": "72d2ccaf062dd0fc1cb460db5fa72f191807edde214cf7505dc285b2833e09ef",
+      "sha256": "beb8895d904c7391d1905da9d22a35e44c74fda42585c2dd34f63bdf61f4b1c0"
+    },
+    "wifi-app-soft-3/events.jsonl": {
+      "bytes": 956,
+      "private_original_sha256": "2722f1c396a063d8ef9977f46d7be766eb78036d9d49b8733c4bb0866ae82350",
+      "sha256": "2488a34133c790b035a397a7e35bc2681b7def196276c21a6ebbc08501e7facf"
+    },
+    "wifi-app-soft-3/result.json": {
+      "bytes": 695,
+      "private_original_sha256": "b9e3a5b323c8591b0500450d1f4753c2cf127f6c51433e534cb05d984271698a",
+      "sha256": "85a0cbd8f392776750d90c0b3cc96f1a5b32c3fd84c9e991b411dbda6d21c17a"
+    },
+    "wifi-app-verified-1/events.jsonl": {
+      "bytes": 968,
+      "private_original_sha256": "05004cd40f51257fdf2a4294c62b899c9cd493c3b72cc0b0adc8f71ffbaeab87",
+      "sha256": "d8a618d80ff1478fd2093868133254a656a901c3f42dfa61b745de9d7bbd79be"
+    },
+    "wifi-app-verified-1/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "77ae938c9700db14ef32af83ca3c3215eb24891d55e0f784100dd8b813111ce9",
+      "sha256": "de5b420ec76b2b43921d82920f6f75fe21cff5b0692e85dd85a86bc2bddccf24"
+    },
+    "wifi-app-verified-2/events.jsonl": {
+      "bytes": 968,
+      "private_original_sha256": "adaf53334b6c2643ff6117ebab8f85911395154be724add79e3d96437522ddaf",
+      "sha256": "41ba32e48bfb939fe41d867ec95b6001200836be5f07584c176fb86b73feae57"
+    },
+    "wifi-app-verified-2/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "f9e78d2265909cedad519102a97627c78e18a362adbc07116e07f9f5a4e71d0c",
+      "sha256": "e558313312d08623689a9ab61c1809a21b9c8aa157c679ae519068060abf2b89"
+    },
+    "wifi-app-verified-3/events.jsonl": {
+      "bytes": 968,
+      "private_original_sha256": "681b5d706708be3153a3cc620ba7b66be7d9a0953776a40d0b209eee13a578dc",
+      "sha256": "4402a82e62b4c928a7c24cbae6e5c6e88ff01c1c1dee5233d4c0704b2a9c0e0d"
+    },
+    "wifi-app-verified-3/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "01a6a438360dea89f74c730cd206bcd20d7f986c3a8624a44969bad4d566a35c",
+      "sha256": "3cee954f22c5f802d801e9fb7f5c94c88e6c93de61a4920bcd22ad9e1c5bc147"
+    },
+    "wifi-app-verified-4/events.jsonl": {
+      "bytes": 968,
+      "private_original_sha256": "e00d7a7b01ac7250d1a343c25831f551100f2ef8a0c829b380249f8942a7dac7",
+      "sha256": "202dedf2738c165ed0425c03727c26ab6f39fdd8dd2bfbd4290fd80dcda51e43"
+    },
+    "wifi-app-verified-4/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "cd8b1af8a26ce7e956caad1dfa50c4ec0f6ee6d039d9afb8de1cc43922a094cc",
+      "sha256": "a9f90d1b1bf1fc991aa2b0adbfe7eb55b7d8a83f47a50193852c2d34bbe698b6"
+    },
+    "wifi-app-verified-5/events.jsonl": {
+      "bytes": 968,
+      "private_original_sha256": "c942e59257d73581d9817f5160259f00a8db119a548bac5ecd0a2e093c2ecf06",
+      "sha256": "d55af7b865b07db9e200dc0a7f9dc50f8da541ccde0330694d67bbebdd2bfd46"
+    },
+    "wifi-app-verified-5/result.json": {
+      "bytes": 701,
+      "private_original_sha256": "08d3890b7438225d99f5020f17897e4a7b5b0fbe76979c922c6721998745ba93",
+      "sha256": "67d218407c60b198cac39ca1938a808a80efee511fad3abaaeba14477b081631"
+    },
+    "wifi-app-verified-seed/events.jsonl": {
+      "bytes": 835,
+      "private_original_sha256": "bc244e15053939b88721b8ea8b9ad5cfbeade2b46f17ef74c003cd11cb789429",
+      "sha256": "a873695a3f06ed6def6f027d2c99d12568d2dff982d01773bfa212d0b6dffaa5"
+    },
+    "wifi-app-verified-seed/result.json": {
+      "bytes": 709,
+      "private_original_sha256": "3e6a010873e4705498b4bccfc5c0992165caf96611ed3ad493ed9471402ba4f5",
+      "sha256": "c10c590313926b6aeba11b986a4523b49a412e2c75c3209330d1fb3586fbb286"
+    },
+    "wifi-deep-abrupt-after/events.jsonl": {
+      "bytes": 1156,
+      "private_original_sha256": "55ea3090cd6cf052c3dace4f058cfe01d4e2966714ba3c566f89214c753872a6",
+      "sha256": "4cc9bed542a81b8c6e57396245c72af3317a28248fb59d1e86b65723c3d01b29"
+    },
+    "wifi-deep-abrupt-after/result.json": {
+      "bytes": 774,
+      "private_original_sha256": "ac50e1af3f201fdce1985bbbdd8282863a37167e6f07a27047405804e9d4769b",
+      "sha256": "5c473b4b52e2aa164bbea38788eccfcd1241b0e32b4a8e4f447abc82e54b0f65"
+    },
+    "wifi-deep-abrupt-before/events.jsonl": {
+      "bytes": 998,
+      "private_original_sha256": "d2241ad44f4fc6109b5f6c07a0fd997daa60a24121d1356da2f04f769239375a",
+      "sha256": "919985b7f8ab529e215c6ce80917deb387cf9f713e647bff39058643033834d0"
+    },
+    "wifi-deep-abrupt-before/result.json": {
+      "bytes": 710,
+      "private_original_sha256": "1070c7ff5564f28cca93eca7ff1f42473e3fb2a3df2e4cbd108647073a95862e",
+      "sha256": "ea7c636c977ab608d32bbc5ae3eb99eed2ef17f53f493b6aff6f62473fc1abd4"
+    },
+    "wifi-deep-graceful-recovery/events.jsonl": {
+      "bytes": 1224,
+      "private_original_sha256": "5261a66d419f64d90bb20f219695758ffe1bef5e9d6265e82d89990c9f374f37",
+      "sha256": "4783c21ef531d5472255f9ffb9786ffb70537a0f6b5d987c3d6119a65ef843b4"
+    },
+    "wifi-deep-graceful-recovery/result.json": {
+      "bytes": 727,
+      "private_original_sha256": "58230747c00ec35ec892ec019d2dd5b645a8a5e030ea827126da3ecfcbf4e5f3",
+      "sha256": "763d72268f96f42da3e713864a8273d8c6126db5ae4b11f864b7d59a9f15912d"
+    },
+    "wifi-graceful-deep-fixed-1/events.jsonl": {
+      "bytes": 1201,
+      "private_original_sha256": "2b521952a90ea1991ecdffd069af5016b92a16ce57d1b4e4c238ace772b93e4d",
+      "sha256": "63bbb5cdeeeab2e01b2cf268986cad91062d9fc009c4837ce0a341533d636b02"
+    },
+    "wifi-graceful-deep-fixed-1/result.json": {
+      "bytes": 716,
+      "private_original_sha256": "5abf62dbdc87d0b95fa28875d64f479254e5a9a97813d5f1adaf48e6dd353b27",
+      "sha256": "fee1a1a123c7b61ebaa4fd820cb5c443c9a10924ee3f19c3a81af79beb1ed1e9"
+    },
+    "wifi-graceful-deep-fixed-2/events.jsonl": {
+      "bytes": 1201,
+      "private_original_sha256": "d8c5684d0f8c31ba7e833665c124b2b0d7357da2c24d9aaa75c6e46ed0f81aa3",
+      "sha256": "9a2bbb8b95a679eaece3f0934ae0eaf35bf010df99ec4123fcf04d8bd387fac8"
+    },
+    "wifi-graceful-deep-fixed-2/result.json": {
+      "bytes": 716,
+      "private_original_sha256": "14bee6601ac9f1cfd5bcd7ba88141d10c4cc2af4e4f4a76daf6cfa5edd978579",
+      "sha256": "ea00db367c1b9c4ed4edf2e757bb43f91f9c336ff9e30050bc7ce7a79a59c4db"
+    },
+    "wifi-graceful-deep-fixed-3/events.jsonl": {
+      "bytes": 1364,
+      "private_original_sha256": "022f7eb792dd602e1ea57f70650e61da7ee58d2e7b963b5960ea7ddf1db3775b",
+      "sha256": "a89f1b313897855cdda85a2fb79678271bbd216d6eb53d39771931bb4ccbbe24"
+    },
+    "wifi-graceful-deep-fixed-3/result.json": {
+      "bytes": 716,
+      "private_original_sha256": "93722a7ead01dc2b0a1f9af5e2fb1876ac7d0df791b091b9e71556c789bda81a",
+      "sha256": "3ea6cac2aa8cf67c44b1e57d2434a7b36895268af390b66024f190701ef44dea"
+    },
+    "wifi-graceful-deep-fixed-4/events.jsonl": {
+      "bytes": 1201,
+      "private_original_sha256": "93369761982b4bb93927d413c3cd5f6c07b2c8a047171d5b21f6a0adaf5f44a6",
+      "sha256": "d45d81984d6b99e41a85a56bfcd45c28b346adafc0633f0d1ef96f5aa658c073"
+    },
+    "wifi-graceful-deep-fixed-4/result.json": {
+      "bytes": 716,
+      "private_original_sha256": "21a3b261edeef355cd2920c4f25612a731156a2ca2ae2d5bd3817f37cd434b84",
+      "sha256": "ac2c4e645383cf75cf75243affe29a53315131d1a8b3ef845d1ab784233e9b10"
+    },
+    "wifi-graceful-deep-fixed-5/events.jsonl": {
+      "bytes": 1201,
+      "private_original_sha256": "06a3e937ad85170298d8d4c53bc8c0a5744a63d0529e9d04e8f563b930dbb1f9",
+      "sha256": "2642ed811e771988be1b459495ed169ee042739adb0574e260472b7de746f627"
+    },
+    "wifi-graceful-deep-fixed-5/result.json": {
+      "bytes": 716,
+      "private_original_sha256": "a471b79bd95836d8cd23a820c07bad957d1fd236eaa5b70024273b2201341569",
+      "sha256": "e8f42336fdb11c2d613f240640c2feac5238c18bacca64c257d61ce7dd85ae94"
+    },
+    "wifi-graceful-normal-1/events.jsonl": {
+      "bytes": 1173,
+      "private_original_sha256": "4795107ed709e01b6c781b1804fb9467f9a70eef73e80aa2e56eae57af64c0d6",
+      "sha256": "8821d0668f34ca32c2e17b2febc199ae53a1c22f81ee971111b1d6a0d1047a40"
+    },
+    "wifi-graceful-normal-1/result.json": {
+      "bytes": 708,
+      "private_original_sha256": "4aeea827b2115c26f651c1632af7dda248651e8a4c0948b9880a7471893b1660",
+      "sha256": "1fb379c38b753f2c6903c32be562d8cf639d0d774d2a9f5db44bffaadf352f6a"
+    },
+    "wifi-graceful-normal-2/events.jsonl": {
+      "bytes": 1173,
+      "private_original_sha256": "eb6423a5967024954c5d605aeba41306085b525a2b5d9e22295a7867220a7b0a",
+      "sha256": "ae1776ec52347cb21564194675165f69fab6ba46588bc79374443383a6113b07"
+    },
+    "wifi-graceful-normal-2/result.json": {
+      "bytes": 708,
+      "private_original_sha256": "28be0dd618b05d4f393528d2c7a50934ac60c4f8e45c709510975b407e8fd485",
+      "sha256": "cdc9746bd3149712afda3dfb4513b83d50c289e1bcde5ebc64f8eeb8b25ee3af"
+    },
+    "wifi-graceful-normal-3/events.jsonl": {
+      "bytes": 1173,
+      "private_original_sha256": "0d02c30cfac722fbea12bbd13478e4b9015f72fda9e0ea935341dad1b6e3d302",
+      "sha256": "f917d8742065149d1145324d3edb3e1b202902687075b08a0e2029ad75e54455"
+    },
+    "wifi-graceful-normal-3/result.json": {
+      "bytes": 708,
+      "private_original_sha256": "9a3f360e75dbd65eacf2b453c47b2feea7785b61fb78bb2f3bfa63831056cf57",
+      "sha256": "ee0444961cbececfbecc5ef3772ed2cbe144a6f51b4eb2432857c3c6f34c2d80"
+    },
+    "wifi-graceful-normal-4/events.jsonl": {
+      "bytes": 1173,
+      "private_original_sha256": "4d89b14357be39ac8bf1bc2b030c8f452edd4ae485cd40c9e29be2bf287d83a0",
+      "sha256": "be8546c7d1137319745a0beeed11a76e42c12faa253ab68862db462d978dab2e"
+    },
+    "wifi-graceful-normal-4/result.json": {
+      "bytes": 708,
+      "private_original_sha256": "fe47f60cfb41b3ff4391be8938ca80cc46b802283ee838348551f8cacf102c6c",
+      "sha256": "51bfb50bd4eb1da9cd654579cbf8e8566b335a2d907d92364c69f99509d5680f"
+    },
+    "wifi-graceful-normal-5/events.jsonl": {
+      "bytes": 1173,
+      "private_original_sha256": "1f52f06440172fd8a240fd306ee38794d46922eba1d9521cc250f3892a354b6a",
+      "sha256": "17520cc46c8c712ec3b279591ee13761a70e6344bd5f9e11d593f69f49cc9e0b"
+    },
+    "wifi-graceful-normal-5/result.json": {
+      "bytes": 706,
+      "private_original_sha256": "66ae078bbb84263a02d2e1dc739de357bd9f288764fa8a44ee64344b5ae99f8a",
+      "sha256": "4f443c6f94feab128f824ec794c704fcdf2af588764d177067d53a1ffed35c89"
+    },
+    "wifi-graceful-recovery/events.jsonl": {
+      "bytes": 1189,
+      "private_original_sha256": "6e70fc77c4ae31a5f0def557d9ef31419ae0ec574c03e4c5c779eeeac612f8ee",
+      "sha256": "3deec717ef0e5e590b28840d88a536b7b3971c52f6ea9e740f0409ded5fe0322"
+    },
+    "wifi-graceful-recovery/result.json": {
+      "bytes": 717,
+      "private_original_sha256": "8d1976ff5db08dcdc41c53ba61dbf15f6b1667d2f2589fef2154775684b2d1c6",
+      "sha256": "e0a9475b758449054364f93a7c49d9ab5df1e2d829521d2c841e6de7dbd199db"
+    },
+    "wifi-graceful-ten/events.jsonl": {
+      "bytes": 7965,
+      "private_original_sha256": "27bce264d5554abe53fd9cb2c202a53a0189caa1f6a97f2fe4e64f70334a7cbd",
+      "sha256": "66b6614c56cbd6c8e2f9dd844c18b6583eed192789fcf63af3a4a8ca2372b099"
+    },
+    "wifi-graceful-ten/result.json": {
+      "bytes": 711,
+      "private_original_sha256": "866b7645f12f630f59b66d51194d6428df7d23c1e0f98342c7550f1a7c4f8acd",
+      "sha256": "98c83ba61a77d9cdeabbc196a74a548d72f67c0445c52a93750c5b8ce3bb1d54"
+    },
+    "wifi-graceful-three/events.jsonl": {
+      "bytes": 2866,
+      "private_original_sha256": "b4e64c77af8ca71a0040ee9f7aacf4df3e006153c84cd6b77854b59df60205e3",
+      "sha256": "70d636b9b25d77f50a516376361dd39766d1155ba480a0b10e81ac26c14888e0"
+    },
+    "wifi-graceful-three/result.json": {
+      "bytes": 712,
+      "private_original_sha256": "55dd090f236448657fd72a13e95621ceb46622362ab6f14bd6ecfb3c44ccfd71",
+      "sha256": "b062152112aa3f578371106fcd19a63e7274abe6c52ae2a3db8281d67553f61f"
+    },
+    "wifi-helper-combined-1/events.jsonl": {
+      "bytes": 986,
+      "private_original_sha256": "880e2f54705e1955904873385bab04f92c124d2c053b6a6e2ab67c262ee76fd5",
+      "sha256": "4da4aa2cb801f8c9089ae1a71808a500743c26800127273b99b6ad14991204d0"
+    },
+    "wifi-helper-combined-1/result.json": {
+      "bytes": 707,
+      "private_original_sha256": "1e930e3ab72b27998823fb6c265b43d103d51b82bcf619ad592851974710fd82",
+      "sha256": "b70576209b2750c00f561efd43b0f30950ba38938eff0cb3a0a07f620dc6259d"
+    },
+    "wifi-helper-combined-2/events.jsonl": {
+      "bytes": 986,
+      "private_original_sha256": "214000c943812bfc854eee6097306506348c089d4bc2811a539fe648bbdedb5e",
+      "sha256": "28447f126d95648a037d8795ae79c7feebae9647d5793b854159a2c65ab0db0f"
+    },
+    "wifi-helper-combined-2/result.json": {
+      "bytes": 707,
+      "private_original_sha256": "d157907ac3e3c1dc50f5d5a495ed150975066dc82d783a562d135f25b12c6bd2",
+      "sha256": "08b82ccca60212b2b56494cb2e30e787b330cf5687df7e0c80f28fafff820cca"
+    },
+    "wifi-helper-combined-3/events.jsonl": {
+      "bytes": 986,
+      "private_original_sha256": "0009bb865349f1fc28c645a3996f74705873d6201beb530248d00b8f62faa62e",
+      "sha256": "aa64cc6e429ff91c27eccd9cedbd5c705dd775b7d80bfd4a64946d7ca11a7c96"
+    },
+    "wifi-helper-combined-3/result.json": {
+      "bytes": 707,
+      "private_original_sha256": "3486c6d7579aa478e7f033d822cf815a6445cc75732cd879c5a48cba7eaca928",
+      "sha256": "74889974b7c357233f47bfad401650a014b33748794dd929b9cd3cd8d2335dec"
+    },
+    "wifi-helper-combined-seed/events.jsonl": {
+      "bytes": 1010,
+      "private_original_sha256": "f58d46df808016430c5b98faa45bfee740aa6c463b5f62133f9eca8cccbba14b",
+      "sha256": "a0c9fe800a9246beb3cec714912acac1d8021f4b274ed1659f627c89371ce4e7"
+    },
+    "wifi-helper-combined-seed/result.json": {
+      "bytes": 714,
+      "private_original_sha256": "316e600909491a5bff250e19330a62918736e57f94f26691da71c31ed8e67792",
+      "sha256": "9e98187e2c9aff040b262412feed20e9e1dc26850a939a88949cc155c23096b6"
+    },
+    "wifi-helper-queue-deep-1/events.jsonl": {
+      "bytes": 998,
+      "private_original_sha256": "1ae82edf2089b9b462d0bbfd5f2b0b8ccf3b9e93c603b796a104b5688d71de35",
+      "sha256": "1d3fdaafded2ee99167b6b3605bcec86dd95d7da76fd9f970efc606bfad022b9"
+    },
+    "wifi-helper-queue-deep-1/result.json": {
+      "bytes": 711,
+      "private_original_sha256": "dd4c57f598a12be5265930a5b7718083e9db782370511bd908f9ecd6cdbd9a19",
+      "sha256": "fca928aa7b539450785ce4f2047feb51c448e431c1ea6f80990570f881bed760"
+    },
+    "wifi-helper-queue-deep-2/events.jsonl": {
+      "bytes": 998,
+      "private_original_sha256": "43e7a5bcf2265a43a8071e1767db5d43d9162db60fc34f75a82bdd76bf53b1ae",
+      "sha256": "cb600c537856f02340b51ec5c5c10f8a602f7dca530ce3a7be924f52d8fc8665"
+    },
+    "wifi-helper-queue-deep-2/result.json": {
+      "bytes": 711,
+      "private_original_sha256": "0824462ad6f7646dc9a402811add3597d3ac9391a3dd69bfebe51ba8c1b3fdb9",
+      "sha256": "6d7a29721ce7b4ac2eaa28646b984b1b656a2d4faf5a71b078612479c6acb52a"
+    },
+    "wifi-helper-queue-deep-3/events.jsonl": {
+      "bytes": 998,
+      "private_original_sha256": "b627366799e34c01c5319e64e53c48b1b168e3c153f4ec17000a530d9ebfe794",
+      "sha256": "4acd5e4ddf6c01942b14685496ad1a41f86a41bed3eea081c1405b799d27f508"
+    },
+    "wifi-helper-queue-deep-3/result.json": {
+      "bytes": 711,
+      "private_original_sha256": "1a45a0beb11d4f6c05a4011b993b75e5d856a6cd727eee8e8c14c240ceea8af7",
+      "sha256": "0de7220d40442c073a04e6dc34a86a91a9d2e5d4e0ff9888eddaae07cbdf327f"
+    },
+    "wifi-helper-queue-deep-4/events.jsonl": {
+      "bytes": 998,
+      "private_original_sha256": "566badad5d541f39250e39c22d91b33754f0ba2a464319c2bd30a9b80af57627",
+      "sha256": "52abdb7ef828faf0fc4322bdb75ddf8fcbe19c3422ce12063779a44d31bd8410"
+    },
+    "wifi-helper-queue-deep-4/result.json": {
+      "bytes": 711,
+      "private_original_sha256": "764d3f65df9794e0c7a05d567421f6d9d8491ec78f96393389a4055750fd24db",
+      "sha256": "958417c3001071138cd37b23f327ce998af1e634ff79929f2e7c1a3fbc904deb"
+    },
+    "wifi-helper-queue-deep-5/events.jsonl": {
+      "bytes": 998,
+      "private_original_sha256": "0d28eb2407976de4a4e321b106a43c897c6a51a39ecaa05b8f06d434efd42053",
+      "sha256": "d5e0caddd52e32046f57ef5a41893e1416236b6d145f4c473c5d48692c7b0373"
+    },
+    "wifi-helper-queue-deep-5/result.json": {
+      "bytes": 711,
+      "private_original_sha256": "e660e85951e76759d32bb9af44a0ec7b94f25b36b757c11962ac51c32a60d103",
+      "sha256": "caef4b12e5293200a90ce8fd6bd7b2fea6fa720660fddd006e7bb4eee015875e"
+    },
+    "wifi-helper-queue-deep-seed/events.jsonl": {
+      "bytes": 1022,
+      "private_original_sha256": "a719da4b34ddd511fe90e7f956f638719b6adf32bd8f292154591dbe1c6ef96d",
+      "sha256": "78aa800c99d69b1bce579057b0498044bf09b035ce07587d0b0708a84224835c"
+    },
+    "wifi-helper-queue-deep-seed/result.json": {
+      "bytes": 717,
+      "private_original_sha256": "ea705b919526a3a95b6f17b574cf818ee4466dc0df2e565361f0bce73faa0f23",
+      "sha256": "96e2e83718eff93d1c649c2f42b723a08cb9fb77b62329beab70518876a9fb95"
+    },
+    "wifi-helper-queue-normal-1/events.jsonl": {
+      "bytes": 1010,
+      "private_original_sha256": "82521810dc7aba2bac6efb253a992077a7137d1f4e37152ac2ce21c311fd9dd8",
+      "sha256": "f852ebb0bbd54ba10ea882eb27cab1d1dbeae0d575bad5350cb6598243801496"
+    },
+    "wifi-helper-queue-normal-1/result.json": {
+      "bytes": 714,
+      "private_original_sha256": "c9758924b4b736cd246bc565f48c16ffaf8a5bb438e2d11f5fe337e7b8af6564",
+      "sha256": "be121280c26e9229f1bd8b8ce31a1ac90207aa495fd8594de0d0404040166b6c"
+    },
+    "wifi-helper-queue-normal-2/events.jsonl": {
+      "bytes": 1010,
+      "private_original_sha256": "e37d6d8ba1ca9a068f82ef193402b87be4a66e679060dbf27c65e062d8c0c7c2",
+      "sha256": "8eefa41b2b8e251436f3fcfcb99e9b5843d9e9a490e71d81cbdd51d7a4f37244"
+    },
+    "wifi-helper-queue-normal-2/result.json": {
+      "bytes": 715,
+      "private_original_sha256": "d2327962a83c50da2dbecd705b4e5aa96c73d0d39873a6d0ea3e95c956137a88",
+      "sha256": "3fede31ae40b93c6c6c124fc345517c55765dc13b849081fce29c3d6f71cbb42"
+    },
+    "wifi-helper-queue-normal-3/events.jsonl": {
+      "bytes": 1010,
+      "private_original_sha256": "83de7ca32e658e233eab7b75be4291fd2d12c546edd2068a0b4503f4605e9f76",
+      "sha256": "8139460690dabea9f776f13fb88c16c1c974e411b71f400f4475ea978890c644"
+    },
+    "wifi-helper-queue-normal-3/result.json": {
+      "bytes": 715,
+      "private_original_sha256": "021f2e4fd29121aba76726eed02d98e5f7139d7f5bd0f3c7a7228e13d73cc066",
+      "sha256": "e902b68495e121f8b6fbed2746e61395dbeaefc2475fd2edec100809e2d6321c"
+    },
+    "wifi-helper-queue-normal-4/events.jsonl": {
+      "bytes": 1010,
+      "private_original_sha256": "ddf15fbf4dcf274f0d9c643343172851f433c52d3d086ed4405daaea654a4154",
+      "sha256": "27c3f125eb7ce74cdfb26c4fba5eb0c69a201beb0f696359d4ec1e790fda70a3"
+    },
+    "wifi-helper-queue-normal-4/result.json": {
+      "bytes": 715,
+      "private_original_sha256": "4623629c74d22e8b1e21c95bb9ca83d4da8a0b342f991768268c605ed8fd2485",
+      "sha256": "85bba23874f7fedd2a2fcfa31a12e13041877756d53f3641261a1542f71168bc"
+    },
+    "wifi-helper-queue-normal-5/events.jsonl": {
+      "bytes": 1010,
+      "private_original_sha256": "6c3690f759e464f9abbde4ba86d468e0a9ed015f2ce87c17ed66f0522a3bfecf",
+      "sha256": "3961717571f7fd5f5b43149b8fe556b0839f45e725f777c9b165c78517a9204b"
+    },
+    "wifi-helper-queue-normal-5/result.json": {
+      "bytes": 715,
+      "private_original_sha256": "9bbf1bfeac7a9c27cec7b3cddc6903b60b42fe17898c210796b5832d65293431",
+      "sha256": "f56c308fc4599bfc58a3d71d7e8777a52ebe7048cf2f13ccf34073440a36b3da"
+    },
+    "wifi-helper-queue-normal-seed/events.jsonl": {
+      "bytes": 1034,
+      "private_original_sha256": "28a4cd02be28a2995e8cfd7258abc912835924d055e1ebdf56d90de18fcab5b1",
+      "sha256": "caf32bcc7c8bed43998a0a47dcce90ca6327215e54fd5dbc716ea71f7640ae8d"
+    },
+    "wifi-helper-queue-normal-seed/result.json": {
+      "bytes": 722,
+      "private_original_sha256": "2ed30b119176afa90576afe4f0812af5c828f082fa1107ca86b9c8fdd82fe249",
+      "sha256": "5bf404f6ae73f411bcaed4acb700dfb8623ce2a3432eabbddc97de6319e53b63"
+    },
+    "wifi-poweroff-three/events.jsonl": {
+      "bytes": 1925,
+      "private_original_sha256": "59ec7bcea19487cf890e23af492d87ced3ac760a013e79f1b70ba8ace548c70c",
+      "sha256": "e545728b678f980fd1199500d69a959a983a4db58cd984e5942856724d50be1c"
+    },
+    "wifi-poweroff-three/result.json": {
+      "bytes": 775,
+      "private_original_sha256": "efb081c87e1381acc6e6c8ef8bc6499b05e103f84413d823ebea6a7ca01c475b",
+      "sha256": "e0bb46276f769eb33cb2cc7e9157b479472b08099b8cb2496e1daa656d8ad16a"
+    },
+    "wifi_device.py.txt": {
+      "bytes": 6108,
+      "sha256": "b22024b6e154f4251449a91c394f3e9cbf4559b6a13119897a22b11aefd37f98"
+    }
+  },
+  "sanitization": {
+    "excluded": [
+      "credentials",
+      "original application",
+      "flash dumps",
+      "filesystem inventories",
+      "raw backup registers",
+      "network endpoint configuration",
+      "unreviewed private files"
+    ],
+    "historical_failures": "Preserved including no-reset watchdog guard failure and failed first Wi-Fi attempts.",
+    "redacted": [
+      "board and meter identifiers",
+      "SSID/password",
+      "network addresses",
+      "absolute user/task/repository paths"
+    ],
+    "sources": "Source copies are exact bytes, never sanitized in place; export fails on a sensitive match."
+  },
+  "schema": 1,
+  "scope": "USB/Wi-Fi investigation, sanitized allowlisted evidence; no device access during export.",
+  "source_proofs": [
+    {
+      "matching_successful_cases": [
+        "wifi-abrupt-before/result.json",
+        "wifi-app-queue-seed/result.json",
+        "wifi-app-soft-1/result.json",
+        "wifi-app-soft-2/result.json",
+        "wifi-app-soft-3/result.json",
+        "wifi-app-verified-1/result.json",
+        "wifi-app-verified-2/result.json",
+        "wifi-app-verified-3/result.json",
+        "wifi-app-verified-4/result.json",
+        "wifi-app-verified-5/result.json",
+        "wifi-app-verified-seed/result.json",
+        "wifi-deep-abrupt-before/result.json",
+        "wifi-deep-graceful-recovery/result.json",
+        "wifi-graceful-deep-fixed-1/result.json",
+        "wifi-graceful-deep-fixed-2/result.json",
+        "wifi-graceful-deep-fixed-3/result.json",
+        "wifi-graceful-deep-fixed-4/result.json",
+        "wifi-graceful-deep-fixed-5/result.json",
+        "wifi-graceful-normal-1/result.json",
+        "wifi-graceful-normal-2/result.json",
+        "wifi-graceful-normal-3/result.json",
+        "wifi-graceful-normal-4/result.json",
+        "wifi-graceful-normal-5/result.json",
+        "wifi-graceful-recovery/result.json",
+        "wifi-graceful-ten/result.json",
+        "wifi-graceful-three/result.json",
+        "wifi-helper-combined-1/result.json",
+        "wifi-helper-combined-2/result.json",
+        "wifi-helper-combined-3/result.json",
+        "wifi-helper-combined-seed/result.json",
+        "wifi-helper-queue-deep-1/result.json",
+        "wifi-helper-queue-deep-2/result.json",
+        "wifi-helper-queue-deep-3/result.json",
+        "wifi-helper-queue-deep-4/result.json",
+        "wifi-helper-queue-deep-5/result.json",
+        "wifi-helper-queue-deep-seed/result.json",
+        "wifi-helper-queue-normal-1/result.json",
+        "wifi-helper-queue-normal-2/result.json",
+        "wifi-helper-queue-normal-3/result.json",
+        "wifi-helper-queue-normal-4/result.json",
+        "wifi-helper-queue-normal-5/result.json",
+        "wifi-helper-queue-normal-seed/result.json"
+      ],
+      "path": "wifi_device.py.txt",
+      "scope": "Exact copied source version only; older result hashes remain authoritative.",
+      "sha256": "b22024b6e154f4251449a91c394f3e9cbf4559b6a13119897a22b11aefd37f98"
+    },
+    {
+      "matching_successful_cases": [
+        "radio-early-combined-stable-1/result.json",
+        "radio-early-combined-stable-10/result.json",
+        "radio-early-combined-stable-2/result.json",
+        "radio-early-combined-stable-3/result.json",
+        "radio-early-combined-stable-4/result.json",
+        "radio-early-combined-stable-5/result.json",
+        "radio-early-combined-stable-6/result.json",
+        "radio-early-combined-stable-7/result.json",
+        "radio-early-combined-stable-8/result.json",
+        "radio-early-combined-stable-9/result.json",
+        "radio-early-stable-sta-1/result.json",
+        "radio-early-stable-stable-1/result.json",
+        "radio-early-stable-stable-2/result.json",
+        "radio-early-stable-stable-3/result.json",
+        "radio-guard-install/result.json",
+        "radio-late-stable-sta-1/result.json",
+        "radio-late-stable-stable-1/result.json",
+        "radio-queue-early-stable-1/result.json",
+        "radio-queue-early-stable-10/result.json",
+        "radio-queue-early-stable-11/result.json",
+        "radio-queue-early-stable-12/result.json",
+        "radio-queue-early-stable-13/result.json",
+        "radio-queue-early-stable-14/result.json",
+        "radio-queue-early-stable-15/result.json",
+        "radio-queue-early-stable-16/result.json",
+        "radio-queue-early-stable-17/result.json",
+        "radio-queue-early-stable-18/result.json",
+        "radio-queue-early-stable-19/result.json",
+        "radio-queue-early-stable-2/result.json",
+        "radio-queue-early-stable-20/result.json",
+        "radio-queue-early-stable-3/result.json",
+        "radio-queue-early-stable-4/result.json",
+        "radio-queue-early-stable-5/result.json",
+        "radio-queue-early-stable-6/result.json",
+        "radio-queue-early-stable-7/result.json",
+        "radio-queue-early-stable-8/result.json",
+        "radio-queue-early-stable-9/result.json",
+        "radio-queue-late-stable-1/result.json",
+        "radio-queue-late-stable-2/result.json",
+        "radio-queue-late-stable-3/result.json",
+        "radio-queue-late-stable-4/result.json",
+        "radio-queue-late-stable-5/result.json"
+      ],
+      "path": "radio_guard.py.txt",
+      "scope": "Exact copied source version only; older result hashes remain authoritative.",
+      "sha256": "7fc5accb3598964597f999ebe6d5a590d368c7ef64c837c6e3af1844cc2fed27"
+    },
+    {
+      "matching_successful_cases": [
+        "helper-helper-combined-1/result.json",
+        "helper-helper-combined-2/result.json",
+        "helper-helper-combined-3/result.json",
+        "helper-helper-combined-final/result.json",
+        "helper-helper-queue-deep-1/result.json",
+        "helper-helper-queue-deep-2/result.json",
+        "helper-helper-queue-deep-3/result.json",
+        "helper-helper-queue-deep-4/result.json",
+        "helper-helper-queue-deep-5/result.json",
+        "helper-helper-queue-deep-final/result.json",
+        "helper-helper-queue-normal-1/result.json",
+        "helper-helper-queue-normal-2/result.json",
+        "helper-helper-queue-normal-3/result.json",
+        "helper-helper-queue-normal-4/result.json",
+        "helper-helper-queue-normal-5/result.json",
+        "helper-helper-queue-normal-final/result.json"
+      ],
+      "path": "helper-source.py.txt",
+      "scope": "Exact copied source version only; older result hashes remain authoritative.",
+      "sha256": "47cee7235cab22ffbcc756a2094741630ef0571d57f9bf9a0f1d4df96d29d1b8"
+    }
+  ],
+  "summaries": {
+    "application_checks": {
+      "by_version": {
+        "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)": 9
+      },
+      "case_results": {
+        "FAIL": 1,
+        "PASS": 9
+      },
+      "fixture_failures": [
+        "app-check-app-queue-1"
+      ],
+      "other_failed_cases": [],
+      "scope": "Application-function test cases only; do not add to independent Wi-Fi probe cycles or reset totals.",
+      "successful_cases": 9
+    },
+    "firmware_switches": [
+      {
+        "case": "switch-combined-control",
+        "firmware_sha256": "c5c308066fc70ecf91d94709d6e5515ff15756d892834417aadd85d685b62f2b",
+        "result": "PASS",
+        "version": "v1.30.0-preview.88.g764de396cf.dirty on 2026-09-27 (GNU 14.3.1 MinSizeRel)"
+      },
+      {
+        "case": "switch-usb-queue-fixed",
+        "firmware_sha256": "b404a1771bf0097a07709848cd296ff6a2eb755f1d7cf25a10395a8f346f0a43",
+        "result": "PASS",
+        "version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)"
+      }
+    ],
+    "helper": {
+      "by_version": {
+        "v1.30.0-preview.88.g764de396cf.dirty on 2026-09-27 (GNU 14.3.1 MinSizeRel)": 4,
+        "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)": 12
+      },
+      "case_results": {
+        "PASS": 16
+      },
+      "successful_calls": 16
+    },
+    "limits": [
+      "Counts cover completed exported cases only, not in-flight cases.",
+      "USB precondition failure explicitly marked no-reset is not a hardware reset failure.",
+      "Wi-Fi PASS cycles require the recorded DHCP/status/body checks; no DNS claim.",
+      "Radio boot PASS is activation/cleanup, not peer traffic or Wi-Fi association.",
+      "Hardware USB root cause is not established by native unit tests."
+    ],
+    "radio_boot": {
+      "by_mode_timing": {
+        "sta/early": 1,
+        "sta/late": 1,
+        "sta_ble/early": 33,
+        "sta_ble/late": 6
+      },
+      "case_results": {
+        "PASS": 41
+      },
+      "successful_boots": 41
+    },
+    "soft_sleep": {
+      "by_version": {
+        "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)": 3
+      },
+      "case_results": {
+        "PASS": 3
+      },
+      "confirmed_soft_resets": 3,
+      "measured_sleep_ms_total": 7503,
+      "requested_lightsleep_ms_total": 7500,
+      "scope": "lightsleep followed by machine.soft_reset; not a hardware reset or USB re-enumeration test."
+    },
+    "total_confirmed_reset_usb_returns": 114,
+    "usb": {
+      "alarm_wakes": 17,
+      "case_results": {
+        "FAIL": 1,
+        "PASS": 33
+      },
+      "completed_resets": 73,
+      "failed_or_incomplete_cases": [],
+      "ordinary_resets": 56,
+      "precondition_failures_without_reset": [
+        "usb-graceful-deep-1"
+      ]
+    },
+    "wifi": {
+      "case_results": {
+        "FAIL": 3,
+        "PASS": 42
+      },
+      "failed_cycles": 3,
+      "not_started_cycles": 1,
+      "requested_cycles": 58,
+      "started_cycles": 57,
+      "successful_connect_ms_max": 4646,
+      "successful_connect_ms_min": 11,
+      "successful_transactions": 54,
+      "terminal_negative_states": [
+        {
+          "case": "wifi-abrupt-after",
+          "connect_elapsed_ms": 3310,
+          "cycle": 1,
+          "status": -1
+        },
+        {
+          "case": "wifi-deep-abrupt-after",
+          "connect_elapsed_ms": 3308,
+          "cycle": 1,
+          "status": -1
+        },
+        {
+          "case": "wifi-poweroff-three",
+          "connect_elapsed_ms": 3308,
+          "cycle": 2,
+          "status": -1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"boot": 101, "error_type": "", "failure_stage": 0, "host_elapsed_s": 0.7932721660472453, "kind": "ready", "outcome": 0, "stage": 0, "wdt_ctrl": 0, "wdt_reason": 2}
+{"boot": 101, "error_type": "", "failure_stage": 0, "host_elapsed_s": 2.2215180410421453, "kind": "complete", "outcome": 1, "stage": 90, "wdt_ctrl": 7999804, "wdt_reason": 2}

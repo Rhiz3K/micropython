@@ -1,0 +1,39 @@
+{"boot_counter": 7, "sio_out": 0, "reset_cause": 4, "label": "deep-wait0-03", "sta_active": false, "pins": {"23": {"status": 0, "pad": 274, "ctrl": 31}, "25": {"status": 0, "pad": 278, "ctrl": 31}, "29": {"status": 0, "pad": 278, "ctrl": 31}}, "ticks_ms": 1134, "sio_oe": 8388608, "ap_active": false, "kind": "snapshot", "backup_words_preserved": true, "phase": "before_cleanup"}
+{"boot_counter": 7, "sio_out": 33554432, "reset_cause": 4, "label": "deep-wait0-03", "sta_active": false, "pins": {"23": {"status": 8192, "pad": 82, "ctrl": 5}, "25": {"status": 67248640, "pad": 86, "ctrl": 5}, "29": {"status": 8192, "pad": 119, "ctrl": 8}}, "ticks_ms": 1671, "sio_oe": 41943040, "ap_active": false, "kind": "snapshot", "backup_words_preserved": true, "phase": "after_cleanup"}
+{"actual_ms": 0, "ticks_ms": 1674, "label": "deep-wait0-03", "requested_ms": 0, "kind": "wait"}
+{"boot_counter": 7, "sio_out": 33554432, "reset_cause": 4, "label": "deep-wait0-03", "sta_active": false, "pins": {"23": {"status": 8192, "pad": 82, "ctrl": 5}, "25": {"status": 67248640, "pad": 86, "ctrl": 5}, "29": {"status": 8192, "pad": 119, "ctrl": 8}}, "ticks_ms": 1676, "sio_oe": 41943040, "ap_active": false, "kind": "snapshot", "backup_words_preserved": true, "phase": "before_active"}
+{"boot_counter": 7, "sio_out": 41943040, "reset_cause": 4, "label": "deep-wait0-03", "sta_active": true, "pins": {"23": {"status": 67248640, "pad": 90, "ctrl": 5}, "25": {"status": 67248640, "pad": 86, "ctrl": 5}, "29": {"status": 8192, "pad": 119, "ctrl": 8}}, "ticks_ms": 2604, "sio_oe": 41943040, "ap_active": false, "kind": "snapshot", "backup_words_preserved": true, "phase": "after_active"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 2613, "elapsed_ms": 1480, "connect_elapsed_ms": 7, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 2714, "elapsed_ms": 1581, "connect_elapsed_ms": 108, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 2815, "elapsed_ms": 1682, "connect_elapsed_ms": 209, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 2916, "elapsed_ms": 1783, "connect_elapsed_ms": 310, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3017, "elapsed_ms": 1884, "connect_elapsed_ms": 411, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3118, "elapsed_ms": 1985, "connect_elapsed_ms": 512, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3219, "elapsed_ms": 2086, "connect_elapsed_ms": 613, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3320, "elapsed_ms": 2187, "connect_elapsed_ms": 714, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3421, "elapsed_ms": 2288, "connect_elapsed_ms": 815, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3521, "elapsed_ms": 2388, "connect_elapsed_ms": 915, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3621, "elapsed_ms": 2488, "connect_elapsed_ms": 1015, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3721, "elapsed_ms": 2588, "connect_elapsed_ms": 1115, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3821, "elapsed_ms": 2688, "connect_elapsed_ms": 1215, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 3921, "elapsed_ms": 2788, "connect_elapsed_ms": 1315, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4021, "elapsed_ms": 2888, "connect_elapsed_ms": 1415, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4121, "elapsed_ms": 2988, "connect_elapsed_ms": 1515, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4221, "elapsed_ms": 3088, "connect_elapsed_ms": 1615, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4321, "elapsed_ms": 3188, "connect_elapsed_ms": 1715, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4421, "elapsed_ms": 3288, "connect_elapsed_ms": 1815, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4521, "elapsed_ms": 3388, "connect_elapsed_ms": 1915, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4621, "elapsed_ms": 3488, "connect_elapsed_ms": 2015, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4721, "elapsed_ms": 3588, "connect_elapsed_ms": 2115, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4821, "elapsed_ms": 3688, "connect_elapsed_ms": 2215, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 4921, "elapsed_ms": 3788, "connect_elapsed_ms": 2315, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 5021, "elapsed_ms": 3888, "connect_elapsed_ms": 2415, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 5121, "elapsed_ms": 3988, "connect_elapsed_ms": 2515, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 5221, "elapsed_ms": 4088, "connect_elapsed_ms": 2615, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 5321, "elapsed_ms": 4188, "connect_elapsed_ms": 2715, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 5421, "elapsed_ms": 4288, "connect_elapsed_ms": 2815, "label": "deep-wait0-03"}
+{"has_dhcp4": false, "connected": false, "status": 1, "kind": "state", "active": true, "ticks_ms": 5521, "elapsed_ms": 4388, "connect_elapsed_ms": 2915, "label": "deep-wait0-03"}
+{"has_dhcp4": true, "connected": true, "status": 3, "kind": "state", "active": true, "ticks_ms": 5650, "elapsed_ms": 4517, "connect_elapsed_ms": 3044, "label": "deep-wait0-03"}
+{"status": 200, "label": "deep-wait0-03", "body_verified": false, "elapsed_ms": 96, "kind": "http"}
+{"boot_counter": 7, "sio_out": 33554432, "reset_cause": 4, "label": "deep-wait0-03", "sta_active": false, "pins": {"23": {"status": 8192, "pad": 82, "ctrl": 5}, "25": {"status": 67248640, "pad": 86, "ctrl": 5}, "29": {"status": 8192, "pad": 119, "ctrl": 8}}, "ticks_ms": 5955, "sio_oe": 41943040, "ap_active": false, "kind": "snapshot", "backup_words_preserved": true, "phase": "final_cleanup"}
+{"label": "deep-wait0-03", "first_negative_elapsed_ms": null, "connected": true, "cleanup_ok": true, "kind": "result", "failure_recorded": false, "http_status": 200, "connect_elapsed_ms": 3044, "ok": true, "elapsed_ms": 4824}

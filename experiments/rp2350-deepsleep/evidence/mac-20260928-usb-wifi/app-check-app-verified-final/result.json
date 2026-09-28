@@ -1,0 +1,15 @@
+{
+  "ap": false,
+  "candidate_main_sha256": "dd5d46130dd872b5849c4328e17ce06363067d72356778542fb7deaf50b3d6b9",
+  "files_verified": 30,
+  "host_monotonic": 407168.273124375,
+  "host_utc": "2026-09-28T09:03:52.423947+00:00",
+  "label": "app-verified-final",
+  "ms": 226,
+  "reg_on": 0,
+  "result": "PASS",
+  "source_sha256": "ad5528caa6e25cf151acc15a3b48a86dc7de3129957da33bb7d3054dc9b274ba",
+  "sta": false,
+  "version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)",
+  "warnings": 0
+}

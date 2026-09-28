@@ -1,0 +1,59 @@
+{
+  "counts": {
+    "set_address_failure_any_port": 0,
+    "target_descriptor_invalid": 0,
+    "target_disconnect": 66,
+    "target_enumeration_failed": 0,
+    "target_failed_to_address": 0,
+    "target_persistent_enumeration_failure": 0,
+    "target_pipe_stalled": 0,
+    "target_successful_enumeration": 66
+  },
+  "created_utc": "2026-09-28T08:59:16.459427+00:00",
+  "end_utc": "2026-09-28T08:59:16+00:00",
+  "exit_code": 0,
+  "limitations": [
+    "Read-only host log scan; no device accesses.",
+    "Zero logged errors in this window do not prove future reliability, firmware progress, absence of unlogged packets or correct WiFi operation.",
+    "SET_ADDRESS result messages do not include port: their count is global to matching kernel events; target-specific failures are counted separately."
+  ],
+  "query_template": [
+    "/usr/bin/log",
+    "show",
+    "--start",
+    "START",
+    "--end",
+    "END",
+    "--style",
+    "ndjson",
+    "--info",
+    "--predicate",
+    "process == \"kernel\" AND (eventMessage CONTAINS[c] \"TARGET_PICO_PORT\" OR eventMessage CONTAINS[c] \"AppleUSBHostPort::terminateDevice\" OR eventMessage CONTAINS[c] \"setAddress\")"
+  ],
+  "records_matched": 3787,
+  "start_utc": "2026-09-28T08:49:25+00:00",
+  "supporting_lines": [
+    {
+      "class": "target_disconnect",
+      "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/000f/0100 (RP2350 Boot): hardware connection lost",
+      "utc": "2026-09-28T08:49:31.095948+00:00"
+    },
+    {
+      "class": "target_successful_enumeration",
+      "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumerated 0x2e8a/0005/0100 (Board in FS mode / 4) at 12 Mbps",
+      "utc": "2026-09-28T08:49:31.104641+00:00"
+    },
+    {
+      "class": "target_disconnect",
+      "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::terminateDevice: destroying 0x2e8a/0005/0100 (Board in FS mode): hardware connection lost",
+      "utc": "2026-09-28T08:50:14.932836+00:00"
+    },
+    {
+      "class": "target_successful_enumeration",
+      "message": "AppleUSB20HubPort@TARGET_PICO_PORT: AppleUSBHostPort::enumerateDeviceComplete_block_invoke: enumerated 0x2e8a/0005/0100 (Board in FS mode / 4) at 12 Mbps",
+      "utc": "2026-09-28T08:50:15.432434+00:00"
+    }
+  ],
+  "timeout_s": 28,
+  "timestamp_handling": "UTC range arguments; local+0200 returnedtimestamps convertedtoUTC. Portalias and USBserial redaction."
+}

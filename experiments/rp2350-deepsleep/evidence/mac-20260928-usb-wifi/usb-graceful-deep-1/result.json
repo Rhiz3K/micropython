@@ -1,0 +1,8 @@
+{
+  "completed": 0,
+  "detail": "Watchdog active",
+  "host_monotonic": 405691.7007755,
+  "host_utc": "2026-09-28T08:39:15.852852+00:00",
+  "result": "FAIL",
+  "type": "RuntimeError"
+}

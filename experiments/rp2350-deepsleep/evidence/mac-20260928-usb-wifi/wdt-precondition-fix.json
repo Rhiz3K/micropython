@@ -1,0 +1,8 @@
+{
+  "cause": "Exact CTRL==0 assertion incorrectly rejected pause-on-debug flags after deep wake. Mask only ENABLE. No watchdog register was written.",
+  "enable_bit_set": false,
+  "observed_wdt_ctrl": 117440512,
+  "previous_result": "usb-graceful-deep-1/result.json",
+  "reset_was_not_issued": true,
+  "result": "HOST_GUARD_FIXED"
+}

@@ -1,0 +1,27 @@
+{
+  "backup_preserved": true,
+  "cleanup": "graceful",
+  "cycles": 3,
+  "device": {
+    "cleanup_mode": "graceful",
+    "cleanup_ok": true,
+    "completed": 3,
+    "kind": "result",
+    "label": "graceful-three",
+    "left_connected": false,
+    "no_filesystem_writes": true,
+    "no_reset": true,
+    "ok": true,
+    "requested": 3,
+    "ticks_ms": 133470
+  },
+  "device_source_sha256": "b22024b6e154f4251449a91c394f3e9cbf4559b6a13119897a22b11aefd37f98",
+  "discarded_unknown_lines": 0,
+  "filesystem_verified": 30,
+  "host_monotonic": 405350.712730833,
+  "host_utc": "2026-09-28T08:33:34.865463+00:00",
+  "label": "graceful-three",
+  "reset_cause_preserved": true,
+  "result": "PASS",
+  "stopped_repl": true
+}

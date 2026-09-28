@@ -1,0 +1,34 @@
+{
+  "boot_delta": 1,
+  "detach_ms": 0,
+  "failure_stage": 0,
+  "filesystem_verified": 30,
+  "host_monotonic": 406395.680437875,
+  "host_utc": "2026-09-28T08:50:59.831158+00:00",
+  "label": "queue-early-stable-2",
+  "mode": "sta_ble",
+  "result": "PASS",
+  "retained_outcome": 1,
+  "retained_stage": 90,
+  "source_sha256": "7fc5accb3598964597f999ebe6d5a590d368c7ef64c837c6e3af1844cc2fed27",
+  "stopped_repl": true,
+  "terminal": {
+    "boot": 78,
+    "error_type": "",
+    "failure_stage": 0,
+    "host_elapsed_s": 1.6926049589528702,
+    "kind": "complete",
+    "outcome": 1,
+    "stage": 90,
+    "wdt_ctrl": 7999809,
+    "wdt_reason": 2
+  },
+  "timing": "early",
+  "usb": {
+    "events": 1,
+    "go_sent": false,
+    "gone_s": 0.5093737499555573,
+    "returned_s": 0.7511554999509826
+  },
+  "watchdog_disabled": true
+}

@@ -1,0 +1,137 @@
+{
+  "artifacts": {
+    "firmware.bin": {
+      "bytes": 889808,
+      "sha256": "998aa6ce213f4f6e4315484f94fcfb35f8895680f5796007e6a877774c718d11"
+    },
+    "firmware.elf": {
+      "bytes": 8795280,
+      "sha256": "3ba36b2627a8fd2214ed42bcebb3411b34a52eb668e5ef286f8f5fd0026e7ed9"
+    },
+    "firmware.uf2": {
+      "bytes": 1780224,
+      "sha256": "b404a1771bf0097a07709848cd296ff6a2eb755f1d7cf25a10395a8f346f0a43"
+    }
+  },
+  "board": "RPI_PICO2_W",
+  "build_directory": "<TASK_ROOT>/usb-fix-build",
+  "build_script_sha256": "2ed831406e544043bd831cfd9cab5f1c79a9e6628ee609d74d923300b32120d7",
+  "commands": [
+    {
+      "argv": [
+        "/opt/homebrew/bin/cmake",
+        "-S",
+        "<TASK_ROOT>/usb-fix-worktree/ports/rp2",
+        "-B",
+        "<TASK_ROOT>/usb-fix-build",
+        "-G",
+        "Unix Makefiles",
+        "-DPICO_BUILD_DOCS=0",
+        "-DMICROPY_BOARD=RPI_PICO2_W",
+        "-DMICROPY_BOARD_DIR=<TASK_ROOT>/usb-fix-worktree/ports/rp2/boards/RPI_PICO2_W",
+        "-DPICO_PLATFORM=rp2350-arm-s",
+        "-DPICO_TOOLCHAIN_PATH=<PRIVATE_WORK>/toolchain/arm-gnu-toolchain-14.3.rel1-darwin-arm64-arm-none-eabi",
+        "-Dpicotool_DIR=<REPO>/ports/rp2/build-mac-PICO2_W/_deps/picotool",
+        "-DPython3_EXECUTABLE=/opt/homebrew/bin/python3"
+      ],
+      "exit_code": 0,
+      "seconds": 1.4424272080068476,
+      "stage": "configure"
+    },
+    {
+      "argv": [
+        "/opt/homebrew/bin/cmake",
+        "--build",
+        "<TASK_ROOT>/usb-fix-build",
+        "--parallel",
+        "4"
+      ],
+      "exit_code": 0,
+      "seconds": 54.2622022080468,
+      "stage": "build"
+    }
+  ],
+  "compiler": "arm-none-eabi-gcc (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623",
+  "compiler_binary_sha256": "df9ef0675933741317cf88ea067c7a2bf84d2e6953ae5971d02c2523d166db51",
+  "compiler_observed": "arm-none-eabi-gcc (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623",
+  "compiler_warning_count": 0,
+  "compiler_warning_lines": [],
+  "configure_warning_lines": [],
+  "core_sha256_after": {
+    "ports/rp2/boards/RPI_PICO2/mpconfigboard.h": "37cf349743c114a528ec002f7bf4c49ca545b9f23efb1058846057c90c563262",
+    "ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h": "d21b69eaa6619fab237dbdcc7613c5c68359e8a539db4823cb684305bccf87e4",
+    "ports/rp2/main.c": "b5bdba53231557d58fd858f4b125f0ab90f1ec4c09e24e5ab0a1f5977523a7b2",
+    "ports/rp2/modmachine.c": "31271e7ce42ed01a70085e8aca63acc611552f9568b21f6693e73f7d9af4fae7",
+    "ports/rp2/modmachine.h": "7ce83d70308780192090988bdc538e36db93d779ecd26a2a7e8474fdc6e32db9",
+    "ports/rp2/mpconfigport.h": "e07a2158281328425d8ad1d89ccabd2809c04183b5f27cb5f47a2e1cf5217e9d"
+  },
+  "core_sha256_before": {
+    "ports/rp2/boards/RPI_PICO2/mpconfigboard.h": "37cf349743c114a528ec002f7bf4c49ca545b9f23efb1058846057c90c563262",
+    "ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h": "d21b69eaa6619fab237dbdcc7613c5c68359e8a539db4823cb684305bccf87e4",
+    "ports/rp2/main.c": "b5bdba53231557d58fd858f4b125f0ab90f1ec4c09e24e5ab0a1f5977523a7b2",
+    "ports/rp2/modmachine.c": "31271e7ce42ed01a70085e8aca63acc611552f9568b21f6693e73f7d9af4fae7",
+    "ports/rp2/modmachine.h": "7ce83d70308780192090988bdc538e36db93d779ecd26a2a7e8474fdc6e32db9",
+    "ports/rp2/mpconfigport.h": "e07a2158281328425d8ad1d89ccabd2809c04183b5f27cb5f47a2e1cf5217e9d"
+  },
+  "dependency_commits": {
+    "lib/btstack": "77e752abd6a0992334047a48038a5a3960e5c6bc",
+    "lib/cyw43-driver": "055d64274b014dd7b1c2fc94d26e8a18face7124",
+    "lib/lwip": "77dcd25a72509eb83f72b033d219b1d40cd8eb95",
+    "lib/mbedtls": "0bebf8b8c7f07abe3571ded48a11aa907a1ffb20",
+    "lib/micropython-lib": "ee4bb8ff139e24c42b739935fbd8ec7c4d061e02",
+    "lib/pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+    "lib/tinyusb": "b549ac1d84cbbe550c9590951e2290098b3fb16c"
+  },
+  "finished_utc": "2026-09-28T08:47:17.469958+00:00",
+  "hardware_accessed": false,
+  "mpversion_header_sha256": "0086ed21dcb81bee3235efbd35bfd28efb105f4ec0eab27de03c38bf89e9ff9f",
+  "no_detach_delay_added": true,
+  "picotool_commit": "6f6458d792b93685a11423b244a585eaa99eafcf",
+  "picotool_sha256": "21e5ed0186d55c4597bb164f78d972c248e03b5e9b82cf7160e77157c65757d8",
+  "picotool_verified_current": true,
+  "platform": "rp2350-arm-s",
+  "runtime_expected_git_version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1",
+  "shared_dependency_status_after": {
+    "lib/btstack": "",
+    "lib/cyw43-driver": "",
+    "lib/lwip": "",
+    "lib/mbedtls": "",
+    "lib/micropython-lib": "",
+    "lib/pico-sdk": "",
+    "lib/tinyusb": ""
+  },
+  "shared_dependency_status_before": {
+    "lib/btstack": "",
+    "lib/cyw43-driver": "",
+    "lib/lwip": "",
+    "lib/mbedtls": "",
+    "lib/micropython-lib": "",
+    "lib/pico-sdk": "",
+    "lib/tinyusb": ""
+  },
+  "source_commit": "764de396cf5893fd12cd6e70fd4edecb1b68c509",
+  "source_directory": "<TASK_ROOT>/usb-fix-worktree",
+  "started_utc": "2026-09-28T08:46:21.518488+00:00",
+  "status": "PASS",
+  "tinyusb_base": "b549ac1d84cbbe550c9590951e2290098b3fb16c",
+  "tinyusb_patch_commit": "a0249ada9096365697340031a7b4a285beb18a2b",
+  "tinyusb_patch_sha256": "ffbadfaa2a51af420e64e1bdb4fad55f1621646eb3bcd98e3d93eaa921076e4e",
+  "tinyusb_sha256_after": {
+    "src/device/usbd.c": "79abb088c6dbecb1a4c8a3872baf518ce84cc24a3e4d22c63ce024b463746a19",
+    "src/portable/raspberrypi/rp2040/dcd_rp2040.c": "fea6fb3137072e7fe2ed192b8610cd6c4706d1b3ea6759e20bcc227439c98cb5",
+    "src/portable/raspberrypi/rp2040/rp2040_usb.c": "ec7230e1d4b3c2cba1f0ad5986cae1e63647b456de3e02dd5df7b0a2e5b593af",
+    "test/unit-test/test/device/usbd/test_usbd.c": "2fdf3d24b88e3611e4c1b99debdfb005bf800105081ffb72980ac28b117c9653"
+  },
+  "tinyusb_sha256_before": {
+    "src/device/usbd.c": "79abb088c6dbecb1a4c8a3872baf518ce84cc24a3e4d22c63ce024b463746a19",
+    "src/portable/raspberrypi/rp2040/dcd_rp2040.c": "fea6fb3137072e7fe2ed192b8610cd6c4706d1b3ea6759e20bcc227439c98cb5",
+    "src/portable/raspberrypi/rp2040/rp2040_usb.c": "ec7230e1d4b3c2cba1f0ad5986cae1e63647b456de3e02dd5df7b0a2e5b593af",
+    "test/unit-test/test/device/usbd/test_usbd.c": "2fdf3d24b88e3611e4c1b99debdfb005bf800105081ffb72980ac28b117c9653"
+  },
+  "tinyusb_usbd_object_path": "<TASK_ROOT>/usb-fix-build/CMakeFiles/firmware.dir<TASK_ROOT>/usb-fix-worktree/lib/tinyusb/src/device/usbd.c.o",
+  "tinyusb_usbd_object_sha256": "8e148b7e9bd7a978b166facd870f7241955406bf8431d244ac51bac8ffb01cf4",
+  "version_environment": {
+    "MICROPY_GIT_HASH": "764de396cf5893fd12cd6e70fd4edecb1b68c509",
+    "MICROPY_GIT_TAG": "v1.30.0-preview.88.g764de396cf.dirty.usbq1"
+  }
+}

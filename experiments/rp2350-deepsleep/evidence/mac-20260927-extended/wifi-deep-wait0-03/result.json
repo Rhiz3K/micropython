@@ -1,0 +1,54 @@
+{
+  "result": "PASS",
+  "label": "deep-wait0-03",
+  "wait_ms": 0,
+  "trace_async": false,
+  "connect_timeout_ms": 35000,
+  "dns_requested": false,
+  "http_body_verified": false,
+  "board_config_written": false,
+  "expected_firmware": "g764de396cf",
+  "script_sha256": "a3a0a87a5a6e458a5759e630654e3b5818c9f6d2ace6cb31297da84d8dd104a0",
+  "device_command_completed": true,
+  "stopped_repl": true,
+  "final_radio_state_requires_review": false,
+  "device_result": {
+    "label": "deep-wait0-03",
+    "first_negative_elapsed_ms": null,
+    "connected": true,
+    "cleanup_ok": true,
+    "kind": "result",
+    "failure_recorded": false,
+    "http_status": 200,
+    "connect_elapsed_ms": 3044,
+    "ok": true,
+    "elapsed_ms": 4824
+  },
+  "status_changes": [
+    {
+      "has_dhcp4": false,
+      "connected": false,
+      "status": 1,
+      "kind": "state",
+      "active": true,
+      "ticks_ms": 2613,
+      "elapsed_ms": 1480,
+      "connect_elapsed_ms": 7,
+      "label": "deep-wait0-03"
+    },
+    {
+      "has_dhcp4": true,
+      "connected": true,
+      "status": 3,
+      "kind": "state",
+      "active": true,
+      "ticks_ms": 5650,
+      "elapsed_ms": 4517,
+      "connect_elapsed_ms": 3044,
+      "label": "deep-wait0-03"
+    }
+  ],
+  "state_sample_count": 31,
+  "ignored_line_count": 0,
+  "elapsed_s": 5.038854042009916
+}

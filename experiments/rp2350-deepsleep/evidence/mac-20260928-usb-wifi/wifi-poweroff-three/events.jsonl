@@ -1,0 +1,12 @@
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "poweroff-three", "mode": "poweroff", "phase": "initial", "sta_active": false, "ticks_ms": 165114, "wl_reg_on": 0}
+{"cleanup_mode": "poweroff", "cycle": 1, "kind": "cycle_start", "label": "poweroff-three", "ticks_ms": 165115}
+{"connect_elapsed_ms": 7, "connected": false, "cycle": 1, "has_dhcp4": false, "kind": "state", "label": "poweroff-three", "status": 1, "ticks_ms": 166048}
+{"connect_elapsed_ms": 3044, "connected": true, "cycle": 1, "has_dhcp4": true, "kind": "state", "label": "poweroff-three", "status": 3, "ticks_ms": 169085}
+{"body_verified": true, "connect_elapsed_ms": 3044, "cycle": 1, "http_status": 200, "kind": "cycle_pass", "label": "poweroff-three", "ticks_ms": 169186}
+{"ap_active": false, "down_observed": null, "kind": "cleanup", "label": "poweroff-three", "mode": "poweroff", "phase": "intercycle", "sta_active": true, "ticks_ms": 169392, "wl_reg_on": 0}
+{"cleanup_mode": "poweroff", "cycle": 2, "kind": "cycle_start", "label": "poweroff-three", "ticks_ms": 169393}
+{"connect_elapsed_ms": 6, "connected": false, "cycle": 2, "has_dhcp4": false, "kind": "state", "label": "poweroff-three", "status": 1, "ticks_ms": 170325}
+{"connect_elapsed_ms": 3308, "connected": false, "cycle": 2, "has_dhcp4": false, "kind": "state", "label": "poweroff-three", "status": -1, "ticks_ms": 173627}
+{"error_type": "AssertionError", "kind": "error", "label": "poweroff-three", "stage": "terminal_link_failure", "ticks_ms": 173628}
+{"ap_active": false, "down_observed": false, "kind": "cleanup", "label": "poweroff-three", "mode": "graceful", "phase": "final", "sta_active": false, "ticks_ms": 174283, "wl_reg_on": 0}
+{"cleanup_mode": "poweroff", "cleanup_ok": true, "completed": 1, "kind": "result", "label": "poweroff-three", "left_connected": false, "no_filesystem_writes": true, "no_reset": true, "ok": false, "requested": 3, "ticks_ms": 174284}

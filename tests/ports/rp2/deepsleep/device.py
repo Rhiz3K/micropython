@@ -15,6 +15,8 @@ PREFIX = "DEEPSLEEP_TEST "
 # RP2 may omit EBUSY from the Python errno module; py/mperrno.h defines it as 16.
 EBUSY = getattr(errno, "EBUSY", 16)
 last_record = {}
+# Pinned lib/cyw43-driver/src/cyw43_ll.h: WPA2-PSK with AES, not an open AP.
+AP_WPA2_AES_PSK = 0x00400004
 
 
 def rtc_seconds():
@@ -25,6 +27,98 @@ def rtc_seconds():
 def check(condition, description):
     if not condition:
         raise AssertionError(description)
+
+
+def pico2w_pin_snapshot():
+    # Read-only diagnostics. ROM/runtime startup may already have changed these
+    # registers: post-boot GPIO values do NOT prove the pins' state during sleep.
+    out = machine.mem32[0xD0000010]
+    oe = machine.mem32[0xD0000030]
+    return {
+        str(gpio): {
+            "ctrl": machine.mem32[0x40028004 + 8 * gpio],
+            "status": machine.mem32[0x40028000 + 8 * gpio],
+            "pad": machine.mem32[0x40038004 + 4 * gpio],
+            "sio_out": bool(out & (1 << gpio)),
+            "sio_oe": bool(oe & (1 << gpio)),
+        }
+        for gpio in (23, 25, 29)
+    }
+
+
+def radio_state(mode, handles):
+    if mode == "never":
+        # Avoid even importing network/bluetooth in this scenario. A clean
+        # boot.py is an operator precondition, not something this can establish.
+        return {"mode": mode, "initialized_by_suite": False, "connection_proven": False}
+    sta, ap, ble = handles
+    result = {
+        "mode": mode,
+        "sta_active": sta.active(),
+        "ap_active": ap.active(),
+        "ble_active": ble.active(),
+        "sta_connected": sta.isconnected(),
+        "connection_proven": False,
+        "ble_transfer_tested": False,
+        "ap_client_tested": False,
+    }
+    check(result["sta_active"] == (mode in ("sta", "sta_ble", "sta_ap")), "STA active state")
+    check(result["ap_active"] == (mode in ("ap", "sta_ap")), "AP active state")
+    check(result["ble_active"] == (mode in ("ble", "sta_ble")), "BLE active state")
+    if result["ap_active"]:
+        check(ap.config("security") == AP_WPA2_AES_PSK, "AP must use WPA2-AES-PSK")
+        result["ap_link_status"] = ap.status()
+        check(result["ap_link_status"] == 3, "AP firmware link is not up")
+        result["ap_security"] = "WPA2-AES-PSK"
+    return result
+
+
+def radio_prepare(config):
+    mode = config["radio"]
+    check(mode in ("never", "sta", "ap", "ble", "sta_ble", "sta_ap"), "unknown radio mode")
+    check(not config.get("wifi") or mode in ("sta", "sta_ble"), "wifi/radio mode conflict")
+    if mode == "never":
+        return None
+    # Construct/query objects without activating either subsystem. Reject an
+    # active boot.py setup instead of silently deinitializing and hiding it.
+    import bluetooth
+    import network
+
+    sta = network.WLAN(network.STA_IF)
+    ap = network.WLAN(network.AP_IF)
+    ble = bluetooth.BLE()
+    check(
+        not sta.active() and not ap.active() and not ble.active(), "radio already active at boot"
+    )
+    if mode in ("ap", "sta_ap"):
+        settings = config.get("ap", {})
+        ssid = settings.get("ssid", "")
+        password = settings.get("password", "")
+        check(
+            isinstance(ssid, str) and ssid.startswith("rp2350-sleep-test"), "test AP SSID required"
+        )
+        check(len(ssid.encode()) <= 32, "test AP SSID too long")
+        check(
+            isinstance(password, str) and 8 <= len(password) <= 63, "private AP password required"
+        )
+        check(
+            all(32 <= ord(char) <= 126 for char in password), "AP password must be printable ASCII"
+        )
+        # Configure while inactive, so there is never a temporary open/default AP.
+        ap.config(ssid=ssid, security=AP_WPA2_AES_PSK, key=password)
+    if mode in ("sta", "sta_ble", "sta_ap"):
+        sta.active(True)
+    if mode in ("ap", "sta_ap"):
+        ap.active(True)
+        # CYW43_LINK_UP (3) requires the firmware's link event and a netif IP;
+        # active() alone only reports a cached request flag on this port.
+        deadline = time.ticks_add(time.ticks_ms(), 10000)
+        while ap.status() != 3:
+            check(time.ticks_diff(deadline, time.ticks_ms()) > 0, "AP firmware link-up timeout")
+            time.sleep_ms(20)
+    if mode in ("ble", "sta_ble"):
+        ble.active(True)  # No advertising, scan, pairing or peer traffic.
+    return (sta, ap, ble)
 
 
 def backup_pattern(region, index):
@@ -192,6 +286,14 @@ def run():
         "status": "READY",
     }
     last_record = record
+    radio = config.get("radio")
+    if radio is not None:
+        check(
+            sys.implementation._machine == "Raspberry Pi Pico 2 W with RP2350",
+            "Pico 2 W radio test only",
+        )
+        record["radio_mode"] = radio
+        record["pins_at_boot"] = pico2w_pin_snapshot()
     check(state[7] == 0x13579BDF, "POWMAN scratch sentinel")
     check(state[4] == 0 and state[6] == 0, "POWMAN scratch unused test words changed")
     with open("deepsleep-sentinel.bin", "rb") as f:
@@ -230,8 +332,16 @@ def run():
         record["status"] = "STOPPED"
         emit(record)
         return
+    radio_handles = None
+    if radio is not None:
+        radio_handles = radio_prepare(config)
+        record["radio"] = radio_state(radio, radio_handles)
+        record["pins_after_radio"] = pico2w_pin_snapshot()
     if config.get("wifi"):
         record["wifi"] = wifi_test(config["wifi"])
+        if radio is not None:
+            record["radio"] = radio_state(radio, radio_handles)
+            record["radio"]["connection_proven"] = True
     wait_for_host(record)
     if state[1] >= config.get("cycles", 100):
         state[3] = 5
@@ -258,7 +368,18 @@ def run():
         machine.RTC().datetime((2026, 9, 25, 4, 23, 59, 58, 0))
     state[2] = rtc_seconds()
     state[3] = 1
-    emit({"run": config["run"], "status": "SLEEP", "completed": state[1]})
+    sleep_record = {
+        "run": config["run"],
+        "status": "SLEEP",
+        "completed": state[1],
+        "boot": state[5],
+    }
+    if radio is not None:
+        sleep_record["radio_mode"] = radio
+        sleep_record["radio"] = radio_state(radio, radio_handles)
+        sleep_record["radio"]["connection_proven"] = bool(config.get("wifi"))
+        sleep_record["pins_before_sleep"] = pico2w_pin_snapshot()
+    emit(sleep_record)
     mode = config.get("mode", "deepsleep")
     if mode == "sleep_reset":
         time.sleep_ms(config["sleep_ms"])

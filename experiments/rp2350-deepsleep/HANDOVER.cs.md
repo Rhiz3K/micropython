@@ -1,10 +1,75 @@
 # Předání: RP2350 deepsleep, Mac a Pico 2 W s displejem
 
-Stav k 27. 9. 2026. Fork: [Rhiz3K/micropython](https://github.com/Rhiz3K/micropython),
+Stav k 28. 9. 2026. Fork: [Rhiz3K/micropython](https://github.com/Rhiz3K/micropython),
 větev `rp2/rp2350-timed-deepsleep`.
 
-**Experimentální firmware; energie úplného aplikačního cyklu není změřená.
-Wi-Fi reconnect není spolehlivý.** Nativní Mac build už byl sestaven a nová
+## Aktuálně: oprava USB a přípravy Wi-Fi, 28. 9.
+
+[Nové výsledky](RESULTS-USB-WIFI-MAC-20260928.md) dokládají opravenou chybu
+fronty SETUP v připnutém TinyUSB a ověřenou sekvenci odhlášení Wi-Fi před
+vypnutím rádia. Nasazený firmware `g764de396cf.dirty.usbq1`, UF2
+`b404a1771bf0097a07709848cd296ff6a2eb755f1d7cf25a10395a8f346f0a43`,
+prošel **70 kontrolovanými návraty USB**. Navíc prošly tři aplikační cykly
+`lightsleep(2500) → soft_reset` a opětovné DHCP/HTTP. Příčina dřívějších
+fyzických výpadků USB není jednoznačně prokázaná; dnešní kontrolní firmware
+také procházel. Nativní C test samostatně reprodukoval konkrétní chybu TinyUSB
+a po její opravě prošel.
+
+**Nasazení ověřeno 2026-09-28T09:06:56Z.** Na Picu je 29 souborů: 28 zůstalo
+byteově totožných, v původním `main.py` je cílená úprava `_shutdown_wifi()`
+a jednoho místa jejího volání. Původní soubory a ověřené flash zálohy zůstávají
+soukromě uložené. Dočasný guard byl odstraněn, původní backup slova a UTC RTC
+obnoveny/ověřeny. Aplikace je zastavená ve friendly REPL, rádio vypnuté,
+panel zaparkovaný. Pico **není v deepsleep**; další reset spustí upravenou
+původní aplikaci. Celý její produkční běh s displejem nebyl znovu spuštěn.
+Testy i místní HTTP server skončily.
+
+**Experimentální větev forku; bez upstream PR.** USB oprava je samostatná
+[převzatá záplata TinyUSB](tinyusb-ep0-queue.patch). `combined-upstream.patch`
+ji neobsahuje; změny uvnitř pracovního stromu submodulu se samy neuloží
+commitem hlavního repozitáře. Přesná reprodukce a omezení jsou v novém reportu.
+Energetická měření níže jsou historická, s novým firmwarem se neopakovala.
+
+## Historická rozšířená validace a společný kandidát, 27. 9.
+
+[Nový report](RESULTS-EXTENDED-MAC-20260927.md) spojuje časovaný P1.7 a
+Pico 2 W GP25 přípravu. Kandidát UF2 `c5c308066fc70ecf91d94709d6e5515ff15756d892834417aadd85d685b62f2b`
+prošel 120 alarmovými návraty: 100 bez aktivace rádia, 10 STA, 5 zabezpečené
+AP v opakované sadě a 5 BLE. Nové přímé core A/B měření snížilo odběr sestavy
+z 0,60048 na 0,37178 mA bez Python přípravy GP25.
+
+**Není připraven k odeslání upstream.** Dvě sady nedodaly první READY a USB
+zmizelo; stejný problém nastal i při obyčejném resetu guardu bez rádia.
+Instalátor nyní poskytuje 150 ms pro potvrzení a zavření CDC, ale pozdější
+STA+BLE start selhal znovu. Příčina ani regrese vůči nezměněnému upstreamu
+není prokázaná. Původní AP FAIL, jeho samostatný PASS a STA+BLE FAIL jsou
+zachované odděleně. Zbylé nové sady, plný Wi-Fi reconnect cyklus, druhé 300s
+potvrzení a nový obraz displeje jsou NOT RUN. Tři samostatné Wi-Fi sondy
+s úplným deinit před/po měly DHCP/HTTP PASS, což neopravňuje tvrdit stabilní
+síť přes opakovaný deepsleep.
+
+[Společný patch](combined-upstream.patch) obsahuje pouze core, dokumentaci
+a opt-in testy vůči `09f5bb447504a058376c62fe991b3613531837e6`. Čisté
+`git apply --check` prošlo. Panelový helper zůstává aplikační integrací.
+Historické samostatné patche a důkazy se nepřepisovaly.
+
+**Tehdejší obnova: PASS, 2026-09-27T21:21:08.784101+00:00.** Na desku se vrátil firmware před touto
+rozšířenou sadou `9a8542bb24`. Celá obnovená flash byla nezávisle ověřena;
+potom byly obnoveny a hashově ověřeny všech 29 původních souborů včetně
+`main.py`. Dočasné testy a rádiové konfigurace jsou odstraněny. UTC RTC a
+všechna původní backup slova jsou obnovená a ověřená. Po BOOTSEL bootu se bez
+resetu vypnul již expirovaný watchdog; stav byl přečten zpět.
+
+Aplikace je zastavená ve friendly REPL, STA/AP off, WL_REG_ON=0, GP25 LOW,
+panel sleep/RST=0 a datové piny Hi-Z. Pico nyní **není v deepsleep**.
+Další reset spustí původní aplikaci, která stále automaticky nevolá nové
+helpery. Další restartovací sady nebyly spuštěny; HTTP server i měření skončily.
+Důkazy jsou v [novém exportu](evidence/mac-20260927-extended/README.md).
+
+## Dřívější dokončené experimenty
+
+**Historický stav před opravou z 28. 9.: experimentální firmware; energie
+úplného aplikačního cyklu není změřená, Wi-Fi reconnect není spolehlivý.** Nativní Mac build už byl sestaven a nová
 Pico 2 W identifikována, plně zálohována a testována. Aktuální průběh a důkazy
 jsou v [samostatných výsledcích z Macu](RESULTS-MAC-20260927.md): krátké sady,
 regrese i skutečné 30minutové a 75minutové spánky prošly. Samostatná Wi-Fi
@@ -45,7 +110,7 @@ Nový [board helper](pico2w_vsys_lowpower.py) je ověřený společně s panelov
 helperem; původní aplikace je automaticky nepoužívá. Kontrola inicializace
 ovladače netestovala připojení k AP a neopravuje známý Wi-Fi reconnect.
 
-**Poslední ověřená obnova nové desky:** v **16:37:40 UTC** zůstal firmware
+**Historický stav před rozšířenou sadou:** v **16:37:40 UTC** zůstal firmware
 `9a8542bb24`, původní `main.py` a všech 29 původních souborů byly obnoveny
 a hashově ověřeny vůči nové záloze bezprostředně před GP25 testy.
 Šest testovacích souborů bylo odstraněno, UTC RTC a uložené backup hodnoty

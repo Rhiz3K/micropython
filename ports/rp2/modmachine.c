@@ -556,6 +556,14 @@ MP_NORETURN static void machine_deepsleep_timed(mp_int_t delay_ms) {
     gpio_init(CYW43_PIN_WL_REG_ON);
     gpio_put(CYW43_PIN_WL_REG_ON, false);
     gpio_set_dir(CYW43_PIN_WL_REG_ON, GPIO_OUT);
+    #if MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW
+    // Some boards also use wireless CS to enable the VSYS monitor path.
+    // Drive it low only after the radio is fully powered off.
+    gpio_init(CYW43_PIN_WL_CS);
+    gpio_disable_pulls(CYW43_PIN_WL_CS);
+    gpio_put(CYW43_PIN_WL_CS, false);
+    gpio_set_dir(CYW43_PIN_WL_CS, GPIO_OUT);
+    #endif
     #endif
     #if MICROPY_HW_ENABLE_USBDEV
     tud_disconnect();

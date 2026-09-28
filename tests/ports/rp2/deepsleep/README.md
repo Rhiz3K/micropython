@@ -93,7 +93,8 @@ Example `config.json`:
 /tmp/rp2350-hwtest/bin/python "$T/host.py" install \
   --manifest private/manifest.json --config private/config.json --allow-write
 /tmp/rp2350-hwtest/bin/python "$T/host.py" run \
-  --manifest private/manifest.json --allow-run --log private/100-cycles.jsonl
+  --manifest private/manifest.json --config private/config.json \
+  --allow-run --log private/100-cycles.jsonl
 ```
 
 An existing `main.py` is refused unless `--replace-main` is also given; its exact
@@ -114,6 +115,13 @@ or missing final `PASS` is incomplete/failed, never a successful test. The
 timeout is per boot; set it longer than the requested sleep plus boot and network
 setup. A PASS means only the implemented checks passed; it is not a current or
 power-domain measurement. The final normal reset leaves the suite stopped.
+
+Pass the same private `--config` to `run` as to `install`. Before sending any
+GO, the host then rejects a different run name or radio mode, and accepts final
+PASS only with exactly the configured cycle count (zero for the watchdog
+rejection case). The configuration and its credentials are not written to the
+host log. Omitting this optional argument retains legacy observation behavior
+without these expected-run checks.
 
 ## Scenarios and initially unexecuted results
 
@@ -195,6 +203,92 @@ do not infer chip current from a whole-board reading.
   then reset; also run baseline firmware's `"mode": "deepsleep"` with the same
   expectation to record its actual existing behavior.
 * C: `"mode": "deepsleep", "expect_deep_cause": true` runs the new implementation.
+
+### Pico 2 W radio initialization across alarm boots
+
+The optional `radio` field selects an isolated radio profile on Raspberry Pi
+Pico 2 W. Start each profile as a separate run with a new log. Use a clean
+`boot.py` that does not initialize a radio; an active STA/AP/BLE found during
+preparation fails the test rather than being silently shut down. The final
+ordinary reset still checks that `DEEPSLEEP_RESET` does not remain stale.
+
+| `radio` | State left active when calling `deepsleep` | Initial result |
+| --- | --- | --- |
+| `never` | Neither network nor Bluetooth imported/initialized by this suite | NOT RUN |
+| `sta` | STA driver, without association unless `wifi` is configured | NOT RUN |
+| `ap` | Only the configured WPA2 test AP | NOT RUN |
+| `ble` | Only `BLE.active(True)`, without advertising, scanning or a peer | NOT RUN |
+| `sta_ble` | STA driver and BLE together | NOT RUN |
+| `sta_ap` | STA driver and the configured WPA2 AP together | NOT RUN |
+
+For example, run `never` for ten 2500ms cycles, then each isolated active
+profile for five cycles before testing combinations:
+
+```json
+{
+  "run": "pico2w-core-cs-low-sta-5",
+  "cycles": 5,
+  "sleep_ms": 2500,
+  "expect_deep_cause": true,
+  "radio": "sta"
+}
+```
+
+After each alarm boot the suite initializes the requested profile again,
+checks the STA/AP/BLE active flags, and leaves those interfaces active for
+firmware teardown. It keeps the objects alive until sleep. There is no Python
+radio deinit or GP25 preparation helper. `never` avoids importing either radio
+module; it cannot establish whether an earlier `boot.py` activated hardware.
+These checks exercise radio initialization APIs across resets. STA without a
+Wi-Fi transaction checks the requested API state, not a working connection.
+No peer traffic or preserved network/BLE connection is established by these
+checks, and no BLE advertisement or scan is started.
+
+AP modes require this additional object in the **private** configuration:
+
+```json
+"ap": {
+  "ssid": "rp2350-sleep-test-example",
+  "password": "REPLACE_IN_PRIVATE_CONFIG"
+}
+```
+
+The SSID must start with `rp2350-sleep-test` and fit 32 UTF-8 bytes. Supply a
+private WPA2 password of 8–63 printable ASCII characters. The host validates
+these fields before writing to the board; the device validates again before
+activation. Security is explicitly WPA2-AES-PSK (`0x00400004`, from the pinned
+CYW43 driver), configured while the AP is inactive and checked after activation.
+The suite also waits at most ten seconds for `ap.status() == 3`
+(`CYW43_LINK_UP`), then requires it in subsequent radio records. On this port
+that requires the firmware AP link event, an up netif and its IP, rather than
+only the cached `active()` flag. It still does not test a client's association
+or over-the-air password authentication.
+No default/open AP is permitted. AP operation emits beacons, but no client is
+needed or tested. SSID/password are not included in result records. The private
+configuration on flash contains the credentials and must be restored/removed
+as part of the operator's exact filesystem restoration.
+
+Reuse the existing `wifi` object for DHCP/DNS/HTTP only with `radio: "sta"` or
+`"sta_ble"`. Omitting `radio` retains the original Wi-Fi suite behavior. A failed
+connection is still a failure; no retry is added. Without a successful Wi-Fi
+transaction, `connection_proven` remains false even if a driver is active.
+
+Radio runs record read-only GP23/25/29 register snapshots: `pins_at_boot` before
+radio-module imports, `pins_after_radio` after initialization, and
+`pins_before_sleep` in the SLEEP record. Fields contain GPIO control/status,
+pad configuration, and SIO output/output-enable values. They are non-atomic
+diagnostics, not assertions of a pin's sleep state. **ROM/runtime startup may
+change GP25 before Python runs; a post-boot LOW or HIGH cannot prove the level
+held during P1.7.** The suite does not write GP25, GP29 or display pins.
+
+To evaluate automatic core preparation, compare old/new firmware using the
+same radio profile and attached, separately prepared display. A separate
+operator-controlled measurement may establish GP25 HIGH immediately before
+entry; do not call the board LOW helper in that comparison. Use external
+current/pin evidence during sleep and the reset-spanning functional results
+together. A functional PASS here is not a measured current reduction. The
+existing 0ms/1ms cases test ordinary reset boundaries and must not be counted
+as successful P1.7 transitions.
 
 Record supply voltage, supply entry point, current measurement point, instrument
 and resolution/bandwidth, Wi-Fi state, attached peripherals, USB and debugger.

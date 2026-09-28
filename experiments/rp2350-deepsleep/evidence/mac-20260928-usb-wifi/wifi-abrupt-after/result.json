@@ -1,0 +1,29 @@
+{
+  "backup_preserved": true,
+  "cleanup": "none",
+  "cycles": 1,
+  "device": {
+    "cleanup_mode": "none",
+    "cleanup_ok": true,
+    "completed": 0,
+    "kind": "result",
+    "label": "abrupt-after",
+    "left_connected": false,
+    "no_filesystem_writes": true,
+    "no_reset": true,
+    "ok": false,
+    "requested": 1,
+    "ticks_ms": 6953
+  },
+  "device_source_sha256": "b22024b6e154f4251449a91c394f3e9cbf4559b6a13119897a22b11aefd37f98",
+  "discarded_unknown_lines": 0,
+  "error_type": "RuntimeError",
+  "failed_stage": "verify_result",
+  "filesystem_verified": 30,
+  "host_monotonic": 405547.786431958,
+  "host_utc": "2026-09-28T08:36:51.938789+00:00",
+  "label": "abrupt-after",
+  "reset_cause_preserved": true,
+  "result": "FAIL",
+  "stopped_repl": true
+}

@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "firmware_version": "v1.30.0-preview.87.g9a8542bb24 on 2026-09-27 (GNU 14.3.1 MinSizeRel)",
+  "original_full_flash_sha256": "cc8847ce63e48da16c4431cc02d6571beabc0c5da96cefcfa3c853ba6e95dba3",
+  "failure_snapshot_sha256": "5f30e319c267358043119b0e3511efb5e16e56a828a4e97070b80ee481235981",
+  "files_verified": 34,
+  "temporary_radio_config_removed": true,
+  "full_flash_verified": true,
+  "stopped_repl": true,
+  "post_bootsel_watchdog_cleanup": "Expired timer with ENABLE set was disabled without reset; readback verified.",
+  "host_monotonic": 365000.402988208,
+  "host_utc": "2026-09-27T21:21:04.625836+00:00"
+}

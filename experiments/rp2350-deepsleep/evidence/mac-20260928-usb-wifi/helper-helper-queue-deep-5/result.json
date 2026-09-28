@@ -1,0 +1,16 @@
+{
+  "ap": false,
+  "connected_before": true,
+  "files_verified": 30,
+  "gp25_ctrl": 5,
+  "gp25_status": 8192,
+  "host_monotonic": 406701.237460791,
+  "host_utc": "2026-09-28T08:56:05.387595+00:00",
+  "label": "helper-queue-deep-5",
+  "ms": 226,
+  "reg_on": 0,
+  "result": "PASS",
+  "source_sha256": "47cee7235cab22ffbcc756a2094741630ef0571d57f9bf9a0f1d4df96d29d1b8",
+  "sta": false,
+  "version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)"
+}
