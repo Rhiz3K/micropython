@@ -1,0 +1,23 @@
+ 0 time=1.000 num=1 direction=rx src-mac=02:00:00:00:00:01
+   dst-mac=ff:ff:ff:ff:ff:ff interface="synthetic fixture"
+   src-address=0.0.0.0:68 (bootpc) dst-address=255.255.255.255:67 (bootps)
+   protocol=ip ip-protocol=udp size=370 cpu=0 ip-packet-size=356
+   ip-header-size=20 dscp=0 identification=1 fragment-offset=0 ttl=64
+
+ 1 time=1.010 num=2 direction=tx src-mac=02:00:00:00:00:02
+   dst-mac=02:00:00:00:00:01 interface="synthetic fixture"
+   src-address=192.0.2.1:67 (bootps) dst-address=192.0.2.100:68 (bootpc)
+   protocol=ip ip-protocol=udp size=342 cpu=0 ip-packet-size=328
+   ip-header-size=20 dscp=0 identification=2 fragment-offset=0 ttl=64
+
+ 2 time=1.020 num=3 direction=rx src-mac=02:00:00:00:00:01
+   dst-mac=ff:ff:ff:ff:ff:ff interface="synthetic fixture"
+   src-address=0.0.0.0:68 (bootpc) dst-address=255.255.255.255:67 (bootps)
+   protocol=ip ip-protocol=udp size=370 cpu=0 ip-packet-size=356
+   ip-header-size=20 dscp=0 identification=3 fragment-offset=0 ttl=64
+
+ 3 time=1.030 num=4 direction=tx src-mac=02:00:00:00:00:02
+   dst-mac=02:00:00:00:00:01 interface="synthetic fixture"
+   src-address=192.0.2.1:67 (bootps) dst-address=192.0.2.100:68 (bootpc)
+   protocol=ip ip-protocol=udp size=342 cpu=0 ip-packet-size=328
+   ip-header-size=20 dscp=0 identification=4 fragment-offset=0 ttl=64

@@ -1,0 +1,46 @@
+{
+  "synthetic": true,
+  "target_mac": "02:00:00:00:00:01",
+  "server_mac": "02:00:00:00:00:02",
+  "server_ip": "192.0.2.1",
+  "offered_ip": "192.0.2.100",
+  "xid": 305419896,
+  "messages": [
+    "DISCOVER",
+    "OFFER",
+    "REQUEST",
+    "ACK"
+  ],
+  "times_s": [
+    "1.000",
+    "1.010",
+    "1.020",
+    "1.030"
+  ],
+  "frames": [
+    {
+      "frame_size": 370,
+      "sha256": "2ff7722005c2d19c1cf56f91a42eed0b8b5a0d326227e868f9724a3e65f4d71e",
+      "ipv4_checksum_hex": "7989",
+      "udp_checksum_hex": "d438"
+    },
+    {
+      "frame_size": 342,
+      "sha256": "93c76b0b63313bbaf31b61cea8362767db0b85b0cc2f45ee81dfad8ebb31d1f5",
+      "ipv4_checksum_hex": "f53d",
+      "udp_checksum_hex": "29da"
+    },
+    {
+      "frame_size": 370,
+      "sha256": "dbfa2183f0ae327a64d590e39826f0dfb81b458731cb5b04e839f4135bfe0977",
+      "ipv4_checksum_hex": "7987",
+      "udp_checksum_hex": "e5c9"
+    },
+    {
+      "frame_size": 342,
+      "sha256": "9dd2a0ed6798fea9c2b79f9d795c79973b35127d3ff44ee9c50cded4c862751f",
+      "ipv4_checksum_hex": "f53b",
+      "udp_checksum_hex": "26da"
+    }
+  ]
+}
