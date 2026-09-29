@@ -61,6 +61,121 @@ def validate_expected_record(record, config):
             raise ValueError("PASS completed count does not match configuration")
 
 
+def parse_record(line):
+    index = line.find(PREFIX)
+    if index < 0:
+        return None
+    record = json.loads(line[index + len(PREFIX) :])
+    if not isinstance(record, dict) or record.get("status") not in (
+        "READY",
+        "SLEEP",
+        "PASS",
+        "FAIL",
+        "STOPPED",
+    ):
+        raise ValueError("invalid test record/status")
+    if record["status"] in ("FAIL", "STOPPED"):
+        return record
+    if (
+        not isinstance(record.get("run"), str)
+        or not record["run"]
+        or type(record.get("boot")) is not int
+        or record["boot"] < 1
+        or type(record.get("completed")) is not int
+        or record["completed"] < 0
+        or record.get("protocol") not in (None, 2)
+    ):
+        raise ValueError("invalid test record fields")
+    if record["status"] != "SLEEP" or record.get("protocol") == 2:
+        if not isinstance(record.get("uid"), str):
+            raise ValueError("missing target identity")
+    return record
+
+
+def acknowledgement(record):
+    if record.get("protocol") == 2:
+        return "GO {} {} {}\n".format(record["run"], record["boot"], record["status"])
+    return "GO " + record["run"] + "\n"
+
+
+class RunProgress:
+    """Validate the full observed sequence, not just the final device counter."""
+
+    def __init__(self, config):
+        self.config = config
+        self.ready = None
+        self.sleep_started = None
+
+    def check(self, record, now):
+        if self.config is None:
+            return
+        if record.get("protocol") != 2:
+            raise ValueError("configured run requires protocol 2; reinstall current device.py")
+        current = (record["boot"], record["completed"])
+        status = record["status"]
+        watchdog = self.config.get("watchdog", False)
+        if status == "READY":
+            if self.ready is None:
+                if current[1] != 0 or record.get("phase") != 0:
+                    raise ValueError("missing initial READY; cannot verify a partial run")
+            elif current == self.ready:
+                if self.sleep_started is not None:
+                    raise ValueError("READY after SLEEP on the same boot")
+                return
+            else:
+                if (
+                    watchdog
+                    or self.sleep_started is None
+                    or current != (self.ready[0] + 1, self.ready[1] + 1)
+                    or record.get("phase") != 1
+                ):
+                    raise ValueError("wake does not match the acknowledged sleep")
+                elapsed = now - self.sleep_started
+                target = self.config["sleep_ms"] / 1000
+                tolerance = self.config.get("host_tolerance_s", max(0.25, target * 0.1))
+                record["host_cycle_elapsed_s"] = elapsed
+                if elapsed < max(0, target - tolerance):
+                    raise ValueError("wake arrived before the host duration lower bound")
+                self.sleep_started = None
+            self.ready = current
+        elif status == "SLEEP":
+            if (
+                watchdog
+                or current != self.ready
+                or current[1] >= self.config.get("cycles", 100)
+                or record.get("sleep_ms") != self.config["sleep_ms"]
+            ):
+                raise ValueError("SLEEP does not match READY/configuration")
+        elif status == "PASS":
+            expected = 0 if watchdog else self.config.get("cycles", 100)
+            if (
+                self.ready is None
+                or self.sleep_started is not None
+                or self.ready[1] != expected
+                or current != (self.ready[0] + 1, expected)
+                or record.get("phase") != (4 if watchdog else 5)
+            ):
+                raise ValueError("PASS lacks a complete observed run and final reset")
+
+    def acknowledged(self, record, now):
+        if self.config is not None and record["status"] == "SLEEP" and self.sleep_started is None:
+            self.sleep_started = now
+
+
+def log_fragment(log, buffer, started):
+    if PREFIX in buffer:
+        log.write(
+            json.dumps(
+                {
+                    "host_event": "truncated_record_on_disconnect",
+                    "line_bytes": len(buffer),
+                    "host_elapsed_s": time.monotonic() - started,
+                }
+            )
+            + "\n"
+        )
+
+
 def load_manifest(path):
     data = json.loads(path.read_text())
     if not data.get("authorized") or not data.get("bootsel_recovery_confirmed"):
@@ -161,6 +276,15 @@ def observe(args, manifest):
         ):
             raise ValueError("expected config requires a run name and positive cycle count")
         validate_radio_config(expected)
+        if (
+            type(expected.get("sleep_ms")) is not int
+            or not 0 <= expected["sleep_ms"] <= 2147483647
+        ):
+            raise ValueError("expected config requires sleep_ms in 0..2147483647")
+        tolerance = expected.get("host_tolerance_s", 0)
+        if not isinstance(tolerance, (int, float)) or not 0 <= tolerance < float("inf"):
+            raise ValueError("host_tolerance_s must be finite and nonnegative")
+    progress = RunProgress(expected)
     seen = set()
     started = time.monotonic()
     last_progress = started
@@ -190,7 +314,22 @@ def observe(args, manifest):
                         index = line.find(PREFIX)
                         if index < 0:
                             continue
-                        record = json.loads(line[index + len(PREFIX) :])
+                        try:
+                            record = parse_record(line)
+                        except (ValueError, UnicodeError):
+                            # A disconnect may truncate JSON or split a UTF-8
+                            # character. Never acknowledge it or extend timeout.
+                            log.write(
+                                json.dumps(
+                                    {
+                                        "host_event": "malformed_record",
+                                        "line_bytes": len(line),
+                                        "host_elapsed_s": time.monotonic() - started,
+                                    }
+                                )
+                                + "\n"
+                            )
+                            continue
                         record["host_elapsed_s"] = time.monotonic() - started
                         try:
                             validate_expected_record(record, expected)
@@ -201,27 +340,42 @@ def observe(args, manifest):
                         if status in ("FAIL", "STOPPED"):
                             log.write(json.dumps(record) + "\n")
                             raise RuntimeError(str(record))
+                        if (status != "SLEEP" or record.get("protocol") == 2) and (
+                            record.get("uid", "").lower() != manifest["unique_id"].lower()
+                        ):
+                            raise ValueError("reconnected target identity mismatch")
+                        try:
+                            progress.check(record, time.monotonic() - started)
+                        except ValueError:
+                            log.write(json.dumps(record) + "\n")
+                            raise
                         if status == "SLEEP":
                             log.write(json.dumps(record) + "\n")
+                            if record.get("protocol") == 2:
+                                connection.write(acknowledgement(record).encode())
+                                connection.flush()
+                                progress.acknowledged(record, time.monotonic() - started)
                             continue
-                        if record.get("uid", "").lower() != manifest["unique_id"].lower():
-                            raise ValueError("reconnected target identity mismatch")
                         key = (record["run"], record["boot"])
                         if key not in seen:
                             seen.add(key)
                             last_progress = time.monotonic()
                             log.write(json.dumps(record) + "\n")
                             print(json.dumps(record), flush=True)
-                        connection.write(("GO " + record["run"] + "\n").encode())
+                        connection.write(acknowledgement(record).encode())
                         connection.flush()
                         if status == "PASS":
                             return
                     if len(buffer) > 65536:
                         raise RuntimeError("unbounded non-test serial output")
                     if port_for(manifest) is None:
+                        log_fragment(log, buffer, started)
                         connection.close()
                         connection = None
+                        buffer = b""
                 except (OSError, serial.SerialException):
+                    log_fragment(log, buffer, started)
+                    buffer = b""
                     if connection is not None:
                         connection.close()
                         connection = None

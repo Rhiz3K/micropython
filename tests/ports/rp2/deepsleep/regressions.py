@@ -3,7 +3,18 @@
 import errno
 import machine
 import micropython
+import sys
 import time
+
+# Baseline RP2 deepsleep(-1) converts to an unsigned delay (about 49 days).
+# This patch exports DEEPSLEEP_RESET only when its POWMAN implementation is
+# enabled. Check both port/chip and capability before any destructive call.
+if not (
+    sys.platform == "rp2"
+    and "RP2350" in getattr(sys.implementation, "_machine", "")
+    and hasattr(machine, "DEEPSLEEP_RESET")
+):
+    raise RuntimeError("requires RP2350 firmware with POWMAN DEEPSLEEP_RESET support")
 
 # RP2 may omit EBUSY from the Python errno module; py/mperrno.h defines it as 16.
 EBUSY = getattr(errno, "EBUSY", 16)

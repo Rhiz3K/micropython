@@ -11,9 +11,10 @@ eight POWMAN scratch words (`machine.mem_backup(2)`), never in flash. A sentinel
 file and the program/configuration are written only at installation. The device
 temporarily owns these eight words as application test data; the firmware must
 not reserve or overwrite any of them for wake markers or diagnostics.
-The device repeats a JSON boot result until the host acknowledges it; USB re-enumeration
-therefore cannot silently lose a successful cycle. The host never soft-resets a
-running test. A test failure repeats its JSON result until Ctrl-C returns to REPL,
+Protocol 2 repeats each JSON boot result and pre-sleep marker until the host
+acknowledges that run, boot number and status. A delayed READY acknowledgement
+cannot acknowledge SLEEP or the next boot. The host never soft-resets a running
+test. A test failure repeats its JSON result until Ctrl-C returns to REPL,
 so failures before USB enumeration are also observable.
 
 The suite requires the RP2350 `machine.mem_backup` regions and tests their
@@ -119,9 +120,39 @@ power-domain measurement. The final normal reset leaves the suite stopped.
 Pass the same private `--config` to `run` as to `install`. Before sending any
 GO, the host then rejects a different run name or radio mode, and accepts final
 PASS only with exactly the configured cycle count (zero for the watchdog
-rejection case). The configuration and its credentials are not written to the
-host log. Omitting this optional argument retains legacy observation behavior
-without these expected-run checks.
+rejection case). It also requires the initial READY, an acknowledged SLEEP for
+each subsequent wake, consecutive boot/cycle counts, and the final ordinary
+reset. Attach before the first cycle; attaching midway cannot verify a complete
+run. Configured runs require current protocol 2 device and host scripts.
+The configuration and its credentials are not written to the host log.
+Omitting this optional argument retains legacy observation behavior, including
+protocol 1 devices, without complete-run or duration checks.
+
+Malformed JSON/UTF-8 records and discarded partial records on USB disconnect
+are logged as host events. They are never acknowledged, counted as progress,
+or accepted as PASS; the existing per-boot timeout still applies. A valid FAIL
+remains fatal. A soft reset after a wake was consumed fails rather than counting
+the same wake twice. Reinstall to start a fresh run after such an interruption.
+
+For configured runs, `host_cycle_elapsed_s` measures from the first successfully
+sent SLEEP acknowledgement to receipt of the next READY. It includes boot, USB
+enumeration and optional network setup; it is not the time in the power state.
+Slow boot or network setup can mask an early hardware wake in this host check.
+The host rejects a duration below `sleep_ms / 1000 - host_tolerance_s`. The default
+tolerance is the larger of 0.25 seconds and 10% of the requested duration, a test
+threshold rather than an LPOSC accuracy claim. Set and report it explicitly
+alongside `rtc_tolerance_s` for long sleeps. There is no duration upper bound
+beyond the configured per-boot timeout; the device checks RTC separately.
+
+Run offline harness checks without any board or serial access:
+
+```sh
+python3 tests/ports/rp2/deepsleep/test_host.py
+```
+
+These exercise malformed/truncated transport, reconnects, acknowledgement and
+cycle validation, and device progress bookkeeping with simulated objects.
+They are not evidence of hardware sleep, watchdog operation or current draw.
 
 ## Scenarios and initially unexecuted results
 
@@ -150,8 +181,15 @@ The CPU1/watchdog cases deliberately expect rejection in this initial patch.
 They are not evidence of automatic shutdown of an active second Python thread
 or continued watchdog protection during a deep sleep. A fresh boot caused by
 an unexpectedly accepted CPU1 call is a failure, not a completed cycle.
+The watchdog PASS phase is armed only after the busy rejection returns; a reset
+before that point fails even if its cause is `WDT_RESET`.
 The scripts compare `OSError` to errno 16 when `errno.EBUSY` is not exported by
 the RP2 Python module; 16 is `MP_EBUSY` in `py/mperrno.h`.
+`regressions.py` refuses to run unless the port is RP2, the chip is RP2350 and
+`machine.DEEPSLEEP_RESET` is exported. In this patch that constant is conditional
+on the POWMAN implementation. This protects the unmodified baseline and RP2040
+from the first negative-delay call, which otherwise can request about 49 days
+of sleep; it is not a general capability guarantee for unrelated firmware.
 
 Wi-Fi configuration uses an operator-approved, controlled HTTP endpoint that
 returns `200`, to make DHCP/DNS/HTTP repeatable. Do not use a public site as a

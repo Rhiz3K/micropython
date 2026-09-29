@@ -146,7 +146,9 @@ def wait_for_host(record):
             if events & select.POLLIN:
                 char = sys.stdin.read(1)
                 if char == "\n":
-                    if line.strip() == "GO " + record["run"]:
+                    if line.strip() == "GO {} {} {}".format(
+                        record["run"], record["boot"], record["status"]
+                    ):
                         return
                     line = ""
                 elif char != "\r":
@@ -273,6 +275,7 @@ def run():
         state[7] = 0x13579BDF
     state[5] += 1
     record = {
+        "protocol": 2,
         "run": config["run"],
         "uid": binascii.hexlify(machine.unique_id()).decode(),
         "boot": state[5],
@@ -301,6 +304,8 @@ def run():
     phase = state[3]
     record["phase"] = phase
     check(phase != 6, "deepsleep accepted an active CPU1")
+    check(phase != 7, "reset interrupted an already consumed wake result")
+    check(phase != 8, "watchdog reset before deepsleep rejection was confirmed")
     if phase in (1, 4, 5):
         expected = machine.WDT_RESET if phase == 4 else getattr(machine, "DEEPSLEEP_RESET", -1)
         if phase == 5 or (phase == 1 and not config.get("expect_deep_cause", True)):
@@ -321,6 +326,9 @@ def run():
             record["crossed_minute"] = state[2] // 60 != rtc_seconds() // 60
             record["crossed_day"] = state[2] // 86400 != rtc_seconds() // 86400
             check(lower <= elapsed <= target + tolerance + 10, "RTC duration")
+            # Consume the wake before incrementing. A soft reset while preparing
+            # or reporting this result must fail, rather than count it twice.
+            state[3] = 7
             state[1] += 1
             record["completed"] = state[1]
         if phase in (4, 5):
@@ -350,9 +358,10 @@ def run():
         state[3] = 6
         thread_test()
     if config.get("watchdog"):
-        state[3] = 4
+        state[3] = 8
         machine.WDT(timeout=2000)
         expect_busy()
+        state[3] = 4
         # A rejected call must leave the watchdog running. Expect WDT_RESET.
         while True:
             pass
@@ -362,24 +371,28 @@ def run():
     os.sync()
     if config.get("lightsleep_before"):
         machine.lightsleep(20)
-    if state[1] == 0:
-        # Set just before sleeping, after USB/Wi-Fi preparation, to ensure the
-        # default first sleep crosses midnight rather than host waiting doing so.
-        machine.RTC().datetime((2026, 9, 25, 4, 23, 59, 58, 0))
-    state[2] = rtc_seconds()
-    state[3] = 1
     sleep_record = {
+        "protocol": 2,
         "run": config["run"],
+        "uid": record["uid"],
         "status": "SLEEP",
         "completed": state[1],
         "boot": state[5],
+        "sleep_ms": config["sleep_ms"],
     }
     if radio is not None:
         sleep_record["radio_mode"] = radio
         sleep_record["radio"] = radio_state(radio, radio_handles)
         sleep_record["radio"]["connection_proven"] = bool(config.get("wifi"))
         sleep_record["pins_before_sleep"] = pico2w_pin_snapshot()
-    emit(sleep_record)
+    # Repeated, separately acknowledged entry marker: the host can time every
+    # cycle even when USB loses the last print immediately before power-down.
+    wait_for_host(sleep_record)
+    if state[1] == 0:
+        # Seed after all host waiting so the first sleep crosses midnight.
+        machine.RTC().datetime((2026, 9, 25, 4, 23, 59, 58, 0))
+    state[2] = rtc_seconds()
+    state[3] = 1
     mode = config.get("mode", "deepsleep")
     if mode == "sleep_reset":
         time.sleep_ms(config["sleep_ms"])
