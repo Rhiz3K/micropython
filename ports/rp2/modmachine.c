@@ -78,10 +78,12 @@ void machine_deepsleep_init(void) {
     if (watchdog_hw->reason) {
         machine_deepsleep_prepare_wfi();
     }
-    // These are read-only hardware reset records, not software scratch markers.
+    // The ROM leaves ALARM set. Consume it below so a later core-only reset
+    // cannot reuse the retained read-only power-down and wake-source records.
     woke_from_deepsleep = !watchdog_hw->reason
         && (powman_hw->chip_reset & POWMAN_CHIP_RESET_HAD_SWCORE_PD_BITS)
-        && (powman_hw->last_swcore_pwrup & RP2_POWMAN_ALARM_PWRUP_MASK);
+        && (powman_hw->last_swcore_pwrup & RP2_POWMAN_ALARM_PWRUP_MASK)
+        && (powman_hw->timer & POWMAN_TIMER_ALARM_BITS);
     powman_disable_alarm_wakeup();
     powman_clear_alarm();
     // POWMAN survives SWCORE power-down. Restore normal awake debug behaviour.
