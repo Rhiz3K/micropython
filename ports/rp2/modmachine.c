@@ -67,6 +67,8 @@
 #define RP2_RESET_DEEPSLEEP (4)
 
 #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
+// SDK 2.3.0 lists source positions; the observed alarm record is 0x40, not 6.
+#define RP2_POWMAN_ALARM_PWRUP_MASK (1u << 6)
 #define RP2_DEEPSLEEP_GLOBALS \
     { MP_ROM_QSTR(MP_QSTR_DEEPSLEEP_RESET), MP_ROM_INT(RP2_RESET_DEEPSLEEP) },
 static bool woke_from_deepsleep;
@@ -79,9 +81,11 @@ void machine_deepsleep_init(void) {
     // These are read-only hardware reset records, not software scratch markers.
     woke_from_deepsleep = !watchdog_hw->reason
         && (powman_hw->chip_reset & POWMAN_CHIP_RESET_HAD_SWCORE_PD_BITS)
-        && (powman_hw->last_swcore_pwrup & (1u << 6)); // AON timer alarm.
+        && (powman_hw->last_swcore_pwrup & RP2_POWMAN_ALARM_PWRUP_MASK);
     powman_disable_alarm_wakeup();
     powman_clear_alarm();
+    // POWMAN survives SWCORE power-down. Restore normal awake debug behaviour.
+    powman_set_debug_power_request_ignored(false);
     if (powman_timer_is_running()) {
         // Preserve the RTC value, restoring crystal accuracy while awake.
         powman_timer_set_1khz_tick_source_xosc();
@@ -554,6 +558,7 @@ MP_NORETURN static void machine_deepsleep_timed(mp_int_t delay_ms) {
     cyw43_deinit(&cyw43_state);
     // Also cover an interface which has never been activated.
     gpio_init(CYW43_PIN_WL_REG_ON);
+    gpio_disable_pulls(CYW43_PIN_WL_REG_ON);
     gpio_put(CYW43_PIN_WL_REG_ON, false);
     gpio_set_dir(CYW43_PIN_WL_REG_ON, GPIO_OUT);
     #if MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW
