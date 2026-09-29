@@ -1,0 +1,27 @@
+{
+  "command": [
+    "make",
+    "-C",
+    "<WORK>/riscv-source-baseline/ports/rp2",
+    "BOARD=RPI_PICO2_W",
+    "BOARD_VARIANT=RISCV",
+    "BUILD=build-review-riscv-baseline-pico2w",
+    "-j6"
+  ],
+  "environment": {
+    "PATH": "<TOOLS>/venv/bin:<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain/bin:<TOOLS>/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin:<HOST_PATH>",
+    "PICO_TOOLCHAIN_PATH": "<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain",
+    "PICO_SDK_PATH": "<WORK>/riscv-source-baseline/lib/pico-sdk",
+    "SOURCE_DATE_EPOCH": "1790668407",
+    "TZ": "UTC",
+    "LC_ALL": "C",
+    "CMAKE_ARGS": "-DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1"
+  },
+  "source_sha": "09f5bb447504a058376c62fe991b3613531837e6",
+  "initial_status": "",
+  "started": "2026-09-29T09:48:14.500026+00:00",
+  "exit_code": 2,
+  "elapsed_s": 42.431,
+  "finished": "2026-09-29T09:48:56.931159+00:00",
+  "artifacts": {}
+}

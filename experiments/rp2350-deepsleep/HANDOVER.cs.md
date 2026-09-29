@@ -1,7 +1,8 @@
 # Handover: RP2350 deepsleep, Linux a Mac
 
-Aktualizováno **29. 9. 2026**. Poslední ověření původní linuxové desky
-skončilo **09:22:02 UTC**. Je na ní nový ARM kandidát `2445a04bf` s opravami
+Aktualizováno **29. 9. 2026**. Poslední uspávací/resetová sada původní linuxové
+desky skončila **09:22:02 UTC**; v **09:45:21 UTC** následovalo pouze čtení
+identity a LPOSC OTP bez resetu. Je na ní ARM kandidát `2445a04bf` s opravami
 z code review: obnovení debug požadavků, explicitní GP23 bez pullů a
 spotřebování alarmového příznaku při rozpoznání probuzení. Opravený testovací
 protokol rozlišuje jednotlivé boot/SLEEP záznamy a odmítá neúplné běhy.
@@ -11,6 +12,12 @@ SYSRESETREQ (cause 1 po předchozím cause 4), WDT a dalšími regresními testy
 Předchozí kandidát a chyby hostitelských postupů mají oddělené záznamy.
 Podrobnosti, buildy, hashe a PASS/FAIL/NEPROVEDENO obsahují
 [code review a nové hardware testy](RESULTS-REVIEW-20260929.md).
+
+[Navazující review](FOLLOWUP-REVIEW-20260929.md) doplňuje automatickou kontrolu
+exportovaných patchů, vysvětlení host ACK, platnou OTP kalibraci 33045 Hz
+a **4/4 RISC-V buildy PASS** (upstream/kandidát × Pico 2/Pico 2 W).
+RISC-V zůstává na cestě lightsleep → reset, runtime nebyl zkoušen.
+Tato navazující sada firmware neměnila; watchdog EBUSY a board opt-in zůstávají.
 
 Zapojení je USB + **Pico-ePaper-2.9 B/W/R V4**, bez nového měření proudu.
 37 souborů, backup registry a původní RTC s uplynulým časem jsou obnovené,
@@ -37,8 +44,9 @@ Linux/MikroTik. Panel V4 nebyl ovládán ani prokazatelně uspán.
   `2445a04bf` plus samostatná přesná USB oprava uvedená níže.
 - Pro core review je nově [osm souborů bez experimentů a harnessu](core-upstream.patch).
   [Combined patch](combined-upstream.patch) navíc zahrnuje opt-in testy.
-  Oba byly aplikované do dočasného indexu upstream základu a výsledné
-  soubory porovnané s HEAD. Nejsou ještě čistou upstream commit historií.
+  Exporty z commitnutého HEAD nyní vytváří a kontroluje
+  [generate_patches.py](tools/README.md); kontrola `--check` nesmí být vynechána
+  po core/test změnách. Nejsou ještě čistou upstream commit historií.
 - **Upstream PR nebyl založen a celek stále není ready pro upstream.**
   Používá se stávající Git identita. Podle přání uživatele nepřidávat
   `Signed-off-by` ani vymýšlet skutečné jméno/e-mail. Případné budoucí
@@ -61,7 +69,8 @@ Linux/MikroTik. Panel V4 nebyl ovládán ani prokazatelně uspán.
 
 Čti v tomto pořadí:
 
-1. Tento handover a [opravy review 29. 9.](RESULTS-REVIEW-20260929.md).
+1. Tento handover, [navazující review](FOLLOWUP-REVIEW-20260929.md)
+   a [opravy review 29. 9.](RESULTS-REVIEW-20260929.md).
 2. [Linux: DHCP capture a opravy helperu 29. 9.](RESULTS-DHCP-LINUX-20260929.md).
 3. [Linux: nové ověření a DHCP selhání 29. 9.](RESULTS-LINUX-20260929.md).
 4. [USB/Wi-Fi: opravy, testy a nasazení na Macu 28. 9.](RESULTS-USB-WIFI-MAC-20260928.md).
@@ -79,7 +88,7 @@ Jejich tehdejší „aktuální stav“ nepřebírat jako dnešní stav cílové
 
 | Deska | Poslední zaznamenaný stav | Co z něj nelze odvodit |
 | --- | --- | --- |
-| Původní Pico 2 W na linuxovém PC | **29. 9. v 09:22 UTC** nový `2445a04bf`, pět alarmových návratů v review sadách, rozlišení software SYSRESETREQ, WDT a osm regresí. 37 souborů a vstupní data obnovená, friendly REPL, rádio/watchdog vypnuté. | Že jsou opravená Wi-Fi selhání, že panel spí, že je změřený odběr či energie nebo že běží soukromá aplikace. |
+| Původní Pico 2 W na linuxovém PC | **29. 9. v 09:45 UTC** read-only ověření identity, OTP a REPL; v **09:22 UTC** nový `2445a04bf`, pět alarmových návratů v review sadách, rozlišení software SYSRESETREQ, WDT a osm regresí. 37 souborů a vstupní data obnovená, friendly REPL, rádio/watchdog vypnuté. | Že jsou opravená Wi-Fi selhání, že panel spí, že je změřený odběr či energie nebo že běží soukromá aplikace. |
 | Nové Pico 2 W na Macu | Nasazení ověřeno **28. 9. v 09:06:56 UTC**: nový firmware, 29 souborů, z toho 28 původních byteově totožných a cíleně upravený `main.py`. Zůstalo ve friendly REPL, rádio vypnuté, panel zaparkovaný; nebylo v deepsleep. Guard odstraněný, backup slova obnovená, RTC ověřené. | Že po pozdějším přepojení stále stojí v REPL. Reset spustí upravenou původní aplikaci. |
 | Deska při dalším předání | Identitu i živý stav ověřit znovu. Linux i Mac mají vlastní privátní manifesty a zálohy. | Že reset, přesun kabelu nebo jiný host zachoval zde popsaný konečný stav. |
 
@@ -119,13 +128,14 @@ helper pro Mac B/W V2 na něj bez kontroly ovladače/pinů nepřenášet.
 | Ranní Linux kandidát 29. 9. (`6f95bf43c`) | 6 alarmových návratů v dokončených sadách, další 1 později ověřený po hostitelském `BrokenPipe`, 5 běžných resetů s USB. Síť: 7 úspěšných DHCP/HTTP, 2 DHCP timeouty. Argumenty/hard IRQ/lightsleep frekvence a čas PASS. Žádné nové měření, 100cyklová či dlouhá sada. |
 | Navazující Linux DHCP diagnostika 29. 9. | Dalších 15 připojení: 12 DHCP/HTTP PASS, 3 timeouty; 5 běžných resetů s USB, žádný nový deepsleep. Dvě chyby Python helperu opravené a hardware ověřené. `PM_NONE` timeouty neodstranilo. Routerový capture a RAM stavy zúžily diagnózu, autentizace není vyřešená. |
 | Review kandidát 29. 9. (`2445a04bf`) | Pět alarmových návratů, tři buildy, software SYSRESETREQ cause 1 místo starého deep cause 4, WDT a osm regresí PASS. Úplná třícyklová sada zahrnuje CPU1/DMA/lightsleep/RTC/USB/file/POWMAN. Nové měření, 100 cyklů, dlouhé spánky, Wi-Fi, RISC-V a fyzické SWD NEPROVEDENO. |
+| Navazující RISC-V kontrola 29. 9. | Čistý základ `09f5bb4475` i kandidát `b0222450ee`: Pico 2/Pico 2 W RISCV 4/4 buildy PASS, nula compiler warnings. Zachovaná cesta lightsleep → reset; žádný RISC-V runtime/P1.7 test. |
 | Běžná cesta původní aplikace | Přesná funkce vypnutí Wi-Fi prošla v RAM; navíc 3× `lightsleep(2500) → soft_reset` a opětovné DHCP/HTTP. Celá soukromá aplikace s reálným serverem a displejem nebyla po nasazení znovu spuštěna. |
 | Spotřeba s displejem | Historicky přibližně 3,82 → 0,60 → 0,37 mA na USB vstupu sestavy; poslední krok byl GP25. Nejde o odběr samotného RP2350, garantovanou hodnotu jiné desky ani dnešní REPL. S USB kandidátem se proud znovu neměřil. |
 | Dlouhé spánky a displej | 30/75 minut a dřívější nové obrazy B prošly na dřívějším Mac firmwaru; nikoli automaticky na novém USB buildu nebo druhé desce. |
 
 Neověřené zůstávají celý produkční cyklus a jeho energie, nové DNS/TLS testy,
 BLE/AP přenosy s protějškem, zbývající kombinované/regresní sady, nový dlouhý
-běh a měření USB kandidáta, fyzické jiné desky a RISC-V.
+běh a měření USB kandidáta, fyzické jiné desky a RISC-V runtime/P1.7.
 Všechny FAIL/NOT RUN zachovat; příchod USB, aktivace rádia a úspěšný HTTP přenos
 jsou různé kontroly.
 
@@ -212,6 +222,10 @@ compiler a připnutý picotool; ulož logy, ELF/UF2/BIN, source commit a hashe
 závislostí soukromě. Aktuální referenční hashe core/test souborů, artefaktů a závislostí jsou
 v [alarm-builds.json](evidence/linux-20260929-review/alarm-builds.json).
 Nový hash binárky je normální, ale novému buildu nelze přiřadit starý PASS.
+
+Reprodukci samostatných **RISC-V buildů** popisuje
+[navazující report](FOLLOWUP-REVIEW-20260929.md#risc-v-compile-regression).
+Nevkládat jeho toolchain/varianty do tohoto ARM instalačního postupu.
 
 **`reproduce.sh` je historický Linux x86_64 recept** pro upstream základ
 plus `firmware.patch`; nevytváří dnešní společný GP25/USB kandidát.

@@ -10,7 +10,8 @@ power for a normal ROM boot and a new `boot.py`/`main.py` run.
 **Experimental; not ready for upstream submission. No PR has been submitted.**
 Board opt-in enables the new timed path only for ARM `RPI_PICO2` and
 `RPI_PICO2_W`. RP2040, RP2350 RISC-V, lightsleep and no-argument deepsleep
-retain their existing paths; RISC-V compatibility has not been verified.
+retain their existing paths. RISC-V compilation now passes for Pico 2/Pico 2 W;
+RISC-V runtime and P1.7 support have not been verified.
 
 ## Implementation and API behavior
 
@@ -22,8 +23,11 @@ retain their existing paths; RISC-V compatibility has not been verified.
 - Calls from core1 or an interrupt, an active Python worker on core1, and an
   enabled watchdog raise `EBUSY` before teardown. The code repeats the worker
   and watchdog checks with interrupts disabled before resetting idle core1.
+  Watchdog refusal is a limitation of this candidate, not a hardware requirement;
+  accepting it needs timeout/transition race tests.
 - Teardown stops CYW43, disconnects USB and aborts DMA using the RP2350-E5
-  sequence. Applications must flush and close buffered files first.
+  sequence. Wi-Fi disassociation is kept separate: a 500 ms outer wait would
+  not bound the driver call itself. Applications must flush and close buffered files first.
   The pinned SDK's SRAM sleep preparation is included with BSD attribution;
   POWMAN removes the switched domains only after the processors enter sleep.
 - Rejected, cancelled or expired transitions after teardown take an ordinary reset.
@@ -68,10 +72,20 @@ does not reproduce the tested integration. That fix is outside `combined-upstrea
 | Software AIRCR SYSRESETREQ after alarm wake, with retained POWMAN history | PASS: cause 1, then 8-second watchdog recovery cause 3 |
 | Active watchdog refusal followed by an actual watchdog reset | PASS: `EBUSY`, then `WDT_RESET` |
 | Current/energy measurement, 100 cycles, 30/75 minutes, new Wi-Fi repetitions | NOT RUN on this revision |
-| Physical SWD debugger, non-W Pico 2, RP2040 runtime and RISC-V build/runtime | NOT RUN |
+| RISC-V builds: clean base and candidate × Pico 2/Pico 2 W | PASS: 4 builds, legacy lightsleep/reset path retained |
+| LPOSC OTP read on the Linux Pico 2 W, installed `2445a04bf` | PASS: 33045 Hz; configured divider matches |
+| Current patch generator, isolated Git fixtures | PASS: 10 tests; repository Ruff/format checks |
+| Physical SWD debugger, non-W Pico 2, RP2040 and RISC-V runtime | NOT RUN |
 
-Protocol 2 checks each observed boot before accepting a completed cycle. This
-reset-spanning harness remains an opt-in experiment, not an upstream multitest.
+The [follow-up report](FOLLOWUP-REVIEW-20260929.md) records RISC-V commands,
+SHA-256 hashes, the read-only OTP check and the source-backed design decisions.
+Current [patch snapshots](tools/README.md) are generated from committed HEAD
+and checked for staleness; they are not a clean upstream commit series.
+
+Protocol 2 waits for host acknowledgements and checks each observed boot before
+accepting a completed cycle. ACK-SLEEP-to-READY timing includes boot/USB, not
+just the powered-down interval. This reset-spanning harness remains an opt-in
+experiment, not an upstream multitest.
 POWMAN records support SWCORE power-down and alarm wake; they are not independent
 measurements of every domain, board current or complete-cycle energy.
 

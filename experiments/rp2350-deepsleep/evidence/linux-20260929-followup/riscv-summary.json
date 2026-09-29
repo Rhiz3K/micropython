@@ -1,0 +1,313 @@
+{
+  "result": "PASS: 4 compile regressions; no hardware test",
+  "baseline_tinyusb": "Unmodified pinned b549ac1d84cbbe550c9590951e2290098b3fb16c",
+  "candidate_tinyusb": "Same pinned HEAD plus exact reviewed tinyusb-ep0-queue.patch, SHA256 ffbadfaa2a51af420e64e1bdb4fad55f1621646eb3bcd98e3d93eaa921076e4e",
+  "toolchain_archive_sha256": "4fca2b0159348fcc444f959d706fa389aa7fcd98f518d67e15d1beb8ffccf99a",
+  "toolchain_release": "https://github.com/raspberrypi/pico-sdk-tools/releases/tag/v2.3.0-1",
+  "limitations": [
+    "No RISC-V runtime, USB re-enumeration or power-down hardware validation.",
+    "POWMAN timed deepsleep remains disabled on RISC-V; PICO_ARM is undefined and #if evaluates it to zero.",
+    "Both compiled and preprocessed deepsleep retain lightsleep followed by reset.",
+    "SDK selected conservative rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb / ilp32 flags after its unmodified Zcmp test rejected s0 asm clobber.",
+    "Initial baseline build stopped at a missing mpy-cross host prerequisite; original log/json retained as initial-missing-mpycross. Explicit host mpy-cross prebuild fixed procedure without source changes.",
+    "CMake configure warning is expected local picotool source build, not a compiler warning."
+  ],
+  "builds": [
+    {
+      "command": [
+        "make",
+        "-C",
+        "<WORK>/riscv-source-baseline/ports/rp2",
+        "BOARD=RPI_PICO2_W",
+        "BOARD_VARIANT=RISCV",
+        "BUILD=build-review-riscv-baseline-pico2w",
+        "-j6"
+      ],
+      "environment": {
+        "PATH": "<TOOLS>/venv/bin:<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain/bin:<TOOLS>/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin:<HOST_PATH>",
+        "PICO_TOOLCHAIN_PATH": "<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain",
+        "PICO_SDK_PATH": "<WORK>/riscv-source-baseline/lib/pico-sdk",
+        "SOURCE_DATE_EPOCH": "1790668407",
+        "TZ": "UTC",
+        "LC_ALL": "C",
+        "CMAKE_ARGS": "-DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1"
+      },
+      "source_sha": "09f5bb447504a058376c62fe991b3613531837e6",
+      "initial_status": "",
+      "started": "2026-09-29T09:49:35.850762+00:00",
+      "mpycross_prebuild": "PASS: make -C mpy-cross BUILD=build -j6",
+      "exit_code": 0,
+      "elapsed_s": 31.845,
+      "finished": "2026-09-29T09:50:12.980137+00:00",
+      "artifacts": {
+        "firmware.elf": {
+          "bytes": 9800996,
+          "sha256": "5b6c91c379bd7f0cfba0158b98cb7622f3208c618fdb82fd9909b70840c86e9d"
+        },
+        "firmware.bin": {
+          "bytes": 1017596,
+          "sha256": "0395f05d0e2b266aeab5978530871650b0d22b1c6a6bdba6d88f944b05e454d0"
+        },
+        "firmware.uf2": {
+          "bytes": 2035712,
+          "sha256": "7b8ba5c9867bf47f13e12f1246889de999e31e2cf375552de115bc0d196493ab"
+        }
+      },
+      "legacy_proof": {
+        "label": "baseline",
+        "board_variant": "RISCV",
+        "build": "<WORK>/riscv-source-baseline/ports/rp2/build-review-riscv-baseline-pico2w",
+        "PICO_ARM_effective": 0,
+        "PICO_ARM_definition": null,
+        "PICO_RISCV": 1,
+        "powman_functions_present": false,
+        "legacy_body_sha256": "ed437e0049fdf440fb09db9e3dd9795d9bbe1ae93b5cc8ae23fd2aea40def254",
+        "legacy_body": "mp_machine_deepsleep(size_t n_args, const mp_obj_t *args) {\n    mp_machine_lightsleep(n_args, args);\n    mp_machine_reset();\n}",
+        "build_type_macro": "#define MICROPY_BUILD_TYPE \"GNU 16.1.0 MinSizeRel\"",
+        "board_build_macro": "#define MICROPY_BOARD_BUILD_NAME \"RPI_PICO2_W-RISCV\"",
+        "compiler_flags": "-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"
+      },
+      "compiler_warning_count": 0,
+      "cmake_warning_count": 1,
+      "picotool_sha": "6f6458d792b93685a11423b244a585eaa99eafcf",
+      "final_source_status": "",
+      "private_original_log_sha256": "2902d9d2ed382aa18fb05a35278b7ab2bde03be755a10c2548bd322cc7e5febc",
+      "published_log": "riscv-baseline-pico2w.log.gz",
+      "published_log_uncompressed_sha256": "c521e9617424271eb89f05e18072b6bfc508e40e97428b1c0388e0907cb89d63"
+    },
+    {
+      "command": [
+        "make",
+        "-C",
+        "<WORK>/riscv-source-baseline/ports/rp2",
+        "BOARD=RPI_PICO2",
+        "BOARD_VARIANT=RISCV",
+        "BUILD=build-review-riscv-baseline-pico2",
+        "-j6"
+      ],
+      "environment": {
+        "PATH": "<TOOLS>/venv/bin:<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain/bin:<TOOLS>/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin:<HOST_PATH>",
+        "PICO_TOOLCHAIN_PATH": "<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain",
+        "PICO_SDK_PATH": "<WORK>/riscv-source-baseline/lib/pico-sdk",
+        "SOURCE_DATE_EPOCH": "1790668407",
+        "TZ": "UTC",
+        "LC_ALL": "C",
+        "CMAKE_ARGS": "-DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1"
+      },
+      "source_sha": "09f5bb447504a058376c62fe991b3613531837e6",
+      "initial_status": "",
+      "started": "2026-09-29T09:52:32.099660+00:00",
+      "mpycross_prebuild": "PASS: make -C mpy-cross BUILD=build -j6",
+      "exit_code": 0,
+      "elapsed_s": 60.003,
+      "finished": "2026-09-29T09:53:32.267496+00:00",
+      "artifacts": {
+        "firmware.elf": {
+          "bytes": 5696344,
+          "sha256": "8f46e3b20bf88de2e520844959b39667740f05378e95bad54c398487b942fc9f"
+        },
+        "firmware.bin": {
+          "bytes": 407848,
+          "sha256": "892a56ad53e01a47f165dabf3fb14784b9190dcdafd15d26c549d6409263dd5d"
+        },
+        "firmware.uf2": {
+          "bytes": 816640,
+          "sha256": "8cdf8ff155c837c54a673d7d3524316691cc85b45a82d8cf7bd1e760ebc4e67c"
+        }
+      },
+      "legacy_proof": {
+        "label": "baseline",
+        "board_variant": "RISCV",
+        "build": "<WORK>/riscv-source-baseline/ports/rp2/build-review-riscv-baseline-pico2",
+        "PICO_ARM_effective": 0,
+        "PICO_ARM_definition": null,
+        "PICO_RISCV": 1,
+        "powman_functions_present": false,
+        "legacy_body_sha256": "ed437e0049fdf440fb09db9e3dd9795d9bbe1ae93b5cc8ae23fd2aea40def254",
+        "legacy_body": "mp_machine_deepsleep(size_t n_args, const mp_obj_t *args) {\n    mp_machine_lightsleep(n_args, args);\n    mp_machine_reset();\n}",
+        "build_type_macro": "#define MICROPY_BUILD_TYPE \"GNU 16.1.0 MinSizeRel\"",
+        "board_build_macro": "#define MICROPY_BOARD_BUILD_NAME \"RPI_PICO2-RISCV\"",
+        "compiler_flags": "-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"
+      },
+      "compiler_warning_count": 0,
+      "cmake_warning_count": 1,
+      "picotool_sha": "6f6458d792b93685a11423b244a585eaa99eafcf",
+      "final_source_status": "",
+      "private_original_log_sha256": "92651d84e570b9536cb70c2718389382d20d1be981a60f232ff1df6c70b0870d",
+      "published_log": "riscv-baseline-pico2.log.gz",
+      "published_log_uncompressed_sha256": "a009fc8f5282a66bbdc483d92b584ae02f53726dae076a7033884dd2a6913358"
+    },
+    {
+      "command": [
+        "make",
+        "-C",
+        "<WORK>/riscv-source-candidate/ports/rp2",
+        "BOARD=RPI_PICO2_W",
+        "BOARD_VARIANT=RISCV",
+        "BUILD=build-review-riscv-candidate-pico2w",
+        "-j6"
+      ],
+      "environment": {
+        "PATH": "<TOOLS>/venv/bin:<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain/bin:<TOOLS>/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin:<HOST_PATH>",
+        "PICO_TOOLCHAIN_PATH": "<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain",
+        "PICO_SDK_PATH": "<WORK>/riscv-source-candidate/lib/pico-sdk",
+        "SOURCE_DATE_EPOCH": "1790668407",
+        "TZ": "UTC",
+        "LC_ALL": "C",
+        "CMAKE_ARGS": "-DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1"
+      },
+      "source_sha": "b0222450ee72e29f4d61d0fe9918ebff408c2879",
+      "initial_status": " m lib/tinyusb\n",
+      "started": "2026-09-29T09:50:19.230884+00:00",
+      "mpycross_prebuild": "PASS: make -C mpy-cross BUILD=build -j6",
+      "exit_code": 0,
+      "elapsed_s": 71.89,
+      "finished": "2026-09-29T09:51:37.058880+00:00",
+      "artifacts": {
+        "firmware.elf": {
+          "bytes": 9801740,
+          "sha256": "8bae6c01ade25df442463a9cb27a4ef172a5432101d1f2d4f17763378e51dfd1"
+        },
+        "firmware.bin": {
+          "bytes": 1017684,
+          "sha256": "3269ab3b5d6e66db092cf553e4bf379a971040f578ed69272e16fede98271240"
+        },
+        "firmware.uf2": {
+          "bytes": 2036224,
+          "sha256": "acf16ece40202aaa978ac082225266e5c6d5870385e367c634f9ab4b53a04932"
+        }
+      },
+      "legacy_proof": {
+        "label": "candidate",
+        "board_variant": "RISCV",
+        "build": "<WORK>/riscv-source-candidate/ports/rp2/build-review-riscv-candidate-pico2w",
+        "PICO_ARM_effective": 0,
+        "PICO_ARM_definition": null,
+        "PICO_RISCV": 1,
+        "powman_functions_present": false,
+        "legacy_body_sha256": "ed437e0049fdf440fb09db9e3dd9795d9bbe1ae93b5cc8ae23fd2aea40def254",
+        "legacy_body": "mp_machine_deepsleep(size_t n_args, const mp_obj_t *args) {\n    mp_machine_lightsleep(n_args, args);\n    mp_machine_reset();\n}",
+        "build_type_macro": "#define MICROPY_BUILD_TYPE \"GNU 16.1.0 MinSizeRel\"",
+        "board_build_macro": "#define MICROPY_BOARD_BUILD_NAME \"RPI_PICO2_W-RISCV\"",
+        "compiler_flags": "-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"
+      },
+      "compiler_warning_count": 0,
+      "cmake_warning_count": 1,
+      "picotool_sha": "6f6458d792b93685a11423b244a585eaa99eafcf",
+      "final_source_status": " m lib/tinyusb\n",
+      "private_original_log_sha256": "09e9bd17f0adc270f079cf9b6d11de1a34b5560be9e3da88155fd8901d272c47",
+      "published_log": "riscv-candidate-pico2w.log.gz",
+      "published_log_uncompressed_sha256": "db6e1fd9253da09f8263acd396eec30fe8d7bc266daaae067695a00782b7d125"
+    },
+    {
+      "command": [
+        "make",
+        "-C",
+        "<WORK>/riscv-source-candidate/ports/rp2",
+        "BOARD=RPI_PICO2",
+        "BOARD_VARIANT=RISCV",
+        "BUILD=build-review-riscv-candidate-pico2",
+        "-j6"
+      ],
+      "environment": {
+        "PATH": "<TOOLS>/venv/bin:<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain/bin:<TOOLS>/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin:<HOST_PATH>",
+        "PICO_TOOLCHAIN_PATH": "<TOOLS>/riscv-sdk-tools-v2.3.0-1/toolchain",
+        "PICO_SDK_PATH": "<WORK>/riscv-source-candidate/lib/pico-sdk",
+        "SOURCE_DATE_EPOCH": "1790668407",
+        "TZ": "UTC",
+        "LC_ALL": "C",
+        "CMAKE_ARGS": "-DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1"
+      },
+      "source_sha": "b0222450ee72e29f4d61d0fe9918ebff408c2879",
+      "initial_status": " m lib/tinyusb\n",
+      "started": "2026-09-29T09:53:52.438683+00:00",
+      "mpycross_prebuild": "PASS: make -C mpy-cross BUILD=build -j6",
+      "exit_code": 0,
+      "elapsed_s": 58.95,
+      "finished": "2026-09-29T09:54:51.553827+00:00",
+      "artifacts": {
+        "firmware.elf": {
+          "bytes": 5696824,
+          "sha256": "2adea1824adece513520e2b06157c7589448b65c8b6d891d775e83f63415fe98"
+        },
+        "firmware.bin": {
+          "bytes": 407872,
+          "sha256": "4f4a0c9251037bfdd76afdfc47bb0be69b17eba5cdd268b9e998b16930d53653"
+        },
+        "firmware.uf2": {
+          "bytes": 816640,
+          "sha256": "d7b145e627bc18c8cfde1f11d7ce9781e351d5cbf25935208cff1d2c9ab15530"
+        }
+      },
+      "legacy_proof": {
+        "label": "candidate",
+        "board_variant": "RISCV",
+        "build": "<WORK>/riscv-source-candidate/ports/rp2/build-review-riscv-candidate-pico2",
+        "PICO_ARM_effective": 0,
+        "PICO_ARM_definition": null,
+        "PICO_RISCV": 1,
+        "powman_functions_present": false,
+        "legacy_body_sha256": "ed437e0049fdf440fb09db9e3dd9795d9bbe1ae93b5cc8ae23fd2aea40def254",
+        "legacy_body": "mp_machine_deepsleep(size_t n_args, const mp_obj_t *args) {\n    mp_machine_lightsleep(n_args, args);\n    mp_machine_reset();\n}",
+        "build_type_macro": "#define MICROPY_BUILD_TYPE \"GNU 16.1.0 MinSizeRel\"",
+        "board_build_macro": "#define MICROPY_BOARD_BUILD_NAME \"RPI_PICO2-RISCV\"",
+        "compiler_flags": "-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"
+      },
+      "compiler_warning_count": 0,
+      "cmake_warning_count": 1,
+      "picotool_sha": "6f6458d792b93685a11423b244a585eaa99eafcf",
+      "final_source_status": " m lib/tinyusb\n",
+      "private_original_log_sha256": "fdd371235f5912a281215068e4cd378819e12f642a554ed48d72a0134e607cfd",
+      "published_log": "riscv-candidate-pico2.log.gz",
+      "published_log_uncompressed_sha256": "c965aede30dc21046bb5d85d920d4f36d09d52d4a75c8de6b3e1e23db9216ae0"
+    }
+  ],
+  "redaction": "Local source/tool paths replaced; full host PATH omitted. Firmware hashes are original build hashes, not sanitized log hashes.",
+  "toolchain": {
+    "compiler_binary_sha256": "d33cfe1662f49a0fd3125596be86bc45b84c1063b1a00cdfdd41a9bdd0197bdc",
+    "sources": {
+      "pinned_sdk_readme": "https://github.com/raspberrypi/pico-sdk/blob/98a542c1a62fb549ffb5d66a3e5892b06276b670/README.md#risc-v-support-on-rp2350",
+      "pinned_sdk_toolchain": "https://github.com/raspberrypi/pico-sdk/blob/98a542c1a62fb549ffb5d66a3e5892b06276b670/cmake/preload/toolchains/pico_riscv_gcc.cmake",
+      "pinned_sdk_ci": "https://github.com/raspberrypi/pico-sdk/blob/98a542c1a62fb549ffb5d66a3e5892b06276b670/.github/workflows/multi-gcc.yml",
+      "toolchain_release": "https://github.com/raspberrypi/pico-sdk-tools/releases/tag/v2.3.0-1"
+    },
+    "notes": [
+      "Pinned SDK README recommends prebuilt official pico-sdk-tools; its example uses old v2.0.0-5 GCC 14 for aarch64.",
+      "Selected x86_64 official v2.3.0-1 GCC 16.1.0 package, with published newlib alignment fix and release API SHA-256.",
+      "Pinned SDK accepts riscv32-pico-elf and probes -mcpu=hazard3-rp2350; SDK CI includes GCC 14.1.0 RISC-V, MicroPython rp2 CI only configures Arm.",
+      "No hardware executed; RISC-V timed POWMAN feature remains disabled."
+    ]
+  },
+  "checkouts": [
+    {
+      "label": "baseline",
+      "sha": "09f5bb447504a058376c62fe991b3613531837e6",
+      "path": "<WORK>/riscv-source-baseline",
+      "submodules": {
+        "btstack": "77e752abd6a0992334047a48038a5a3960e5c6bc",
+        "cyw43-driver": "055d64274b014dd7b1c2fc94d26e8a18face7124",
+        "lwip": "77dcd25a72509eb83f72b033d219b1d40cd8eb95",
+        "mbedtls": "0bebf8b8c7f07abe3571ded48a11aa907a1ffb20",
+        "micropython-lib": "ee4bb8ff139e24c42b739935fbd8ec7c4d061e02",
+        "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+        "tinyusb": "b549ac1d84cbbe550c9590951e2290098b3fb16c"
+      },
+      "tinyusb_patch": false
+    },
+    {
+      "label": "candidate",
+      "sha": "b0222450ee72e29f4d61d0fe9918ebff408c2879",
+      "path": "<WORK>/riscv-source-candidate",
+      "submodules": {
+        "btstack": "77e752abd6a0992334047a48038a5a3960e5c6bc",
+        "cyw43-driver": "055d64274b014dd7b1c2fc94d26e8a18face7124",
+        "lwip": "77dcd25a72509eb83f72b033d219b1d40cd8eb95",
+        "mbedtls": "0bebf8b8c7f07abe3571ded48a11aa907a1ffb20",
+        "micropython-lib": "ee4bb8ff139e24c42b739935fbd8ec7c4d061e02",
+        "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+        "tinyusb": "b549ac1d84cbbe550c9590951e2290098b3fb16c"
+      },
+      "tinyusb_patch": true
+    }
+  ]
+}

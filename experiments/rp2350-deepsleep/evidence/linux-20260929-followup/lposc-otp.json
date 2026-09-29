@@ -1,0 +1,23 @@
+{
+  "build": "RPI_PICO2_W",
+  "cause": 3,
+  "dbg_pwrcfg": 0,
+  "divider_matches_otp": true,
+  "firmware_flashed": false,
+  "freq": 150000000,
+  "friendly_repl_verified": true,
+  "host_time": 1790675121.4389737,
+  "lposc_frac_khz": 2949,
+  "lposc_int_khz": 33,
+  "model": "Raspberry Pi Pico 2 W with RP2350",
+  "otp_lposc_hz": 33045,
+  "otp_programmed": false,
+  "otp_valid_for_pinned_sdk": true,
+  "powman_timer": 65538,
+  "rtc_epoch": 1609473941,
+  "sleep_or_reset_requested": false,
+  "source_commit": "2445a04bfa2f426e8390b2efaa6450910734e430",
+  "uid": "<TARGET>",
+  "version": "v1.30.0-preview.99.g2445a04bfa.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+  "wdt_enabled": false
+}

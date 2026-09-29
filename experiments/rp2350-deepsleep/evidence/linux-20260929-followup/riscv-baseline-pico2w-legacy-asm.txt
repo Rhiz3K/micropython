@@ -1,0 +1,15 @@
+
+<WORK>/riscv-source-baseline/ports/rp2/build-review-riscv-baseline-pico2w/firmware.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+10029022 <machine_deepsleep>:
+10029022:	1141                	addi	sp,sp,-16
+10029024:	c606                	sw	ra,12(sp)
+10029026:	3361                	jal	10028dae <mp_machine_lightsleep>
+10029028:	3909                	jal	10028c3a <mp_machine_reset>
+
+Disassembly of section .boot2:
+
+Disassembly of section .data:

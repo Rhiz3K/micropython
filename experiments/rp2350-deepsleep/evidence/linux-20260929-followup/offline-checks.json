@@ -1,0 +1,20 @@
+{
+  "source_head": "709a7f9664f75933b5a9a3b25a2c69e423f37146",
+  "firmware_changed": false,
+  "generator_git_fixtures": {
+    "tests": 10,
+    "result": "PASS"
+  },
+  "generator_write": "PASS: already matched",
+  "generator_check": "PASS: both snapshots match committed HEAD",
+  "ruff_repository_config": "PASS",
+  "ruff_format": "PASS: 2 files already formatted",
+  "git_diff_check": "PASS",
+  "extra_ruff_select_ALL": {
+    "result": "FAIL",
+    "findings": 117,
+    "note": "Non-repository optional style rules, including type annotations, docstrings and pytest preferences. No claim of --select ALL compliance; repository-config checks passed."
+  },
+  "generator_commit": "5c9811743a3964189a0be1469a13236ee954e8d2",
+  "actual_snapshot_application": "PASS: both exports apply to pinned upstream base in disposable indexes; scoped stage entries equal committed HEAD"
+}
