@@ -1,0 +1,5 @@
+
+_sd_trace=[]
+def _sd_probe(label):
+    _s=network.WLAN(network.STA_IF)
+    return {'label':label,'ticks_ms':time.ticks_ms(),'status':_s.status(),'connected':_s.isconnected(),'netif_flags':machine.mem8[0x20005799],'join_state':machine.mem32[0x20005638]}

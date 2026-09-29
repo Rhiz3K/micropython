@@ -1,0 +1,23 @@
+# Run on the exact firmware ELF represented by elf-layout.json.
+arm-none-eabi-gdb -batch -nx firmware.elf \
+  -ex 'p/x &cyw43_state' \
+  -ex 'p/x &cyw43_state.dhcp_client' \
+  -ex 'p/x &cyw43_state.netif[0]' \
+  -ex 'p/x &cyw43_state.netif[0].flags' \
+  -ex 'p/x &cyw43_state.netif[0].ip_addr' \
+  -ex 'p/x &cyw43_state.wifi_join_state' \
+  -ex 'p/x &cyw43_state.itf_state' \
+  -ex 'p/x &cyw43_state.netif[0].client_data[0]' \
+  -ex 'p/x &mp_network_soft_timer' \
+  -ex 'p/x &cyw43_poll' \
+  -ex 'p/x &cyw43_sleep' \
+  -ex 'p/x &dhcp_pcb' \
+  -ex 'p/x &if_active' \
+  -ex 'ptype /o struct dhcp' \
+  -ex 'ptype /o soft_timer_entry_t' \
+  -ex 'p/x (unsigned int)&((struct dhcp *)0)->pcb_allocated' \
+  -ex 'p/x (unsigned int)&((struct dhcp *)0)->state' \
+  -ex 'p/x (unsigned int)&((struct dhcp *)0)->tries' \
+  -ex 'p/x (unsigned int)&((struct dhcp *)0)->request_timeout' \
+  -ex 'p/x (unsigned int)&((soft_timer_entry_t *)0)->mode' \
+  -ex 'p/x (unsigned int)&((soft_timer_entry_t *)0)->expiry_ms'

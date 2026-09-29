@@ -2,34 +2,50 @@
 
 Aktualizováno **29. 9. 2026**. Cílem je pokračovat v ověřování časovaného
 RP2350 deepsleep, USB a Wi-Fi na cílovém PC a jeho skutečné desce.
-Nejnovější ověření původní linuxové desky skončilo **29. 9. v 06:23:50 UTC**:
-nový ARM firmware je nahraný, původní soubory/backup registry/RTC obnovené
-a friendly REPL odpovídá. Zapojení je USB + **Pico-ePaper-2.9 B/W/R V4**,
+Nejnovější ověření původní linuxové desky skončilo **29. 9. v 07:55:24 UTC**:
+ARM firmware z ranního buildu zůstal beze změny, 37 souborů je ověřených,
+backup registry obnovené, RTC pokračuje a friendly REPL odpovídá.
+Zapojení je USB + **Pico-ePaper-2.9 B/W/R V4**,
 označení panelu potvrdil uživatel. Podrobnosti a zachovaná selhání obsahují
-[dnešní linuxové výsledky](RESULTS-LINUX-20260929.md).
+[navazující DHCP diagnostika](RESULTS-DHCP-LINUX-20260929.md)
+a [ranní linuxové výsledky](RESULTS-LINUX-20260929.md).
 
 **Wi-Fi není vyřešena univerzálně:** tři kontrolované návraty z deepsleep
 s DHCP/HTTP prošly, ale další dva pokusy zůstaly bez DHCP adresy při
 funkčním USB. Jeden následoval po běžném resetu, druhý ještě před jakýmkoli
 dalším spánkem/resetem. Mac úspěchy proto nepřenášet na zdejší MikroTik síť.
 
+Navazující diagnostika přidala **15 připojení: 12 DHCP/HTTP PASS a 3 timeouty**,
+bez dalšího deepsleep. Timeout nastal i s `PM_NONE`, preset se proto nemění.
+Záznamy ukazují nestabilní Wi-Fi registraci a BADAUTH překryté cached netif
+stavem; neurčují ještě přesnou příčinu autentizace. Dvě malé opravy
+`pico2w_vsys_lowpower.py` mají hardware důkazy před/po: explicitní GP23 LOW/SIO
+po startu bez rádia a uznání lokálního odpojení se záporným status místo
+čekání výhradně na nulu. **Helper byl zkoušen v RAM, není nově nahrán do
+filesystemu ani soukromé aplikace.** Síťový driver ani core patch se neměnily.
+
 ## 1. Co převzít
 
 - Fork: [Rhiz3K/micropython](https://github.com/Rhiz3K/micropython), větev
   **`rp2/rp2350-timed-deepsleep`**.
-- Poslední implementační commit:
+- Poslední implementační commit **core firmwaru**:
   [`0f193e89cbb0246ca4d967e1ad98db28304a031c`](https://github.com/Rhiz3K/micropython/commit/0f193e89cbb0246ca4d967e1ad98db28304a031c).
   Obsahuje GP25 přípravu v core, rozšířené testy, Wi-Fi helper, TinyUSB patch
   a anonymizované důkazy. Je pushnutý; při přípravě předání se ověřila shoda
   lokálního a vzdáleného commitu. Navazující předání mění dokumentaci a důkazy;
-  dnešní Linux kandidát byl sestaven ze zdrojového commitu
+  DHCP follow-up 29. 9. navíc opravuje Python helper a přidává jeho regresi.
+  Dnešní Linux kandidát byl sestaven ze zdrojového commitu
   `6f95bf43caab2f2ba693cbf91e82214e5b59f874` s níže uvedeným USB patchem.
 - **Upstream PR nebyl založen a celek stále není ready pro upstream.**
   Používá se stávající Git identita. Podle přání uživatele nepřidávat
   `Signed-off-by` ani vymýšlet skutečné jméno/e-mail. Případné budoucí
   upstream podání a jeho požadavky se řeší samostatně.
-- Hlavní pracovní strom na Macu je před tímto předáním čistý; **`lib/tinyusb`
-  je úmyslně lokálně upravený**. Gitlink zůstává na `b549ac1d…`.
+- Python helper opravuje samostatný commit
+  [`0da78808c`](https://github.com/Rhiz3K/micropython/commit/0da78808c).
+  [Offline DHCP parser](tools/README.md) je oddělený v `bfd8ba9b8`;
+  nepatří do firmware ani do core upstream patche.
+- Při předání z Macu byl hlavní pracovní strom čistý; **`lib/tinyusb`
+  zůstal úmyslně lokálně upravený**. Gitlink zůstává na `b549ac1d…`.
   Přesný [TinyUSB patch](tinyusb-ep0-queue.patch) je uložený v hlavním repozitáři,
   ale nový klon jej musí zvlášť aplikovat. Samotné `git clone` nestačí.
   Oprava je nyní aplikovaná i v původním linuxovém checkoutu; úmyslně
@@ -42,11 +58,12 @@ dalším spánkem/resetem. Mac úspěchy proto nepřenášet na zdejší MikroTi
 Čti v tomto pořadí:
 
 1. Tento handover.
-2. [Linux: nové ověření a DHCP selhání 29. 9.](RESULTS-LINUX-20260929.md).
-3. [USB/Wi-Fi: opravy, testy a nasazení na Macu 28. 9.](RESULTS-USB-WIFI-MAC-20260928.md).
-4. [Společný P1.7/GP25 kandidát a rozšířené testy 27. 9.](RESULTS-EXTENDED-MAC-20260927.md).
-5. [Opt-in hardware testy a formát privátního manifestu](../../tests/ports/rp2/deepsleep/README.md).
-6. Podle úkolu [Mac funkční testy](RESULTS-MAC-20260927.md),
+2. [Linux: DHCP capture a opravy helperu 29. 9.](RESULTS-DHCP-LINUX-20260929.md).
+3. [Linux: nové ověření a DHCP selhání 29. 9.](RESULTS-LINUX-20260929.md).
+4. [USB/Wi-Fi: opravy, testy a nasazení na Macu 28. 9.](RESULTS-USB-WIFI-MAC-20260928.md).
+5. [Společný P1.7/GP25 kandidát a rozšířené testy 27. 9.](RESULTS-EXTENDED-MAC-20260927.md).
+6. [Opt-in hardware testy a formát privátního manifestu](../../tests/ports/rp2/deepsleep/README.md).
+7. Podle úkolu [Mac funkční testy](RESULTS-MAC-20260927.md),
    [displejová optimalizace](POWER-OPT-MAC-20260927.md),
    [GP25 měření](POWER-GP25-MAC-20260927.md) a [návrh upstream PR](upstream-pr.md).
 
@@ -94,6 +111,7 @@ na něj helper určený pro Mac B/W V2 bez nové kontroly ovladače a pinů.
 | Původní výpadky USB | Logy Macu dokládají skutečné chyby enumerace. Jejich příčinná souvislost s opravenou chybou TinyUSB **není prokázaná**; kontrolní firmware v nové sadě také procházel. |
 | Wi-Fi | Samotné vypnutí bez odhlášení reprodukovalo tři neúspěchy, i bez resetu. Odhlášení a vyčkání na lokální link-down před vypnutím prošlo kontrolovanými testy. Celkem 54 úspěšných DHCP/HTTP transakcí; jedna seed transakce použila již připojenou STA. |
 | Linux kandidát 29. 9. | 6 alarmových návratů v dokončených sadách, další 1 později ověřený po hostitelském `BrokenPipe`, 5 běžných resetů s USB. Síť: 7 úspěšných DHCP/HTTP, 2 DHCP timeouty. Argumenty/hard IRQ/lightsleep frekvence a čas PASS. Žádné nové měření, 100cyklová či dlouhá sada. |
+| Navazující Linux DHCP diagnostika 29. 9. | Dalších 15 připojení: 12 DHCP/HTTP PASS, 3 timeouty; 5 běžných resetů s USB, žádný nový deepsleep. Dvě chyby Python helperu opravené a hardware ověřené. `PM_NONE` timeouty neodstranilo. Routerový capture a RAM stavy zúžily diagnózu, autentizace není vyřešená. |
 | Běžná cesta původní aplikace | Přesná funkce vypnutí Wi-Fi prošla v RAM; navíc 3× `lightsleep(2500) → soft_reset` a opětovné DHCP/HTTP. Celá soukromá aplikace s reálným serverem a displejem nebyla po nasazení znovu spuštěna. |
 | Spotřeba s displejem | Historicky přibližně 3,82 → 0,60 → 0,37 mA na USB vstupu sestavy; poslední krok byl GP25. Nejde o odběr samotného RP2350, garantovanou hodnotu jiné desky ani dnešní REPL. S USB kandidátem se proud znovu neměřil. |
 | Dlouhé spánky a displej | 30/75 minut a dřívější nové obrazy B prošly na dřívějším Mac firmwaru; nikoli automaticky na novém USB buildu nebo druhé desce. |

@@ -1,0 +1,44 @@
+
+def _diag_emit(kind, **data):
+    data['kind']=kind
+    data['ticks_ms']=time.ticks_ms()
+    print('DHCP_DIAG '+json.dumps(data))
+def _dhcp_memory():
+    word=machine.mem32[0x200058a4]
+    return {'xid':machine.mem32[0x200058a0],'pcb_allocated':word&255,'state':(word>>8)&255,'tries':(word>>16)&255,'flags':word>>24,'request_timeout':machine.mem16[0x200058a8],'timer_mode':machine.mem16[0x20007b66],'timer_expiry_ms':machine.mem32[0x20007b68],'netif_flags':machine.mem8[0x20005799],'join_state':machine.mem32[0x20005638]}
+def _diag_connect(credentials,endpoint,label):
+    sta=network.WLAN(network.STA_IF)
+    try:
+        radio_off_and_disable_vsys_monitor()
+    finally:
+        _diag_emit('shutdown_snapshot',samples=_sd_trace)
+    sta.active(True)
+    sta.config(pm=network.WLAN.PM_NONE if _preset == "none" else network.WLAN.PM_PERFORMANCE)
+    _diag_emit("pm_preset",preset=_preset,readback=sta.config("pm"))
+    started=time.ticks_ms()
+    sta.connect(credentials['ssid'],credentials['password'])
+    credentials=None
+    prior=None
+    heartbeat=time.ticks_ms()
+    _diag_emit('start',label=label,reset_cause=machine.reset_cause())
+    while True:
+        elapsed=time.ticks_diff(time.ticks_ms(),started)
+        status=sta.status()
+        bound=bool(sta.ipconfig('has_dhcp4'))
+        enabled=bool(sta.ipconfig('dhcp4'))
+        state=(status,sta.isconnected(),bound,enabled,sta.ipconfig('addr4'))
+        if state!=prior or time.ticks_diff(time.ticks_ms(),heartbeat)>=1000:
+            _diag_emit('state',status=status,connected=state[1],dhcp_bound=bound,dhcp_enabled=enabled,addr4=state[4],elapsed_ms=elapsed,dhcp_memory=_dhcp_memory())
+            prior=state
+            heartbeat=time.ticks_ms()
+        if status==3 and bound and sta.isconnected():
+            try:
+                _wifi_http(sta,endpoint,label,1)
+                _diag_emit('result',ok=True,http_ok=True,status=status,dhcp_bound=bound,elapsed_ms=elapsed,radio_left_active=True)
+            except Exception as exc:
+                _diag_emit('result',ok=False,http_ok=False,status=status,dhcp_bound=bound,elapsed_ms=elapsed,error_type=type(exc).__name__,radio_left_active=True)
+            return
+        if status<0 or elapsed>=35000:
+            _diag_emit('result',ok=False,http_ok=False,status=status,dhcp_bound=bound,elapsed_ms=elapsed,radio_left_active=True)
+            return
+        time.sleep_ms(100)

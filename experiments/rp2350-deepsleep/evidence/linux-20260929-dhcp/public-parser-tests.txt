@@ -1,0 +1,23 @@
+test_absent_udp_checksum_rejected (__main__.ParserTests.test_absent_udp_checksum_rejected) ... ok
+test_byte_exact_uncompressed_roundtrip (__main__.ParserTests.test_byte_exact_uncompressed_roundtrip) ... ok
+test_checksum_known_vectors (__main__.ParserTests.test_checksum_known_vectors) ... ok
+test_cli_and_no_overwrite (__main__.ParserTests.test_cli_and_no_overwrite) ... ok
+test_compressed_interior_and_trailing_zeros (__main__.ParserTests.test_compressed_interior_and_trailing_zeros) ... ok
+test_compressed_nonzero_repeat (__main__.ParserTests.test_compressed_nonzero_repeat) ... ok
+test_correlate_metadata_and_times (__main__.ParserTests.test_correlate_metadata_and_times) ... ok
+test_corrupt_checksums_rejected (__main__.ParserTests.test_corrupt_checksums_rejected) ... ok
+test_dhcp_overload (__main__.ParserTests.test_dhcp_overload) ... ok
+test_expected_xid_and_target_must_be_present (__main__.ParserTests.test_expected_xid_and_target_must_be_present) ... ok
+test_fixture_hashes_checksums_and_dora (__main__.ParserTests.test_fixture_hashes_checksums_and_dora) ... ok
+test_gap_overlap_truncation_rejected (__main__.ParserTests.test_gap_overlap_truncation_rejected) ... ok
+test_invalid_dhcp_options_and_message_direction (__main__.ParserTests.test_invalid_dhcp_options_and_message_direction) ... ok
+test_invalid_frame_export_rejected (__main__.ParserTests.test_invalid_frame_export_rejected) ... ok
+test_invalid_packet_metadata_rejected (__main__.ParserTests.test_invalid_packet_metadata_rejected) ... ok
+test_invalid_repeat_rejected (__main__.ParserTests.test_invalid_repeat_rejected) ... ok
+test_ipv4_fragment_and_reserved_flag_rejected (__main__.ParserTests.test_ipv4_fragment_and_reserved_flag_rejected) ... ok
+test_vlan_and_ipv4_options (__main__.ParserTests.test_vlan_and_ipv4_options) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.149s
+
+OK

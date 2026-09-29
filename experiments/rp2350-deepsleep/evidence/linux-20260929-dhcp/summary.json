@@ -1,0 +1,3211 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-29",
+  "scope": "Repeated Wi-Fi connection/DHCP diagnostics on Linux; no deepsleep transitions in these attempts.",
+  "privacy": "Allowlisted derived evidence only. No raw packets, network/device identities, addresses, SSIDs, hostnames, credentials or application paths.",
+  "pending_captures": [],
+  "capture_count": 19,
+  "connection_results": {
+    "PASS": 11,
+    "FAIL": 3
+  },
+  "categories": {
+    "CONNECTION_RESULT": 14,
+    "HELPER_LINK_DOWN_PRECONDITION": 3,
+    "HOST_CAPTURE_PRECONDITION": 1,
+    "HELPER_COLD_GP23_PRECONDITION": 1
+  },
+  "pm_groups": {
+    "performance": {
+      "captures": [
+        12,
+        14,
+        16,
+        18
+      ],
+      "outcomes": {
+        "FAIL": 2,
+        "PASS": 2
+      }
+    },
+    "none": {
+      "captures": [
+        13,
+        15,
+        17
+      ],
+      "outcomes": {
+        "PASS": 2,
+        "FAIL": 1
+      }
+    }
+  },
+  "captures": [
+    {
+      "capture": 1,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790666544.5669868,
+        "finished": 1790666599.571755,
+        "returncode": 255,
+        "interrupt_sent": 1790666594.5680933,
+        "ssh_terminated_after_interrupt": true
+      },
+      "event_count": 4,
+      "result": {
+        "ticks_ms": 3921138,
+        "elapsed_ms": 3136,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [],
+      "netif_flags_observed": [],
+      "join_states_observed": [],
+      "memory_state_sample_count": 0,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "NO_USABLE_FRAME_EXPORT",
+        "frame_count": null,
+        "target_frame_count": null
+      },
+      "router_registration_samples": [],
+      "note": "Connection result exists; quick output is not a usable saved packet capture."
+    },
+    {
+      "capture": 2,
+      "outcome": "FAIL",
+      "category": "HELPER_LINK_DOWN_PRECONDITION",
+      "metadata": {
+        "started": 1790666624.6688907,
+        "finished": 1790666679.6709983,
+        "returncode": 255,
+        "interrupt_sent": 1790666674.6697571,
+        "ssh_terminated_after_interrupt": true
+      },
+      "event_count": 0,
+      "result": null,
+      "pm": null,
+      "dhcp_states_observed": [],
+      "netif_flags_observed": [],
+      "join_states_observed": [],
+      "memory_state_sample_count": 0,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "NO_USABLE_FRAME_EXPORT",
+        "frame_count": null,
+        "target_frame_count": null
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 3,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790666776.441298,
+        "finished": 1790666831.4463515,
+        "returncode": 255,
+        "interrupt_sent": 1790666826.4422505,
+        "ssh_terminated_after_interrupt": true
+      },
+      "event_count": 7,
+      "result": {
+        "ticks_ms": 4153820,
+        "elapsed_ms": 3149,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [
+        2,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        1537
+      ],
+      "memory_state_sample_count": 5,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 1417422577,
+        "transactions": [
+          {
+            "xid_u32": 1417422577,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "15.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1417422577,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.856",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1417422577,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.858",
+            "since_first_packet_ms": "2.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1417422577,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.87",
+            "since_first_packet_ms": "14.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1417422577,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.871",
+            "since_first_packet_ms": "15.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 4,
+      "outcome": "FAIL",
+      "category": "HOST_CAPTURE_PRECONDITION",
+      "metadata": {},
+      "event_count": 0,
+      "result": null,
+      "pm": null,
+      "dhcp_states_observed": [],
+      "netif_flags_observed": [],
+      "join_states_observed": [],
+      "memory_state_sample_count": 0,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "NO_USABLE_FRAME_EXPORT",
+        "frame_count": null,
+        "target_frame_count": null
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 5,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790667064.463515,
+        "capture_running_verified": 1790667064.8964407,
+        "probe_returncode": 0,
+        "probe_finished": 1790667070.72939,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 7,
+      "result": {
+        "ticks_ms": 4441079,
+        "elapsed_ms": 3141,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [
+        2,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        1537
+      ],
+      "memory_state_sample_count": 5,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 1997238652,
+        "transactions": [
+          {
+            "xid_u32": 1997238652,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "15.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1997238652,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.103",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 16
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1997238652,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.104",
+            "since_first_packet_ms": "1.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1997238652,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.118",
+            "since_first_packet_ms": "15.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1997238652,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.118",
+            "since_first_packet_ms": "15.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 6,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790667108.3600948,
+        "capture_running_verified": 1790667108.7514381,
+        "probe_returncode": 0,
+        "probe_finished": 1790667116.8419225,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 7,
+      "result": {
+        "ticks_ms": 4487220,
+        "elapsed_ms": 3341,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1
+      ],
+      "memory_state_sample_count": 5,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 1503533019,
+        "transactions": [
+          {
+            "xid_u32": 1503533019,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "283.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1503533019,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.31",
+            "since_first_packet_ms": "0.00",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1503533019,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.312",
+            "since_first_packet_ms": "2.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1503533019,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.592",
+            "since_first_packet_ms": "282.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1503533019,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.593",
+            "since_first_packet_ms": "283.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 7,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790667117.7679677,
+        "capture_running_verified": 1790667118.2321646,
+        "probe_returncode": 0,
+        "probe_finished": 1790667129.288028,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 8,
+      "result": {
+        "ticks_ms": 4499638,
+        "elapsed_ms": 5037,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1
+      ],
+      "memory_state_sample_count": 6,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 1015404241,
+        "transactions": [
+          {
+            "xid_u32": 1015404241,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "151.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1015404241,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "8.13",
+            "since_first_packet_ms": "0.00",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1015404241,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "8.132",
+            "since_first_packet_ms": "2.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1015404241,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "8.28",
+            "since_first_packet_ms": "150.00",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1015404241,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "8.281",
+            "since_first_packet_ms": "151.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 8,
+      "outcome": "FAIL",
+      "category": "HELPER_LINK_DOWN_PRECONDITION",
+      "metadata": {
+        "started": 1790667130.2854807,
+        "capture_running_verified": 1790667130.7048428,
+        "probe_returncode": 1,
+        "probe_finished": 1790667132.9270096,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 0,
+      "result": null,
+      "pm": null,
+      "dhcp_states_observed": [],
+      "netif_flags_observed": [],
+      "join_states_observed": [],
+      "memory_state_sample_count": 0,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "EMPTY_SNAPSHOT",
+        "frame_count": 0,
+        "target_frame_count": 0,
+        "transactions": [],
+        "packets": [],
+        "checksum_validation": "NOT_APPLICABLE"
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 9,
+      "outcome": "FAIL",
+      "category": "HELPER_COLD_GP23_PRECONDITION",
+      "metadata": {
+        "started": 1790667237.7897463,
+        "capture_running_verified": 1790667238.204101,
+        "probe_returncode": 1,
+        "probe_finished": 1790667240.3762574,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 0,
+      "result": null,
+      "pm": null,
+      "dhcp_states_observed": [],
+      "netif_flags_observed": [],
+      "join_states_observed": [],
+      "memory_state_sample_count": 0,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "EMPTY_SNAPSHOT",
+        "frame_count": 0,
+        "target_frame_count": 0,
+        "transactions": [],
+        "packets": [],
+        "checksum_validation": "NOT_APPLICABLE"
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 10,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790667493.7730646,
+        "capture_running_verified": 1790667494.23782,
+        "probe_returncode": 0,
+        "probe_finished": 1790667529.7484856,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 38,
+      "result": {
+        "ticks_ms": 71141,
+        "elapsed_ms": 32715,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        4,
+        1537,
+        2052
+      ],
+      "memory_state_sample_count": 35,
+      "shutdown_snapshot_sample_count": 0,
+      "badauth_sample_count": 14,
+      "badauth_while_netif_link_up_sample_count": 14,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 1926527717,
+        "transactions": [
+          {
+            "xid_u32": 1926527717,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "18.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1926527717,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "34.774",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 16
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1926527717,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "34.776",
+            "since_first_packet_ms": "2.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1926527717,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "34.791",
+            "since_first_packet_ms": "17.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1926527717,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "34.792",
+            "since_first_packet_ms": "18.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 11,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790667601.329304,
+        "capture_running_verified": 1790667602.0112891,
+        "probe_returncode": 0,
+        "probe_finished": 1790667610.0626066,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 10,
+      "result": {
+        "ticks_ms": 151433,
+        "elapsed_ms": 5044,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": null,
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        1537
+      ],
+      "memory_state_sample_count": 7,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 4059415707,
+        "transactions": [
+          {
+            "xid_u32": 4059415707,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "26.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 4059415707,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.732",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 16
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 4059415707,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.734",
+            "since_first_packet_ms": "2.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 4059415707,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.758",
+            "since_first_packet_ms": "26.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 4059415707,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.758",
+            "since_first_packet_ms": "26.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": []
+    },
+    {
+      "capture": 12,
+      "outcome": "FAIL",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790667958.686934,
+        "capture_running_verified": 1790667959.3267782,
+        "probe_returncode": 0,
+        "probe_finished": 1790667996.5599256,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 40,
+      "result": {
+        "ticks_ms": 538381,
+        "elapsed_ms": 35002,
+        "dhcp_bound": false,
+        "status": 2,
+        "ok": false,
+        "radio_left_active": true,
+        "http_ok": false,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 503378,
+        "readback": 10555714,
+        "kind": "pm_preset",
+        "preset": "performance"
+      },
+      "dhcp_states_observed": [
+        2,
+        6
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        4,
+        513,
+        1537
+      ],
+      "memory_state_sample_count": 36,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 3,
+      "badauth_while_netif_link_up_sample_count": 3,
+      "packet_evidence": {
+        "availability": "EMPTY_SNAPSHOT",
+        "frame_count": 0,
+        "target_frame_count": 0,
+        "transactions": [],
+        "packets": [],
+        "checksum_validation": "NOT_APPLICABLE"
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790667961.4099321,
+          "host_end": 1790667961.789021,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790667964.7891994,
+          "host_end": 1790667965.4583673,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -60
+        },
+        {
+          "host_start": 1790667968.458574,
+          "host_end": 1790667968.804596,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -56
+        },
+        {
+          "host_start": 1790667971.8047957,
+          "host_end": 1790667972.0483992,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790667975.0485318,
+          "host_end": 1790667975.296818,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -57
+        },
+        {
+          "host_start": 1790667978.2970498,
+          "host_end": 1790667978.496562,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790667981.4967449,
+          "host_end": 1790667981.6828399,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790667984.6829927,
+          "host_end": 1790667984.892177,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -61
+        },
+        {
+          "host_start": 1790667987.8924448,
+          "host_end": 1790667988.1140313,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790667991.1143818,
+          "host_end": 1790667991.3304305,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "3s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790667994.3306484,
+          "host_end": 1790667994.96013,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -59
+        }
+      ]
+    },
+    {
+      "capture": 13,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790668017.0570886,
+        "capture_running_verified": 1790668017.4740555,
+        "probe_returncode": 0,
+        "probe_finished": 1790668023.9596384,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 10,
+      "result": {
+        "ticks_ms": 565326,
+        "elapsed_ms": 3261,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 561964,
+        "readback": 16,
+        "kind": "pm_preset",
+        "preset": "none"
+      },
+      "dhcp_states_observed": [
+        1,
+        2,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        1537
+      ],
+      "memory_state_sample_count": 6,
+      "shutdown_snapshot_sample_count": 28,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 982811674,
+        "transactions": [
+          {
+            "xid_u32": 982811674,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "106.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 982811674,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.917",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 982811674,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.919",
+            "since_first_packet_ms": "2.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 982811674,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "6.023",
+            "since_first_packet_ms": "106.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 982811674,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "6.023",
+            "since_first_packet_ms": "106.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668019.8488867,
+          "host_end": 1790668020.059672,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668023.0600638,
+          "host_end": 1790668023.3612983,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -56
+        }
+      ]
+    },
+    {
+      "capture": 14,
+      "outcome": "FAIL",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790668026.650405,
+        "capture_running_verified": 1790668027.3329363,
+        "probe_returncode": 0,
+        "probe_finished": 1790668065.0789049,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 40,
+      "result": {
+        "ticks_ms": 606470,
+        "elapsed_ms": 35099,
+        "dhcp_bound": false,
+        "status": 2,
+        "ok": false,
+        "radio_left_active": true,
+        "http_ok": false,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 571369,
+        "readback": 10555714,
+        "kind": "pm_preset",
+        "preset": "performance"
+      },
+      "dhcp_states_observed": [
+        2,
+        6
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        4,
+        513,
+        1537
+      ],
+      "memory_state_sample_count": 36,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 7,
+      "badauth_while_netif_link_up_sample_count": 7,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 2,
+        "target_frame_count": 2,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": null,
+        "transactions": [
+          {
+            "xid_u32": 1302178106,
+            "messages": [
+              "DISCOVER",
+              "OFFER"
+            ],
+            "packet_nums": [
+              1,
+              2
+            ],
+            "first_to_last_ms": "1.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1302178106,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.091",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 16
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1302178106,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.092",
+            "since_first_packet_ms": "1.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668029.3648655,
+          "host_end": 1790668029.5715706,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668032.5718102,
+          "host_end": 1790668032.8031473,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -56
+        },
+        {
+          "host_start": 1790668035.8033898,
+          "host_end": 1790668036.0445054,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -55
+        },
+        {
+          "host_start": 1790668039.0448248,
+          "host_end": 1790668039.2453363,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -57
+        },
+        {
+          "host_start": 1790668042.2454755,
+          "host_end": 1790668042.4615574,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "2s",
+          "signal_dbm": -57
+        },
+        {
+          "host_start": 1790668045.4617362,
+          "host_end": 1790668045.6414835,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668048.6418152,
+          "host_end": 1790668048.8556223,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790668051.8559086,
+          "host_end": 1790668052.108308,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "2s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790668055.1085978,
+          "host_end": 1790668055.3372273,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668058.337472,
+          "host_end": 1790668058.5722435,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -56
+        },
+        {
+          "host_start": 1790668061.5723603,
+          "host_end": 1790668062.889798,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -59
+        },
+        {
+          "host_start": 1790668065.8899524,
+          "host_end": 1790668066.2664897,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        }
+      ]
+    },
+    {
+      "capture": 15,
+      "outcome": "FAIL",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790668081.2964492,
+        "capture_running_verified": 1790668081.6466887,
+        "probe_returncode": 0,
+        "probe_finished": 1790668119.3894718,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 40,
+      "result": {
+        "ticks_ms": 660750,
+        "elapsed_ms": 35091,
+        "dhcp_bound": false,
+        "status": 2,
+        "ok": false,
+        "radio_left_active": true,
+        "http_ok": false,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 625656,
+        "readback": 16,
+        "kind": "pm_preset",
+        "preset": "none"
+      },
+      "dhcp_states_observed": [
+        1,
+        2,
+        6
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        4,
+        1537
+      ],
+      "memory_state_sample_count": 36,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 10,
+      "badauth_while_netif_link_up_sample_count": 10,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 6,
+        "target_frame_count": 6,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": null,
+        "transactions": [
+          {
+            "xid_u32": 2709932653,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "first_to_last_ms": "2161.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 2709932653,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "34.917",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 2709932653,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "34.92",
+            "since_first_packet_ms": "3.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 2709932653,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "35.071",
+            "since_first_packet_ms": "154.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 2709932653,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "35.072",
+            "since_first_packet_ms": "155.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 2709932653,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 5,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "37.077",
+            "since_first_packet_ms": "2160.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 2709932653,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 6,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "37.078",
+            "since_first_packet_ms": "2161.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668084.046131,
+          "host_end": 1790668084.2997298,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668087.2999547,
+          "host_end": 1790668087.5255554,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -57
+        },
+        {
+          "host_start": 1790668090.5258095,
+          "host_end": 1790668090.7480755,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790668093.7482932,
+          "host_end": 1790668094.2698576,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668097.270069,
+          "host_end": 1790668097.5095775,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -56
+        },
+        {
+          "host_start": 1790668100.5097609,
+          "host_end": 1790668100.7444205,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -60
+        },
+        {
+          "host_start": 1790668103.7448032,
+          "host_end": 1790668103.9914336,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -56
+        },
+        {
+          "host_start": 1790668106.9917264,
+          "host_end": 1790668107.1984217,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668110.1987948,
+          "host_end": 1790668110.4230342,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -62
+        },
+        {
+          "host_start": 1790668113.4232283,
+          "host_end": 1790668113.6499536,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668116.6501691,
+          "host_end": 1790668116.868462,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668119.8686914,
+          "host_end": 1790668120.0192702,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        }
+      ]
+    },
+    {
+      "capture": 16,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790668123.2611065,
+        "capture_running_verified": 1790668123.7111766,
+        "probe_returncode": 0,
+        "probe_finished": 1790668134.5111535,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 10,
+      "result": {
+        "ticks_ms": 675886,
+        "elapsed_ms": 4833,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 667687,
+        "readback": 10555714,
+        "kind": "pm_preset",
+        "preset": "performance"
+      },
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1
+      ],
+      "memory_state_sample_count": 6,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 1977582427,
+        "transactions": [
+          {
+            "xid_u32": 1977582427,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "15.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1977582427,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.14",
+            "since_first_packet_ms": "0.00",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1977582427,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.141",
+            "since_first_packet_ms": "1.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 1977582427,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.155",
+            "since_first_packet_ms": "15.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 1977582427,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "7.155",
+            "since_first_packet_ms": "15.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668126.023416,
+          "host_end": 1790668126.4379456,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668129.4381306,
+          "host_end": 1790668129.688247,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -57
+        },
+        {
+          "host_start": 1790668132.6885016,
+          "host_end": 1790668132.859105,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -56
+        }
+      ]
+    },
+    {
+      "capture": 17,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790668136.1114538,
+        "capture_running_verified": 1790668136.5928092,
+        "probe_returncode": 0,
+        "probe_finished": 1790668172.4283407,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 38,
+      "result": {
+        "ticks_ms": 713916,
+        "elapsed_ms": 32899,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 680591,
+        "readback": 16,
+        "kind": "pm_preset",
+        "preset": "none"
+      },
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1,
+        4,
+        1537
+      ],
+      "memory_state_sample_count": 34,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 3,
+      "badauth_while_netif_link_up_sample_count": 3,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 980478313,
+        "transactions": [
+          {
+            "xid_u32": 980478313,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "152.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 980478313,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "35.049",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 30
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 980478313,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "35.05",
+            "since_first_packet_ms": "1.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 980478313,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "35.2",
+            "since_first_packet_ms": "151.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 980478313,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "35.201",
+            "since_first_packet_ms": "152.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668138.8628879,
+          "host_end": 1790668139.1021953,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668142.1024306,
+          "host_end": 1790668142.3091881,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790668145.3093746,
+          "host_end": 1790668145.5688057,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668148.5690932,
+          "host_end": 1790668148.7753248,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -58
+        },
+        {
+          "host_start": 1790668151.7755532,
+          "host_end": 1790668152.0081375,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -62
+        },
+        {
+          "host_start": 1790668155.0082986,
+          "host_end": 1790668155.219369,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668158.2197719,
+          "host_end": 1790668158.5010452,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -61
+        },
+        {
+          "host_start": 1790668161.5013087,
+          "host_end": 1790668161.7722504,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -62
+        },
+        {
+          "host_start": 1790668164.7724721,
+          "host_end": 1790668164.9912112,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "0s",
+          "signal_dbm": -61
+        },
+        {
+          "host_start": 1790668167.9914675,
+          "host_end": 1790668168.1764953,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "3s",
+          "signal_dbm": -60
+        },
+        {
+          "host_start": 1790668171.1768105,
+          "host_end": 1790668172.0711682,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "2s",
+          "signal_dbm": -59
+        }
+      ]
+    },
+    {
+      "capture": 18,
+      "outcome": "PASS",
+      "category": "CONNECTION_RESULT",
+      "metadata": {
+        "started": 1790668175.2602246,
+        "capture_running_verified": 1790668175.6718733,
+        "probe_returncode": 0,
+        "probe_finished": 1790668181.7557452,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 9,
+      "result": {
+        "ticks_ms": 723126,
+        "elapsed_ms": 3121,
+        "dhcp_bound": true,
+        "status": 3,
+        "ok": true,
+        "radio_left_active": true,
+        "http_ok": true,
+        "kind": "result"
+      },
+      "pm": {
+        "ticks_ms": 719688,
+        "readback": 10555714,
+        "kind": "pm_preset",
+        "preset": "performance"
+      },
+      "dhcp_states_observed": [
+        2,
+        6,
+        10
+      ],
+      "netif_flags_observed": [
+        123,
+        127
+      ],
+      "join_states_observed": [
+        1
+      ],
+      "memory_state_sample_count": 5,
+      "shutdown_snapshot_sample_count": 5,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "PARSED",
+        "frame_count": 4,
+        "target_frame_count": 4,
+        "checksum_validation": "PASS",
+        "frame_metadata_header_crosscheck": "PASS",
+        "external_bound_xid_u32": 2575018089,
+        "transactions": [
+          {
+            "xid_u32": 2575018089,
+            "messages": [
+              "DISCOVER",
+              "OFFER",
+              "REQUEST",
+              "ACK"
+            ],
+            "packet_nums": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "first_to_last_ms": "13.000",
+            "xid_observed_in_ram": true
+          }
+        ],
+        "packets": [
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 2575018089,
+            "bootp_flags": 0,
+            "message_type": 1,
+            "packet_num": 1,
+            "target_match": true,
+            "message": "DISCOVER",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.385",
+            "since_first_packet_ms": "0.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 320,
+                "bytes": 16
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 2575018089,
+            "bootp_flags": 0,
+            "message_type": 2,
+            "packet_num": 2,
+            "target_match": true,
+            "message": "OFFER",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.386",
+            "since_first_packet_ms": "1.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 350,
+            "ip_total_length": 336,
+            "ip_header_length": 20,
+            "udp_length": 316,
+            "bootp_op": 1,
+            "xid": 2575018089,
+            "bootp_flags": 0,
+            "message_type": 3,
+            "packet_num": 3,
+            "target_match": true,
+            "message": "REQUEST",
+            "direction": "rx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.397",
+            "since_first_packet_ms": "12.000",
+            "l2_delivery": "broadcast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              },
+              {
+                "offset": 336,
+                "bytes": 14
+              }
+            ],
+            "xid_observed_in_ram": true
+          },
+          {
+            "frame_size": 342,
+            "ip_total_length": 328,
+            "ip_header_length": 20,
+            "udp_length": 308,
+            "bootp_op": 2,
+            "xid": 2575018089,
+            "bootp_flags": 0,
+            "message_type": 5,
+            "packet_num": 4,
+            "target_match": true,
+            "message": "ACK",
+            "direction": "tx",
+            "ipv4_checksum": "PASS",
+            "udp_checksum": "PASS",
+            "relative_time_s": "5.398",
+            "since_first_packet_ms": "13.000",
+            "l2_delivery": "target_unicast",
+            "repeat_expansions": [
+              {
+                "offset": 96,
+                "bytes": 176
+              }
+            ],
+            "xid_observed_in_ram": true
+          }
+        ]
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668178.0755315,
+          "host_end": 1790668178.2727404,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        },
+        {
+          "host_start": 1790668181.272891,
+          "host_end": 1790668181.4417663,
+          "returncode": 0,
+          "present": true,
+          "authorized": true,
+          "uptime": "1s",
+          "signal_dbm": -59
+        }
+      ]
+    },
+    {
+      "capture": 19,
+      "outcome": "FAIL",
+      "category": "HELPER_LINK_DOWN_PRECONDITION",
+      "metadata": {
+        "started": 1790668184.622164,
+        "capture_running_verified": 1790668185.058511,
+        "probe_returncode": 1,
+        "probe_finished": 1790668187.229777,
+        "capture_stopped": true,
+        "sniffer_settings_unchanged": true,
+        "source_commit": "c19140ec78dcfa2b733dac425a94f9e677583c08"
+      },
+      "event_count": 1,
+      "result": null,
+      "pm": null,
+      "dhcp_states_observed": [],
+      "netif_flags_observed": [],
+      "join_states_observed": [],
+      "memory_state_sample_count": 0,
+      "shutdown_snapshot_sample_count": 28,
+      "badauth_sample_count": 0,
+      "badauth_while_netif_link_up_sample_count": 0,
+      "packet_evidence": {
+        "availability": "EMPTY_SNAPSHOT",
+        "frame_count": 0,
+        "target_frame_count": 0,
+        "transactions": [],
+        "packets": [],
+        "checksum_validation": "NOT_APPLICABLE"
+      },
+      "router_registration_samples": [
+        {
+          "host_start": 1790668187.444721,
+          "host_end": 1790668187.6518183,
+          "returncode": 0,
+          "present": false,
+          "authorized": null,
+          "uptime": null,
+          "signal_dbm": null
+        }
+      ]
+    }
+  ],
+  "cold_helper_trials": [
+    {
+      "helper_passed": true,
+      "host_time": 1790667424.0321147,
+      "trial": 1,
+      "before": {
+        "gpio25_status": 0,
+        "sio_out": 0,
+        "cyw43_poll": 0,
+        "gpio23_status": 0,
+        "gpio23_ctrl": 31,
+        "sta_active": false,
+        "ap_active": false,
+        "gpio25_ctrl": 31,
+        "sio_oe": 8388608
+      },
+      "after": {
+        "gpio25_status": 8192,
+        "sio_out": 0,
+        "cyw43_poll": 0,
+        "gpio23_status": 8192,
+        "gpio23_ctrl": 5,
+        "sta_active": false,
+        "ap_active": false,
+        "gpio25_ctrl": 5,
+        "sio_oe": 41943040
+      },
+      "helper_sha256": "e42a5f2536eef22308c90d51629a47b920098ab7e37e6ce3a67abfeb80bb1907"
+    },
+    {
+      "helper_passed": true,
+      "host_time": 1790667457.8699777,
+      "trial": 2,
+      "before": {
+        "gpio25_status": 0,
+        "sio_out": 0,
+        "cyw43_poll": 0,
+        "gpio23_status": 0,
+        "gpio23_ctrl": 31,
+        "sta_active": false,
+        "ap_active": false,
+        "gpio25_ctrl": 31,
+        "sio_oe": 8388608
+      },
+      "after": {
+        "gpio25_status": 8192,
+        "sio_out": 0,
+        "cyw43_poll": 0,
+        "gpio23_status": 8192,
+        "gpio23_ctrl": 5,
+        "sta_active": false,
+        "ap_active": false,
+        "gpio25_ctrl": 5,
+        "sio_oe": 41943040
+      },
+      "helper_sha256": "e42a5f2536eef22308c90d51629a47b920098ab7e37e6ce3a67abfeb80bb1907"
+    },
+    {
+      "helper_passed": true,
+      "host_time": 1790667458.8585622,
+      "trial": 3,
+      "before": {
+        "gpio25_status": 0,
+        "sio_out": 0,
+        "cyw43_poll": 0,
+        "gpio23_status": 0,
+        "gpio23_ctrl": 31,
+        "sta_active": false,
+        "ap_active": false,
+        "gpio25_ctrl": 31,
+        "sio_oe": 8388608
+      },
+      "after": {
+        "gpio25_status": 8192,
+        "sio_out": 0,
+        "cyw43_poll": 0,
+        "gpio23_status": 8192,
+        "gpio23_ctrl": 5,
+        "sta_active": false,
+        "ap_active": false,
+        "gpio25_ctrl": 5,
+        "sio_oe": 41943040
+      },
+      "helper_sha256": "e42a5f2536eef22308c90d51629a47b920098ab7e37e6ce3a67abfeb80bb1907"
+    }
+  ],
+  "ordinary_resets": [
+    {
+      "host_start": 1790667227.3071344,
+      "host_finish": 1790667227.937283,
+      "trial": 1,
+      "before": {
+        "sta_active": false,
+        "wdt_enabled": false,
+        "ap_active": false
+      },
+      "after": {
+        "cause": 3
+      },
+      "same_device_uid": true,
+      "outcome": "PASS"
+    },
+    {
+      "host_start": 1790667456.9481812,
+      "host_finish": 1790667457.5930486,
+      "trial": 2,
+      "before": {
+        "sta_active": false,
+        "wdt_enabled": false,
+        "ap_active": false
+      },
+      "after": {
+        "cause": 3
+      },
+      "same_device_uid": true,
+      "outcome": "PASS"
+    },
+    {
+      "host_start": 1790667458.0685093,
+      "host_finish": 1790667458.5962589,
+      "trial": 3,
+      "before": {
+        "sta_active": false,
+        "wdt_enabled": false,
+        "ap_active": false
+      },
+      "after": {
+        "cause": 3
+      },
+      "same_device_uid": true,
+      "outcome": "PASS"
+    }
+  ],
+  "parser_tests": {
+    "outcome": "PASS",
+    "test_count": 11,
+    "duration_s": 0.005,
+    "tests": [
+      {
+        "name": "test_absent_udp_checksum_cannot_be_pass",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_byte_exact_roundtrip_without_compression",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_corrupt_ipv4_checksum_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_corrupt_udp_checksum_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_four_valid_checksums_and_target_transaction",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_interior_and_trailing_repeats_are_present",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_offer_request_ack_address_and_server_agree",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_router_metadata_and_relative_times",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_truncation_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_unexplained_gap_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_wrong_expected_ram_xid_rejected",
+        "outcome": "PASS"
+      }
+    ],
+    "scope": "Saved private packet reconstruction/parser checks; not a fresh hardware test."
+  },
+  "limitations": [
+    "Router-side capture does not itself prove Wi-Fi delivery to the board.",
+    "No saved target frames means none observed at this capture point, not proof that no radio frame was transmitted.",
+    "Private parser requires non-empty input; genuinely empty frozen snapshots are counted without invoking it.",
+    "RAM observations are external telemetry; packet XID matching correlates the observations.",
+    "RAM signed XID is preserved as xid and additionally normalized to xid_u32 using & 0xffffffff.",
+    "Failed helper/host preconditions are not counted as failed DHCP connection results.",
+    "A BADAUTH join-state sample does not by itself prove wrong credentials.",
+    "PM order is sequential, not randomized; these samples cannot establish a universal PM fix.",
+    "Power consumption and cycle energy were not measured."
+  ]
+}

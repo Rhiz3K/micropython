@@ -1,0 +1,125 @@
+{
+  "gdb_expressions": [
+    {
+      "expression": "p/x &cyw43_state",
+      "value": "0x20004dcc"
+    },
+    {
+      "expression": "p/x &cyw43_state.dhcp_client",
+      "value": "0x200058a0"
+    },
+    {
+      "expression": "p/x &cyw43_state.netif[0]",
+      "value": "0x200056b0"
+    },
+    {
+      "expression": "p/x &cyw43_state.netif[0].flags",
+      "value": "0x20005799"
+    },
+    {
+      "expression": "p/x &cyw43_state.netif[0].ip_addr",
+      "value": "0x200056b4"
+    },
+    {
+      "expression": "p/x &cyw43_state.wifi_join_state",
+      "value": "0x20005638"
+    },
+    {
+      "expression": "p/x &cyw43_state.itf_state",
+      "value": "0x2000562c"
+    },
+    {
+      "expression": "p/x &cyw43_state.netif[0].client_data[0]",
+      "value": "0x20005778"
+    },
+    {
+      "expression": "p/x &mp_network_soft_timer",
+      "value": "0x20007b54"
+    },
+    {
+      "expression": "p/x &cyw43_poll",
+      "value": "0x20004dc4"
+    },
+    {
+      "expression": "p/x &cyw43_sleep",
+      "value": "0x20004dc8"
+    },
+    {
+      "expression": "p/x &dhcp_pcb",
+      "value": "0x20005a4c"
+    },
+    {
+      "expression": "p/x &if_active",
+      "value": "0x2000891e"
+    },
+    {
+      "expression": "p/x (unsigned int)&((struct dhcp *)0)->pcb_allocated",
+      "value": "0x4"
+    },
+    {
+      "expression": "p/x (unsigned int)&((struct dhcp *)0)->state",
+      "value": "0x5"
+    },
+    {
+      "expression": "p/x (unsigned int)&((struct dhcp *)0)->tries",
+      "value": "0x6"
+    },
+    {
+      "expression": "p/x (unsigned int)&((struct dhcp *)0)->request_timeout",
+      "value": "0x8"
+    },
+    {
+      "expression": "p/x (unsigned int)&((soft_timer_entry_t *)0)->mode",
+      "value": "0x12"
+    },
+    {
+      "expression": "p/x (unsigned int)&((soft_timer_entry_t *)0)->expiry_ms",
+      "value": "0x14"
+    }
+  ],
+  "struct_layout_lines": [
+    "/* offset      |    size */  type = struct dhcp {",
+    "/*      0      |       4 */    u32_t xid;",
+    "/*      4      |       1 */    u8_t pcb_allocated;",
+    "/*      5      |       1 */    u8_t state;",
+    "/*      6      |       1 */    u8_t tries;",
+    "/*      7      |       1 */    u8_t flags;",
+    "/*      8      |       2 */    dhcp_timeout_t request_timeout;",
+    "/*     10      |       2 */    dhcp_timeout_t t1_timeout;",
+    "/*     12      |       2 */    dhcp_timeout_t t2_timeout;",
+    "/*     14      |       2 */    dhcp_timeout_t t1_renew_time;",
+    "/*     16      |       2 */    dhcp_timeout_t t2_rebind_time;",
+    "/*     18      |       2 */    dhcp_timeout_t lease_used;",
+    "/*     20      |       2 */    dhcp_timeout_t t0_timeout;",
+    "/* XXX  2-byte hole      */",
+    "/*     24      |      24 */    ip_addr_t server_ip_addr;",
+    "/*     48      |       4 */    ip4_addr_t offered_ip_addr;",
+    "/*     52      |       4 */    ip4_addr_t offered_sn_mask;",
+    "/*     56      |       4 */    ip4_addr_t offered_gw_addr;",
+    "/*     60      |       4 */    u32_t offered_t0_lease;",
+    "/*     64      |       4 */    u32_t offered_t1_renew;",
+    "/*     68      |       4 */    u32_t offered_t2_rebind;",
+    "                               /* total size (bytes):   72 */",
+    "/*      0      |      16 */    mp_pairheap_t pairheap;",
+    "/*     16      |       2 */    uint16_t flags;",
+    "/*     18      |       2 */    uint16_t mode;",
+    "/*     20      |       4 */    uint32_t expiry_ms;",
+    "/*     24      |       4 */    uint32_t delta_ms;",
+    "/*     28      |       4 */    union {",
+    "/*                     4 */        void (*c_callback)(struct _soft_timer_entry_t *);",
+    "/*                     4 */        mp_obj_t py_callback;",
+    "                                   /* total size (bytes):    4 */",
+    "                               /* total size (bytes):   32 */"
+  ],
+  "notes": [
+    "Addresses apply only to the exact historical ELF recorded privately, not a newly built firmware.",
+    "Read-only individual telemetry reads are not an atomic snapshot and can straddle callbacks.",
+    "request_timeout is a count of 500 ms DHCP fine-timer intervals.",
+    "timer_expiry_ms uses a uint32 millisecond domain; do not subtract MicroPython ticks_ms without conversion.",
+    "wifi_join_state & 0x0f == 4 is driver BADAUTH; netif flags 0x04 and 0x01 are LINK_UP and UP."
+  ],
+  "recorded_artifact_sha256": [
+    "26dfaffbc72e158d073ab4b55cb469097f2c148e03ede8061d58be974044337b",
+    "77aea5317b92dae8bc486911170e2f7d4a27cb564d33bb116d14689f6ca2f32a"
+  ]
+}

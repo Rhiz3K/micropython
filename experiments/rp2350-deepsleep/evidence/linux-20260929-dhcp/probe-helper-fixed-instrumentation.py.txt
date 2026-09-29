@@ -1,0 +1,4 @@
+instrumented=helper.replace('    was_connected = sta.isconnected()', '    _sd_trace.clear()\n    was_connected = sta.isconnected()')
+instrumented=instrumented.replace('        sta.disconnect()', '        _sd_trace.append(_sd_probe("before_disconnect"))\n        sta.disconnect()\n        _sd_trace.append(_sd_probe("disconnect_returned"))')
+instrumented=instrumented.replace('            if sta.status() <= 0', '            _sd_trace.append(_sd_probe("poll"))\n            if sta.status() <= 0')
+instrumented=instrumented.replace('        sta.active(False)', '        _sd_trace.append(_sd_probe("before_active_false"))\n        sta.active(False)')

@@ -23,10 +23,25 @@ power-off allowed repeated DHCP/HTTP after reset, deep sleep and the original
 application's lightsleep/soft-reset path. This is application preparation,
 not a change to the core deepsleep deadline or a guarantee for every AP.
 The patched original application and new firmware are installed; 28 other
-original files were verified unchanged and the application is stopped in REPL.
+original files were verified unchanged and the application was stopped in REPL
+on the **Mac test board on 28 September**.
 Complete application-cycle energy and the full production application flow
 remain unverified. The [previous report](RESULTS-EXTENDED-MAC-20260927.md)
 retains all original failures and the earlier rollback evidence.
+
+The **29 September Linux follow-up** used a different Pico 2 W, a B/W/R V4
+panel and a MikroTik network. Its [initial tests](RESULTS-LINUX-20260929.md)
+passed six controlled alarm wakes but also found two DHCP timeouts. The
+[subsequent packet/RAM diagnostics](RESULTS-DHCP-LINUX-20260929.md) found three
+more timeouts in 15 connections, with no sleep between the PM comparison
+attempts. PM_NONE did not eliminate the failure. Router registrations and
+driver state indicate unstable Wi-Fi association/authentication, but the event
+reason is unresolved. No new current or cycle-energy measurement was made.
+Two hardware-verified fixes to the experimental Python preparation helper
+handle a never-initialized GP23 mux and an already-down link retaining BADAUTH.
+They do not modify this core patch, resolve Wi-Fi authentication, or install
+an application change on that board. The Linux firmware and all 37 files were
+left unchanged by this diagnostic follow-up.
 
 ### Implementation
 

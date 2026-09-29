@@ -1,0 +1,17 @@
+
+_st=network.WLAN(network.STA_IF)
+_deadline=time.ticks_ms()
+_bad=False
+while time.ticks_diff(time.ticks_ms(),_deadline)<10000:
+    if _st.isconnected() and machine.mem32[0x20005638]&15==4:
+        _bad=True
+        break
+    time.sleep_ms(100)
+_diag_emit('shutdown_target',bad_auth_while_connected=_bad,status=_st.status(),connected=_st.isconnected(),dhcp_memory=_dhcp_memory())
+try:
+    radio_off_and_disable_vsys_monitor()
+    _require_sio_low_output(23)
+    _require_sio_low_output(25)
+    _diag_emit('shutdown_result',ok=True,sta_active=_st.active(),ap_active=network.WLAN(network.AP_IF).active(),pins_verified_low=True)
+finally:
+    _diag_emit('shutdown_snapshot',samples=_sd_trace)

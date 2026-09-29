@@ -1,0 +1,25 @@
+# Mandatory guard before using this exact ELF's hardcoded RAM addresses.
+# Derived standalone equivalent plus an added board-model check.
+# This standalone guard fragment was not executed as-is in the recorded run.
+import sys
+
+if (
+    sys.implementation.name != "micropython"
+    or sys.platform != "rp2"
+    or getattr(sys.implementation, "_machine", "")
+    != "Raspberry Pi Pico 2 W with RP2350"
+):
+    raise RuntimeError("This probe requires the identified Pico 2 W RP2350 firmware")
+
+import uctypes
+import binascii
+import hashlib
+
+_h = hashlib.sha256()
+for _offset in range(0, 889792, 16384):
+    _h.update(uctypes.bytearray_at(0x10000000 + _offset, min(16384, 889792 - _offset)))
+_expected_bin_sha256 = (
+    "77aea5317b92dae8bc486911170e2f7d4a27cb564d33bb116d14689f6ca2f32a"
+)
+if binascii.hexlify(_h.digest()).decode() != _expected_bin_sha256:
+    raise RuntimeError("Firmware BIN mismatch; regenerate telemetry addresses from its ELF")

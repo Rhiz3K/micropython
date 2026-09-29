@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "scope": "Helper regressions after capture19; not part of the historical PM A/B group.",
+  "portable_regressions": [
+    {
+      "phase": "before",
+      "metadata": {
+        "host_time": 1790668310.6048598,
+        "status": "FAIL",
+        "helper_sha256": "079e5d0ac2a403bc0112a961d4caf0a8eeeb4b6c81e55191f18eb6d93ec41f19",
+        "probe_sha256": "fd5293c4cd7e68ea00ea7341cfd0ef3cd88f33966f6cedc73d3a400124cf3e45"
+      },
+      "records": [
+        {
+          "reset_cause": 3,
+          "helper_called": false,
+          "fresh_boot_and_stopped_workers_are_operator_preconditions": true,
+          "status": "READY",
+          "stage": "preconditions",
+          "before_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "before_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          }
+        },
+        {
+          "reset_cause": 3,
+          "helper_called": true,
+          "fresh_boot_and_stopped_workers_are_operator_preconditions": true,
+          "status": "FAIL",
+          "stage": "helper",
+          "error_type": "OSError",
+          "error": "Expected SIO output low on GPIO 23",
+          "before_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "after_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "before_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          },
+          "after_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "metadata": {
+        "host_time": 1790668310.8100088,
+        "status": "PASS",
+        "helper_sha256": "e42a5f2536eef22308c90d51629a47b920098ab7e37e6ce3a67abfeb80bb1907",
+        "probe_sha256": "fd5293c4cd7e68ea00ea7341cfd0ef3cd88f33966f6cedc73d3a400124cf3e45"
+      },
+      "records": [
+        {
+          "reset_cause": 3,
+          "helper_called": false,
+          "fresh_boot_and_stopped_workers_are_operator_preconditions": true,
+          "status": "READY",
+          "stage": "preconditions",
+          "before_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "before_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          }
+        },
+        {
+          "reset_cause": 3,
+          "helper_called": true,
+          "fresh_boot_and_stopped_workers_are_operator_preconditions": true,
+          "status": "PASS",
+          "stage": "postconditions",
+          "before_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "after_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "before_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          },
+          "after_pins": {
+            "23": {
+              "pad": 82,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 8192,
+              "ctrl": 5
+            },
+            "25": {
+              "pad": 82,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 8192,
+              "ctrl": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "metadata": {
+        "host_time": 1790668517.5297623,
+        "status": "PASS",
+        "helper_sha256": "07f9a63cdc3f969c5eea7ee5c9a98821082313134457ddd759e5824172df1ecf",
+        "probe_sha256": "fd5293c4cd7e68ea00ea7341cfd0ef3cd88f33966f6cedc73d3a400124cf3e45"
+      },
+      "records": [
+        {
+          "reset_cause": 3,
+          "helper_called": false,
+          "fresh_boot_and_stopped_workers_are_operator_preconditions": true,
+          "status": "READY",
+          "stage": "preconditions",
+          "before_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "before_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          }
+        },
+        {
+          "reset_cause": 3,
+          "helper_called": true,
+          "fresh_boot_and_stopped_workers_are_operator_preconditions": true,
+          "status": "PASS",
+          "stage": "postconditions",
+          "before_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "after_radio": {
+            "ble_active": false,
+            "sta_active": false,
+            "ap_active": false
+          },
+          "before_pins": {
+            "23": {
+              "pad": 274,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 0,
+              "ctrl": 31
+            },
+            "25": {
+              "pad": 278,
+              "sio_out": false,
+              "sio_oe": false,
+              "status": 0,
+              "ctrl": 31
+            }
+          },
+          "after_pins": {
+            "23": {
+              "pad": 82,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 8192,
+              "ctrl": 5
+            },
+            "25": {
+              "pad": 82,
+              "sio_out": false,
+              "sio_oe": true,
+              "status": 8192,
+              "ctrl": 5
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "ordinary_resets": [
+    {
+      "host_start": 1790668285.3784137,
+      "host_finish": 1790668287.0514407,
+      "trial": 4,
+      "before": {
+        "sta_active": false,
+        "wdt_enabled": false,
+        "ap_active": false
+      },
+      "after": {
+        "cause": 3
+      },
+      "same_device_uid": true,
+      "outcome": "PASS"
+    },
+    {
+      "host_start": 1790668512.5984194,
+      "host_finish": 1790668513.1358862,
+      "trial": 5,
+      "before": {
+        "sta_active": false,
+        "wdt_enabled": false,
+        "ap_active": false
+      },
+      "after": {
+        "cause": 3
+      },
+      "same_device_uid": true,
+      "outcome": "PASS"
+    }
+  ],
+  "shutdown_fix1": {
+    "probe_source_hashes": {
+      "base_helper_sha256": "07f9a63cdc3f969c5eea7ee5c9a98821082313134457ddd759e5824172df1ecf",
+      "instrumented_helper_sha256": "18582399f16350f16bc03dba0e37963cea68dd0b9fb46b67185a4168d559291f"
+    },
+    "connection_result": {
+      "ticks_ms": 188148,
+      "elapsed_ms": 3221,
+      "dhcp_bound": true,
+      "status": 3,
+      "ok": true,
+      "radio_left_active": true,
+      "http_ok": true,
+      "kind": "result"
+    },
+    "shutdown_result": {
+      "ticks_ms": 190111,
+      "ok": true,
+      "ap_active": false,
+      "sta_active": false,
+      "pins_verified_low": true,
+      "kind": "shutdown_result"
+    },
+    "packet_capture": "NOT_RUN"
+  },
+  "total_connections_including_helper_regression": {
+    "attempts": 15,
+    "PASS": 12,
+    "FAIL": 3
+  },
+  "total_ordinary_resets": 5,
+  "final_state": {
+    "host_finished": 1790668524.9955113,
+    "filesystem_files": 37,
+    "filesystem_unchanged": true,
+    "backup_regions_restored": true,
+    "rtc_unchanged_and_elapsed_time_verified": true,
+    "rtc_target_epoch": 1609467343,
+    "friendly_repl_verified": true,
+    "display_driven": false,
+    "panel_sleep_verified": false,
+    "flash_writes": 0,
+    "firmware_flashed": false,
+    "radio_pins_verified_low": true,
+    "firmware_program_sha256": "77aea5317b92dae8bc486911170e2f7d4a27cb564d33bb116d14689f6ca2f32a",
+    "metadata": {
+      "gpio23_out": false,
+      "freq": 150000000,
+      "rtc_epoch": 1609467344,
+      "gpio25_out": false,
+      "cause": 3,
+      "sta_active": false,
+      "ap_active": false,
+      "wdt_enabled": false,
+      "ble_active": false
+    },
+    "same_device_uid_as_initial": true
+  }
+}
