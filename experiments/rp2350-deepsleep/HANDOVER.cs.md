@@ -1,5 +1,9 @@
 # Handover: RP2350 deepsleep, Linux a Mac
 
+Pro pokračování na PC s měřákem použij také
+[samostatný měřicí handover](HANDOVER-METER.cs.md): aktuální kandidát,
+převzetí tamní desky, 100 cyklů, 30/75 minut a srovnávací měření.
+
 Aktualizováno **29. 9. 2026**. Poslední uspávací/resetová sada původní linuxové
 desky skončila **09:22:02 UTC**; v **09:45:21 UTC** následovalo pouze čtení
 identity a LPOSC OTP bez resetu. Je na ní ARM kandidát `2445a04bf` s opravami
