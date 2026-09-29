@@ -1,10 +1,17 @@
-# Handover: pokračování na druhém PC a druhé desce
+# Handover: RP2350 deepsleep, Linux a Mac
 
 Aktualizováno **29. 9. 2026**. Cílem je pokračovat v ověřování časovaného
 RP2350 deepsleep, USB a Wi-Fi na cílovém PC a jeho skutečné desce.
-Při tomto předání se **neotevíral USB port, neresetovala ani nepřepisovala deska**.
-Níže uvedené stavy hardware jsou poslední zaznamenaná pozorování, nikoli
-nové ověření dnešního zapojení.
+Nejnovější ověření původní linuxové desky skončilo **29. 9. v 06:23:50 UTC**:
+nový ARM firmware je nahraný, původní soubory/backup registry/RTC obnovené
+a friendly REPL odpovídá. Zapojení je USB + **Pico-ePaper-2.9 B/W/R V4**,
+označení panelu potvrdil uživatel. Podrobnosti a zachovaná selhání obsahují
+[dnešní linuxové výsledky](RESULTS-LINUX-20260929.md).
+
+**Wi-Fi není vyřešena univerzálně:** tři kontrolované návraty z deepsleep
+s DHCP/HTTP prošly, ale další dva pokusy zůstaly bez DHCP adresy při
+funkčním USB. Jeden následoval po běžném resetu, druhý ještě před jakýmkoli
+dalším spánkem/resetem. Mac úspěchy proto nepřenášet na zdejší MikroTik síť.
 
 ## 1. Co převzít
 
@@ -14,7 +21,9 @@ nové ověření dnešního zapojení.
   [`0f193e89cbb0246ca4d967e1ad98db28304a031c`](https://github.com/Rhiz3K/micropython/commit/0f193e89cbb0246ca4d967e1ad98db28304a031c).
   Obsahuje GP25 přípravu v core, rozšířené testy, Wi-Fi helper, TinyUSB patch
   a anonymizované důkazy. Je pushnutý; při přípravě předání se ověřila shoda
-  lokálního a vzdáleného commitu. Následující commit tohoto předání mění jen dokumentaci.
+  lokálního a vzdáleného commitu. Navazující předání mění dokumentaci a důkazy;
+  dnešní Linux kandidát byl sestaven ze zdrojového commitu
+  `6f95bf43caab2f2ba693cbf91e82214e5b59f874` s níže uvedeným USB patchem.
 - **Upstream PR nebyl založen a celek stále není ready pro upstream.**
   Používá se stávající Git identita. Podle přání uživatele nepřidávat
   `Signed-off-by` ani vymýšlet skutečné jméno/e-mail. Případné budoucí
@@ -23,6 +32,8 @@ nové ověření dnešního zapojení.
   je úmyslně lokálně upravený**. Gitlink zůstává na `b549ac1d…`.
   Přesný [TinyUSB patch](tinyusb-ep0-queue.patch) je uložený v hlavním repozitáři,
   ale nový klon jej musí zvlášť aplikovat. Samotné `git clone` nestačí.
+  Oprava je nyní aplikovaná i v původním linuxovém checkoutu; úmyslně
+  upravený submodul nepřepisovat při aktualizaci zdrojů.
 - `firmware.patch`, `tests.patch` a `combined-upstream.patch` jsou podklady
   proti upstream základu `09f5bb447504a058376c62fe991b3613531837e6`.
   **Core/test změny už jsou v této větvi; tyto tři patche na ni znovu neaplikovat.**
@@ -31,10 +42,11 @@ nové ověření dnešního zapojení.
 Čti v tomto pořadí:
 
 1. Tento handover.
-2. [USB/Wi-Fi: opravy, testy a nasazení 28. 9.](RESULTS-USB-WIFI-MAC-20260928.md).
-3. [Společný P1.7/GP25 kandidát a rozšířené testy 27. 9.](RESULTS-EXTENDED-MAC-20260927.md).
-4. [Opt-in hardware testy a formát privátního manifestu](../../tests/ports/rp2/deepsleep/README.md).
-5. Podle úkolu [Mac funkční testy](RESULTS-MAC-20260927.md),
+2. [Linux: nové ověření a DHCP selhání 29. 9.](RESULTS-LINUX-20260929.md).
+3. [USB/Wi-Fi: opravy, testy a nasazení na Macu 28. 9.](RESULTS-USB-WIFI-MAC-20260928.md).
+4. [Společný P1.7/GP25 kandidát a rozšířené testy 27. 9.](RESULTS-EXTENDED-MAC-20260927.md).
+5. [Opt-in hardware testy a formát privátního manifestu](../../tests/ports/rp2/deepsleep/README.md).
+6. Podle úkolu [Mac funkční testy](RESULTS-MAC-20260927.md),
    [displejová optimalizace](POWER-OPT-MAC-20260927.md),
    [GP25 měření](POWER-GP25-MAC-20260927.md) a [návrh upstream PR](upstream-pr.md).
 
@@ -46,9 +58,9 @@ Jejich tehdejší „aktuální stav“ nepřebírat jako dnešní stav cílové
 
 | Deska | Poslední zaznamenaný stav | Co z něj nelze odvodit |
 | --- | --- | --- |
-| Původní Pico 2 W na linuxovém PC | Dříve prošlo 100 krátkými spánky. Po Wi-Fi trasování `wlan.config(trace=7)` 26. 9. přestalo odpovídat USB. Obnova fyzickým odpojením tehdy nebyla potvrzená; soukromé zálohy jsou na původním PC. | Že je dnes stále zaseklé, že má nový USB fix nebo že se na něj vztahuje Mac nasazení. |
+| Původní Pico 2 W na linuxovém PC | **29. 9. nově ověřeno.** Reagovalo na REPL; vznikla čerstvá 4MiB/37souborová záloha, byl nahrán ARM kandidát s USB fixem. Prošly dvě sady po třech alarmových návratech a pět běžných resetů. Po obnově vstupních dat zůstalo ve friendly REPL, rádio a watchdog vypnuté. | Že jsou opravená všechna Wi-Fi selhání, že panel spí, že je změřený odběr nebo že nyní běží soukromá aplikace. |
 | Nové Pico 2 W na Macu | Nasazení ověřeno **28. 9. v 09:06:56 UTC**: nový firmware, 29 souborů, z toho 28 původních byteově totožných a cíleně upravený `main.py`. Zůstalo ve friendly REPL, rádio vypnuté, panel zaparkovaný; nebylo v deepsleep. Guard odstraněný, backup slova obnovená, RTC ověřené. | Že po pozdějším přepojení stále stojí v REPL. Reset spustí upravenou původní aplikaci. |
-| Deska připojená při novém pokračování | **Zatím neověřeno.** Nejdřív zjistit skutečný model, UID, aktuální firmware a zapojení. | Že jde automaticky o jednu z předchozích desek nebo že na ni patří jejich manifest/flash backup. |
+| Deska při dalším předání | Identitu i živý stav ověřit znovu. Linux i Mac mají vlastní privátní manifesty a zálohy. | Že reset, přesun kabelu nebo jiný host zachoval zde popsaný konečný stav. |
 
 Mac sestava měla stále připojený Waveshare **Pico-ePaper-2.9 B/W V2, 296×128**.
 Napájení při pozdějších testech: hub → vstup JT-UM120 → výstup JT-UM120 → Pico;
@@ -61,6 +73,16 @@ Mac firmware zůstává historicky označen
 Vznikl před commitem `0f193e89c`; starší hash v runtime není důkazem,
 že opravy chybějí. Nový build na druhém PC bude mít vlastní verzi/hash.
 
+Linux firmware nyní hlásí
+`v1.30.0-preview.90.g6f95bf43ca.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)`.
+Jeho UF2 SHA256 je
+`ac9dd70af30cd96d6250d6d4b539cdd2baad12672db94b238691b0720902a721`.
+Po nahrání se ověřila shoda programové oblasti s BIN. Konečných 37 souborů
+odpovídá dnešní vstupní záloze. Vstupní `main.py` byl už starší testovací
+harness, a ten je obnovený: po resetu čeká na GO, nikoli na autonomní běh
+původní aplikace. **Linux B/W/R V4 nebyl uspáván ani překreslován**; nepoužívat
+na něj helper určený pro Mac B/W V2 bez nové kontroly ovladače a pinů.
+
 ## 3. Co funguje a co ještě není prokázané
 
 | Oblast | Přesný rozsah důkazů |
@@ -71,6 +93,7 @@ Vznikl před commitem `0f193e89c`; starší hash v runtime není důkazem,
 | TinyUSB chyba | Upstream `a0249ada…` opravuje únik počítadla SETUP při plné frontě. Nativní mockovaný C test: před opravou FAIL 1/1, po opravě PASS 1/1, celá sada 7/7 a s přidaným testem pořadí 8/8. |
 | Původní výpadky USB | Logy Macu dokládají skutečné chyby enumerace. Jejich příčinná souvislost s opravenou chybou TinyUSB **není prokázaná**; kontrolní firmware v nové sadě také procházel. |
 | Wi-Fi | Samotné vypnutí bez odhlášení reprodukovalo tři neúspěchy, i bez resetu. Odhlášení a vyčkání na lokální link-down před vypnutím prošlo kontrolovanými testy. Celkem 54 úspěšných DHCP/HTTP transakcí; jedna seed transakce použila již připojenou STA. |
+| Linux kandidát 29. 9. | 6 alarmových návratů v dokončených sadách, další 1 později ověřený po hostitelském `BrokenPipe`, 5 běžných resetů s USB. Síť: 7 úspěšných DHCP/HTTP, 2 DHCP timeouty. Argumenty/hard IRQ/lightsleep frekvence a čas PASS. Žádné nové měření, 100cyklová či dlouhá sada. |
 | Běžná cesta původní aplikace | Přesná funkce vypnutí Wi-Fi prošla v RAM; navíc 3× `lightsleep(2500) → soft_reset` a opětovné DHCP/HTTP. Celá soukromá aplikace s reálným serverem a displejem nebyla po nasazení znovu spuštěna. |
 | Spotřeba s displejem | Historicky přibližně 3,82 → 0,60 → 0,37 mA na USB vstupu sestavy; poslední krok byl GP25. Nejde o odběr samotného RP2350, garantovanou hodnotu jiné desky ani dnešní REPL. S USB kandidátem se proud znovu neměřil. |
 | Dlouhé spánky a displej | 30/75 minut a dřívější nové obrazy B prošly na dřívějším Mac firmwaru; nikoli automaticky na novém USB buildu nebo druhé desce. |
@@ -80,6 +103,12 @@ BLE/AP přenosy s protějškem, zbývající kombinované/regresní sady, nový 
 běh a měření USB kandidáta, fyzické jiné desky a RISC-V.
 Všechny FAIL/NOT RUN zachovat; příchod USB, aktivace rádia a úspěšný HTTP přenos
 jsou různé kontroly.
+
+Tabulkové Mac Wi-Fi úspěchy neznamenají spolehlivost na Linux/MikroTik:
+29. 9. nastaly dva timeouty při status 2 bez IPv4 i s řízeným odhlášením.
+První nastal po běžném resetu, další bez resetu před lightsleep; všechny
+plánované síťové lightsleep/soft-reset cykly proto zůstaly neprovedené.
+Stávající bound lease na routeru není důkaz nového DHCP handshake.
 
 ## 4. Převzetí zdrojů a build na druhém PC
 
@@ -246,13 +275,17 @@ Na jiném panelu nepřebírat GPIO registry ani uspávací sekvenci bez ověřen
 
 ## 7. Doporučené navazující ověření
 
-1. Identita, dnešní stav a vlastní záloha cílové desky; malá USB/reset sada
+1. Při novém připojení identita, dnešní stav a vlastní záloha cílové desky; malá USB/reset sada
    a 3 krátké alarmové návraty. Při novém USB FAIL uložit čas a log hostu;
    podle potřeby srovnat přímé připojení s hubem, nikoli zaměnit výsledek jiné desky.
-2. Wi-Fi: cold boot, běžný reset, krátký deepsleep a lightsleep/soft-reset
+2. Na Linux/MikroTik nejprve odděleně diagnostikovat zbývající DHCP timeouty:
+   zachytit DHCP výměnu a klientský stav při status 2 bez riskantního `trace=7`.
+   Předchozí samostatný recovery prošel, ale další pokus opět selhal; opakování
+   není doložená oprava. Wi-Fi scénáře: cold boot, běžný reset, krátký deepsleep a lightsleep/soft-reset
    s řízeným odhlášením. Po každém návratu ověřit nové spojení, DHCP a přesné
    HTTP tělo; DNS/TLS přidat samostatně, pokud jsou součástí reálné aplikace.
-3. Přečíst a cíleně integrovat aplikaci cílové desky; ověřit celý skutečný cyklus
+3. Případnou integraci soukromé aplikace řešit jako samostatný úkol; není
+   součástí firmware patche. Přečíst její skutečný zdroj a ověřit celý cyklus
    stažení → nový obraz → uspání → probuzení → další přenos. Funkční text na
    e-paperu vyžaduje vizuální kontrolu nového obrazu, ne pouze úspěšné SPI.
 4. Teprve potom širší profily STA/AP/BLE, regrese a dlouhé spánky. Pro 30/75 minut
@@ -283,6 +316,15 @@ Tyto zálohy patří Mac desce. Zálohy původní linuxové desky hledej na pův
 Pro práci pouze na firmwaru stačí nový klon a vlastní build; pro přenos
 konkrétní aplikace je potřeba také její skutečný privátní zdroj.
 
+Na původním Linux PC jsou dnešní zálohy, přesné host skripty, manifesty a logy
+v soukromém adresáři `~/.local/share/rp2350-deepsleep/takeover-linux-20260929/`.
+`current-flash-4MiB.bin` a obsahově ověřený `restore-current-full-flash.uf2`
+obnovují **stav před dnešní změnou**, nikoli dávnější původní aplikaci.
+Před jejich použitím znovu ověřit identitu a lokální kontrolní součty.
+Dnešní kandidát je `ports/rp2/build-linux-20260929-usbq1/firmware.uf2`.
+Soukromé `final-state-private.json` a filesystem manifest dokládají obnovu
+vstupních souborů, backup slov a RTC; nezveřejňovat celé soukromé adresáře.
+
 Kontrolní součty veřejných artefaktů jsou v `SHA256SUMS`; na Linuxu ověřit
 `sha256sum -c SHA256SUMS`, na Macu `shasum -a 256 -c SHA256SUMS` z této složky.
 
@@ -291,6 +333,9 @@ Kontrolní součty veřejných artefaktů jsou v `SHA256SUMS`; na Linuxu ověři
 > Převezmi https://github.com/Rhiz3K/micropython/blob/rp2/rp2350-timed-deepsleep/experiments/rp2350-deepsleep/HANDOVER.cs.md
 > a pokračuj na tomto PC a zde připojené desce. Poslední implementační commit
 > je 0f193e89cbb0246ca4d967e1ad98db28304a031c, navazující commit je handover.
+> Nejdřív přečti také RESULTS-LINUX-20260929.md: původní Linux Pico má nový
+> USB kandidát, připojený B/W/R V4 a při poslední kontrole funkční REPL.
+> Zůstávají dvě skutečná DHCP selhání; neoznačuj je za vyřešená Mac helperem.
 > Nejdřív ověř OS, zdroje, fyzickou identitu a současný stav desky; nesměšuj
 > původní linuxové Pico s Mac Picem a nepoužívej cizí flash zálohu/UID.
 > TinyUSB a024 je uložený patch, který nový klon nemá automaticky aplikovaný.

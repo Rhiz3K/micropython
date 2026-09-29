@@ -9,3 +9,5 @@ evidence/mac-20260927*/** -text
 evidence/mac-20260927*/*.csv whitespace=cr-at-eol
 # Keep generated SVG path formatting intact.
 evidence/mac-20260927*/*.svg -whitespace
+# Preserve the byte-identical Linux REPL transcript (CRLF from the device).
+evidence/linux-20260929/regressions.txt -text whitespace=cr-at-eol

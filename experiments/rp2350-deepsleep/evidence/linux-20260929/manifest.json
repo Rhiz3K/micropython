@@ -1,0 +1,362 @@
+{
+  "counting_notes": [
+    "Seven HTTP successes out of nine started probes includes seeds and the separate recovery; it is not seven sleep cycles.",
+    "Five ordinary reset checks are three standalone, one final minimal-suite reset, and one Wi-Fi profile reset.",
+    "Six controlled deep-wake records are three minimal-suite and three Wi-Fi v2 returns. One v1 alarm is independently observed later in v2 initial_state, not counted as a fourth v2 return.",
+    "The network lightsleep/soft-reset profiles never reached a lightsleep request. The separate regressions.txt lightsleep check did execute and passed.",
+    "Final-state PASS means restoration passed; the two DHCP failures and v1 host BrokenPipe failure remain failures."
+  ],
+  "device_tag": "original-linux-pico2w",
+  "files": {
+    "build-result.json": {
+      "added_json_paths": [],
+      "copy": "byte-identical",
+      "redacted_json_paths": [],
+      "source_basename": "build-result.json"
+    },
+    "candidate-usb.json": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "observed_counts": {
+        "initial_readback_records": 1,
+        "ordinary_reset_repl_records": 3
+      },
+      "record_count": 4,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].uid",
+        "$[1].uid",
+        "$[2].uid",
+        "$[3].uid"
+      ],
+      "source_basename": "candidate-usb-private.json"
+    },
+    "final-state.json": {
+      "added_json_paths": [
+        "$.metadata.device_tag",
+        "$.device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "interpretation": "Restoration and final REPL/radio-state checks only; not a claim that all earlier tests passed.",
+      "redacted_json_paths": [
+        "$.metadata.uid",
+        "$.restored_paths"
+      ],
+      "source_basename": "final-state-private.json",
+      "terminal_status": "PASS"
+    },
+    "minimal3.jsonl": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag",
+        "$[4].device_tag",
+        "$[5].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "observed_counts": {
+        "deep_wake_records": 3,
+        "final_ordinary_reset_pass_records": 1
+      },
+      "record_count": 6,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].usb_serial",
+        "$[1].uid",
+        "$[2].uid",
+        "$[3].uid",
+        "$[4].uid",
+        "$[5].uid"
+      ],
+      "source_basename": "minimal3-private.jsonl",
+      "terminal_status": "PASS"
+    },
+    "regressions.txt": {
+      "added_json_paths": [],
+      "copy": "byte-identical",
+      "observed_counts": {
+        "pass_lines": 8
+      },
+      "redacted_json_paths": [],
+      "source_basename": "regressions-private.txt",
+      "terminal_status": "PASS"
+    },
+    "wifi-dhcp-recovery.jsonl": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].metadata.device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag",
+        "$[4].device_tag",
+        "$[5].device_tag",
+        "$[6].device_tag",
+        "$[7].device_tag",
+        "$[8].device_tag",
+        "$[9].device_tag",
+        "$[10].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "observed_counts": {
+        "deep_wake_pass_records": 0,
+        "graceful_poweroff_pass_records": 1,
+        "http_transaction_pass_records": 1,
+        "ordinary_reset_pass_records": 0,
+        "ordinary_reset_request_records": 0,
+        "sleep_request_records": 0,
+        "wifi_probe_failed_result_records": 0,
+        "wifi_probe_start_records": 1
+      },
+      "record_count": 11,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].uid",
+        "$[1].metadata.uid",
+        "$[2].mac_hex"
+      ],
+      "source_basename": "wifi-dhcp-recovery-private.jsonl",
+      "terminal_status": "PASS"
+    },
+    "wifi-lightsleep-only.jsonl": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].metadata.device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag",
+        "$[4].device_tag",
+        "$[5].device_tag",
+        "$[6].device_tag",
+        "$[7].device_tag",
+        "$[8].device_tag",
+        "$[9].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "interpretation": "Seed connection timed out before any lightsleep or soft reset request. The planned three cycles were not run.",
+      "observed_counts": {
+        "http_transaction_pass_records": 0,
+        "lightsleep_request_records": 0,
+        "lightsleep_soft_reset_pass_records": 0,
+        "wifi_probe_failed_result_records": 1,
+        "wifi_probe_start_records": 1
+      },
+      "record_count": 10,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].uid",
+        "$[1].metadata.uid"
+      ],
+      "source_basename": "wifi-lightsleep-only-private.jsonl",
+      "terminal_error_type": "AssertionError",
+      "terminal_status": "FAIL"
+    },
+    "wifi-recovery-v2.jsonl": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].metadata.device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag",
+        "$[4].device_tag",
+        "$[5].device_tag",
+        "$[6].device_tag",
+        "$[7].device_tag",
+        "$[8].device_tag",
+        "$[9].device_tag",
+        "$[10].before.device_tag",
+        "$[10].device_tag",
+        "$[11].after.device_tag",
+        "$[11].device_tag",
+        "$[12].device_tag",
+        "$[13].device_tag",
+        "$[14].device_tag",
+        "$[15].device_tag",
+        "$[16].device_tag",
+        "$[17].device_tag",
+        "$[18].device_tag",
+        "$[19].device_tag",
+        "$[20].before.device_tag",
+        "$[20].device_tag",
+        "$[21].after.device_tag",
+        "$[21].device_tag",
+        "$[22].device_tag",
+        "$[23].device_tag",
+        "$[24].device_tag",
+        "$[25].device_tag",
+        "$[26].device_tag",
+        "$[27].device_tag",
+        "$[28].device_tag",
+        "$[29].before.device_tag",
+        "$[29].device_tag",
+        "$[30].after.device_tag",
+        "$[30].device_tag",
+        "$[31].device_tag",
+        "$[32].device_tag",
+        "$[33].device_tag",
+        "$[34].device_tag",
+        "$[35].device_tag",
+        "$[36].device_tag",
+        "$[37].device_tag",
+        "$[38].device_tag",
+        "$[39].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "observed_counts": {
+        "deep_wake_pass_records": 3,
+        "graceful_poweroff_pass_records": 4,
+        "http_transaction_pass_records": 4,
+        "ordinary_reset_pass_records": 0,
+        "ordinary_reset_request_records": 0,
+        "sleep_request_records": 3,
+        "wifi_probe_failed_result_records": 0,
+        "wifi_probe_start_records": 4
+      },
+      "record_count": 40,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].uid",
+        "$[1].metadata.uid",
+        "$[10].before.uid",
+        "$[11].after.uid",
+        "$[20].before.uid",
+        "$[21].after.uid",
+        "$[29].before.uid",
+        "$[30].after.uid"
+      ],
+      "source_basename": "wifi-recovery-v2-private.jsonl",
+      "terminal_status": "PASS"
+    },
+    "wifi-recovery.jsonl": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag",
+        "$[4].device_tag",
+        "$[5].device_tag",
+        "$[6].device_tag",
+        "$[7].device_tag",
+        "$[8].device_tag",
+        "$[9].before.device_tag",
+        "$[9].device_tag",
+        "$[10].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "observed_counts": {
+        "deep_wake_pass_records": 0,
+        "graceful_poweroff_pass_records": 1,
+        "http_transaction_pass_records": 1,
+        "ordinary_reset_pass_records": 0,
+        "ordinary_reset_request_records": 0,
+        "sleep_request_records": 1,
+        "wifi_probe_failed_result_records": 0,
+        "wifi_probe_start_records": 1
+      },
+      "record_count": 11,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].uid",
+        "$[9].before.uid"
+      ],
+      "source_basename": "wifi-recovery-private.jsonl",
+      "terminal_error_type": "BrokenPipeError",
+      "terminal_status": "FAIL"
+    },
+    "wifi-reset-lightsleep.jsonl": {
+      "added_json_paths": [
+        "$[0].device_tag",
+        "$[1].metadata.device_tag",
+        "$[1].device_tag",
+        "$[2].device_tag",
+        "$[3].device_tag",
+        "$[4].device_tag",
+        "$[5].device_tag",
+        "$[6].device_tag",
+        "$[7].device_tag",
+        "$[8].device_tag",
+        "$[9].before.device_tag",
+        "$[9].device_tag",
+        "$[10].after.device_tag",
+        "$[10].device_tag",
+        "$[11].device_tag",
+        "$[12].device_tag",
+        "$[13].device_tag",
+        "$[14].device_tag",
+        "$[15].device_tag",
+        "$[16].device_tag",
+        "$[17].device_tag",
+        "$[18].device_tag"
+      ],
+      "all_other_values_preserved": true,
+      "observed_counts": {
+        "deep_wake_pass_records": 0,
+        "graceful_poweroff_pass_records": 1,
+        "http_transaction_pass_records": 1,
+        "ordinary_reset_pass_records": 1,
+        "ordinary_reset_request_records": 1,
+        "sleep_request_records": 0,
+        "wifi_probe_failed_result_records": 1,
+        "wifi_probe_start_records": 2
+      },
+      "record_count": 19,
+      "record_order_preserved": true,
+      "redacted_json_paths": [
+        "$[0].uid",
+        "$[1].metadata.uid",
+        "$[9].before.uid",
+        "$[10].after.uid"
+      ],
+      "source_basename": "wifi-reset-lightsleep-private.jsonl",
+      "terminal_error_type": "AssertionError",
+      "terminal_status": "FAIL"
+    }
+  },
+  "limitations": [
+    "No deterministic reproduction of the original USB hang is claimed.",
+    "Native TinyUSB queue-full regression is historical Mac evidence, not rerun by this export.",
+    "A sleep/reset request is not a successful wake.",
+    "FAIL records are retained; later recovery does not turn the failed run into PASS.",
+    "The v1 alarm is observed retrospectively in v2 initial_state metadata and is excluded from v2 deep_wake_pass count.",
+    "No new 100-cycle, long-sleep, current or cycle-energy result."
+  ],
+  "observed_summary": {
+    "controlled_deep_wake_records": 6,
+    "lightsleep_soft_reset_network_cycles_executed": 0,
+    "ordinary_reset_repl_checks": 5,
+    "regression_pass_lines": 8,
+    "retrospective_prior_alarm_observations": 1,
+    "wifi_http_transactions_passed": 7,
+    "wifi_probe_attempts_started": 9,
+    "wifi_probe_failed_results": 2
+  },
+  "pending": [],
+  "private_sources_unchanged": true,
+  "redaction_policy": {
+    "device_tag_semantics": "Public pseudonym only; not derived from a UID or MAC. Added to each top-level device record and nested objects from which identifiers were removed.",
+    "excluded_content": [
+      "credentials",
+      "private source scripts",
+      "filesystem inventory and contents",
+      "full-flash backup and its hash",
+      "raw router output",
+      "IP addresses and MAC addresses"
+    ],
+    "method": "Explicit recursive key allowlist; unknown fields rejected. Device identifiers removed at every nesting depth. Remaining strings screened for addresses and private paths.",
+    "removed_field_names": [
+      "mac_hex",
+      "uid",
+      "usb_serial",
+      "restored_paths"
+    ],
+    "timestamps": "Original host_time, host_start and all device/elapsed timestamps are preserved unchanged.",
+    "uname": "Original five-element uname retained; nodename verified to be literal rp2."
+  },
+  "schema_version": 1,
+  "scope": "Completed bounded Linux takeover evidence collection on 2026-09-29; mixed results, including retained Wi-Fi failures."
+}

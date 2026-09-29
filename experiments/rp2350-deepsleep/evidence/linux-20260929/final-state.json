@@ -1,0 +1,26 @@
+{
+  "backup_regions_restored": true,
+  "device_tag": "original-linux-pico2w",
+  "display_driven": false,
+  "filesystem_all_restored": true,
+  "filesystem_files": 37,
+  "friendly_repl_verified": true,
+  "host_finished": 1790663030.2852654,
+  "metadata": {
+    "ap_active": false,
+    "cause": 3,
+    "device_tag": "original-linux-pico2w",
+    "freq": 150000000,
+    "gpio23_out": false,
+    "gpio25_out": false,
+    "model": "Raspberry Pi Pico 2 W with RP2350",
+    "rtc_epoch": 1609461850,
+    "sta_active": false,
+    "version": "v1.30.0-preview.90.g6f95bf43ca.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+    "wdt_enabled": false
+  },
+  "panel_sleep_verified": false,
+  "regression_checks": 8,
+  "rtc_restored_with_elapsed_host_time": true,
+  "rtc_target_epoch": 1609461850
+}

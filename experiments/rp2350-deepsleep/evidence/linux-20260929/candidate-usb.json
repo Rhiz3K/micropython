@@ -1,0 +1,61 @@
+[
+  {
+    "cause": 1,
+    "device_tag": "original-linux-pico2w",
+    "flash_sha256": "77aea5317b92dae8bc486911170e2f7d4a27cb564d33bb116d14689f6ca2f32a",
+    "host_time": 1790661986.2303476,
+    "uname": [
+      "rp2",
+      "rp2",
+      "1.30.0-preview",
+      "v1.30.0-preview.90.g6f95bf43ca.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+      "Raspberry Pi Pico 2 W with RP2350"
+    ],
+    "wdt_ctrl": 1073741824
+  },
+  {
+    "cause": 3,
+    "device_tag": "original-linux-pico2w",
+    "host_time": 1790661987.211785,
+    "index": 1,
+    "uname": [
+      "rp2",
+      "rp2",
+      "1.30.0-preview",
+      "v1.30.0-preview.90.g6f95bf43ca.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+      "Raspberry Pi Pico 2 W with RP2350"
+    ],
+    "usb_and_repl_elapsed_s": 0.9810915120178834,
+    "wdt_ctrl": 0
+  },
+  {
+    "cause": 3,
+    "device_tag": "original-linux-pico2w",
+    "host_time": 1790661987.7915833,
+    "index": 2,
+    "uname": [
+      "rp2",
+      "rp2",
+      "1.30.0-preview",
+      "v1.30.0-preview.90.g6f95bf43ca.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+      "Raspberry Pi Pico 2 W with RP2350"
+    ],
+    "usb_and_repl_elapsed_s": 0.579544659005478,
+    "wdt_ctrl": 0
+  },
+  {
+    "cause": 3,
+    "device_tag": "original-linux-pico2w",
+    "host_time": 1790661988.5709789,
+    "index": 3,
+    "uname": [
+      "rp2",
+      "rp2",
+      "1.30.0-preview",
+      "v1.30.0-preview.90.g6f95bf43ca.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+      "Raspberry Pi Pico 2 W with RP2350"
+    ],
+    "usb_and_repl_elapsed_s": 0.7790760499774478,
+    "wdt_ctrl": 0
+  }
+]

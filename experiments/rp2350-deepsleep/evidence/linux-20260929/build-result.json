@@ -1,0 +1,21 @@
+{
+  "source_commit": "6f95bf43caab2f2ba693cbf91e82214e5b59f874",
+  "board": "RPI_PICO2_W",
+  "platform": "rp2350-arm-s",
+  "tinyusb_patch_sha256": "ffbadfaa2a51af420e64e1bdb4fad55f1621646eb3bcd98e3d93eaa921076e4e",
+  "artifacts": {
+    "firmware.uf2": {
+      "bytes": 1780224,
+      "sha256": "ac9dd70af30cd96d6250d6d4b539cdd2baad12672db94b238691b0720902a721"
+    },
+    "firmware.bin": {
+      "bytes": 889792,
+      "sha256": "77aea5317b92dae8bc486911170e2f7d4a27cb564d33bb116d14689f6ca2f32a"
+    },
+    "firmware.elf": {
+      "bytes": 8653016,
+      "sha256": "26dfaffbc72e158d073ab4b55cb469097f2c148e03ede8061d58be974044337b"
+    }
+  },
+  "mac_reference_source_hashes_match": true
+}
