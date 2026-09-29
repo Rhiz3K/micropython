@@ -4,13 +4,13 @@
 Call only after all network/Bluetooth tasks, callbacks and other workers have
 stopped, and explicitly deactivate Bluetooth before calling if it was used.
 An active station is disconnected before its radio is powered off. The helper
-waits up to 500 ms for the driver's link-down state; the disconnect call itself
-also has a driver timeout. If a previously connected station does not report
-link-down, the radio and monitor path are still turned off, then OSError is
-raised. This verifies the local state, not receipt of a frame by the access point.
+waits up to 500 ms for a locally disconnected state (idle or connection error);
+the disconnect call itself also has a driver timeout. If a previously connected
+station does not report that state, the radio and monitor path are still turned
+off, then OSError is raised. This does not verify receipt of a frame by the AP.
 
-This function deinitializes both WLAN interfaces and verifies that
-GP23/WL_REG_ON is driven low before driving GP25/wireless CS low. The latter
+This function deinitializes both WLAN interfaces, explicitly drives
+GP23/WL_REG_ON low and verifies it before driving GP25/wireless CS low. The latter
 disables Pico 2 W's VSYS-to-ADC3 monitor path. It does not switch off VSYS or
 the Pico's main supply, and does not change USB or display registers/pins.
 
@@ -60,10 +60,12 @@ def radio_off_and_disable_vsys_monitor():
         sta.disconnect()
         started = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), started) < 500:
-            if sta.status() == 0 and not sta.isconnected():
+            # CYW43 can retain an auth error after its netif link goes down.
+            # Positive JOIN/NOIP/UP states must still block this confirmation.
+            if sta.status() <= 0 and not sta.isconnected():
                 break
             time.sleep_ms(20)
-        link_down = sta.status() == 0 and not sta.isconnected()
+        link_down = sta.status() <= 0 and not sta.isconnected()
         sta.active(False)
     if ap.active():
         ap.active(False)
@@ -72,6 +74,8 @@ def radio_off_and_disable_vsys_monitor():
     sta.deinit()
     if sta.active() or ap.active():
         raise OSError("Wireless interfaces are still active")
+    # An idle deinit may leave the reset mux on a never-initialized radio pin.
+    machine.Pin(23, machine.Pin.OUT, pull=None, value=0)
     _require_sio_low_output(23)
 
     machine.Pin(25, machine.Pin.OUT, pull=None, value=0)
