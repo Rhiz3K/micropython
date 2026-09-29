@@ -107,7 +107,7 @@ connection succeeds or the interface gets disabled.
 .. _Pico 2 W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#pico2w-technical-specification
 
 Timed deep sleep on Pico 2 (experimental)
-----------------------------------------
+-----------------------------------------
 
 The ARM builds for Pico 2 and Pico 2 W support an experimental timed power-down::
 
@@ -143,9 +143,8 @@ interrupt handler causes ``OSError(EBUSY)`` before teardown. The watchdog is not
 silently disabled: it would lose both its counter and protection in P1.7.
 Terminate the second thread cooperatively before calling deep sleep.
 
-Negative durations that fit the integer conversion raise ``ValueError``;
-integers with magnitude above 2147483647 raise ``OverflowError`` (including
--2147483648). Zero and 1 ms use a short delay and an ordinary reset. Setup
+Negative or out-of-range durations raise an exception.
+Zero and 1 ms use a short delay and an ordinary reset. Setup
 time counts toward the requested interval. If the alarm expires during setup,
 or hardware refuses the transition after teardown, an ordinary reset is used;
 it is not reported as ``DEEPSLEEP_RESET``. A short requested duration therefore
