@@ -17,6 +17,11 @@ cannot acknowledge SLEEP or the next boot. The host never soft-resets a running
 test. A test failure repeats its JSON result until Ctrl-C returns to REPL,
 so failures before USB enumeration are also observable.
 
+Timed-sleep cycles require a connected host: without its matching READY and
+SLEEP acknowledgements, the board stays awake indefinitely. Disconnecting the host
+before SLEEP is acknowledged therefore does not start a standalone sleep test.
+This is a property of the test program, not of `machine.deepsleep()` itself.
+
 The suite requires the RP2350 `machine.mem_backup` regions and tests their
 advertised layout. It observes, but does not require, retention of watchdog
 scratch regions 0 and 1: a SWCORE power-down may lose those regions. The suite
