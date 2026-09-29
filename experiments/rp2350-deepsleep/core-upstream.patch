@@ -1,5 +1,5 @@
 diff --git a/docs/library/machine.rst b/docs/library/machine.rst
-index 6389b3f08..c1fd9d6ab 100644
+index 6389b3f0883250f9f66fcca870705e95ffccde50..c1fd9d6ab1369decd375fe8834cf2fd5e309e8bf 100644
 --- a/docs/library/machine.rst
 +++ b/docs/library/machine.rst
 @@ -124,7 +124,8 @@ To always read a positive integer
@@ -23,7 +23,7 @@ index 6389b3f08..c1fd9d6ab 100644
  
     On stm32 the region index does not have a uniform meaning across boards:
 diff --git a/docs/rp2/quickref.rst b/docs/rp2/quickref.rst
-index 8e0f6d6ba..bdd38b709 100644
+index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddbcaf243ef 100644
 --- a/docs/rp2/quickref.rst
 +++ b/docs/rp2/quickref.rst
 @@ -106,6 +106,55 @@ connection succeeds or the interface gets disabled.
@@ -83,7 +83,7 @@ index 8e0f6d6ba..bdd38b709 100644
  ----------------
  
 diff --git a/ports/rp2/boards/RPI_PICO2/mpconfigboard.h b/ports/rp2/boards/RPI_PICO2/mpconfigboard.h
-index c0ab8e77b..d3f3b13b6 100644
+index c0ab8e77b091b786704fb8efafa0d08c2be704b5..d3f3b13b6d2eea90e1b24e3111f6a86363c54ca6 100644
 --- a/ports/rp2/boards/RPI_PICO2/mpconfigboard.h
 +++ b/ports/rp2/boards/RPI_PICO2/mpconfigboard.h
 @@ -1,2 +1,3 @@
@@ -91,7 +91,7 @@ index c0ab8e77b..d3f3b13b6 100644
  #define MICROPY_HW_BOARD_NAME                   "Raspberry Pi Pico2"
 +#define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP       (PICO_ARM)
 diff --git a/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h b/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
-index e47091768..f270df2f7 100644
+index e47091768ff3717d95c775884952607833e3c2b0..f270df2f700d6dcc0416ac58832ce3274cbf1e47 100644
 --- a/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
 +++ b/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
 @@ -1,5 +1,8 @@
@@ -104,7 +104,7 @@ index e47091768..f270df2f7 100644
  // Enable networking.
  #define MICROPY_PY_NETWORK 1
 diff --git a/ports/rp2/main.c b/ports/rp2/main.c
-index 304175b53..240edd1c8 100644
+index 304175b5370bbe148fb79c78ec1096a1a29f71a8..240edd1c8ae60222b366ef4eb2bf4ebb454d534c 100644
 --- a/ports/rp2/main.c
 +++ b/ports/rp2/main.c
 @@ -93,6 +93,10 @@ bi_decl(bi_program_feature_group_with_flags(BINARY_INFO_TAG_MICROPYTHON,
@@ -119,7 +119,7 @@ index 304175b53..240edd1c8 100644
      #if PICO_ARM
      SCB->SCR |= SCB_SCR_SEVONPEND_Msk;
 diff --git a/ports/rp2/modmachine.c b/ports/rp2/modmachine.c
-index 41c371a36..8ba14e86b 100644
+index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb86050e388b4e 100644
 --- a/ports/rp2/modmachine.c
 +++ b/ports/rp2/modmachine.c
 @@ -28,6 +28,7 @@
@@ -423,7 +423,7 @@ index 41c371a36..8ba14e86b 100644
      mp_machine_reset();
  }
 diff --git a/ports/rp2/modmachine.h b/ports/rp2/modmachine.h
-index 1ed812aff..387978a86 100644
+index 1ed812afff8f5f9fe9c8a484326de54ee1df6b35..387978a86a364d2629652b98c4ea7b8610029e66 100644
 --- a/ports/rp2/modmachine.h
 +++ b/ports/rp2/modmachine.h
 @@ -3,6 +3,7 @@
@@ -435,7 +435,7 @@ index 1ed812aff..387978a86 100644
  void machine_pin_deinit(void);
  void machine_i2s_init0(void);
 diff --git a/ports/rp2/mpconfigport.h b/ports/rp2/mpconfigport.h
-index 3084531cb..488f6e16b 100644
+index 3084531cb4097bd779ce852f5264eff87524cc86..488f6e16b01de544e6d3b0b8c1187c81a1aba5e0 100644
 --- a/ports/rp2/mpconfigport.h
 +++ b/ports/rp2/mpconfigport.h
 @@ -85,6 +85,15 @@

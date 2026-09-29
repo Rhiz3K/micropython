@@ -1,4 +1,45 @@
-# Offline RouterOS DHCP parser
+# Offline tools
+
+## Current upstream patch snapshots
+
+`generate_patches.py` checks or regenerates `core-upstream.patch` and
+`combined-upstream.patch` from **committed HEAD**, against the pinned ancestor
+`09f5bb447504a058376c62fe991b3613531837e6`. Run from the repository root:
+
+```sh
+# Read-only check; this is also the default with no argument.
+python3 experiments/rp2350-deepsleep/tools/generate_patches.py --check
+
+# Commit the intended source changes first, then explicitly update snapshots.
+python3 experiments/rp2350-deepsleep/tools/generate_patches.py --write
+python3 experiments/rp2350-deepsleep/tools/generate_patches.py --check
+
+# Isolated Git fixtures; no device or existing snapshot is changed.
+python3 experiments/rp2350-deepsleep/tools/test_generate_patches.py
+```
+
+The core scope is `ports/rp2`, `docs/rp2` and `docs/library/machine.rst`.
+Combined adds `tests/ports/rp2/deepsleep`. Directory scopes intentionally
+include newly committed helpers and tests. Staged or unstaged scoped changes,
+nonignored untracked scoped files, a missing/nonancestor base, or a concurrent
+HEAD change stop generation. Repository-ignored build products/bytecode and unrelated
+changes under `experiments/` or `lib/tinyusb` do not block it.
+
+Diffs use a temporary bare Git view of the committed objects, with a fresh
+temporary index, fixed diff options and full object IDs. User Git configuration,
+external diff, textconv and local/global attribute overrides cannot alter the patch.
+Implicit XDG global attributes and ignore rules are disabled as well.
+The original index and working sources are not modified. A check compares exact
+bytes and returns nonzero for stale/missing snapshots; only `--write` replaces
+the two current snapshots. Commit those generated files after reviewing them.
+
+Python 3.8+ and Git with `rev-parse --path-format` support (2.31+) are required.
+Historical `firmware.patch`/`tests.patch`, TinyUSB preparation, reports, checksums,
+commits and hardware are outside this tool's scope. It does not make the branch
+ready for upstream submission or certify a build; update/review the separate
+artifact checksum inventory when publishing changed snapshots.
+
+## RouterOS DHCP parser
 
 `parse_router_dhcp.py` uses Python 3.8+ and its standard library. It reads two
 saved text files and writes JSON. It does not access a router, serial port or
