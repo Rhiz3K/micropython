@@ -1,0 +1,14 @@
+[
+  {
+    "patch": "core-upstream.patch",
+    "apply_check": "PASS",
+    "all_patched_blobs_equal_head": true,
+    "files": 8
+  },
+  {
+    "patch": "combined-upstream.patch",
+    "apply_check": "PASS",
+    "all_patched_blobs_equal_head": true,
+    "files": 13
+  }
+]

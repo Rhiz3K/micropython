@@ -1,0 +1,10 @@
+{
+  "run": "review-20260929-alarm-short3",
+  "sleep_ms": 2500,
+  "expect_deep_cause": true,
+  "cycles": 3,
+  "radio": "never",
+  "thread": true,
+  "dma": true,
+  "lightsleep_before": true
+}

@@ -1,0 +1,3 @@
+{"host_start": 1790673676.9831154, "usb_serial": "<TARGET>"}
+{"boot": 1, "cause": 3, "completed": 0, "host_elapsed_s": 0.6308703490067273, "phase": 0, "powman_chip_reset": 33554432, "powman_last_swcore_pwrup": 64, "protocol": 2, "rtc": [2026, 9, 26, 5, 0, 0, 27, 0], "run": "review-20260929-alarm-wdt", "status": "READY", "uid": "<TARGET>"}
+{"boot": 2, "cause": 3, "completed": 0, "host_elapsed_s": 3.9819383040303364, "phase": 4, "powman_chip_reset": 33554432, "powman_last_swcore_pwrup": 64, "protocol": 2, "rtc": [2026, 9, 26, 5, 0, 0, 47, 0], "run": "review-20260929-alarm-wdt", "status": "PASS", "uid": "<TARGET>", "watchdog_scratch_retained": [false, false]}

@@ -1,0 +1,7 @@
+{
+  "run": "review-20260929-wdt",
+  "sleep_ms": 2500,
+  "expect_deep_cause": true,
+  "cycles": 1,
+  "watchdog": true
+}

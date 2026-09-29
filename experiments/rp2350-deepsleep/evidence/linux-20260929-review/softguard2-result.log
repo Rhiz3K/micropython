@@ -1,0 +1,1 @@
+PASS: expected FAIL after soft reset; one wake remains one; post-deep debug requests restored.

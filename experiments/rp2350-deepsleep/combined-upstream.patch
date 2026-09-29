@@ -23,15 +23,15 @@ index 6389b3f08..c1fd9d6ab 100644
  
     On stm32 the region index does not have a uniform meaning across boards:
 diff --git a/docs/rp2/quickref.rst b/docs/rp2/quickref.rst
-index 8e0f6d6ba..63291db27 100644
+index 8e0f6d6ba..bdd38b709 100644
 --- a/docs/rp2/quickref.rst
 +++ b/docs/rp2/quickref.rst
-@@ -106,6 +106,56 @@ connection succeeds or the interface gets disabled.
+@@ -106,6 +106,55 @@ connection succeeds or the interface gets disabled.
  .. _Pico W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#picow-technical-specification
  .. _Pico 2 W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#pico2w-technical-specification
  
 +Timed deep sleep on Pico 2 (experimental)
-+----------------------------------------
++-----------------------------------------
 +
 +The ARM builds for Pico 2 and Pico 2 W support an experimental timed power-down::
 +
@@ -67,9 +67,8 @@ index 8e0f6d6ba..63291db27 100644
 +silently disabled: it would lose both its counter and protection in P1.7.
 +Terminate the second thread cooperatively before calling deep sleep.
 +
-+Negative durations that fit the integer conversion raise ``ValueError``;
-+integers with magnitude above 2147483647 raise ``OverflowError`` (including
-+-2147483648). Zero and 1 ms use a short delay and an ordinary reset. Setup
++Negative or out-of-range durations raise an exception.
++Zero and 1 ms use a short delay and an ordinary reset. Setup
 +time counts toward the requested interval. If the alarm expires during setup,
 +or hardware refuses the transition after teardown, an ordinary reset is used;
 +it is not reported as ``DEEPSLEEP_RESET``. A short requested duration therefore
@@ -120,7 +119,7 @@ index 304175b53..240edd1c8 100644
      #if PICO_ARM
      SCB->SCR |= SCB_SCR_SEVONPEND_Msk;
 diff --git a/ports/rp2/modmachine.c b/ports/rp2/modmachine.c
-index 41c371a36..8c9a4ddfd 100644
+index 41c371a36..8ba14e86b 100644
 --- a/ports/rp2/modmachine.c
 +++ b/ports/rp2/modmachine.c
 @@ -28,6 +28,7 @@
@@ -131,7 +130,7 @@ index 41c371a36..8c9a4ddfd 100644
  #include "mp_usbd.h"
  #include "modmachine.h"
  #include "uart.h"
-@@ -53,11 +54,45 @@
+@@ -53,11 +54,51 @@
  #if MICROPY_PY_NETWORK_CYW43
  #include "lib/cyw43-driver/src/cyw43.h"
  #endif
@@ -148,6 +147,8 @@ index 41c371a36..8c9a4ddfd 100644
 +#define RP2_RESET_DEEPSLEEP (4)
 +
 +#if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++// SDK 2.3.0 lists source positions; the observed alarm record is 0x40, not 6.
++#define RP2_POWMAN_ALARM_PWRUP_MASK (1u << 6)
 +#define RP2_DEEPSLEEP_GLOBALS \
 +    { MP_ROM_QSTR(MP_QSTR_DEEPSLEEP_RESET), MP_ROM_INT(RP2_RESET_DEEPSLEEP) },
 +static bool woke_from_deepsleep;
@@ -157,12 +158,16 @@ index 41c371a36..8c9a4ddfd 100644
 +    if (watchdog_hw->reason) {
 +        machine_deepsleep_prepare_wfi();
 +    }
-+    // These are read-only hardware reset records, not software scratch markers.
++    // The ROM leaves ALARM set. Consume it below so a later core-only reset
++    // cannot reuse the retained read-only power-down and wake-source records.
 +    woke_from_deepsleep = !watchdog_hw->reason
 +        && (powman_hw->chip_reset & POWMAN_CHIP_RESET_HAD_SWCORE_PD_BITS)
-+        && (powman_hw->last_swcore_pwrup & (1u << 6)); // AON timer alarm.
++        && (powman_hw->last_swcore_pwrup & RP2_POWMAN_ALARM_PWRUP_MASK)
++        && (powman_hw->timer & POWMAN_TIMER_ALARM_BITS);
 +    powman_disable_alarm_wakeup();
 +    powman_clear_alarm();
++    // POWMAN survives SWCORE power-down. Restore normal awake debug behaviour.
++    powman_set_debug_power_request_ignored(false);
 +    if (powman_timer_is_running()) {
 +        // Preserve the RTC value, restoring crystal accuracy while awake.
 +        powman_timer_set_1khz_tick_source_xosc();
@@ -177,7 +182,7 @@ index 41c371a36..8c9a4ddfd 100644
      { MP_ROM_QSTR(MP_QSTR_Pin),                 MP_ROM_PTR(&machine_pin_type) }, \
      { MP_ROM_QSTR(MP_QSTR_RTC),                 MP_ROM_PTR(&machine_rtc_type) }, \
      { MP_ROM_QSTR(MP_QSTR_Timer),               MP_ROM_PTR(&machine_timer_type) }, \
-@@ -82,6 +117,10 @@ static mp_int_t mp_machine_reset_cause(void) {
+@@ -82,6 +123,10 @@ static mp_int_t mp_machine_reset_cause(void) {
      int reset_cause;
      if (watchdog_caused_reboot()) {
          reset_cause = RP2_RESET_WDT;
@@ -188,7 +193,7 @@ index 41c371a36..8c9a4ddfd 100644
      } else {
          reset_cause = RP2_RESET_PWRON;
      }
-@@ -376,7 +415,227 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+@@ -376,7 +421,228 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
      }
  }
  
@@ -331,6 +336,7 @@ index 41c371a36..8c9a4ddfd 100644
 +    cyw43_deinit(&cyw43_state);
 +    // Also cover an interface which has never been activated.
 +    gpio_init(CYW43_PIN_WL_REG_ON);
++    gpio_disable_pulls(CYW43_PIN_WL_REG_ON);
 +    gpio_put(CYW43_PIN_WL_REG_ON, false);
 +    gpio_set_dir(CYW43_PIN_WL_REG_ON, GPIO_OUT);
 +    #if MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW
@@ -450,10 +456,10 @@ index 3084531cb..488f6e16b 100644
  #ifdef MICROPY_GC_STACK_ENTRY_TYPE
 diff --git a/tests/ports/rp2/deepsleep/README.md b/tests/ports/rp2/deepsleep/README.md
 new file mode 100644
-index 000000000..dc57a1e2c
+index 000000000..c867beefc
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/README.md
-@@ -0,0 +1,312 @@
+@@ -0,0 +1,350 @@
 +# RP2350 timed deepsleep hardware checks (opt-in)
 +
 +These scripts are **prepared hardware tests, not evidence that tests passed**.
@@ -467,9 +473,10 @@ index 000000000..dc57a1e2c
 +file and the program/configuration are written only at installation. The device
 +temporarily owns these eight words as application test data; the firmware must
 +not reserve or overwrite any of them for wake markers or diagnostics.
-+The device repeats a JSON boot result until the host acknowledges it; USB re-enumeration
-+therefore cannot silently lose a successful cycle. The host never soft-resets a
-+running test. A test failure repeats its JSON result until Ctrl-C returns to REPL,
++Protocol 2 repeats each JSON boot result and pre-sleep marker until the host
++acknowledges that run, boot number and status. A delayed READY acknowledgement
++cannot acknowledge SLEEP or the next boot. The host never soft-resets a running
++test. A test failure repeats its JSON result until Ctrl-C returns to REPL,
 +so failures before USB enumeration are also observable.
 +
 +The suite requires the RP2350 `machine.mem_backup` regions and tests their
@@ -575,9 +582,39 @@ index 000000000..dc57a1e2c
 +Pass the same private `--config` to `run` as to `install`. Before sending any
 +GO, the host then rejects a different run name or radio mode, and accepts final
 +PASS only with exactly the configured cycle count (zero for the watchdog
-+rejection case). The configuration and its credentials are not written to the
-+host log. Omitting this optional argument retains legacy observation behavior
-+without these expected-run checks.
++rejection case). It also requires the initial READY, an acknowledged SLEEP for
++each subsequent wake, consecutive boot/cycle counts, and the final ordinary
++reset. Attach before the first cycle; attaching midway cannot verify a complete
++run. Configured runs require current protocol 2 device and host scripts.
++The configuration and its credentials are not written to the host log.
++Omitting this optional argument retains legacy observation behavior, including
++protocol 1 devices, without complete-run or duration checks.
++
++Malformed JSON/UTF-8 records and discarded partial records on USB disconnect
++are logged as host events. They are never acknowledged, counted as progress,
++or accepted as PASS; the existing per-boot timeout still applies. A valid FAIL
++remains fatal. A soft reset after a wake was consumed fails rather than counting
++the same wake twice. Reinstall to start a fresh run after such an interruption.
++
++For configured runs, `host_cycle_elapsed_s` measures from the first successfully
++sent SLEEP acknowledgement to receipt of the next READY. It includes boot, USB
++enumeration and optional network setup; it is not the time in the power state.
++Slow boot or network setup can mask an early hardware wake in this host check.
++The host rejects a duration below `sleep_ms / 1000 - host_tolerance_s`. The default
++tolerance is the larger of 0.25 seconds and 10% of the requested duration, a test
++threshold rather than an LPOSC accuracy claim. Set and report it explicitly
++alongside `rtc_tolerance_s` for long sleeps. There is no duration upper bound
++beyond the configured per-boot timeout; the device checks RTC separately.
++
++Run offline harness checks without any board or serial access:
++
++```sh
++python3 tests/ports/rp2/deepsleep/test_host.py
++```
++
++These exercise malformed/truncated transport, reconnects, acknowledgement and
++cycle validation, and device progress bookkeeping with simulated objects.
++They are not evidence of hardware sleep, watchdog operation or current draw.
 +
 +## Scenarios and initially unexecuted results
 +
@@ -606,8 +643,15 @@ index 000000000..dc57a1e2c
 +They are not evidence of automatic shutdown of an active second Python thread
 +or continued watchdog protection during a deep sleep. A fresh boot caused by
 +an unexpectedly accepted CPU1 call is a failure, not a completed cycle.
++The watchdog PASS phase is armed only after the busy rejection returns; a reset
++before that point fails even if its cause is `WDT_RESET`.
 +The scripts compare `OSError` to errno 16 when `errno.EBUSY` is not exported by
 +the RP2 Python module; 16 is `MP_EBUSY` in `py/mperrno.h`.
++`regressions.py` refuses to run unless the port is RP2, the chip is RP2350 and
++`machine.DEEPSLEEP_RESET` is exported. In this patch that constant is conditional
++on the POWMAN implementation. This protects the unmodified baseline and RP2040
++from the first negative-delay call, which otherwise can request about 49 days
++of sleep; it is not a general capability guarantee for unrelated firmware.
 +
 +Wi-Fi configuration uses an operator-approved, controlled HTTP endpoint that
 +returns `200`, to make DHCP/DNS/HTTP repeatable. Do not use a public site as a
@@ -768,10 +812,10 @@ index 000000000..dc57a1e2c
 +backup hashes, firmware hashes, any scope traces and a PASS/FAIL/NOT RUN table.
 diff --git a/tests/ports/rp2/deepsleep/device.py b/tests/ports/rp2/deepsleep/device.py
 new file mode 100644
-index 000000000..6aea53018
+index 000000000..526baff3c
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/device.py
-@@ -0,0 +1,409 @@
+@@ -0,0 +1,422 @@
 +# Install as main.py on an identified, backed-up test board. See README.md.
 +# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
 +import binascii
@@ -920,7 +964,9 @@ index 000000000..6aea53018
 +            if events & select.POLLIN:
 +                char = sys.stdin.read(1)
 +                if char == "\n":
-+                    if line.strip() == "GO " + record["run"]:
++                    if line.strip() == "GO {} {} {}".format(
++                        record["run"], record["boot"], record["status"]
++                    ):
 +                        return
 +                    line = ""
 +                elif char != "\r":
@@ -1047,6 +1093,7 @@ index 000000000..6aea53018
 +        state[7] = 0x13579BDF
 +    state[5] += 1
 +    record = {
++        "protocol": 2,
 +        "run": config["run"],
 +        "uid": binascii.hexlify(machine.unique_id()).decode(),
 +        "boot": state[5],
@@ -1075,6 +1122,8 @@ index 000000000..6aea53018
 +    phase = state[3]
 +    record["phase"] = phase
 +    check(phase != 6, "deepsleep accepted an active CPU1")
++    check(phase != 7, "reset interrupted an already consumed wake result")
++    check(phase != 8, "watchdog reset before deepsleep rejection was confirmed")
 +    if phase in (1, 4, 5):
 +        expected = machine.WDT_RESET if phase == 4 else getattr(machine, "DEEPSLEEP_RESET", -1)
 +        if phase == 5 or (phase == 1 and not config.get("expect_deep_cause", True)):
@@ -1095,6 +1144,9 @@ index 000000000..6aea53018
 +            record["crossed_minute"] = state[2] // 60 != rtc_seconds() // 60
 +            record["crossed_day"] = state[2] // 86400 != rtc_seconds() // 86400
 +            check(lower <= elapsed <= target + tolerance + 10, "RTC duration")
++            # Consume the wake before incrementing. A soft reset while preparing
++            # or reporting this result must fail, rather than count it twice.
++            state[3] = 7
 +            state[1] += 1
 +            record["completed"] = state[1]
 +        if phase in (4, 5):
@@ -1124,9 +1176,10 @@ index 000000000..6aea53018
 +        state[3] = 6
 +        thread_test()
 +    if config.get("watchdog"):
-+        state[3] = 4
++        state[3] = 8
 +        machine.WDT(timeout=2000)
 +        expect_busy()
++        state[3] = 4
 +        # A rejected call must leave the watchdog running. Expect WDT_RESET.
 +        while True:
 +            pass
@@ -1136,24 +1189,28 @@ index 000000000..6aea53018
 +    os.sync()
 +    if config.get("lightsleep_before"):
 +        machine.lightsleep(20)
-+    if state[1] == 0:
-+        # Set just before sleeping, after USB/Wi-Fi preparation, to ensure the
-+        # default first sleep crosses midnight rather than host waiting doing so.
-+        machine.RTC().datetime((2026, 9, 25, 4, 23, 59, 58, 0))
-+    state[2] = rtc_seconds()
-+    state[3] = 1
 +    sleep_record = {
++        "protocol": 2,
 +        "run": config["run"],
++        "uid": record["uid"],
 +        "status": "SLEEP",
 +        "completed": state[1],
 +        "boot": state[5],
++        "sleep_ms": config["sleep_ms"],
 +    }
 +    if radio is not None:
 +        sleep_record["radio_mode"] = radio
 +        sleep_record["radio"] = radio_state(radio, radio_handles)
 +        sleep_record["radio"]["connection_proven"] = bool(config.get("wifi"))
 +        sleep_record["pins_before_sleep"] = pico2w_pin_snapshot()
-+    emit(sleep_record)
++    # Repeated, separately acknowledged entry marker: the host can time every
++    # cycle even when USB loses the last print immediately before power-down.
++    wait_for_host(sleep_record)
++    if state[1] == 0:
++        # Seed after all host waiting so the first sleep crosses midnight.
++        machine.RTC().datetime((2026, 9, 25, 4, 23, 59, 58, 0))
++    state[2] = rtc_seconds()
++    state[3] = 1
 +    mode = config.get("mode", "deepsleep")
 +    if mode == "sleep_reset":
 +        time.sleep_ms(config["sleep_ms"])
@@ -1183,10 +1240,10 @@ index 000000000..6aea53018
 +        time.sleep_ms(1000)
 diff --git a/tests/ports/rp2/deepsleep/host.py b/tests/ports/rp2/deepsleep/host.py
 new file mode 100644
-index 000000000..418c2cddb
+index 000000000..0216e1f35
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/host.py
-@@ -0,0 +1,280 @@
+@@ -0,0 +1,434 @@
 +#!/usr/bin/env python3
 +# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
 +"""Install/observe the opt-in RP2350 reset-spanning test. Never flashes firmware."""
@@ -1248,6 +1305,121 @@ index 000000000..418c2cddb
 +        expected = 0 if config.get("watchdog") else config.get("cycles", 100)
 +        if type(record.get("completed")) is not int or record["completed"] != expected:
 +            raise ValueError("PASS completed count does not match configuration")
++
++
++def parse_record(line):
++    index = line.find(PREFIX)
++    if index < 0:
++        return None
++    record = json.loads(line[index + len(PREFIX) :])
++    if not isinstance(record, dict) or record.get("status") not in (
++        "READY",
++        "SLEEP",
++        "PASS",
++        "FAIL",
++        "STOPPED",
++    ):
++        raise ValueError("invalid test record/status")
++    if record["status"] in ("FAIL", "STOPPED"):
++        return record
++    if (
++        not isinstance(record.get("run"), str)
++        or not record["run"]
++        or type(record.get("boot")) is not int
++        or record["boot"] < 1
++        or type(record.get("completed")) is not int
++        or record["completed"] < 0
++        or record.get("protocol") not in (None, 2)
++    ):
++        raise ValueError("invalid test record fields")
++    if record["status"] != "SLEEP" or record.get("protocol") == 2:
++        if not isinstance(record.get("uid"), str):
++            raise ValueError("missing target identity")
++    return record
++
++
++def acknowledgement(record):
++    if record.get("protocol") == 2:
++        return "GO {} {} {}\n".format(record["run"], record["boot"], record["status"])
++    return "GO " + record["run"] + "\n"
++
++
++class RunProgress:
++    """Validate the full observed sequence, not just the final device counter."""
++
++    def __init__(self, config):
++        self.config = config
++        self.ready = None
++        self.sleep_started = None
++
++    def check(self, record, now):
++        if self.config is None:
++            return
++        if record.get("protocol") != 2:
++            raise ValueError("configured run requires protocol 2; reinstall current device.py")
++        current = (record["boot"], record["completed"])
++        status = record["status"]
++        watchdog = self.config.get("watchdog", False)
++        if status == "READY":
++            if self.ready is None:
++                if current[1] != 0 or record.get("phase") != 0:
++                    raise ValueError("missing initial READY; cannot verify a partial run")
++            elif current == self.ready:
++                if self.sleep_started is not None:
++                    raise ValueError("READY after SLEEP on the same boot")
++                return
++            else:
++                if (
++                    watchdog
++                    or self.sleep_started is None
++                    or current != (self.ready[0] + 1, self.ready[1] + 1)
++                    or record.get("phase") != 1
++                ):
++                    raise ValueError("wake does not match the acknowledged sleep")
++                elapsed = now - self.sleep_started
++                target = self.config["sleep_ms"] / 1000
++                tolerance = self.config.get("host_tolerance_s", max(0.25, target * 0.1))
++                record["host_cycle_elapsed_s"] = elapsed
++                if elapsed < max(0, target - tolerance):
++                    raise ValueError("wake arrived before the host duration lower bound")
++                self.sleep_started = None
++            self.ready = current
++        elif status == "SLEEP":
++            if (
++                watchdog
++                or current != self.ready
++                or current[1] >= self.config.get("cycles", 100)
++                or record.get("sleep_ms") != self.config["sleep_ms"]
++            ):
++                raise ValueError("SLEEP does not match READY/configuration")
++        elif status == "PASS":
++            expected = 0 if watchdog else self.config.get("cycles", 100)
++            if (
++                self.ready is None
++                or self.sleep_started is not None
++                or self.ready[1] != expected
++                or current != (self.ready[0] + 1, expected)
++                or record.get("phase") != (4 if watchdog else 5)
++            ):
++                raise ValueError("PASS lacks a complete observed run and final reset")
++
++    def acknowledged(self, record, now):
++        if self.config is not None and record["status"] == "SLEEP" and self.sleep_started is None:
++            self.sleep_started = now
++
++
++def log_fragment(log, buffer, started):
++    if PREFIX in buffer:
++        log.write(
++            json.dumps(
++                {
++                    "host_event": "truncated_record_on_disconnect",
++                    "line_bytes": len(buffer),
++                    "host_elapsed_s": time.monotonic() - started,
++                }
++            )
++            + "\n"
++        )
 +
 +
 +def load_manifest(path):
@@ -1350,6 +1522,15 @@ index 000000000..418c2cddb
 +        ):
 +            raise ValueError("expected config requires a run name and positive cycle count")
 +        validate_radio_config(expected)
++        if (
++            type(expected.get("sleep_ms")) is not int
++            or not 0 <= expected["sleep_ms"] <= 2147483647
++        ):
++            raise ValueError("expected config requires sleep_ms in 0..2147483647")
++        tolerance = expected.get("host_tolerance_s", 0)
++        if not isinstance(tolerance, (int, float)) or not 0 <= tolerance < float("inf"):
++            raise ValueError("host_tolerance_s must be finite and nonnegative")
++    progress = RunProgress(expected)
 +    seen = set()
 +    started = time.monotonic()
 +    last_progress = started
@@ -1379,7 +1560,22 @@ index 000000000..418c2cddb
 +                        index = line.find(PREFIX)
 +                        if index < 0:
 +                            continue
-+                        record = json.loads(line[index + len(PREFIX) :])
++                        try:
++                            record = parse_record(line)
++                        except (ValueError, UnicodeError):
++                            # A disconnect may truncate JSON or split a UTF-8
++                            # character. Never acknowledge it or extend timeout.
++                            log.write(
++                                json.dumps(
++                                    {
++                                        "host_event": "malformed_record",
++                                        "line_bytes": len(line),
++                                        "host_elapsed_s": time.monotonic() - started,
++                                    }
++                                )
++                                + "\n"
++                            )
++                            continue
 +                        record["host_elapsed_s"] = time.monotonic() - started
 +                        try:
 +                            validate_expected_record(record, expected)
@@ -1390,27 +1586,42 @@ index 000000000..418c2cddb
 +                        if status in ("FAIL", "STOPPED"):
 +                            log.write(json.dumps(record) + "\n")
 +                            raise RuntimeError(str(record))
++                        if (status != "SLEEP" or record.get("protocol") == 2) and (
++                            record.get("uid", "").lower() != manifest["unique_id"].lower()
++                        ):
++                            raise ValueError("reconnected target identity mismatch")
++                        try:
++                            progress.check(record, time.monotonic() - started)
++                        except ValueError:
++                            log.write(json.dumps(record) + "\n")
++                            raise
 +                        if status == "SLEEP":
 +                            log.write(json.dumps(record) + "\n")
++                            if record.get("protocol") == 2:
++                                connection.write(acknowledgement(record).encode())
++                                connection.flush()
++                                progress.acknowledged(record, time.monotonic() - started)
 +                            continue
-+                        if record.get("uid", "").lower() != manifest["unique_id"].lower():
-+                            raise ValueError("reconnected target identity mismatch")
 +                        key = (record["run"], record["boot"])
 +                        if key not in seen:
 +                            seen.add(key)
 +                            last_progress = time.monotonic()
 +                            log.write(json.dumps(record) + "\n")
 +                            print(json.dumps(record), flush=True)
-+                        connection.write(("GO " + record["run"] + "\n").encode())
++                        connection.write(acknowledgement(record).encode())
 +                        connection.flush()
 +                        if status == "PASS":
 +                            return
 +                    if len(buffer) > 65536:
 +                        raise RuntimeError("unbounded non-test serial output")
 +                    if port_for(manifest) is None:
++                        log_fragment(log, buffer, started)
 +                        connection.close()
 +                        connection = None
++                        buffer = b""
 +                except (OSError, serial.SerialException):
++                    log_fragment(log, buffer, started)
++                    buffer = b""
 +                    if connection is not None:
 +                        connection.close()
 +                        connection = None
@@ -1469,16 +1680,27 @@ index 000000000..418c2cddb
 +    main()
 diff --git a/tests/ports/rp2/deepsleep/regressions.py b/tests/ports/rp2/deepsleep/regressions.py
 new file mode 100644
-index 000000000..67246f84c
+index 000000000..fafae37d4
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/regressions.py
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,85 @@
 +# Run explicitly via mpremote, with the installed sleep suite stopped.
 +# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
 +import errno
 +import machine
 +import micropython
++import sys
 +import time
++
++# Baseline RP2 deepsleep(-1) converts to an unsigned delay (about 49 days).
++# This patch exports DEEPSLEEP_RESET only when its POWMAN implementation is
++# enabled. Check both port/chip and capability before any destructive call.
++if not (
++    sys.platform == "rp2"
++    and "RP2350" in getattr(sys.implementation, "_machine", "")
++    and hasattr(machine, "DEEPSLEEP_RESET")
++):
++    raise RuntimeError("requires RP2350 firmware with POWMAN DEEPSLEEP_RESET support")
 +
 +# RP2 may omit EBUSY from the Python errno module; py/mperrno.h defines it as 16.
 +EBUSY = getattr(errno, "EBUSY", 16)
@@ -1547,3 +1769,425 @@ index 000000000..67246f84c
 +    print("PASS lightsleep clock restoration and time progress")
 +finally:
 +    machine.freq(original)
+diff --git a/tests/ports/rp2/deepsleep/test_host.py b/tests/ports/rp2/deepsleep/test_host.py
+new file mode 100644
+index 000000000..03885d973
+--- /dev/null
++++ b/tests/ports/rp2/deepsleep/test_host.py
+@@ -0,0 +1,416 @@
++#!/usr/bin/env python3
++# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
++"""Offline harness checks only: no serial device, firmware, or sleep is exercised."""
++
++import ast
++import binascii
++from contextlib import ExitStack
++import importlib.util
++import io
++import json
++from pathlib import Path
++import sys
++import tempfile
++import types
++import unittest
++from unittest.mock import patch
++
++HERE = Path(__file__).resolve().parent
++SPEC = importlib.util.spec_from_file_location("deepsleep_host", HERE / "host.py")
++host = importlib.util.module_from_spec(SPEC)
++SPEC.loader.exec_module(host)
++CONFIG = {"run": "synthetic", "cycles": 1, "sleep_ms": 2500}
++MANIFEST = {"usb_serial": "synthetic", "unique_id": "0123"}
++
++
++def record(status="READY", boot=1, completed=0, phase=0, **extra):
++    result = {
++        "protocol": 2,
++        "run": "synthetic",
++        "uid": "0123",
++        "status": status,
++        "boot": boot,
++        "completed": completed,
++        "phase": phase,
++    }
++    result.update(extra)
++    return result
++
++
++def frame(value):
++    return host.PREFIX + json.dumps(value).encode() + b"\n"
++
++
++class ProtocolTests(unittest.TestCase):
++    def test_malformed_records(self):
++        for payload in (b'{"status":', b"\xff", b"[]", b"null", b'{"status":"OTHER"}'):
++            with self.subTest(payload=payload), self.assertRaises((ValueError, UnicodeError)):
++                host.parse_record(host.PREFIX + payload)
++        self.assertIsNone(host.parse_record(b"normal REPL output"))
++        self.assertEqual(host.parse_record(b">>> " + frame(record())), record())
++
++    def test_acknowledgement_scoped_to_boot_and_status(self):
++        self.assertEqual(host.acknowledgement(record()), "GO synthetic 1 READY\n")
++        self.assertEqual(host.acknowledgement(record("SLEEP")), "GO synthetic 1 SLEEP\n")
++        self.assertEqual(host.acknowledgement(record(boot=2)), "GO synthetic 2 READY\n")
++
++    def start_sleep(self, config=CONFIG):
++        progress = host.RunProgress(config)
++        progress.check(record(), 0)
++        sleep = record("SLEEP", sleep_ms=config["sleep_ms"])
++        progress.check(sleep, 0.1)
++        progress.acknowledged(sleep, 0.2)
++        return progress
++
++    def test_complete_run_and_timing(self):
++        progress = self.start_sleep()
++        wake = record(boot=2, completed=1, phase=1)
++        progress.check(wake, 3)
++        self.assertAlmostEqual(wake["host_cycle_elapsed_s"], 2.8)
++        progress.check(wake, 3.1)  # repeated READY is idempotent
++        progress.check(record("PASS", boot=3, completed=1, phase=5), 4)
++
++    def test_duplicate_sleep_keeps_first_successful_ack_time(self):
++        progress = self.start_sleep()
++        sleep = record("SLEEP", sleep_ms=2500)
++        progress.check(sleep, 2)
++        progress.acknowledged(sleep, 2)
++        self.assertEqual(progress.sleep_started, 0.2)
++
++    def test_early_wake_rejected(self):
++        progress = self.start_sleep()
++        with self.assertRaisesRegex(ValueError, "duration lower bound"):
++            progress.check(record(boot=2, completed=1, phase=1), 1)
++
++    def test_pass_without_complete_observation_rejected(self):
++        for records in (
++            [record("PASS", boot=3, completed=1, phase=5)],
++            [record(), record("PASS", boot=3, completed=1, phase=5)],
++            [record(boot=2, completed=1, phase=1)],
++            [record(), record(boot=2, completed=1, phase=1)],
++        ):
++            with self.subTest(records=records), self.assertRaises(ValueError):
++                progress = host.RunProgress(CONFIG)
++                for value in records:
++                    progress.check(value, 3)
++
++    def test_unacknowledged_sleep_and_skipped_boot_rejected(self):
++        for acknowledged, boot in ((False, 2), (True, 3)):
++            progress = host.RunProgress(CONFIG)
++            progress.check(record(), 0)
++            sleep = record("SLEEP", sleep_ms=2500)
++            progress.check(sleep, 0.1)
++            if acknowledged:
++                progress.acknowledged(sleep, 0.2)
++            with self.assertRaisesRegex(ValueError, "acknowledged sleep"):
++                progress.check(record(boot=boot, completed=1, phase=1), 4)
++
++    def test_wrong_identity_run_count_and_legacy_protocol(self):
++        with self.assertRaises(ValueError):
++            host.validate_expected_record(record(run="other"), CONFIG)
++        with self.assertRaises(ValueError):
++            host.validate_expected_record(record("PASS", completed=2), CONFIG)
++        legacy = record()
++        del legacy["protocol"]
++        with self.assertRaisesRegex(ValueError, "reinstall"):
++            host.RunProgress(CONFIG).check(legacy, 0)
++
++    def test_watchdog_sequence(self):
++        progress = host.RunProgress(dict(CONFIG, watchdog=True))
++        progress.check(record(), 0)
++        progress.check(record("PASS", boot=2, phase=4), 2.5)
++        with self.assertRaises(ValueError):
++            progress.check(record("PASS", boot=2, phase=8), 2.5)
++
++    def test_zero_duration(self):
++        progress = self.start_sleep(dict(CONFIG, sleep_ms=0))
++        progress.check(record(boot=2, completed=1, phase=1), 0.2)
++
++
++class FakeClock:
++    now = 0.0
++
++    def monotonic(self):
++        return self.now
++
++    def time(self):
++        return self.now
++
++    def sleep(self, seconds):
++        self.now += seconds
++
++
++class FakeSerial:
++    in_waiting = 0
++
++    def __init__(self, events, clock):
++        self.events = iter(events)
++        self.clock = clock
++        self.writes = []
++        self.closed = False
++
++    def read(self, _):
++        self.clock.sleep(0.2)
++        event = next(self.events, b"")
++        if isinstance(event, Exception):
++            raise event
++        if isinstance(event, tuple):
++            delay, event = event
++            self.clock.sleep(delay)
++        return event
++
++    def write(self, data):
++        self.writes.append(data)
++
++    def flush(self):
++        pass
++
++    def close(self):
++        self.closed = True
++
++
++class ObserveTests(unittest.TestCase):
++    def observe(self, sessions, error=None):
++        clock = FakeClock()
++        connections = [FakeSerial(events, clock) for events in sessions]
++        pending = iter(connections)
++        serial = types.SimpleNamespace(
++            Serial=lambda *a, **kw: next(pending), SerialException=OSError
++        )
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            (root / "config.json").write_text(json.dumps(CONFIG))
++            args = types.SimpleNamespace(
++                allow_run=True,
++                config=root / "config.json",
++                log=root / "log.jsonl",
++                timeout=8,
++            )
++            with ExitStack() as stack:
++                stack.enter_context(patch.dict(sys.modules, {"serial": serial}))
++                stack.enter_context(patch.object(host, "time", clock))
++                stack.enter_context(
++                    patch.object(host, "port_for", return_value="synthetic-no-device")
++                )
++                stack.enter_context(patch("sys.stdout", new_callable=io.StringIO))
++                if error is None:
++                    host.observe(args, MANIFEST)
++                else:
++                    with self.assertRaises(error):
++                        host.observe(args, MANIFEST)
++            records = [json.loads(line) for line in args.log.read_text().splitlines()]
++        self.assertTrue(all(connection.closed for connection in connections))
++        return records, connections
++
++    def test_malformed_and_truncated_usb_reconnect_then_complete(self):
++        records, connections = self.observe(
++            [
++                [
++                    host.PREFIX + b'{"status":\n',
++                    frame(record()),
++                    frame(record("SLEEP", sleep_ms=2500)),
++                    host.PREFIX + b'{"sta',
++                    OSError("USB gone"),
++                ],
++                [
++                    (2.5, frame(record(boot=2, completed=1, phase=1))),
++                    frame(record("PASS", boot=3, completed=1, phase=5)),
++                ],
++            ]
++        )
++        self.assertEqual(
++            [r["host_event"] for r in records if "host_event" in r],
++            ["malformed_record", "truncated_record_on_disconnect"],
++        )
++        self.assertEqual(records[-1]["status"], "PASS")
++        self.assertEqual(
++            connections[0].writes,
++            [b"\nHELLO\n", b"GO synthetic 1 READY\n", b"GO synthetic 1 SLEEP\n"],
++        )
++
++    def test_repeated_bad_json_cannot_extend_timeout_or_pass(self):
++        records, connections = self.observe(
++            [[host.PREFIX + b'{"status":"PASS"\n'] * 100], TimeoutError
++        )
++        self.assertTrue(all(r.get("status") != "PASS" for r in records))
++        self.assertEqual(connections[0].writes, [b"\nHELLO\n"])
++        self.assertLess(len(records), 100)
++
++    def test_wrong_uid_never_acknowledged(self):
++        _, connections = self.observe([[frame(record(uid="other"))]], ValueError)
++        self.assertEqual(connections[0].writes, [b"\nHELLO\n"])
++
++    def test_device_fail_remains_failure(self):
++        records, _ = self.observe([[frame(record("FAIL", error="synthetic"))]], RuntimeError)
++        self.assertEqual(records[-1]["status"], "FAIL")
++
++
++class SimulatedReset(BaseException):
++    pass
++
++
++class DeviceStateTests(unittest.TestCase):
++    def setUp(self):
++        tree = ast.parse((HERE / "device.py").read_text())
++        functions = [node for node in tree.body if isinstance(node, ast.FunctionDef)]
++        self.config = dict(CONFIG)
++        self.state = [0x44535032, 0, 100, 0, 0, 1, 0, 0x13579BDF]
++        self.machine = types.SimpleNamespace(
++            mem_backup=lambda _: [[0] * 8, [0] * 8, self.state],
++            unique_id=lambda: b"\x01\x23",
++            reset_cause=lambda: 4,
++            RTC=lambda: types.SimpleNamespace(datetime=lambda: (2026, 9, 26, 5, 0, 0, 1, 0)),
++            mem32={0x4010002C: 0, 0x401000A0: 64},
++            DEEPSLEEP_RESET=4,
++            WDT_RESET=3,
++            WDT=lambda **kwargs: None,
++        )
++        self.namespace = {
++            "machine": self.machine,
++            "json": json,
++            "binascii": binascii,
++            "MAGIC": self.state[0],
++            "SENTINEL": b"sentinel",
++            "EBUSY": 16,
++            "open": lambda name, *a: (
++                io.StringIO(json.dumps(self.config))
++                if name.endswith(".json")
++                else io.BytesIO(b"sentinel")
++            ),
++        }
++        exec(
++            compile(ast.Module(body=functions, type_ignores=[]), "device.py", "exec"),
++            self.namespace,
++        )
++        self.namespace["rtc_seconds"] = lambda: 103
++        self.namespace["wait_for_host"] = lambda _: None
++
++    def test_wake_consumed_before_reporting_and_soft_reset_not_double_counted(self):
++        self.state[3] = 1
++        self.namespace["wait_for_host"] = lambda _: (_ for _ in ()).throw(SimulatedReset())
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual((self.state[1], self.state[3]), (1, 7))
++        with self.assertRaisesRegex(AssertionError, "already consumed"):
++            self.namespace["run"]()
++        self.assertEqual(self.state[1], 1)
++
++    def test_watchdog_cannot_pass_before_busy_was_confirmed(self):
++        self.config["watchdog"] = True
++        self.machine.deepsleep = lambda _: (_ for _ in ()).throw(SimulatedReset())
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual(self.state[3], 8)
++        self.machine.reset_cause = lambda: 3
++        with self.assertRaisesRegex(AssertionError, "before deepsleep rejection"):
++            self.namespace["run"]()
++
++    def test_confirmed_watchdog_phase_accepts_watchdog_reset(self):
++        self.state[3] = 4
++        self.machine.reset_cause = lambda: 3
++        emitted = []
++        self.namespace["wait_for_host"] = emitted.append
++        self.namespace["run"]()
++        self.assertEqual(emitted[0]["status"], "PASS")
++        self.assertEqual(self.state[3], 2)
++
++    def test_watchdog_pass_phase_written_only_after_busy(self):
++        class ResetAtArming(list):
++            def __setitem__(self, key, value):
++                super().__setitem__(key, value)
++                if key == 3 and value == 4:
++                    raise SimulatedReset()
++
++        self.config["watchdog"] = True
++        self.state = ResetAtArming(self.state)
++        busy_phases = []
++
++        def busy(_):
++            busy_phases.append(self.state[3])
++            raise OSError(16)
++
++        self.machine.deepsleep = busy
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual(busy_phases, [8])
++        self.assertEqual(self.state[3], 4)
++
++    def test_stale_or_wrong_status_ack_cannot_release_device(self):
++        incoming = io.StringIO(
++            "GO synthetic\nGO synthetic 0 READY\nGO synthetic 1 SLEEP\nGO synthetic 1 READY\n"
++        )
++        self.namespace.update(
++            {
++                "select": types.SimpleNamespace(
++                    POLLIN=1,
++                    poll=lambda: types.SimpleNamespace(
++                        register=lambda *a: None, poll=lambda _: [(0, 1)]
++                    ),
++                ),
++                "sys": types.SimpleNamespace(stdin=incoming),
++                "time": types.SimpleNamespace(
++                    ticks_ms=lambda: 0, ticks_diff=lambda a, b: a - b, ticks_add=lambda a, b: a + b
++                ),
++                "emit": lambda _: None,
++            }
++        )
++        # Restore the actual function overridden by setUp.
++        tree = ast.parse((HERE / "device.py").read_text())
++        function = next(
++            n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "wait_for_host"
++        )
++        exec(
++            compile(ast.Module(body=[function], type_ignores=[]), "device.py", "exec"),
++            self.namespace,
++        )
++        self.namespace["wait_for_host"](record())
++        self.assertEqual(incoming.read(), "")
++
++    def test_sleep_phase_and_rtc_seed_follow_sleep_ack(self):
++        self.namespace["os"] = types.SimpleNamespace(sync=lambda: None)
++        rtc_writes = []
++        self.machine.RTC = lambda: types.SimpleNamespace(
++            datetime=lambda *args: rtc_writes.extend(args) if args else ()
++        )
++
++        def wait(value):
++            if value["status"] == "SLEEP":
++                self.assertEqual(self.state[3], 0)
++                self.assertEqual(rtc_writes, [])
++
++        self.namespace["wait_for_host"] = wait
++        self.machine.deepsleep = lambda _: (_ for _ in ()).throw(SimulatedReset())
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual(self.state[3], 1)
++        self.assertEqual(rtc_writes, [(2026, 9, 25, 4, 23, 59, 58, 0)])
++
++    def test_regression_guard_rejects_baseline_before_any_sleep(self):
++        tree = ast.parse((HERE / "regressions.py").read_text())
++        guard = next(node for node in tree.body if isinstance(node, ast.If))
++        code = compile(ast.Module(body=[guard], type_ignores=[]), "regressions.py", "exec")
++        for platform, model, capability, accepted in (
++            ("rp2", "Raspberry Pi Pico 2 W with RP2350", False, False),
++            ("rp2", "Raspberry Pi Pico with RP2040", True, False),
++            ("esp32", "RP2350", True, False),
++            ("rp2", "Raspberry Pi Pico 2 W with RP2350", True, True),
++        ):
++            machine = types.SimpleNamespace()
++            if capability:
++                machine.DEEPSLEEP_RESET = 4
++            namespace = {
++                "machine": machine,
++                "sys": types.SimpleNamespace(
++                    platform=platform, implementation=types.SimpleNamespace(_machine=model)
++                ),
++            }
++            with self.subTest(platform=platform, model=model, capability=capability):
++                if accepted:
++                    exec(code, namespace)
++                else:
++                    with self.assertRaises(RuntimeError):
++                        exec(code, namespace)
++
++
++if __name__ == "__main__":
++    unittest.main()

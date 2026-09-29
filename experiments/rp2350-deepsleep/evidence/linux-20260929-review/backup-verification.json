@@ -1,0 +1,11 @@
+{
+  "device_flash_sha256": "8f90c5e2ac606686b0886e8d03fd9a2d0500ed80cb3f7bcd9da08a0657456ae4",
+  "filesystem_files": 37,
+  "firmware_region_sha256": "77aea5317b92dae8bc486911170e2f7d4a27cb564d33bb116d14689f6ca2f32a",
+  "flash_bytes": 4194304,
+  "flash_sha256": "8f90c5e2ac606686b0886e8d03fd9a2d0500ed80cb3f7bcd9da08a0657456ae4",
+  "host_finished": 1790672155.3050601,
+  "method": "host read via REPL plus independent on-device hash",
+  "restore_uf2_payload_verified": true,
+  "rom_picotool_verify": "NOT RUN"
+}

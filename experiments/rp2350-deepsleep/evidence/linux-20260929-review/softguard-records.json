@@ -1,0 +1,63 @@
+[
+  {
+    "boot": 1,
+    "cause": 3,
+    "completed": 0,
+    "phase": 0,
+    "powman_chip_reset": 33554432,
+    "powman_last_swcore_pwrup": 64,
+    "protocol": 2,
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      0,
+      1,
+      8,
+      0
+    ],
+    "run": "review-20260929-softguard",
+    "status": "READY",
+    "uid": "<TARGET>"
+  },
+  {
+    "boot": 1,
+    "completed": 0,
+    "protocol": 2,
+    "run": "review-20260929-softguard",
+    "sleep_ms": 2500,
+    "status": "SLEEP",
+    "uid": "<TARGET>"
+  },
+  {
+    "boot": 2,
+    "cause": 4,
+    "completed": 1,
+    "crossed_day": true,
+    "crossed_minute": true,
+    "phase": 1,
+    "powman_chip_reset": 33554432,
+    "powman_last_swcore_pwrup": 64,
+    "protocol": 2,
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      0,
+      0,
+      0,
+      0
+    ],
+    "rtc_before_epoch_s": 1790380798,
+    "rtc_elapsed_s": 2,
+    "run": "review-20260929-softguard",
+    "status": "READY",
+    "uid": "<TARGET>",
+    "watchdog_scratch_retained": [
+      false,
+      false
+    ]
+  }
+]

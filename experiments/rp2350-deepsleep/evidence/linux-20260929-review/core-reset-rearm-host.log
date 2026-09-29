@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<CHECKOUT>/tests/ports/rp2/deepsleep/host.py", line 434, in <module>
+    main()
+  File "<CHECKOUT>/tests/ports/rp2/deepsleep/host.py", line 430, in main
+    observe(args, manifest)
+  File "<CHECKOUT>/tests/ports/rp2/deepsleep/host.py", line 311, in observe
+    buffer += connection.read(connection.in_waiting or 1)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/rp2350-tools/venv/lib/python3.12/site-packages/serial/serialposix.py", line 565, in read
+    ready, _, _ = select.select([self.fd, self.pipe_abort_read_r], [], [], timeout.time_left())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

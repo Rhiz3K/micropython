@@ -1,0 +1,16 @@
+error: commit 2445a04bf: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit 2445a04bf: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit 2445a04bf: Message must be signed-off. Use "git commit -s".
+error: commit de4b5c531: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit de4b5c531: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit de4b5c531: Message must be signed-off. Use "git commit -s".
+error: commit 5f4f0fde9: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit 5f4f0fde9: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit 5f4f0fde9: Message must be signed-off. Use "git commit -s".
+error: commit 9b0760c44: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit 9b0760c44: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit 9b0760c44: Message must be signed-off. Use "git commit -s".
+error: commit f7f0d0704: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit f7f0d0704: Unwanted email address: 33246262+Rhiz3K@users.noreply.github.com
+error: commit f7f0d0704: Message must be signed-off. Use "git commit -s".
+See https://github.com/micropython/micropython/blob/master/CODECONVENTIONS.md

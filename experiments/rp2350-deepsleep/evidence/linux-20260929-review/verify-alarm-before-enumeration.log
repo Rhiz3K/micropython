@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "<PRIVATE>/verify_alarm.py", line 23, in <module>
+    b=connect()
+      ^^^^^^^^^
+  File "<PRIVATE>/verify_alarm.py", line 13, in connect
+    assert len(ps)==1
+           ^^^^^^^^^^
+AssertionError

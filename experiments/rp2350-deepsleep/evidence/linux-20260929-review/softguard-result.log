@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<PRIVATE>/softguard.py", line 86, in <module>
+    failure = wait_record(('FAIL', 3, 1), False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<PRIVATE>/softguard.py", line 58, in wait_record
+    raise TimeoutError(expected)
+TimeoutError: ('FAIL', 3, 1)

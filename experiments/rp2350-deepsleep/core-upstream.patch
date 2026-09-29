@@ -1,0 +1,456 @@
+diff --git a/docs/library/machine.rst b/docs/library/machine.rst
+index 6389b3f08..c1fd9d6ab 100644
+--- a/docs/library/machine.rst
++++ b/docs/library/machine.rst
+@@ -124,7 +124,8 @@ To always read a positive integer
+    .. note::
+ 
+       On esp32 and rp2, data persists across :ref:`soft_reset`,
+-      `machine.reset()` and `machine.deepsleep()` wake but is lost on
++      `machine.reset()` and `machine.deepsleep()` wake (subject to the RP2350
++      region restriction below), but is lost on
+       power-off and on poweron-style resets. On esp32 in particular this
+       includes pressing the EN/RESET button on most dev boards, which the
+       chip reports as a power-on reset.
+@@ -141,6 +142,9 @@ To always read a positive integer
+    stm32   BKP registers         Region 1 on BKPSRAM families (F4/F7/H5/H7/U5/N6)
+    ======  ====================  ================================================
+ 
++   On RP2350, a deep sleep which powers off the switched-core domain retains
++   only POWMAN region 2. Watchdog regions 0 and 1 are lost in that state.
++
+    Use ``machine.mem_backup(-1)`` to discover available regions and their sizes.
+ 
+    On stm32 the region index does not have a uniform meaning across boards:
+diff --git a/docs/rp2/quickref.rst b/docs/rp2/quickref.rst
+index 8e0f6d6ba..bdd38b709 100644
+--- a/docs/rp2/quickref.rst
++++ b/docs/rp2/quickref.rst
+@@ -106,6 +106,55 @@ connection succeeds or the interface gets disabled.
+ .. _Pico W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#picow-technical-specification
+ .. _Pico 2 W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#pico2w-technical-specification
+ 
++Timed deep sleep on Pico 2 (experimental)
++-----------------------------------------
++
++The ARM builds for Pico 2 and Pico 2 W support an experimental timed power-down::
++
++    import machine
++    machine.deepsleep(5000)
++    # Execution does not continue here: boot.py and main.py run again on wake.
++
++For durations greater than 1 ms, this requests RP2350 power state P1.7: the
++switched core, XIP cache and both SRAM domains are powered off. The always-on
++timer wakes the chip through the normal ROM boot path. A successful timer wake
++is reported as ``machine.DEEPSLEEP_RESET`` by ``machine.reset_cause()``. The RTC
++continues using the low-power oscillator during sleep, so its accuracy differs
++from the crystal used while awake. No particular board current is guaranteed.
++
++USB disconnects and must enumerate again. Pico 2 W turns off CYW43; the new
++program must reconnect Wi-Fi. After powering off CYW43, Pico 2 W also drives
++GP25 (wireless CS) low to disable the board's VSYS monitor path. Normal wireless
++initialisation after wake reclaims this pin. This preparation applies only to
++timed deep sleep, not to ``WLAN.active(False)`` or ``machine.lightsleep()``.
++GPIO pads retain their output state during power down; external devices and
++the board regulator/flash remain powered. Applications must prepare their own
++external peripherals for sleep. This is not a board-wide power switch. GPIO
++wake is not configured by this path.
++
++Only ``machine.mem_backup(2)`` (the eight POWMAN words) survives this power-down.
++The watchdog scratch regions 0 and 1, Python heap and peripheral state do not.
++Close or flush files before sleeping, as before a reset: ``os.sync()`` does not
++flush open littlefs file objects. Flash operations already issued on the calling
++core complete synchronously. DMA is stopped before requesting power-down.
++
++An active watchdog, a running second Python thread, a call from core 1, or an
++interrupt handler causes ``OSError(EBUSY)`` before teardown. The watchdog is not
++silently disabled: it would lose both its counter and protection in P1.7.
++Terminate the second thread cooperatively before calling deep sleep.
++
++Negative or out-of-range durations raise an exception.
++Zero and 1 ms use a short delay and an ordinary reset. Setup
++time counts toward the requested interval. If the alarm expires during setup,
++or hardware refuses the transition after teardown, an ordinary reset is used;
++it is not reported as ``DEEPSLEEP_RESET``. A short requested duration therefore
++does not guarantee entry to P1.7.
++
++``machine.lightsleep()`` is unchanged. Calling ``machine.deepsleep()`` without
++an argument retains the previous dormant/lightsleep-then-reset behavior, with
++no timed wake. RP2040, RISC-V builds and other board configurations retain the
++previous implementation. The P1.7 path is not enabled or verified for RISC-V.
++
+ Delay and timing
+ ----------------
+ 
+diff --git a/ports/rp2/boards/RPI_PICO2/mpconfigboard.h b/ports/rp2/boards/RPI_PICO2/mpconfigboard.h
+index c0ab8e77b..d3f3b13b6 100644
+--- a/ports/rp2/boards/RPI_PICO2/mpconfigboard.h
++++ b/ports/rp2/boards/RPI_PICO2/mpconfigboard.h
+@@ -1,2 +1,3 @@
+ // Board and hardware specific configuration
+ #define MICROPY_HW_BOARD_NAME                   "Raspberry Pi Pico2"
++#define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP       (PICO_ARM)
+diff --git a/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h b/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
+index e47091768..f270df2f7 100644
+--- a/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
++++ b/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
+@@ -1,5 +1,8 @@
+ // Board and hardware specific configuration
+ #define MICROPY_HW_BOARD_NAME                   "Raspberry Pi Pico 2 W"
++#define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP       (PICO_ARM)
++// Wireless CS also enables the board's VSYS monitor path.
++#define MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW        (PICO_ARM)
+ 
+ // Enable networking.
+ #define MICROPY_PY_NETWORK 1
+diff --git a/ports/rp2/main.c b/ports/rp2/main.c
+index 304175b53..240edd1c8 100644
+--- a/ports/rp2/main.c
++++ b/ports/rp2/main.c
+@@ -93,6 +93,10 @@ bi_decl(bi_program_feature_group_with_flags(BINARY_INFO_TAG_MICROPYTHON,
+     BI_NAMED_GROUP_SEPARATE_COMMAS | BI_NAMED_GROUP_SORT_ALPHA));
+ 
+ int main(int argc, char **argv) {
++    #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++    machine_deepsleep_init();
++    #endif
++
+     // This is a tickless port, interrupts should always trigger SEV.
+     #if PICO_ARM
+     SCB->SCR |= SCB_SCR_SEVONPEND_Msk;
+diff --git a/ports/rp2/modmachine.c b/ports/rp2/modmachine.c
+index 41c371a36..8ba14e86b 100644
+--- a/ports/rp2/modmachine.c
++++ b/ports/rp2/modmachine.c
+@@ -28,6 +28,7 @@
+ // extmod/modmachine.c via MICROPY_PY_MACHINE_INCLUDEFILE.
+ 
+ #include "py/mphal.h"
++#include "py/mperrno.h"
+ #include "mp_usbd.h"
+ #include "modmachine.h"
+ #include "uart.h"
+@@ -53,11 +54,51 @@
+ #if MICROPY_PY_NETWORK_CYW43
+ #include "lib/cyw43-driver/src/cyw43.h"
+ #endif
++#if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++#include "hardware/dma.h"
++#include "hardware/powman.h"
++#include "hardware/structs/nvic.h"
++#include "hardware/structs/systick.h"
++#include "pico/multicore.h"
++#endif
+ 
+ #define RP2_RESET_PWRON (1)
+ #define RP2_RESET_WDT (3)
++#define RP2_RESET_DEEPSLEEP (4)
++
++#if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++// SDK 2.3.0 lists source positions; the observed alarm record is 0x40, not 6.
++#define RP2_POWMAN_ALARM_PWRUP_MASK (1u << 6)
++#define RP2_DEEPSLEEP_GLOBALS \
++    { MP_ROM_QSTR(MP_QSTR_DEEPSLEEP_RESET), MP_ROM_INT(RP2_RESET_DEEPSLEEP) },
++static bool woke_from_deepsleep;
++static void machine_deepsleep_prepare_wfi(void);
++
++void machine_deepsleep_init(void) {
++    if (watchdog_hw->reason) {
++        machine_deepsleep_prepare_wfi();
++    }
++    // The ROM leaves ALARM set. Consume it below so a later core-only reset
++    // cannot reuse the retained read-only power-down and wake-source records.
++    woke_from_deepsleep = !watchdog_hw->reason
++        && (powman_hw->chip_reset & POWMAN_CHIP_RESET_HAD_SWCORE_PD_BITS)
++        && (powman_hw->last_swcore_pwrup & RP2_POWMAN_ALARM_PWRUP_MASK)
++        && (powman_hw->timer & POWMAN_TIMER_ALARM_BITS);
++    powman_disable_alarm_wakeup();
++    powman_clear_alarm();
++    // POWMAN survives SWCORE power-down. Restore normal awake debug behaviour.
++    powman_set_debug_power_request_ignored(false);
++    if (powman_timer_is_running()) {
++        // Preserve the RTC value, restoring crystal accuracy while awake.
++        powman_timer_set_1khz_tick_source_xosc();
++    }
++}
++#else
++#define RP2_DEEPSLEEP_GLOBALS
++#endif
+ 
+ #define MICROPY_PY_MACHINE_EXTRA_GLOBALS \
++    RP2_DEEPSLEEP_GLOBALS \
+     { MP_ROM_QSTR(MP_QSTR_Pin),                 MP_ROM_PTR(&machine_pin_type) }, \
+     { MP_ROM_QSTR(MP_QSTR_RTC),                 MP_ROM_PTR(&machine_rtc_type) }, \
+     { MP_ROM_QSTR(MP_QSTR_Timer),               MP_ROM_PTR(&machine_timer_type) }, \
+@@ -82,6 +123,10 @@ static mp_int_t mp_machine_reset_cause(void) {
+     int reset_cause;
+     if (watchdog_caused_reboot()) {
+         reset_cause = RP2_RESET_WDT;
++    #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++    } else if (woke_from_deepsleep) {
++        reset_cause = RP2_RESET_DEEPSLEEP;
++    #endif
+     } else {
+         reset_cause = RP2_RESET_PWRON;
+     }
+@@ -376,7 +421,228 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+     }
+ }
+ 
++#if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++/*
++ * Adapted from Raspberry Pi pico-sdk, commit
++ * 98a542c1a62fb549ffb5d66a3e5892b06276b670,
++ * src/rp2_common/pico_low_power/low_power.c:
++ * runtime_init_rp2350_sleep_fix().
++ *
++ * Copyright (c) 2026 Raspberry Pi (Trading) Ltd.
++ * SPDX-License-Identifier: BSD-3-Clause
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice,
++ *    this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright notice,
++ *    this list of conditions and the following disclaimer in the documentation
++ *    and/or other materials provided with the distribution.
++ * 3. Neither the name of the copyright holder nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++static void __no_inline_not_in_flash_func(machine_deepsleep_prepare_wfi)(void) {
++    // As in the SDK's runtime_init_rp2350_sleep_fix, clear the post-ROM-reboot
++    // sleep state with an immediately pending IRQ. The STR and WFI must share
++    // one aligned instruction fetch in SRAM. PRIMASK prevents handler dispatch.
++    uint32_t irq_state = save_and_disable_interrupts();
++    uint32_t enabled[MP_ARRAY_SIZE(nvic_hw->icer)];
++    for (uint i = 0; i < MP_ARRAY_SIZE(enabled); ++i) {
++        enabled[i] = nvic_hw->iser[i];
++        nvic_hw->icer[i] = UINT32_MAX;
++    }
++    uint32_t mask = 1u << (FIRST_USER_IRQ % 32);
++    io_rw_32 *pending = &nvic_hw->ispr[FIRST_USER_IRQ / 32];
++    nvic_hw->icpr[FIRST_USER_IRQ / 32] = mask;
++    nvic_hw->iser[FIRST_USER_IRQ / 32] = mask;
++    scb_hw->scr &= ~M33_SCR_SLEEPDEEP_BITS;
++    __asm volatile (
++        ".balign 4\n"
++        "str %0, [%1]\n"
++        "wfi\n"
++        : : "l" (mask), "l" (pending) : "memory"
++        );
++    nvic_hw->icer[FIRST_USER_IRQ / 32] = mask;
++    nvic_hw->icpr[FIRST_USER_IRQ / 32] = mask;
++    for (uint i = 0; i < MP_ARRAY_SIZE(enabled); ++i) {
++        nvic_hw->iser[i] = enabled[i];
++    }
++    restore_interrupts(irq_state);
++}
++
++MP_NORETURN static void machine_deepsleep_abort(void) {
++    uint32_t state = powman_hw->state;
++    if ((state & (POWMAN_STATE_CHANGING_BITS | POWMAN_STATE_REQ_BITS))
++        == (POWMAN_STATE_CHANGING_BITS | POWMAN_STATE_REQ_BITS)) {
++        // A transition can commit between the caller's check and this one.
++        // Its wake alarm must remain armed.
++        __dsb();
++        for (;;) {
++            __wfi();
++        }
++    }
++    // Teardown cannot be undone. Cancel the request and take an ordinary reset;
++    // reset_cause() must not claim that the switched core was powered down.
++    // Keep the alarm armed until cancellation has completed: a transition that
++    // is already underway must retain its wake source.
++    powman_hw->state = POWMAN_PASSWORD_BITS; // Request P0.0 (all domains on).
++    uint64_t deadline = time_us_64() + 100000;
++    while (powman_hw->state & (POWMAN_STATE_WAITING_BITS | POWMAN_STATE_CHANGING_BITS | POWMAN_STATE_CURRENT_BITS)) {
++        if (time_us_64() >= deadline) {
++            // Never execute WFI with an unconfirmed cancellation.
++            watchdog_reboot(0, SRAM_END, 0);
++            for (;;) {
++                tight_loop_contents();
++            }
++        }
++    }
++    powman_disable_alarm_wakeup();
++    powman_clear_alarm();
++    scb_hw->scr &= ~M33_SCR_SLEEPDEEP_BITS;
++    mp_machine_reset();
++}
++
++MP_NORETURN static void machine_deepsleep_timed(mp_int_t delay_ms) {
++    if (delay_ms < 0) {
++        mp_raise_ValueError(MP_ERROR_TEXT("negative sleep duration"));
++    }
++    // Do not kill another Python thread while it owns a lock or writes flash.
++    if (get_core_num() != 0 || __get_current_exception()
++        #if MICROPY_PY_THREAD
++        || core1_entry != NULL
++        #endif
++        || (watchdog_hw->ctrl & WATCHDOG_CTRL_ENABLE_BITS)) {
++        mp_raise_OSError(MP_EBUSY);
++    }
++    if (delay_ms <= 1) {
++        mp_hal_delay_ms(delay_ms);
++        mp_machine_reset();
++    }
++    uint64_t now = powman_timer_get_ms();
++    if (!powman_timer_is_running() || now > UINT64_MAX - (uint32_t)delay_ms) {
++        mp_raise_ValueError(MP_ERROR_TEXT("invalid sleep deadline"));
++    }
++    uint64_t deadline = now + (uint32_t)delay_ms;
++    powman_power_state awake = powman_get_power_state();
++    if (!powman_configure_wakeup_state(POWMAN_POWER_STATE_NONE, awake)) {
++        mp_raise_OSError(MP_EINVAL);
++    }
++
++    // Flash operations on core0 are synchronous. Applications must flush/close
++    // files before calling, as for machine.reset(); os.sync() cannot flush LFS
++    // file objects. From here there is no return to the Python runtime.
++    uint32_t irq_state = save_and_disable_interrupts();
++    // A callback could have started a thread/watchdog since the initial check.
++    if (
++        #if MICROPY_PY_THREAD
++        core1_entry != NULL ||
++        #endif
++        (watchdog_hw->ctrl & WATCHDOG_CTRL_ENABLE_BITS)) {
++        restore_interrupts(irq_state);
++        mp_raise_OSError(MP_EBUSY);
++    }
++    multicore_reset_core1();
++    #if MICROPY_PY_NETWORK_CYW43
++    cyw43_deinit(&cyw43_state);
++    // Also cover an interface which has never been activated.
++    gpio_init(CYW43_PIN_WL_REG_ON);
++    gpio_disable_pulls(CYW43_PIN_WL_REG_ON);
++    gpio_put(CYW43_PIN_WL_REG_ON, false);
++    gpio_set_dir(CYW43_PIN_WL_REG_ON, GPIO_OUT);
++    #if MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW
++    // Some boards also use wireless CS to enable the VSYS monitor path.
++    // Drive it low only after the radio is fully powered off.
++    gpio_init(CYW43_PIN_WL_CS);
++    gpio_disable_pulls(CYW43_PIN_WL_CS);
++    gpio_put(CYW43_PIN_WL_CS, false);
++    gpio_set_dir(CYW43_PIN_WL_CS, GPIO_OUT);
++    #endif
++    #endif
++    #if MICROPY_HW_ENABLE_USBDEV
++    tud_disconnect();
++    #endif
++
++    // RP2350-E5: prevent every channel from restarting another before aborting
++    // them together. Leave the peripheral clocks running until writes drain.
++    for (uint i = 0; i < NUM_DMA_CHANNELS; ++i) {
++        uint32_t ctrl = dma_hw->ch[i].ctrl_trig;
++        ctrl &= ~(DMA_CH0_CTRL_TRIG_EN_BITS | DMA_CH0_CTRL_TRIG_CHAIN_TO_BITS);
++        dma_hw->ch[i].al1_ctrl = ctrl | (i << DMA_CH0_CTRL_TRIG_CHAIN_TO_LSB);
++    }
++    dma_hw->abort = (1u << NUM_DMA_CHANNELS) - 1;
++    uint64_t abort_deadline = time_us_64() + 100000;
++    while (dma_hw->abort) {
++        if (time_us_64() >= abort_deadline) {
++            machine_deepsleep_abort();
++        }
++    }
++
++    for (uint i = 0; i < MP_ARRAY_SIZE(nvic_hw->icer); ++i) {
++        nvic_hw->icer[i] = UINT32_MAX;
++        nvic_hw->icpr[i] = UINT32_MAX;
++    }
++    systick_hw->csr = 0;
++    scb_hw->icsr = M33_ICSR_PENDSVCLR_BITS | M33_ICSR_PENDSTCLR_BITS;
++    // A preceding lightsleep() may have left SLEEPDEEP set.
++    scb_hw->scr &= ~M33_SCR_SLEEPDEEP_BITS;
++    powman_disable_all_wakeups();
++    powman_clear_alarm();
++    powman_set_debug_power_request_ignored(true);
++    powman_timer_set_1khz_tick_source_lposc();
++    powman_set_bits(&powman_hw->vreg_ctrl, POWMAN_VREG_CTRL_UNLOCK_BITS);
++    // Normal ROM flash boot, without reserving any machine.mem_backup words.
++    for (uint i = 0; i < 4; ++i) {
++        powman_hw->boot[i] = 0;
++    }
++    powman_enable_alarm_wakeup_at_ms(deadline);
++    // If the deadline races entry, this pending IRQ makes WFI return even with
++    // PRIMASK set. Its handler is never executed; the failure path resets.
++    irq_set_enabled(POWMAN_IRQ_TIMER, true);
++    int state_result = powman_set_power_state(POWMAN_POWER_STATE_NONE);
++    // The SDK polls for WAITING, but the sequencer may already be CHANGING.
++    // Do not cancel or disarm the alarm once the all-off transition has begun.
++    uint32_t state = powman_hw->state;
++    if ((state & (POWMAN_STATE_CHANGING_BITS | POWMAN_STATE_REQ_BITS))
++        == (POWMAN_STATE_CHANGING_BITS | POWMAN_STATE_REQ_BITS)) {
++        __dsb();
++        for (;;) {
++            __wfi();
++        }
++    }
++    if (powman_timer_get_ms() >= deadline || state_result != PICO_OK) {
++        machine_deepsleep_abort();
++    }
++    // POWMAN defers P1.7 until both processors sleep. No manual clock/XIP
++    // shutdown is needed: instructions and stack remain accessible until WFI,
++    // after which SWCORE, XIP cache and both SRAM domains lose power.
++    while (powman_timer_get_ms() < deadline) {
++        __dsb();
++        __wfi();
++    }
++    machine_deepsleep_abort();
++}
++#endif
++
+ MP_NORETURN static void mp_machine_deepsleep(size_t n_args, const mp_obj_t *args) {
++    #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++    if (n_args == 1) {
++        machine_deepsleep_timed(mp_obj_get_int(args[0]));
++    }
++    #endif
+     mp_machine_lightsleep(n_args, args);
+     mp_machine_reset();
+ }
+diff --git a/ports/rp2/modmachine.h b/ports/rp2/modmachine.h
+index 1ed812aff..387978a86 100644
+--- a/ports/rp2/modmachine.h
++++ b/ports/rp2/modmachine.h
+@@ -3,6 +3,7 @@
+ 
+ #include "py/obj.h"
+ 
++void machine_deepsleep_init(void);
+ void machine_pin_init(void);
+ void machine_pin_deinit(void);
+ void machine_i2s_init0(void);
+diff --git a/ports/rp2/mpconfigport.h b/ports/rp2/mpconfigport.h
+index 3084531cb..488f6e16b 100644
+--- a/ports/rp2/mpconfigport.h
++++ b/ports/rp2/mpconfigport.h
+@@ -85,6 +85,15 @@
+ #define MICROPY_HW_ENABLE_PSRAM (0)
+ #endif
+ 
++#ifndef MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++#define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP (0)
++#endif
++
++// Board opt-in: hold wireless CS low after CYW43 power-off in timed deep sleep.
++#ifndef MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW
++#define MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW (0)
++#endif
++
+ // Memory allocation policies
+ #if MICROPY_HW_ENABLE_PSRAM
+ #ifdef MICROPY_GC_STACK_ENTRY_TYPE

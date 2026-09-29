@@ -1,0 +1,6 @@
+{
+  "run": "review-20260929-core-reset",
+  "sleep_ms": 2500,
+  "expect_deep_cause": true,
+  "cycles": 1
+}

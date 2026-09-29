@@ -1,0 +1,109 @@
+[
+  {
+    "boot": 1,
+    "cause": 3,
+    "completed": 0,
+    "phase": 0,
+    "powman_chip_reset": 33554432,
+    "powman_last_swcore_pwrup": 64,
+    "protocol": 2,
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      0,
+      0,
+      19,
+      0
+    ],
+    "run": "review-20260929-core-reset",
+    "status": "READY",
+    "uid": "<TARGET>"
+  },
+  {
+    "boot": 1,
+    "completed": 0,
+    "protocol": 2,
+    "run": "review-20260929-core-reset",
+    "sleep_ms": 2500,
+    "status": "SLEEP",
+    "uid": "<TARGET>"
+  },
+  {
+    "boot": 2,
+    "cause": 4,
+    "completed": 1,
+    "crossed_day": true,
+    "crossed_minute": true,
+    "phase": 1,
+    "powman_chip_reset": 33554432,
+    "powman_last_swcore_pwrup": 64,
+    "protocol": 2,
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      0,
+      0,
+      0,
+      0
+    ],
+    "rtc_before_epoch_s": 1790380798,
+    "rtc_elapsed_s": 2,
+    "run": "review-20260929-core-reset",
+    "status": "READY",
+    "uid": "<TARGET>",
+    "watchdog_scratch_retained": [
+      false,
+      false
+    ]
+  },
+  {
+    "boot": 3,
+    "cause": 1,
+    "completed": 1,
+    "error": "AssertionError('reset interrupted an already consumed wake result',)",
+    "phase": 7,
+    "powman_chip_reset": 33554432,
+    "powman_last_swcore_pwrup": 64,
+    "protocol": 2,
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      0,
+      0,
+      2,
+      0
+    ],
+    "run": "review-20260929-core-reset",
+    "status": "FAIL",
+    "uid": "<TARGET>"
+  },
+  {
+    "boot": 4,
+    "cause": 3,
+    "completed": 1,
+    "error": "AssertionError('reset interrupted an already consumed wake result',)",
+    "phase": 7,
+    "powman_chip_reset": 33554432,
+    "powman_last_swcore_pwrup": 64,
+    "protocol": 2,
+    "rtc": [
+      2026,
+      9,
+      26,
+      5,
+      0,
+      0,
+      10,
+      0
+    ],
+    "run": "review-20260929-core-reset",
+    "status": "FAIL",
+    "uid": "<TARGET>"
+  }
+]
