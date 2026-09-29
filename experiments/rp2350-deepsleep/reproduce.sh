@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Rebuild the reviewed baseline and patch in a new, isolated clone.
+# Historical reproduction of the 2026-09-25 candidate, not the current branch.
+# This intentionally excludes later GP25, USB and review fixes.
 # Linux x86_64 prerequisites: git, curl, tar/xz, Python 3 + venv, GNU Make,
 # host C/C++ compiler, pkg-config. This script never accesses a device.
-# Usage: ./reproduce.sh /absolute/path/to/new-build-directory
+# Usage: ./reproduce.sh --historical-20260925 /absolute/path/to/new-build-directory
 # Optional: JOBS=4 ARM_TOOLCHAIN_ARCHIVE=/path/to/verified-archive.tar.xz
 set -euo pipefail
 
@@ -14,8 +15,17 @@ readonly toolchain_sha=8f6903f8ceb084d9227b9ef991490413014d991874a1e34074443c2a7
 readonly toolchain_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.3.rel1/binrel/${toolchain_name}.tar.xz"
 readonly bundle_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
+if [[ "${1:-}" != --historical-20260925 ]]; then
+    printf 'This script builds the HISTORICAL 2026-09-25 candidate (3fc3f9431), not HEAD.\n' >&2
+    printf 'For the current candidate, follow HANDOVER.cs.md, including the TinyUSB patch.\n' >&2
+    printf 'To reproduce the old results: %s --historical-20260925 /path/to/NEW-directory\n' "$0" >&2
+    exit 2
+fi
+shift
+printf 'HISTORICAL BUILD: base 09f5bb4475 + 3fc3f9431 patches; no later GP25/USB/review fixes.\n' >&2
+
 if [[ $# -ne 1 || -e "$1" ]]; then
-    printf 'Usage: %s /path/to/NEW-build-directory\n' "$0" >&2
+    printf 'Usage: %s --historical-20260925 /path/to/NEW-build-directory\n' "$0" >&2
     printf 'The destination must not already exist. No existing tree is deleted.\n' >&2
     exit 2
 fi
