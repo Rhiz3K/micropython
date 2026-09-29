@@ -1,411 +1,300 @@
-# Předání: RP2350 deepsleep, Mac a Pico 2 W s displejem
+# Handover: pokračování na druhém PC a druhé desce
 
-Stav k 28. 9. 2026. Fork: [Rhiz3K/micropython](https://github.com/Rhiz3K/micropython),
-větev `rp2/rp2350-timed-deepsleep`.
+Aktualizováno **29. 9. 2026**. Cílem je pokračovat v ověřování časovaného
+RP2350 deepsleep, USB a Wi-Fi na cílovém PC a jeho skutečné desce.
+Při tomto předání se **neotevíral USB port, neresetovala ani nepřepisovala deska**.
+Níže uvedené stavy hardware jsou poslední zaznamenaná pozorování, nikoli
+nové ověření dnešního zapojení.
 
-## Aktuálně: oprava USB a přípravy Wi-Fi, 28. 9.
+## 1. Co převzít
 
-[Nové výsledky](RESULTS-USB-WIFI-MAC-20260928.md) dokládají opravenou chybu
-fronty SETUP v připnutém TinyUSB a ověřenou sekvenci odhlášení Wi-Fi před
-vypnutím rádia. Nasazený firmware `g764de396cf.dirty.usbq1`, UF2
-`b404a1771bf0097a07709848cd296ff6a2eb755f1d7cf25a10395a8f346f0a43`,
-prošel **70 kontrolovanými návraty USB**. Navíc prošly tři aplikační cykly
-`lightsleep(2500) → soft_reset` a opětovné DHCP/HTTP. Příčina dřívějších
-fyzických výpadků USB není jednoznačně prokázaná; dnešní kontrolní firmware
-také procházel. Nativní C test samostatně reprodukoval konkrétní chybu TinyUSB
-a po její opravě prošel.
+- Fork: [Rhiz3K/micropython](https://github.com/Rhiz3K/micropython), větev
+  **`rp2/rp2350-timed-deepsleep`**.
+- Poslední implementační commit:
+  [`0f193e89cbb0246ca4d967e1ad98db28304a031c`](https://github.com/Rhiz3K/micropython/commit/0f193e89cbb0246ca4d967e1ad98db28304a031c).
+  Obsahuje GP25 přípravu v core, rozšířené testy, Wi-Fi helper, TinyUSB patch
+  a anonymizované důkazy. Je pushnutý; při přípravě předání se ověřila shoda
+  lokálního a vzdáleného commitu. Následující commit tohoto předání mění jen dokumentaci.
+- **Upstream PR nebyl založen a celek stále není ready pro upstream.**
+  Používá se stávající Git identita. Podle přání uživatele nepřidávat
+  `Signed-off-by` ani vymýšlet skutečné jméno/e-mail. Případné budoucí
+  upstream podání a jeho požadavky se řeší samostatně.
+- Hlavní pracovní strom na Macu je před tímto předáním čistý; **`lib/tinyusb`
+  je úmyslně lokálně upravený**. Gitlink zůstává na `b549ac1d…`.
+  Přesný [TinyUSB patch](tinyusb-ep0-queue.patch) je uložený v hlavním repozitáři,
+  ale nový klon jej musí zvlášť aplikovat. Samotné `git clone` nestačí.
+- `firmware.patch`, `tests.patch` a `combined-upstream.patch` jsou podklady
+  proti upstream základu `09f5bb447504a058376c62fe991b3613531837e6`.
+  **Core/test změny už jsou v této větvi; tyto tři patche na ni znovu neaplikovat.**
+  `combined-upstream.patch` neobsahuje TinyUSB opravu ani soukromou aplikaci.
 
-**Nasazení ověřeno 2026-09-28T09:06:56Z.** Na Picu je 29 souborů: 28 zůstalo
-byteově totožných, v původním `main.py` je cílená úprava `_shutdown_wifi()`
-a jednoho místa jejího volání. Původní soubory a ověřené flash zálohy zůstávají
-soukromě uložené. Dočasný guard byl odstraněn, původní backup slova a UTC RTC
-obnoveny/ověřeny. Aplikace je zastavená ve friendly REPL, rádio vypnuté,
-panel zaparkovaný. Pico **není v deepsleep**; další reset spustí upravenou
-původní aplikaci. Celý její produkční běh s displejem nebyl znovu spuštěn.
-Testy i místní HTTP server skončily.
+Čti v tomto pořadí:
 
-**Experimentální větev forku; bez upstream PR.** USB oprava je samostatná
-[převzatá záplata TinyUSB](tinyusb-ep0-queue.patch). `combined-upstream.patch`
-ji neobsahuje; změny uvnitř pracovního stromu submodulu se samy neuloží
-commitem hlavního repozitáře. Přesná reprodukce a omezení jsou v novém reportu.
-Energetická měření níže jsou historická, s novým firmwarem se neopakovala.
+1. Tento handover.
+2. [USB/Wi-Fi: opravy, testy a nasazení 28. 9.](RESULTS-USB-WIFI-MAC-20260928.md).
+3. [Společný P1.7/GP25 kandidát a rozšířené testy 27. 9.](RESULTS-EXTENDED-MAC-20260927.md).
+4. [Opt-in hardware testy a formát privátního manifestu](../../tests/ports/rp2/deepsleep/README.md).
+5. Podle úkolu [Mac funkční testy](RESULTS-MAC-20260927.md),
+   [displejová optimalizace](POWER-OPT-MAC-20260927.md),
+   [GP25 měření](POWER-GP25-MAC-20260927.md) a [návrh upstream PR](upstream-pr.md).
 
-## Historická rozšířená validace a společný kandidát, 27. 9.
+[Starý chronologický handover](https://github.com/Rhiz3K/micropython/blob/0f193e89cbb0246ca4d967e1ad98db28304a031c/experiments/rp2350-deepsleep/HANDOVER.cs.md)
+a [původní linuxové výsledky](RESULTS.md) zůstávají historickými podklady.
+Jejich tehdejší „aktuální stav“ nepřebírat jako dnešní stav cílové desky.
 
-[Nový report](RESULTS-EXTENDED-MAC-20260927.md) spojuje časovaný P1.7 a
-Pico 2 W GP25 přípravu. Kandidát UF2 `c5c308066fc70ecf91d94709d6e5515ff15756d892834417aadd85d685b62f2b`
-prošel 120 alarmovými návraty: 100 bez aktivace rádia, 10 STA, 5 zabezpečené
-AP v opakované sadě a 5 BLE. Nové přímé core A/B měření snížilo odběr sestavy
-z 0,60048 na 0,37178 mA bez Python přípravy GP25.
+## 2. Dvě různé desky — nesměšovat jejich stav ani zálohy
 
-**Není připraven k odeslání upstream.** Dvě sady nedodaly první READY a USB
-zmizelo; stejný problém nastal i při obyčejném resetu guardu bez rádia.
-Instalátor nyní poskytuje 150 ms pro potvrzení a zavření CDC, ale pozdější
-STA+BLE start selhal znovu. Příčina ani regrese vůči nezměněnému upstreamu
-není prokázaná. Původní AP FAIL, jeho samostatný PASS a STA+BLE FAIL jsou
-zachované odděleně. Zbylé nové sady, plný Wi-Fi reconnect cyklus, druhé 300s
-potvrzení a nový obraz displeje jsou NOT RUN. Tři samostatné Wi-Fi sondy
-s úplným deinit před/po měly DHCP/HTTP PASS, což neopravňuje tvrdit stabilní
-síť přes opakovaný deepsleep.
+| Deska | Poslední zaznamenaný stav | Co z něj nelze odvodit |
+| --- | --- | --- |
+| Původní Pico 2 W na linuxovém PC | Dříve prošlo 100 krátkými spánky. Po Wi-Fi trasování `wlan.config(trace=7)` 26. 9. přestalo odpovídat USB. Obnova fyzickým odpojením tehdy nebyla potvrzená; soukromé zálohy jsou na původním PC. | Že je dnes stále zaseklé, že má nový USB fix nebo že se na něj vztahuje Mac nasazení. |
+| Nové Pico 2 W na Macu | Nasazení ověřeno **28. 9. v 09:06:56 UTC**: nový firmware, 29 souborů, z toho 28 původních byteově totožných a cíleně upravený `main.py`. Zůstalo ve friendly REPL, rádio vypnuté, panel zaparkovaný; nebylo v deepsleep. Guard odstraněný, backup slova obnovená, RTC ověřené. | Že po pozdějším přepojení stále stojí v REPL. Reset spustí upravenou původní aplikaci. |
+| Deska připojená při novém pokračování | **Zatím neověřeno.** Nejdřív zjistit skutečný model, UID, aktuální firmware a zapojení. | Že jde automaticky o jednu z předchozích desek nebo že na ni patří jejich manifest/flash backup. |
 
-[Společný patch](combined-upstream.patch) obsahuje pouze core, dokumentaci
-a opt-in testy vůči `09f5bb447504a058376c62fe991b3613531837e6`. Čisté
-`git apply --check` prošlo. Panelový helper zůstává aplikační integrací.
-Historické samostatné patche a důkazy se nepřepisovaly.
+Mac sestava měla stále připojený Waveshare **Pico-ePaper-2.9 B/W V2, 296×128**.
+Napájení při pozdějších testech: hub → vstup JT-UM120 → výstup JT-UM120 → Pico;
+PC port měřáku byl také v hubu. Pico nemělo další napájení. Nové zapojení
+ověřit znovu; stará fotografie neurčuje dnešní stav ani polohu propojek.
 
-**Tehdejší obnova: PASS, 2026-09-27T21:21:08.784101+00:00.** Na desku se vrátil firmware před touto
-rozšířenou sadou `9a8542bb24`. Celá obnovená flash byla nezávisle ověřena;
-potom byly obnoveny a hashově ověřeny všech 29 původních souborů včetně
-`main.py`. Dočasné testy a rádiové konfigurace jsou odstraněny. UTC RTC a
-všechna původní backup slova jsou obnovená a ověřená. Po BOOTSEL bootu se bez
-resetu vypnul již expirovaný watchdog; stav byl přečten zpět.
+Mac firmware zůstává historicky označen
+`v1.30.0-preview.88.g764de396cf.dirty.usbq1` (build 28. 9.). Jeho UF2 SHA256:
+`b404a1771bf0097a07709848cd296ff6a2eb755f1d7cf25a10395a8f346f0a43`.
+Vznikl před commitem `0f193e89c`; starší hash v runtime není důkazem,
+že opravy chybějí. Nový build na druhém PC bude mít vlastní verzi/hash.
 
-Aplikace je zastavená ve friendly REPL, STA/AP off, WL_REG_ON=0, GP25 LOW,
-panel sleep/RST=0 a datové piny Hi-Z. Pico nyní **není v deepsleep**.
-Další reset spustí původní aplikaci, která stále automaticky nevolá nové
-helpery. Další restartovací sady nebyly spuštěny; HTTP server i měření skončily.
-Důkazy jsou v [novém exportu](evidence/mac-20260927-extended/README.md).
+## 3. Co funguje a co ještě není prokázané
 
-## Dřívější dokončené experimenty
-
-**Historický stav před opravou z 28. 9.: experimentální firmware; energie
-úplného aplikačního cyklu není změřená, Wi-Fi reconnect není spolehlivý.** Nativní Mac build už byl sestaven a nová
-Pico 2 W identifikována, plně zálohována a testována. Aktuální průběh a důkazy
-jsou v [samostatných výsledcích z Macu](RESULTS-MAC-20260927.md): krátké sady,
-regrese i skutečné 30minutové a 75minutové spánky prošly. Samostatná Wi-Fi
-diagnostika reprodukovala selhání po běžném restartu i na nezměněném základu.
-Displejový test se dvěma obrazy a jedním 5s alarmovým bootem má automatické
-kontroly PASS; majitel následně potvrdil správný čitelný obraz B a černý
-obdélník vpravo, takže vizuální kontrola fáze B má také PASS.
-Majitel upřesnil, že displej zůstává připojený. Krátké/dlouhé spánkové sady jej
-neobsluhovaly; dřívější fyzické odpojení nebylo doložené, nejde o ověřený test
-holé desky. Následný displejový test je samostatný výsledek.
-
-Navazující [měření přes JT-UM120](POWER-MAC-20260927.md) porovnalo tři 45s
-opakování aktivního CPU, běžného čekání, lightsleep a deepsleep. Celá sestava
-s vypnutým rádiem a uspaným panelem měla v pozdním okně samostatného 300s
-deepsleep průměr **3,81 mA / 19,38 mW** na USB vstupu. Všechny režimy i návraty
-prošly. Pozdější 15s nezatížená reference ukázala 0,05541 mA; celý její záznam
-skončil HID chybou až po tomto platném úseku. Měření holé desky a energie
-úplného cyklu chybí; nulová reference není kalibrace a nebyla odečtena.
-
-Pozdější [optimalizace s připojeným displejem](POWER-OPT-MAC-20260927.md)
-snížila odběr na **0,6000 a 0,5999 mA / přibližně 3,05 mW** ve dvou 300s
-testech, asi o **84 %** proti nově zopakovanému základu 3,8195 mA. Pomohlo
-uvolnění datových pinů po dokončeném panel sleep; firmware se neměnil.
-Všech osm nových alarmových návratů a nové A/B překreslení prošly automatickými
-kontrolami. Majitel následně potvrdil správný nový text `B: OPTIMIZED SLEEP OK`
-i černý obdélník vpravo: vizuální kontrola také PASS.
-[Ověřený helper](pico_epaper29_lowpower.py) vyžaduje úplné uspání panelu
-před voláním a obnovení všech GPIO/SPI při dalším použití displeje.
-**Původní aplikace tuto optimalizaci zatím nevolá.**
-
-Další [A/B test GP25](POWER-GP25-MAC-20260927.md) snížil odběr z **0,5983 na
-0,3708 mA / 1,8849 mW**, dalších **38,0 %**, při stále připojeném displeji.
-Po úplném vypnutí rádia GP25 LOW vypíná měřicí cestu VSYS. Tři krátké
-HIGH/LOW/HIGH a dvě 300s srovnání mají PASS, stejně jako nové A/B překreslení
-a opětovná inicializace ovladače rádia. Dodaná fotografie potvrzuje nový
-text `B: GP25 SLEEP OK` a černý obdélník vpravo: vizuální kontrola PASS.
-Nový [board helper](pico2w_vsys_lowpower.py) je ověřený společně s panelovým
-helperem; původní aplikace je automaticky nepoužívá. Kontrola inicializace
-ovladače netestovala připojení k AP a neopravuje známý Wi-Fi reconnect.
-
-**Historický stav před rozšířenou sadou:** v **16:37:40 UTC** zůstal firmware
-`9a8542bb24`, původní `main.py` a všech 29 původních souborů byly obnoveny
-a hashově ověřeny vůči nové záloze bezprostředně před GP25 testy.
-Šest testovacích souborů bylo odstraněno, UTC RTC a uložené backup hodnoty
-obnoveny a ověřeny. Aplikace je zastavená ve friendly REPL, STA/AP neaktivní,
-WL_REG_ON=0, GP25 LOW, panel uspaný, RST=0 a datové piny uvolněné. Pico nyní není
-v deepsleep; uvedených 0,37 mA je naměřená hodnota spánku. Další reset spustí
-původní aplikaci. Host testy, záznam měřáku a HTTP endpoint skončily.
-
-## Co přebíráš
-
-- Firmware a testy jsou v commitu `3fc3f9431d9ccc571b4fb0c27bd860d5709ab683`.
-  Tento už existující commit nebyl při předání přepisován.
-- Základ je `09f5bb447504a058376c62fe991b3613531837e6`, SDK
-  `98a542c1a62fb549ffb5d66a3e5892b06276b670` (2.3.0).
-- [Výsledky a otevřené chyby](RESULTS.md), [návrh upstream PR v angličtině](upstream-pr.md),
-  [testovací nástroje](../../tests/ports/rp2/deepsleep/README.md),
-  [přesné revize submodulů](submodule-revisions.txt).
-- `firmware.patch` a `tests.patch` lze samostatně posoudit vůči přesnému základu.
-  Jsou už aplikované ve větvi; na ni je znovu neaplikuj.
-- Veřejný upstream PR nebyl vytvořen. Tato složka je předávací materiál forku,
-  nikoli navrhovaná součást upstream firmwaru.
-
-Nové `machine.deepsleep(ms)` na Pico 2/Pico 2 W ARM žádá POWMAN P1.7:
-SWCORE, obě SRAM domény a XIP cache se mají vypnout, AON časovač běží z LPOSC
-a alarm spustí normální ROM boot. Python heap se nezachovává. RTC a
-`machine.mem_backup(2)` přežijí; regiony 0/1 nikoli. Firmware nepoužívá scratch
-slova jako vlastní wake značku. Aktivní watchdog, Python worker na core1 a IRQ
-kontext se odmítají EBUSY. Aplikace musí předem ukončit workery a flush/close
-otevřené soubory. USB a síť se po probuzení navazují znovu.
-
-RP2040 a bezargumentová cesta zůstávají původní. Nová cesta není ověřená pro
-RISC-V a je pro něj vypnutá. Opravy RTC/frekvence `cc120575`, `eb1611d2`,
-`1ea77a5d` již obsahuje základ; znovu je neimplementuj.
-
-## Známý stav původní desky
-
-Původní Pico 2 W na linuxovém PC prošlo 100 krátkými cykly a dalšími kontrolami.
-Při následném Wi-Fi trasování `wlan.config(trace=7)` 26. září přestalo odpovídat
-USB REPL. To je pozdější událost než úspěšné testy z 25. září. Firmware se při
-trasování nepřepisoval. Běžný USB reset a 5/30sekundové požadavky na vypnutí
-portu hubu obnovu nezajistily; skutečné odpojení VBUS nebylo změřeno. Majitel
-potvrdil napájení pouze USB, bez dalších vodičů.
-
-Poslední ověřený stav je **neodpovídající deska**, čekající na fyzické odpojení
-a připojení, nejprve bez BOOTSEL a ideálně přímo k PC. Na přání majitele má
-zůstat experimentální firmware. Ověřená úplná původní záloha a obnovovací UF2
-existují soukromě na původním PC, nejsou ve forku. Nejsou zálohou nového Pica.
-
-Wi-Fi test selhal i na původním masteru před prvním uspáním. Read-only diagnostika
-routeru našla dřívější neúspěšné DHCP nabídky pro kandidátní MAC; její přiřazení
-k desce ještě potřebuje potvrdit skutečným WLAN MAC. Není prokázaná příčina ani
-regrese deepsleep. Příště preferuj packet capture na kontrolovaném AP. USB trace
-bez funkční obnovy neopakuj. Router nebyl překonfigurován; privátní síťové
-podklady, hesla ani původní aplikace se nepřenášejí do GitHubu.
-
-## Nová sestava
-
-Majitel uvedl **Pico 2 WH** (Pico 2 W s připájenými headery) a
-[Waveshare Pico-ePaper-2.9](https://rpishop.cz/pico-karty/3652-waveshare-29-e-paper-displej-pro-raspberry-pi-pico.html).
-Pro ověřenou originální Pico 2 W použij `BOARD=RPI_PICO2_W`, výchozí ARM variantu.
-Model i unique ID ověř na nové desce; staré sériové číslo/manifest nepřebírej.
-Nezaměňuj ji s Pico WH/Pico W (RP2040, stará cesta) nebo Pico 2 bez Wi-Fi
-(`BOARD=RPI_PICO2`).
-
-Displej je samostatná integrace; patch žádný driver nepřidává. Starší fotografie
-identifikuje B/W V2, 296×128; aktuální polohu propojek z ní nelze odvodit.
-Při nové izolované validaci nejdřív otestuj samotnou desku bez displeje;
-dokončené Mac sady tuto podmínku nedokládají. Displej připojuj/odpojuj při
-odpojeném napájení. Konkrétní test s připnutým vendor driverem a omezeným BUSY
-je popsán v Mac reportu; automatický běh původní aplikace tím ověřen není.
-Zachovaný obraz e-paperu sám o sobě nedokazuje spánek procesoru ani nízký odběr.
-Při měření porovnávej zvlášť holou desku a celou sestavu včetně displeje,
-jeho řadiče a napájení.
-
-Odkazovaný modul je černobílý 296×128, nikoli varianta B/D/CapTouch.
-[Schéma Waveshare](https://files.waveshare.com/upload/6/62/Pico-ePaper-2.9.pdf)
-a [připnuté Python demo](https://github.com/waveshareteam/Pico_ePaper_Code/blob/c9bcd84db5adf5f085353649a8a5c31492bc5fb8/python/Pico_ePaper-2.9.py)
-uvádějí toto zapojení; před použitím porovnej fyzickou revizi:
-
-| Signál | Připojení |
+| Oblast | Přesný rozsah důkazů |
 | --- | --- |
-| Napájení | VSYS, GND |
-| DC / CS | GP8 / GP9 |
-| SPI1 CLK / DIN (MOSI) | GP10 / GP11 |
-| RST / BUSY | GP12 / GP13 |
+| Timed deepsleep | P1.7 vypíná SWCORE, SRAM a XIP cache; alarm vede k novému ROM bootu. RTC a `machine.mem_backup(2)` se zachovávají, Python heap a regiony 0/1 ne. Aktivní watchdog/core1/IRQ mají definovaná odmítnutí. RP2040, RISC-V a bezargumentová cesta nejsou touto cestou změněné. |
+| Společný P1.7/GP25 firmware `c5c308…` | 120 alarmových návratů: 100 bez rádia, 10 STA, 5 AP v opakované sadě, 5 BLE. Dřívější AP/STA+BLE bootstrap FAIL jsou zachované. |
+| Nový USB firmware `b404a177…` | **70 kontrolovaných návratů USB**: 37 běžných resetů, 8 alarmových návratů a 25 samostatně počítaných startů STA+BLE. Není to 70 deepsleep cyklů. |
+| TinyUSB chyba | Upstream `a0249ada…` opravuje únik počítadla SETUP při plné frontě. Nativní mockovaný C test: před opravou FAIL 1/1, po opravě PASS 1/1, celá sada 7/7 a s přidaným testem pořadí 8/8. |
+| Původní výpadky USB | Logy Macu dokládají skutečné chyby enumerace. Jejich příčinná souvislost s opravenou chybou TinyUSB **není prokázaná**; kontrolní firmware v nové sadě také procházel. |
+| Wi-Fi | Samotné vypnutí bez odhlášení reprodukovalo tři neúspěchy, i bez resetu. Odhlášení a vyčkání na lokální link-down před vypnutím prošlo kontrolovanými testy. Celkem 54 úspěšných DHCP/HTTP transakcí; jedna seed transakce použila již připojenou STA. |
+| Běžná cesta původní aplikace | Přesná funkce vypnutí Wi-Fi prošla v RAM; navíc 3× `lightsleep(2500) → soft_reset` a opětovné DHCP/HTTP. Celá soukromá aplikace s reálným serverem a displejem nebyla po nasazení znovu spuštěna. |
+| Spotřeba s displejem | Historicky přibližně 3,82 → 0,60 → 0,37 mA na USB vstupu sestavy; poslední krok byl GP25. Nejde o odběr samotného RP2350, garantovanou hodnotu jiné desky ani dnešní REPL. S USB kandidátem se proud znovu neměřil. |
+| Dlouhé spánky a displej | 30/75 minut a dřívější nové obrazy B prošly na dřívějším Mac firmwaru; nikoli automaticky na novém USB buildu nebo druhé desce. |
 
-Schéma obsahuje řízení napájecího obvodu navázané na RST; nevymýšlej samostatný
-volný GPIO EN ani bez měření netvrď úplné odpojení napájení. Demo `sleep()`
-pošle příkaz `0x10`, data `0x01`, počká dvě sekundy a stáhne RST. Pro pozdější
-integraci dokonči refresh/BUSY, zavolej ověřené `epd.sleep()`, poté
-`pico_epaper29_lowpower.park_after_sleep()` a pak teprve časovaný
-`machine.deepsleep(...)`. Po novém bootu obnov všechny směry GPIO a SPI,
-displej resetuj a inicializuj; samotné `init()` původního driveru GPIO
-neobnovuje. Vendor
-`ReadBusy()` nemá timeout: integrační test musí čekání omezit, aby zamrzlý
-displej neskrýval chybu uspávání. Vendor UF2 není náhradou tohoto firmwaru.
+Neověřené zůstávají celý produkční cyklus a jeho energie, nové DNS/TLS testy,
+BLE/AP přenosy s protějškem, zbývající kombinované/regresní sady, nový dlouhý
+běh a měření USB kandidáta, fyzické jiné desky a RISC-V.
+Všechny FAIL/NOT RUN zachovat; příchod USB, aktivace rádia a úspěšný HTTP přenos
+jsou různé kontroly.
 
-## Klon a prostředí na Macu
+## 4. Převzetí zdrojů a build na druhém PC
 
-Následující příkazy jsou postup pro nový host. Pro skutečně provedený nativní
-Mac build a přesné verze viz [výsledky z Macu](RESULTS-MAC-20260927.md).
-Nejprve ověř `uname -m` a dostupnost Command Line Tools (`xcode-select -p`).
-Pokud chybí, nainstaluj je `xcode-select --install`. S dostupným Homebrew:
+Následující shellový postup je určen pro **Linux/macOS s dostupnými build
+nástroji**, nikoli jako ověřený nativní Windows návod. Neinstaluje firmware.
+Nejprve zjisti OS/architekturu a použij plný Arm GNU Toolchain pro daný host;
+ověřená verze byla **14.3.Rel1 / GCC 14.3.1**, CMake 4.4.3. Potřebuješ Git,
+GNU Make, host C/C++ compiler, Python 3 a target C knihovnu, nejen samotné GCC.
+Pro USB zálohy je navíc potřeba host `picotool` s USB podporou; picotool,
+který si CMake sestaví pro generování UF2, tuto podporu mít nemusí.
+
+Použij nový adresář nebo nejdřív prověř vlastní rozpracované změny. Nepřepisuj
+existující checkout pomocí `reset --hard` ani `submodule update --force`.
 
 ```sh
-git clone --branch rp2/rp2350-timed-deepsleep https://github.com/Rhiz3K/micropython.git
-cd micropython
-git rev-parse HEAD
+git clone --branch rp2/rp2350-timed-deepsleep \
+  https://github.com/Rhiz3K/micropython.git micropython-rp2350-handover
+cd micropython-rp2350-handover
+git status --short
+git merge-base --is-ancestor 0f193e89cbb0246ca4d967e1ad98db28304a031c HEAD
 
-brew install cmake python picotool
-brew install --cask gcc-arm-embedded
-python3 -m venv "$HOME/.venvs/rp2350"
-source "$HOME/.venvs/rp2350/bin/activate"
-python -m pip install mpremote pyserial
-
-uname -m
 arm-none-eabi-gcc --version
 arm-none-eabi-gcc -print-file-name=libc.a
 cmake --version
-picotool version
+python3 --version
 ```
 
-`libc.a` musí ukázat skutečný existující soubor. Samostatná Homebrew formula
-`arm-none-eabi-gcc` bez target C knihovny nestačí. Cask se časem mění a může mít
-jinou verzi než historicky ověřený Linux GCC 14.3.1; zaznamenej skutečné verze.
-Pro přesný historický build je níže Linux recept, pro bližší nativní sestavení
-je k dispozici oficiální Arm 14.3.rel1 balíček pro příslušnou macOS architekturu.
-Nový GCC/Mac build vyžaduje vlastní validaci, není automaticky původní UF2.
-
-Zdroje: [Homebrew cask](https://formulae.brew.sh/cask/gcc-arm-embedded),
-[Arm toolchains](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads),
-[mpremote](https://docs.micropython.org/en/latest/reference/mpremote.html).
-
-## Identifikace a záloha nové desky
-
-Před zápisem firmwaru/testů potvrď oprávnění k použití právě této desky,
-ověř její model/UID, zazálohuj firmware i celý filesystem a zajisti BOOTSEL
-obnovu. Užitečná data z backup registrů zaznamenej zvlášť; flash je neobsahuje.
-Další sériové klienty zavři. Metadata portů lze nejprve jen vypsat:
+`libc.a` musí být skutečný existující soubor. Do `PATH` dej binářky plného
+Arm toolchainu. Ověř a odstraň případné zděděné nastavení jiného SDK,
+RISC-V compileru, user C modulů či frozen manifestu; nový build adresář sám
+neodstraní konfiguraci přenesenou prostředím. Nenastavuj staré `MICROPY_GIT_TAG`
+a `MICROPY_GIT_HASH` jen pro napodobení runtime `.usbq1`.
 
 ```sh
-python tests/ports/rp2/deepsleep/host.py list
-mpremote connect list
-mpremote connect id:NEW_USB_SERIAL resume exec \
-  'import machine, sys, os; print(sys.implementation); print(os.uname()); print(machine.unique_id().hex()); print(os.listdir())'
+unset MICROPY_GIT_TAG MICROPY_GIT_HASH BOARD_VARIANT
+export CMAKE_ARGS='-DPICO_DEFAULT_RP2350_PLATFORM=rp2350-arm-s -DCMAKE_BUILD_TYPE=MinSizeRel -DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1'
+make -C ports/rp2 BOARD=RPI_PICO2_W BOARD_VARIANT= BUILD=build-handover-pico2w submodules
+
+test "$(git -C lib/pico-sdk rev-parse HEAD)" = 98a542c1a62fb549ffb5d66a3e5892b06276b670
+test "$(git -C lib/tinyusb rev-parse HEAD)" = b549ac1d84cbbe550c9590951e2290098b3fb16c
 ```
 
-`NEW_USB_SERIAL` nahraď skutečným identifikátorem. Na Macu se názvy portů liší
-od linuxového ttyACM0; nepoužívej slepě první port. REPL příkaz může přerušit
-běžící aplikaci. Pro zálohu přepni vlastní desku fyzicky do BOOTSEL, připoj
-jen tuto testovanou desku a pomocí `picotool info -a` ověř identitu a kapacitu.
-BOOTSEL serial se může lišit od MicroPython USB serial:
+Každý neúspěšný příkaz nejdřív vyřeš; nepokračuj dalším krokem s chybnou
+identitou závislosti. `CMAKE_ARGS` předávej **prostředím**, jak je uvedeno,
+ne jako argument za `make`, který by přebil doplnění board parametrů.
+Board varianta nastavuje obecné `rp2350`; ARM proto výslovně určuje
+`PICO_DEFAULT_RP2350_PLATFORM=rp2350-arm-s`. Nepoužívej variantu `RISCV`.
+
+Teprve **po inicializaci submodulů** aplikuj USB opravu v kořenovém
+`lib/tinyusb`, nikoli v `lib/pico-sdk/lib/tinyusb`. Následující blok je pro
+čistý TinyUSB v novém klonu:
 
 ```sh
-umask 077
-pico_backup="$HOME/pico-backup-NEW_DEVICE"
-mkdir -p "$pico_backup"
-picotool info -a
-picotool info -a --ser NEW_BOOTSEL_SERIAL
-picotool save -a -v "$pico_backup/full-flash.bin" --ser NEW_BOOTSEL_SERIAL
-picotool verify "$pico_backup/full-flash.bin" --ser NEW_BOOTSEL_SERIAL
-wc -c "$pico_backup/full-flash.bin"
-shasum -a 256 "$pico_backup/full-flash.bin"
+test -z "$(git -C lib/tinyusb status --porcelain)"
+git -C lib/tinyusb apply --check ../../experiments/rp2350-deepsleep/tinyusb-ep0-queue.patch
+git -C lib/tinyusb apply ../../experiments/rp2350-deepsleep/tinyusb-ep0-queue.patch
+git -C lib/tinyusb apply --reverse --check ../../experiments/rp2350-deepsleep/tinyusb-ep0-queue.patch
+git -C lib/tinyusb diff --check
 ```
 
-Použij nový adresář a nepřepisuj starší zálohu. U originální Pico 2 W očekávej
-celou 4 MiB flash (4194304 bajtů), ne pouze programovou část. Ověřený kompletní
-obraz zahrnuje interní filesystem; externí úložiště by vyžadovalo zvláštní
-zálohu. Pokud se kapacita/identita liší nebo verify selže, nepokračuj zápisem.
-Postup nástroje: [oficiální picotool](https://github.com/raspberrypi/picotool).
-
-## Sestavení a instalace
-
-Pro novou potvrzenou Pico 2 W, z kořene klonu (bez `BOARD_VARIANT=RISCV`):
+Na Macu už aplikovaná je. Pokud opačná kontrola projde v převzatém checkoutu,
+porovnej celý diff se záplatou a nepřidávej ji podruhé. Očekávané změny jsou
+`src/device/usbd.c` a `test/unit-test/test/device/usbd/test_usbd.c`.
+Patch má SHA256 `ffbadfaa2a51af420e64e1bdb4fad55f1621646eb3bcd98e3d93eaa921076e4e`.
+Samostatný `a52562b…` nebyl zahrnut; nepřidávej jej automaticky.
 
 ```sh
-make -C ports/rp2 BOARD=RPI_PICO2_W submodules
-git -C lib/pico-sdk rev-parse HEAD
-git submodule status --recursive
-make -C mpy-cross -j"$(sysctl -n hw.ncpu)"
-export CMAKE_ARGS='-DPICOTOOL_GIT_BRANCH=6f6458d792b93685a11423b244a585eaa99eafcf -DPICOTOOL_FORCE_FETCH_FROM_GIT=1 -DCMAKE_BUILD_TYPE=MinSizeRel'
-make -C ports/rp2 BOARD=RPI_PICO2_W BUILD=build-mac-PICO2_W -j"$(sysctl -n hw.ncpu)"
-shasum -a 256 ports/rp2/build-mac-PICO2_W/firmware.uf2
+make -C mpy-cross -j4
+make -C ports/rp2 BOARD=RPI_PICO2_W BOARD_VARIANT= BUILD=build-handover-pico2w -j4
+python3 - <<'PY'
+from pathlib import Path
+import hashlib
+p = Path('ports/rp2/build-handover-pico2w/firmware.uf2')
+print(hashlib.sha256(p.read_bytes()).hexdigest(), p)
+PY
 ```
 
-Zkontroluj vypsané SDK SHA proti začátku dokumentu. `CMAKE_ARGS` je úmyslně
-proměnná prostředí; zadání na příkazovém řádku make by mohlo přepsat argumenty
-boardu. Uchovej build log a hash svého artefaktu.
+Zkontroluj v configure/build logu skutečné `RPI_PICO2_W`, ARM platformu,
+compiler a připnutý picotool; ulož logy, ELF/UF2/BIN, source commit a hashe
+závislostí soukromě. Referenční hashe šesti core a čtyř TinyUSB souborů jsou
+v [build-result.json](evidence/mac-20260928-usb-wifi/usb-fix-build/build-result.json).
+Nový hash binárky je normální, ale novému buildu nelze přiřadit starý PASS.
 
-Teprve po identifikaci, oprávnění a ověřené záloze nahraj firmware na stejnou
-desku v BOOTSEL a znovu ověř její REPL identitu:
+**`reproduce.sh` je historický Linux x86_64 recept** pro upstream základ
+plus `firmware.patch`; nevytváří dnešní společný GP25/USB kandidát.
+Pro nový build používej tuto větev a postup výše.
 
-```sh
-picotool load -v ports/rp2/build-mac-PICO2_W/firmware.uf2 --ser NEW_BOOTSEL_SERIAL
-picotool reboot --ser NEW_BOOTSEL_SERIAL
-```
+## 5. Cílová deska: první kroky před zápisem
 
-Původní `boot.py`/`main.py` zůstávají ve flash; před jejich dalším použitím
-posuď jejich chování. Nahrání UF2 není záloha ani automatické vyčištění aplikace.
-BOOTSEL boot může zanechat aktivní watchdog; testovací instalátor provede
-`machine.reset()` před sadou. EBUSY neobcházej zápisem do watchdog registrů.
+1. Vylistuj USB bez otevření portu: `python3 tests/ports/rp2/deepsleep/host.py list`
+   (vyžaduje `pyserial`). Ověř, která fyzická deska je připojená, zda má displej,
+   napájení a případný debugger. Port/VID/PID samotné nestačí; při nejasnosti
+   se doptat na přiřazení, nevybírat první nalezený port.
+2. Je-li REPL dostupný, načti model, `machine.unique_id()` a `os.uname()` do
+   **soukromého** záznamu. Zjisti aktuální `boot.py`/`main.py` před restartem;
+   otevření REPL může přerušit aplikaci. Nepoužívej natvrdo Mac port ani UID.
+3. U původní neodpovídající linuxové desky znovu ověř aktuální stav. Pokud USB
+   opravdu chybí, zajisti fyzické odpojení jediného napájení a normální připojení;
+   případně BOOTSEL s vlastní ověřenou obnovou. Neopakuj slepě `trace=7` ani
+   nekonečné pokusy o otevření zaseklého CDC.
+4. Před flash/testy vytvoř nový privátní manifest pro tuto desku. Zálohuj
+   firmware, celý filesystem a zvlášť užitečná backup slova. U originální
+   Pico 2 W má úplná flash **4 MiB / 4194304 bajtů**. Ověř velikost, SHA256 a
+   nezávislé `picotool verify`. Použij její skutečný BOOTSEL serial, který se
+   může lišit od runtime serialu; žádné erase ani cizí full-flash obrazy.
+5. Zajisti obnovu před první mutací. Autorizaci už poskytnutou pro stejnou desku
+   neopakuj; nepřenášej však souhlas ani manifest na neidentifikované zařízení.
+   Současně smí port ovládat jen jeden hostitelský proces.
 
-Přesné opakování historických buildů **na Linux x86_64**:
+Celá flash záloha desky A **není** instalační obraz desky B: obsahuje cizí
+aplikaci, konfiguraci i případná tajemství. Firmware UF2 neobsahuje automaticky
+zálohu filesystemu. Jeho nahrání ponechá `boot.py`/`main.py`, které se mohou
+po rebootu ihned spustit; předem připrav bezpečný start s možností obnovy.
 
-```sh
-experiments/rp2350-deepsleep/reproduce.sh /absolute/path/to/NEW-build-directory
-```
+Při použití opt-in testů postupuj podle jejich README. Vytvářej nové názvy
+runů/logů, první sada jen **3× 2500 ms**; další rozsah podle jejího výsledku.
+Předávej stejný `--config` do `install` i `run`. `--replace-main` použij až po
+ověřené záloze a posouzení autostartu. Nástroj mění RTC a všechna backup slova;
+jejich původní hodnoty musí zůstat v privátním záznamu pro konečnou obnovu.
+Jeho timeout plně neomezuje zaseklý hostitelský serial write/flush: použij i
+vnější mez procesu a dostupnou fyzickou obnovu. Neočekávané selhání zastaví sadu.
+Pokud brání spánku watchdog, EBUSY neobcházej libovolným zápisem do jeho
+registrů. Aktivitu určuje bit ENABLE `0x40000000`, nikoli nenulový celý CTRL;
+dřívější test právě toto chybně zaměnil. Obnova po BOOTSEL se musí řídit
+aktuálně přečteným stavem a původem watchdogu, ne slepým spuštěním starého skriptu.
 
-Skript nejprve sestaví nezměněné W/RP2040, pak patch pro W/Pico2/RP2040,
-ověří stažený toolchain a uloží logy i hashe. Na macOS jej nespouštěj jako
-nativní recept. Binárky stejného funkčního zdroje po commitu mohou mít jiný
-hash kvůli verzovacím metadatům.
+## 6. Wi-Fi a displej: co přenést do aplikace
 
-## Pořadí nových testů
+**Oprava Wi-Fi není automaticky součástí samotného `machine.deepsleep()`.**
+Před vypnutím ukončit síťové úlohy/callbacky a BLE, odhlásit aktivní STA,
+vyčkat na lokální `status()==0` a `not isconnected()`, potom deaktivovat
+rozhraní a provést deinit. Lokální link-down nedokazuje přijetí rámce AP.
+Polling má limit 500 ms; synchronní příkaz disconnect má vlastní timeout.
 
-1. Bez displeje a Wi-Fi: nový privátní manifest podle [README testů](../../tests/ports/rp2/deepsleep/README.md),
-   `cycles=3`, `sleep_ms=2500`, `expect_deep_cause=true`. Manifest patří nové
-   desce a vlastní záloze. Pokud jeden ověřený full-flash obraz zahrnuje firmware
-   i interní FS, obě zálohové položky mohou odkazovat na něj; tento fakt zapiš.
-2. Po úspěchu samostatná sada 100 cyklů. Kontroluj cause, RTC, POWMAN, soubor
-   a USB. Host vyžaduje nový název logu, nic nepřepisuje.
-3. Regrese lightsleep, vlákna, DMA, watchdog odmítnutí a běh watchdogu po odmítnutí.
-4. Wi-Fi na známém AP s kontrolovaným HTTP endpointem: nejprve obyčejné restarty,
-   pak deep wake. Zaznamenej asociaci, DHCP, DNS, HTTP a WLAN status odděleně.
-   Nepřenášej stará síťová hesla ani předpoklad stejné příčiny mezi sítěmi.
-5. 30 min a 75 min; poté integrace a uspání konkrétní revize e-paperu.
-6. Proud a energie cyklu A sleep / B původní implementace / C nová. Zaznamenej
-   napětí, místo měření, měřidlo/rozlišení, USB, debugger, Wi-Fi i displej.
+Veřejný [Pico 2 W helper](pico2w_vsys_lowpower.py) navíc ověřuje GP23 LOW
+(rádio vypnuté) a nastaví GP25/CS LOW (VSYS monitor vypnutý). Pokud se dříve
+připojená STA nepotvrdí jako odpojená, po vypnutí vyvolá chybu. Před dalším
+použitím musí ovladač znovu inicializovat rádio a jeho piny.
+Formátování při commitu změnilo SHA helperu, ale nikoli AST; přesný testovaný
+zdroj i [ověření shody](evidence/mac-20260928-usb-wifi/commit-format-checks.json)
+zůstávají v důkazech.
 
-Příklad po přípravě privátního manifestu a konfigurace mimo Git:
+Soukromé Mac `main.py` dostalo stejné řízené odhlášení do `_shutdown_wifi()`
+a jednoho místa volání. Zachovává best-effort vypnutí s varováním při chybě.
+**Stále používá lightsleep + soft reset, ne P1.7 deepsleep**, a nebylo do něj
+plošně přidáno parkování displeje/GP25. Na druhé desce aplikaci nejdřív přečti;
+přenes odpovídající malou změnu, nepředpokládej totožný soubor ani rozhraní.
 
-```sh
-python tests/ports/rp2/deepsleep/host.py install \
-  --manifest "$pico_backup/manifest.json" --config "$pico_backup/config.json" --allow-write
-python tests/ports/rp2/deepsleep/host.py run \
-  --manifest "$pico_backup/manifest.json" --allow-run --log "$pico_backup/three-cycles.jsonl"
-```
+Výchozí Wi-Fi režim veřejné opt-in sady ponechá rádio aktivní pro teardown
+v core; **automaticky nevolá nový helper**. Taková sada testuje jinou situaci
+než ověřenou aplikační přípravu. Pro ověření opravy použij výslovnou přípravu
+a kontrolovaný endpoint; negativní kontrolu bez ní eviduj odděleně.
+Síť, heslo, DHCP, DNS a HTTP cíl zjisti na novém místě. Heslo zadat lokálně
+mimo Git, netisknout do chatu/logů. Veřejné `*.py.txt` jsou přesné záznamy
+tehdejších sond, ne hotový přenosný host runner s novou identitou.
 
-Existující `main.py` vyžaduje vědomé `--replace-main`; nástroj si jeho kopii
-uloží do privátního adresáře. `boot.py` nemění. Sada nastavuje RTC, zabírá
-všech osm POWMAN slov a kontroluje ztrátu watchdog backup oblastí. Po ztrátě
-napájení se progress vynuluje, program však čeká na host GO a sám necykluje.
+U stejného panelu platí DC/CS GP8/9, SPI1 CLK/MOSI GP10/11, RST/BUSY GP12/13;
+fyzickou revizi a napájecí propojky ověř. Po dokončeném refresh/BUSY a
+**skutečném panel sleep** zavolej [park_after_sleep()](pico_epaper29_lowpower.py).
+Helper sám sleep příkaz neposílá. Potom už panel nečíst a vstoupit do spánku;
+po bootu obnovit všechna GPIO/SPI a panel resetovat/inicializovat. Původní
+vendor `init()` samo směry pinů nemusí obnovit a `ReadBusy()` nemá timeout.
+Na jiném panelu nepřebírat GPIO registry ani uspávací sekvenci bez ověření.
 
-Známé omezení host nástroje: serial write/flush nemají úplnou časovou mez;
-`--timeout` není zárukou ukončení při zamrzlém USB ovladači. Při zaseknutí
-ukonči testovacího klienta a zajisti fyzické odpojení desky. Zápis firmware ani
-testovací smyčku nespouštěj bez dostupné obnovy.
+## 7. Doporučené navazující ověření
 
-Pro dlouhé sady použij vždy `cycles=1`, nový run/log a větší host timeout:
-30 minut znamená `sleep_ms=1800000` s `--timeout 2100`, 75 minut
-`sleep_ms=4500000` s `--timeout 4800`. Výchozích 90 sekund nestačí.
-Nastav také explicitní `rtc_tolerance_s` podle plánované tolerance a zaznamenej
-skutečný rozdíl RTC vůči host času; LPOSC nemá garantovanou přesnost krystalu.
-Aktuální výsledky dlouhých testů jsou v [záznamu z Macu](RESULTS-MAC-20260927.md);
-historické linuxové výsledky je neobsahují.
+1. Identita, dnešní stav a vlastní záloha cílové desky; malá USB/reset sada
+   a 3 krátké alarmové návraty. Při novém USB FAIL uložit čas a log hostu;
+   podle potřeby srovnat přímé připojení s hubem, nikoli zaměnit výsledek jiné desky.
+2. Wi-Fi: cold boot, běžný reset, krátký deepsleep a lightsleep/soft-reset
+   s řízeným odhlášením. Po každém návratu ověřit nové spojení, DHCP a přesné
+   HTTP tělo; DNS/TLS přidat samostatně, pokud jsou součástí reálné aplikace.
+3. Přečíst a cíleně integrovat aplikaci cílové desky; ověřit celý skutečný cyklus
+   stažení → nový obraz → uspání → probuzení → další přenos. Funkční text na
+   e-paperu vyžaduje vizuální kontrolu nového obrazu, ne pouze úspěšné SPI.
+4. Teprve potom širší profily STA/AP/BLE, regrese a dlouhé spánky. Pro 30/75 minut
+   samostatný run s jedním cyklem, host timeout delší než spánek a explicitní
+   RTC tolerance. Dlouhé testy na druhé desce nebyly tímto předáním objednány.
+5. Změřit aktuální odběr a energii celého cyklu s přesně zaznamenaným zapojením.
+   Rozlišit holou desku/sestavu, USB vstup/3V3 a napájený vs. zaparkovaný panel.
+   Předchozí 0,37 mA nelze automaticky přisoudit nové sestavě.
 
-## Návrat a další předání
+Po testech odstranit guard a testovací konfiguraci, ověřit soubory proti vlastní
+záloze, obnovit backup hodnoty/RTC a uvést skutečný konečný stav aplikace.
+Nové výsledky ukládat s jiným datem/deskou; původní důkazy se nepřepisují.
 
-Obnova celé zálohy je zápis přes celý obsah flash právě této desky. Zkontroluj
-její uložený hash, vrať desku do BOOTSEL, znovu ověř identitu a pak:
+## 8. Co se přes Git nepřenese
 
-```sh
-picotool load -v "$pico_backup/full-flash.bin" --ser NEW_BOOTSEL_SERIAL
-picotool reboot --ser NEW_BOOTSEL_SERIAL
-```
+Ve forku jsou firmware zdroje, oba veřejné helpery, opt-in testy, patche a
+anonymizované výsledky. **Nejsou v něm** hotové UF2/ELF/BIN, původní/soukromé
+`main.py`, hesla, celé flash zálohy, skutečné UID/serialy, privátní manifesty
+ani host skripty s identitou konkrétní Mac desky.
 
-Původní firmware/filesystem nové desky lze obnovit jen její vlastní zálohou.
-Veřejný fork neobsahuje zálohy ani credentials. Pro budoucí upstream bude
-potřeba lidská revize, přezkoumání změny retence mem_backup, doplnění měření
-holé desky a energie úplného aplikačního cyklu,
-vyřešení síťové stability a commit message/DCO podle upstream pravidel.
-Existující autorství při předání nebylo přepisováno.
+Na Macu jsou privátní artefakty pod pracovním adresářem
+`~/pico-work/rp2350-mac-20260927-112409/`, poslední USB/Wi-Fi práce v
+`usb-wifi-20260928T082726Z/`. Relevantní položky jsou `usb-fix-build/firmware.uf2`,
+`original-files/`, `app-candidate/main.py`, `checkpoint.json`,
+`deployment-result-public.json` a vlastní ověřené flash obrazy u obou změn
+firmwaru. Kopírovat je případně soukromě; hesla a dumpy nepublikovat.
+Tyto zálohy patří Mac desce. Zálohy původní linuxové desky hledej na původním PC.
+Pro práci pouze na firmwaru stačí nový klon a vlastní build; pro přenos
+konkrétní aplikace je potřeba také její skutečný privátní zdroj.
 
-Text pro dalšího asistenta:
+Kontrolní součty veřejných artefaktů jsou v `SHA256SUMS`; na Linuxu ověřit
+`sha256sum -c SHA256SUMS`, na Macu `shasum -a 256 -c SHA256SUMS` z této složky.
 
-> Pokračuj ve forku Rhiz3K/micropython, větev rp2/rp2350-timed-deepsleep.
-> Nejdřív přečti experiments/rp2350-deepsleep/HANDOVER.cs.md a RESULTS.md.
-> Mám Mac, jinou Pico 2 W s headery a Waveshare Pico-ePaper-2.9 B/W V2.
-> Přečti také RESULTS-MAC-20260927.md, POWER-MAC-20260927.md,
-> POWER-OPT-MAC-20260927.md, POWER-GP25-MAC-20260927.md a privátní STATUS.cs.md
-> v pracovním adresáři této desky. Identifikace a plná záloha už existují.
-> Testy včetně obou dlouhých spánků a obou optimalizací jsou dokončené;
-> před dalším zápisem ověř aktuální stav. Poslední obnova v 16:37:40 UTC
-> zachovala experimentální firmware a hashově ověřila všech 29 původních
-> souborů. Aplikace zůstala zastavená v REPL, rádio off, GP25 LOW a panel
-> uspaný s uvolněnými datovými piny. Naměřených 0,3708 mA je odběr při
-> deepsleep, nikoli v konečném REPL. Další reset spustí původní aplikaci,
-> která ověřené helpery zatím automaticky nepoužívá.
-> Displej je podle majitele připojený; předchozí odpojení nebylo doložené.
-> Wi-Fi po restartu selhala i na nezměněném baseline; příčina zůstává otevřená.
-> Nejnovější obraz B: GP25 SLEEP OK a obdélník vpravo prošly automatickou
-> kontrolou i vizuální kontrolou dodané fotografie. Inicializace ovladače
-> rádia prošla, připojení k AP tím ověřené není.
-> Původní deska na Linuxu po USB trace neodpovídá, její stav nesměšuj s touto
-> deskou. Další izolované testy koordinuj se zapojením. Výsledek je experiment,
-> s měřením USB odběru celé sestavy, bez energie úplného aplikačního cyklu.
-> Neoznačuj nové testy za PASS, dokud skutečně neproběhnou.
-> Upstream PR zatím nevytvářej; aplikační firmware a webový instalátor jsou mimo rozsah.
+## Text pro dalšího asistenta
+
+> Převezmi https://github.com/Rhiz3K/micropython/blob/rp2/rp2350-timed-deepsleep/experiments/rp2350-deepsleep/HANDOVER.cs.md
+> a pokračuj na tomto PC a zde připojené desce. Poslední implementační commit
+> je 0f193e89cbb0246ca4d967e1ad98db28304a031c, navazující commit je handover.
+> Nejdřív ověř OS, zdroje, fyzickou identitu a současný stav desky; nesměšuj
+> původní linuxové Pico s Mac Picem a nepoužívej cizí flash zálohu/UID.
+> TinyUSB a024 je uložený patch, který nový klon nemá automaticky aplikovaný.
+> Core patche už ve větvi jsou. Wi-Fi oprava vyžaduje přípravu aplikace;
+> samotné deepsleep ji neprovádí. Zachovej soukromé soubory a zajisti vlastní
+> ověřenou obnovu před zápisem. Navazuj na hotové výsledky, ověř novou sestavu
+> postupně a neoznačuj staré PASS za nové. Upstream PR zatím nevytvářej.
