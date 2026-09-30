@@ -25,4 +25,3 @@ def expect_busy():
  after=machine.mem32[WATCHDOG_CTRL]
  check(after & WATCHDOG_ENABLE and after & 0x00ffffff,'watchdog stopped after EBUSY')
  print('WATCHDOG_ACTIVE '+json.dumps({'stage':'after_busy','boot':state[5],'phase':state[3],'ctrl':after,'time':after & 0x00ffffff,'ebusy_confirmed':True}))
-

@@ -23,10 +23,10 @@ index 6389b3f0883250f9f66fcca870705e95ffccde50..c1fd9d6ab1369decd375fe8834cf2fd5
  
     On stm32 the region index does not have a uniform meaning across boards:
 diff --git a/docs/rp2/quickref.rst b/docs/rp2/quickref.rst
-index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddbcaf243ef 100644
+index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..ed6e02ac86d421f0ee199db9de4c8ab4928311d6 100644
 --- a/docs/rp2/quickref.rst
 +++ b/docs/rp2/quickref.rst
-@@ -106,6 +106,55 @@ connection succeeds or the interface gets disabled.
+@@ -106,6 +106,59 @@ connection succeeds or the interface gets disabled.
  .. _Pico W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#picow-technical-specification
  .. _Pico 2 W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#pico2w-technical-specification
  
@@ -44,7 +44,9 @@ index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddb
 +timer wakes the chip through the normal ROM boot path. A successful timer wake
 +is reported as ``machine.DEEPSLEEP_RESET`` by ``machine.reset_cause()``. The RTC
 +continues using the low-power oscillator during sleep, so its accuracy differs
-+from the crystal used while awake. No particular board current is guaranteed.
++from the crystal used while awake and varies with voltage and temperature.
++Applications requiring accurate wall-clock time should synchronise the RTC
++after waking. No particular board current is guaranteed.
 +
 +USB disconnects and must enumerate again. Pico 2 W turns off CYW43; the new
 +program must reconnect Wi-Fi. After powering off CYW43, Pico 2 W also drives
@@ -65,6 +67,8 @@ index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddb
 +An active watchdog, a running second Python thread, a call from core 1, or an
 +interrupt handler causes ``OSError(EBUSY)`` before teardown. The watchdog is not
 +silently disabled: it would lose both its counter and protection in P1.7.
++An expired watchdog left enabled by a previous reboot is cleared at startup
++and does not block timed deep sleep; the recorded reset cause is preserved.
 +Terminate the second thread cooperatively before calling deep sleep.
 +
 +Negative or out-of-range durations raise an exception.
@@ -119,7 +123,7 @@ index 304175b5370bbe148fb79c78ec1096a1a29f71a8..240edd1c8ae60222b366ef4eb2bf4ebb
      #if PICO_ARM
      SCB->SCR |= SCB_SCR_SEVONPEND_Msk;
 diff --git a/ports/rp2/modmachine.c b/ports/rp2/modmachine.c
-index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb86050e388b4e 100644
+index 41c371a367d6bcf9119955547847ccca42269951..5c201cfda30aef1039ff5cfe53f13958123e56ee 100644
 --- a/ports/rp2/modmachine.c
 +++ b/ports/rp2/modmachine.c
 @@ -28,6 +28,7 @@
@@ -130,7 +134,7 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
  #include "mp_usbd.h"
  #include "modmachine.h"
  #include "uart.h"
-@@ -53,11 +54,51 @@
+@@ -53,11 +54,58 @@
  #if MICROPY_PY_NETWORK_CYW43
  #include "lib/cyw43-driver/src/cyw43.h"
  #endif
@@ -155,6 +159,13 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
 +static void machine_deepsleep_prepare_wfi(void);
 +
 +void machine_deepsleep_init(void) {
++    // A watchdog timeout (including the ROM's delayed BOOTSEL reboot) can
++    // leave ENABLE set with an expired counter. Preserve any live watchdog.
++    uint32_t watchdog_ctrl = watchdog_hw->ctrl;
++    if ((watchdog_ctrl & (WATCHDOG_CTRL_ENABLE_BITS | WATCHDOG_CTRL_TIME_BITS))
++        == WATCHDOG_CTRL_ENABLE_BITS) {
++        hw_clear_bits(&watchdog_hw->ctrl, WATCHDOG_CTRL_ENABLE_BITS);
++    }
 +    if (watchdog_hw->reason) {
 +        machine_deepsleep_prepare_wfi();
 +    }
@@ -182,7 +193,7 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
      { MP_ROM_QSTR(MP_QSTR_Pin),                 MP_ROM_PTR(&machine_pin_type) }, \
      { MP_ROM_QSTR(MP_QSTR_RTC),                 MP_ROM_PTR(&machine_rtc_type) }, \
      { MP_ROM_QSTR(MP_QSTR_Timer),               MP_ROM_PTR(&machine_timer_type) }, \
-@@ -82,6 +123,10 @@ static mp_int_t mp_machine_reset_cause(void) {
+@@ -82,6 +130,10 @@ static mp_int_t mp_machine_reset_cause(void) {
      int reset_cause;
      if (watchdog_caused_reboot()) {
          reset_cause = RP2_RESET_WDT;
@@ -193,7 +204,7 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
      } else {
          reset_cause = RP2_RESET_PWRON;
      }
-@@ -376,7 +421,228 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+@@ -376,7 +428,228 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
      }
  }
  
@@ -456,10 +467,10 @@ index 3084531cb4097bd779ce852f5264eff87524cc86..488f6e16b01de544e6d3b0b8c1187c81
  #ifdef MICROPY_GC_STACK_ENTRY_TYPE
 diff --git a/tests/ports/rp2/deepsleep/README.md b/tests/ports/rp2/deepsleep/README.md
 new file mode 100644
-index 0000000000000000000000000000000000000000..0ce2aa64727ce1ea7327940a1802a223b6b5d1bc
+index 0000000000000000000000000000000000000000..9599ed1a9f43ff3c2fe97f55fa52d52614a7485c
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/README.md
-@@ -0,0 +1,355 @@
+@@ -0,0 +1,398 @@
 +# RP2350 timed deepsleep hardware checks (opt-in)
 +
 +These scripts are **prepared hardware tests, not evidence that tests passed**.
@@ -584,9 +595,24 @@ index 0000000000000000000000000000000000000000..0ce2aa64727ce1ea7327940a1802a223
 +setup. A PASS means only the implemented checks passed; it is not a current or
 +power-domain measurement. The final normal reset leaves the suite stopped.
 +
++To test the first application boot after UF2 installation, use a separate
++one-cycle configuration (`"cycles": 1, "sleep_ms": 2500`) and add `--no-reset`
++to `install`. This stages and synchronizes the files and clears the suite's
++POWMAN progress without starting it or invoking `machine.reset()`. Then use the
++identified board's documented BOOTSEL procedure to install the exact verified
++UF2, preserving its filesystem, and observe the first normal application boot
++with `run`. Do not issue `machine.reset()`, Ctrl-D or another reset between the
++UF2 boot and the first deep sleep. Record the firmware identity/hash and the
++first READY's `cause`, `watchdog_reason` and `watchdog_ctrl`. The watchdog timeout
++path is established only when `watchdog_reason & 1` (TIMER) is set; after startup
++cleanup `watchdog_ctrl & (1 << 30)` (ENABLE) must be clear. A different reason
++can test first-boot sleep, but does not establish expired-watchdog recovery.
++BOOTSEL itself can affect RTC continuity; save/restore RTC separately and do not
++count that transition as a normal reset. The installer does not flash firmware.
++
 +Pass the same private `--config` to `run` as to `install`. Before sending any
 +GO, the host then rejects a different run name or radio mode, and accepts final
-+PASS only with exactly the configured cycle count (zero for the watchdog
++PASS only with exactly the configured cycle count (zero for the legacy watchdog
 +rejection case). It also requires the initial READY, an acknowledged SLEEP for
 +each subsequent wake, consecutive boot/cycle counts, and the final ordinary
 +reset. Attach before the first cycle; attaching midway cannot verify a complete
@@ -623,6 +649,16 @@ index 0000000000000000000000000000000000000000..0ce2aa64727ce1ea7327940a1802a223
 +
 +## Scenarios and initially unexecuted results
 +
++On 2026-09-30, an ARM Pico 2 W with a prepared B/W V2 e-paper fixture passed
++both the first application boot after UF2 and the watchdog-after-reset scenario
++with one 2.5 s alarm cycle each. The latter also confirmed EBUSY while the live
++watchdog continued counting, followed by a genuine TIMER watchdog reset.
++See [the dated report](../../../../experiments/rp2350-deepsleep/RESULTS-WATCHDOG-MAC-20260930.md)
++for firmware hashes, full observed sequences, excluded fixture attempts and
++restoration. The table below retains the initial planning status; it is not a
++current hardware-results summary. A live watchdog inherited at startup remains
++untested.
++
 +Each independent run requires a distinct run name/configuration/log and a new
 +installation to reset its scratch state. Installation writes are per run, not
 +per cycle. Preserve the complete logs and firmware hashes.
@@ -633,6 +669,8 @@ index 0000000000000000000000000000000000000000..0ce2aa64727ce1ea7327940a1802a223
 +| Watchdog scratch retention | Reported independently in each wake record | NOT RUN |
 +| Active CPU1 and caller on CPU1 | Add `"thread": true`; expects `OSError(EBUSY)` then successful deep sleep after CPU1 exits | NOT RUN |
 +| Active watchdog | `"watchdog": true, "cycles": 1`; rejection must leave watchdog running and reboot with `WDT_RESET` | NOT RUN |
++| Deep sleep after watchdog timeout | Add `"watchdog_after_reset": true` to the active-watchdog configuration; observes timeout, then the configured timed deep cycles and final ordinary reset | NOT RUN |
++| First application boot after UF2 | Separate one-cycle run staged with `install --no-reset`; verified UF2 boot followed directly by a 2.5 s deep cycle | NOT RUN |
 +| Active DMA | Add `"dma": true`; a fixed-address RAM copy must be stopped by deep-sleep teardown | NOT RUN |
 +| Lightsleep immediately before deep sleep | Add `"lightsleep_before": true`; calls `lightsleep(20)` before every deep sleep | NOT RUN |
 +| Wi-Fi, DHCP, DNS, HTTP, repeated reconnect | Add Wi-Fi configuration below | NOT RUN |
@@ -650,6 +688,22 @@ index 0000000000000000000000000000000000000000..0ce2aa64727ce1ea7327940a1802a223
 +an unexpectedly accepted CPU1 call is a failure, not a completed cycle.
 +The watchdog PASS phase is armed only after the busy rejection returns; a reset
 +before that point fails even if its cause is `WDT_RESET`.
++
++`"watchdog_after_reset": true` is a separate opt-in extension; it requires
++`"watchdog": true`, `"mode": "deepsleep"` (the default), `sleep_ms >= 2` and
++`expect_deep_cause: true`. The original watchdog-only scenario still ends with
++zero completed deep cycles and PASS immediately after the confirmed timeout.
++The extension reports that timeout as READY with phase 4 and completed count
++zero, requires the TIMER reason and a cleared ENABLE bit, then proceeds without
++arming another watchdog. Every timed cycle must return `DEEPSLEEP_RESET`, and
++the final ordinary reset must clear that indication. The host requires the full
++sequence: initial READY, watchdog-timeout READY, acknowledged SLEEP, deep-wake
++READY and final PASS. A repeated or interrupted timeout result cannot skip a
++required phase. Keep a new run name and evidence log for this extension; an old
++watchdog-only PASS is not evidence of recovery into deep sleep. These tests do
++not cover a watchdog inherited while still running at boot, such as a boot ROM
++try-before-you-buy watchdog.
++
 +The scripts compare `OSError` to errno 16 when `errno.EBUSY` is not exported by
 +the RP2 Python module; 16 is `MP_EBUSY` in `py/mperrno.h`.
 +`regressions.py` refuses to run unless the port is RP2, the chip is RP2350 and
@@ -817,10 +871,10 @@ index 0000000000000000000000000000000000000000..0ce2aa64727ce1ea7327940a1802a223
 +backup hashes, firmware hashes, any scope traces and a PASS/FAIL/NOT RUN table.
 diff --git a/tests/ports/rp2/deepsleep/device.py b/tests/ports/rp2/deepsleep/device.py
 new file mode 100644
-index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531a9653428
+index 0000000000000000000000000000000000000000..31d5b4877326356404e2b7943246ac8fb4dc32af
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/device.py
-@@ -0,0 +1,422 @@
+@@ -0,0 +1,451 @@
 +# Install as main.py on an identified, backed-up test board. See README.md.
 +# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
 +import binascii
@@ -840,6 +894,11 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +last_record = {}
 +# Pinned lib/cyw43-driver/src/cyw43_ll.h: WPA2-PSK with AES, not an open AP.
 +AP_WPA2_AES_PSK = 0x00400004
++# RP2350 hardware/regs/watchdog.h: read-only boot diagnostics.
++WATCHDOG_CTRL = 0x400D8000
++WATCHDOG_REASON = 0x400D8008
++WATCHDOG_ENABLE = 1 << 30
++WATCHDOG_REASON_TIMER = 1
 +
 +
 +def rtc_seconds():
@@ -1086,6 +1145,17 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +    global last_record
 +    with open("deepsleep-config.json") as f:
 +        config = json.load(f)
++    watchdog_after_reset = config.get("watchdog_after_reset", False)
++    check(type(watchdog_after_reset) is bool, "watchdog_after_reset must be boolean")
++    if watchdog_after_reset:
++        check(config.get("watchdog") is True, "watchdog_after_reset requires watchdog=true")
++        cycles = config.get("cycles", 100)
++        check(
++            type(cycles) is int and cycles >= 1, "watchdog recovery needs positive integer cycles"
++        )
++        check(config.get("mode", "deepsleep") == "deepsleep", "watchdog recovery needs deepsleep")
++        check(config.get("expect_deep_cause", True), "watchdog recovery needs DEEPSLEEP_RESET")
++        check(config["sleep_ms"] >= 2, "watchdog recovery needs a timed deep sleep")
 +    regions = machine.mem_backup(-1)
 +    check(len(regions) == 3 and len(regions[2]) == 8, "requires RP2350 backup regions")
 +    state = regions[2]
@@ -1109,9 +1179,13 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +        # Startup may already have consumed/cleared CHIP_RESET status flags.
 +        "powman_chip_reset": machine.mem32[0x40100000 + 0x2C],
 +        "powman_last_swcore_pwrup": machine.mem32[0x40100000 + 0xA0],
++        "watchdog_ctrl": machine.mem32[WATCHDOG_CTRL],
++        "watchdog_reason": machine.mem32[WATCHDOG_REASON],
 +        "status": "READY",
 +    }
 +    last_record = record
++    if watchdog_after_reset:
++        record["watchdog_after_reset"] = True
 +    radio = config.get("radio")
 +    if radio is not None:
 +        check(
@@ -1129,6 +1203,7 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +    check(phase != 6, "deepsleep accepted an active CPU1")
 +    check(phase != 7, "reset interrupted an already consumed wake result")
 +    check(phase != 8, "watchdog reset before deepsleep rejection was confirmed")
++    check(phase != 9, "reset interrupted an already consumed watchdog result")
 +    if phase in (1, 4, 5):
 +        expected = machine.WDT_RESET if phase == 4 else getattr(machine, "DEEPSLEEP_RESET", -1)
 +        if phase == 5 or (phase == 1 and not config.get("expect_deep_cause", True)):
@@ -1154,7 +1229,13 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +            state[3] = 7
 +            state[1] += 1
 +            record["completed"] = state[1]
-+        if phase in (4, 5):
++        if phase == 4 and watchdog_after_reset:
++            check(record["watchdog_reason"] & WATCHDOG_REASON_TIMER, "watchdog timeout required")
++            check(not record["watchdog_ctrl"] & WATCHDOG_ENABLE, "expired watchdog still enabled")
++            # Consume this timeout before reporting it. A soft reset while the
++            # host waits must not turn an unobserved timeout into a valid run.
++            state[3] = 9
++        elif phase in (4, 5):
 +            record["status"] = "PASS"
 +            state[3] = 2
 +            wait_for_host(record)
@@ -1180,7 +1261,7 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +    if config.get("thread"):
 +        state[3] = 6
 +        thread_test()
-+    if config.get("watchdog"):
++    if config.get("watchdog") and phase == 0:
 +        state[3] = 8
 +        machine.WDT(timeout=2000)
 +        expect_busy()
@@ -1203,6 +1284,8 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +        "boot": state[5],
 +        "sleep_ms": config["sleep_ms"],
 +    }
++    if watchdog_after_reset:
++        sleep_record["watchdog_after_reset"] = True
 +    if radio is not None:
 +        sleep_record["radio_mode"] = radio
 +        sleep_record["radio"] = radio_state(radio, radio_handles)
@@ -1245,10 +1328,10 @@ index 0000000000000000000000000000000000000000..526baff3c29f1e4b84b8f06ec7881531
 +        time.sleep_ms(1000)
 diff --git a/tests/ports/rp2/deepsleep/host.py b/tests/ports/rp2/deepsleep/host.py
 new file mode 100644
-index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f00f154c7
+index 0000000000000000000000000000000000000000..50fecaacab91ce20852d18a87bccbc2a147015e1
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/host.py
-@@ -0,0 +1,434 @@
+@@ -0,0 +1,485 @@
 +#!/usr/bin/env python3
 +# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
 +"""Install/observe the opt-in RP2350 reset-spanning test. Never flashes firmware."""
@@ -1293,6 +1376,29 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +        raise ValueError("ap configuration requires radio=ap or sta_ap")
 +
 +
++def validate_watchdog_config(config):
++    after_reset = config.get("watchdog_after_reset", False)
++    if type(after_reset) is not bool:
++        raise ValueError("watchdog_after_reset must be boolean")
++    if not after_reset:
++        return
++    if config.get("watchdog") is not True:
++        raise ValueError("watchdog_after_reset requires watchdog=true")
++    cycles = config.get("cycles", 100)
++    if type(cycles) is not int or cycles < 1:
++        raise ValueError("watchdog recovery requires a positive integer cycle count")
++    if config.get("mode", "deepsleep") != "deepsleep":
++        raise ValueError("watchdog recovery requires mode=deepsleep")
++    if not config.get("expect_deep_cause", True) or config["sleep_ms"] < 2:
++        raise ValueError("watchdog recovery requires timed sleep with DEEPSLEEP_RESET")
++
++
++def expected_cycles(config):
++    if config.get("watchdog") and not config.get("watchdog_after_reset"):
++        return 0
++    return config.get("cycles", 100)
++
++
 +def ports():
 +    from serial.tools import list_ports
 +
@@ -1306,8 +1412,10 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +        raise ValueError("record does not belong to the expected run")
 +    if config.get("radio") is not None and record.get("radio_mode") != config["radio"]:
 +        raise ValueError("record radio mode does not match configuration")
++    if config.get("watchdog_after_reset") and record.get("watchdog_after_reset") is not True:
++        raise ValueError("record lacks watchdog-after-reset scenario marker")
 +    if record.get("status") == "PASS":
-+        expected = 0 if config.get("watchdog") else config.get("cycles", 100)
++        expected = expected_cycles(config)
 +        if type(record.get("completed")) is not int or record["completed"] != expected:
 +            raise ValueError("PASS completed count does not match configuration")
 +
@@ -1356,6 +1464,7 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +        self.config = config
 +        self.ready = None
 +        self.sleep_started = None
++        self.watchdog_reset_seen = False
 +
 +    def check(self, record, now):
 +        if self.config is None:
@@ -1365,6 +1474,7 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +        current = (record["boot"], record["completed"])
 +        status = record["status"]
 +        watchdog = self.config.get("watchdog", False)
++        after_reset = self.config.get("watchdog_after_reset", False)
 +        if status == "READY":
 +            if self.ready is None:
 +                if current[1] != 0 or record.get("phase") != 0:
@@ -1373,9 +1483,22 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +                if self.sleep_started is not None:
 +                    raise ValueError("READY after SLEEP on the same boot")
 +                return
++            elif after_reset and not self.watchdog_reset_seen and record.get("phase") == 4:
++                if (
++                    self.sleep_started is not None
++                    or self.ready[1] != 0
++                    or current != (self.ready[0] + 1, 0)
++                    or type(record.get("watchdog_reason")) is not int
++                    or not record["watchdog_reason"] & 1
++                    or type(record.get("watchdog_ctrl")) is not int
++                    or record["watchdog_ctrl"] & (1 << 30)
++                ):
++                    raise ValueError("watchdog timeout does not follow the initial READY")
++                self.watchdog_reset_seen = True
 +            else:
 +                if (
-+                    watchdog
++                    (watchdog and not after_reset)
++                    or (after_reset and not self.watchdog_reset_seen)
 +                    or self.sleep_started is None
 +                    or current != (self.ready[0] + 1, self.ready[1] + 1)
 +                    or record.get("phase") != 1
@@ -1391,20 +1514,22 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +            self.ready = current
 +        elif status == "SLEEP":
 +            if (
-+                watchdog
++                (watchdog and not after_reset)
++                or (after_reset and not self.watchdog_reset_seen)
 +                or current != self.ready
 +                or current[1] >= self.config.get("cycles", 100)
 +                or record.get("sleep_ms") != self.config["sleep_ms"]
 +            ):
 +                raise ValueError("SLEEP does not match READY/configuration")
 +        elif status == "PASS":
-+            expected = 0 if watchdog else self.config.get("cycles", 100)
++            expected = expected_cycles(self.config)
 +            if (
 +                self.ready is None
++                or (after_reset and not self.watchdog_reset_seen)
 +                or self.sleep_started is not None
 +                or self.ready[1] != expected
 +                or current != (self.ready[0] + 1, expected)
-+                or record.get("phase") != (4 if watchdog else 5)
++                or record.get("phase") != (4 if watchdog and not after_reset else 5)
 +            ):
 +                raise ValueError("PASS lacks a complete observed run and final reset")
 +
@@ -1461,6 +1586,7 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +    if not config.get("run") or config.get("cycles", 100) < 1:
 +        raise ValueError("config requires a run name and positive cycle count")
 +    validate_radio_config(config)
++    validate_watchdog_config(config)
 +    sys.path.insert(0, str(HERE.parents[3] / "tools"))
 +    from pyboard import Pyboard
 +
@@ -1504,12 +1630,16 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +            "os.sync()\nmachine.mem_backup(2)[0] = 0\n"
 +            % (json.dumps(config), b"RP2350 deepsleep filesystem sentinel\n")
 +        )
-+        board.use_raw_paste = False
-+        # Allow the host to receive the command ACK and close CDC before reset.
-+        board.exec_raw_no_follow("import time; time.sleep_ms(150); machine.reset()")
++        if not args.no_reset:
++            board.use_raw_paste = False
++            # Allow the host to receive the command ACK and close CDC before reset.
++            board.exec_raw_no_follow("import time; time.sleep_ms(150); machine.reset()")
 +    finally:
 +        board.close()
-+    print("Installed once. Start 'run'; per-cycle progress uses POWMAN scratch only.")
++    if args.no_reset:
++        print("Installed without reset. Arrange the documented BOOTSEL/UF2 boot, then run.")
++    else:
++        print("Installed once. Start 'run'; per-cycle progress uses POWMAN scratch only.")
 +
 +
 +def observe(args, manifest):
@@ -1532,6 +1662,7 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +            or not 0 <= expected["sleep_ms"] <= 2147483647
 +        ):
 +            raise ValueError("expected config requires sleep_ms in 0..2147483647")
++        validate_watchdog_config(expected)
 +        tolerance = expected.get("host_tolerance_s", 0)
 +        if not isinstance(tolerance, (int, float)) or not 0 <= tolerance < float("inf"):
 +            raise ValueError("host_tolerance_s must be finite and nonnegative")
@@ -1648,6 +1779,9 @@ index 0000000000000000000000000000000000000000..0216e1f35510a93fceffd50c2222624f
 +            command.add_argument("--config", type=Path, required=True)
 +            command.add_argument("--allow-write", action="store_true")
 +            command.add_argument("--replace-main", action="store_true")
++            command.add_argument(
++                "--no-reset", action="store_true", help="stage files without starting the suite"
++            )
 +        else:
 +            command.add_argument(
 +                "--config",
@@ -1776,10 +1910,10 @@ index 0000000000000000000000000000000000000000..fafae37d421e2478f29bfa1840a5ffda
 +    machine.freq(original)
 diff --git a/tests/ports/rp2/deepsleep/test_host.py b/tests/ports/rp2/deepsleep/test_host.py
 new file mode 100644
-index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b9c7ae860
+index 0000000000000000000000000000000000000000..1de1b338287f8784ab92826f7eaa468d3e2531c6
 --- /dev/null
 +++ b/tests/ports/rp2/deepsleep/test_host.py
-@@ -0,0 +1,416 @@
+@@ -0,0 +1,619 @@
 +#!/usr/bin/env python3
 +# The MIT License (MIT). Copyright (c) 2026 MicroPython contributors.
 +"""Offline harness checks only: no serial device, firmware, or sleep is exercised."""
@@ -1904,6 +2038,79 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +        with self.assertRaises(ValueError):
 +            progress.check(record("PASS", boot=2, phase=8), 2.5)
 +
++    def test_watchdog_after_reset_sequence(self):
++        config = dict(CONFIG, watchdog=True, watchdog_after_reset=True)
++        progress = host.RunProgress(config)
++        progress.check(record(watchdog_after_reset=True), 0)
++        timeout = record(
++            boot=2, phase=4, watchdog_after_reset=True, watchdog_reason=1, watchdog_ctrl=0
++        )
++        progress.check(timeout, 2.1)
++        progress.check(timeout, 2.2)  # Repeated timeout READY is idempotent.
++        sleep = record("SLEEP", boot=2, sleep_ms=2500, watchdog_after_reset=True)
++        progress.check(sleep, 2.3)
++        progress.acknowledged(sleep, 2.4)
++        wake = record(boot=3, completed=1, phase=1, watchdog_after_reset=True)
++        progress.check(wake, 5.1)
++        final = record("PASS", boot=4, completed=1, phase=5, watchdog_after_reset=True)
++        host.validate_expected_record(final, config)
++        progress.check(final, 5.2)
++
++    def test_watchdog_after_reset_cannot_skip_timeout_or_deep_sleep(self):
++        config = dict(CONFIG, watchdog=True, watchdog_after_reset=True)
++        progress = host.RunProgress(config)
++        progress.check(record(), 0)
++        with self.assertRaises(ValueError):
++            progress.check(record("SLEEP", sleep_ms=2500), 0.1)
++        with self.assertRaises(ValueError):
++            progress.check(record(boot=2, completed=1, phase=1), 3)
++        progress.check(record(boot=2, phase=4, watchdog_reason=1, watchdog_ctrl=0), 2)
++        with self.assertRaises(ValueError):
++            progress.check(record("PASS", boot=3, completed=1, phase=5), 3)
++        with self.assertRaises(ValueError):
++            progress.check(record(boot=3, completed=1, phase=1), 5)
++        with self.assertRaises(ValueError):
++            host.validate_expected_record(
++                record("PASS", boot=2, phase=4, watchdog_after_reset=True), config
++            )
++        with self.assertRaisesRegex(ValueError, "scenario marker"):
++            host.validate_expected_record(record(), config)
++
++    def test_watchdog_after_reset_requires_actual_inactive_timeout(self):
++        config = dict(CONFIG, watchdog=True, watchdog_after_reset=True)
++        for extra in (
++            {"watchdog_reason": 2},
++            {"watchdog_reason": None},
++            {"watchdog_ctrl": 1 << 30},
++            {"watchdog_ctrl": None},
++            {"boot": 3},
++            {"completed": 1},
++        ):
++            with self.subTest(extra=extra), self.assertRaises(ValueError):
++                progress = host.RunProgress(config)
++                progress.check(record(), 0)
++                timeout = record(boot=2, phase=4, watchdog_reason=1, watchdog_ctrl=0)
++                timeout.update(extra)
++                progress.check(timeout, 2)
++
++    def test_watchdog_after_reset_config_restrictions(self):
++        config = dict(CONFIG, watchdog=True, watchdog_after_reset=True)
++        host.validate_watchdog_config(config)
++        host.validate_watchdog_config(dict(CONFIG, watchdog=True))
++        for extra in (
++            {"watchdog": False},
++            {"watchdog_after_reset": "true"},
++            {"mode": "lightsleep_reset"},
++            {"expect_deep_cause": False},
++            {"sleep_ms": 1},
++            {"cycles": 0},
++            {"cycles": -1},
++            {"cycles": 1.5},
++            {"cycles": True},
++        ):
++            with self.subTest(extra=extra), self.assertRaises(ValueError):
++                host.validate_watchdog_config(dict(config, **extra))
++
 +    def test_zero_duration(self):
 +        progress = self.start_sleep(dict(CONFIG, sleep_ms=0))
 +        progress.check(record(boot=2, completed=1, phase=1), 0.2)
@@ -1952,7 +2159,7 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +
 +
 +class ObserveTests(unittest.TestCase):
-+    def observe(self, sessions, error=None):
++    def observe(self, sessions, error=None, config=CONFIG):
 +        clock = FakeClock()
 +        connections = [FakeSerial(events, clock) for events in sessions]
 +        pending = iter(connections)
@@ -1961,7 +2168,7 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +        )
 +        with tempfile.TemporaryDirectory() as directory:
 +            root = Path(directory)
-+            (root / "config.json").write_text(json.dumps(CONFIG))
++            (root / "config.json").write_text(json.dumps(config))
 +            args = types.SimpleNamespace(
 +                allow_run=True,
 +                config=root / "config.json",
@@ -2010,6 +2217,36 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +            [b"\nHELLO\n", b"GO synthetic 1 READY\n", b"GO synthetic 1 SLEEP\n"],
 +        )
 +
++    def test_watchdog_after_reset_reconnect_and_complete(self):
++        config = dict(CONFIG, watchdog=True, watchdog_after_reset=True)
++        records, connections = self.observe(
++            [
++                [frame(record(watchdog_after_reset=True)), OSError("WDT reset")],
++                [
++                    frame(
++                        record(
++                            boot=2,
++                            phase=4,
++                            watchdog_after_reset=True,
++                            watchdog_reason=1,
++                            watchdog_ctrl=0,
++                        )
++                    ),
++                    frame(record("SLEEP", boot=2, sleep_ms=2500, watchdog_after_reset=True)),
++                    OSError("deep sleep"),
++                ],
++                [
++                    (2.5, frame(record(boot=3, completed=1, phase=1, watchdog_after_reset=True))),
++                    frame(record("PASS", boot=4, completed=1, phase=5, watchdog_after_reset=True)),
++                ],
++            ],
++            config=config,
++        )
++        self.assertEqual(records[-1]["completed"], 1)
++        self.assertEqual(records[-1]["phase"], 5)
++        self.assertIn(b"GO synthetic 2 READY\n", connections[1].writes)
++        self.assertIn(b"GO synthetic 2 SLEEP\n", connections[1].writes)
++
 +    def test_repeated_bad_json_cannot_extend_timeout_or_pass(self):
 +        records, connections = self.observe(
 +            [[host.PREFIX + b'{"status":"PASS"\n'] * 100], TimeoutError
@@ -2027,6 +2264,50 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +        self.assertEqual(records[-1]["status"], "FAIL")
 +
 +
++class InstallTests(unittest.TestCase):
++    def test_staged_install_never_resets_or_starts_main(self):
++        for no_reset in (True, False):
++            commands = []
++            writes = []
++            board = types.SimpleNamespace(
++                enter_raw_repl=lambda **kwargs: self.assertFalse(kwargs["soft_reset"]),
++                fs_put=lambda source, destination: writes.append(destination),
++                exec_raw_no_follow=commands.append,
++                close=lambda: None,
++            )
++
++            def execute(command):
++                commands.append(command)
++                if "unique_id" in command:
++                    return json.dumps({"uid": "0123", "machine": "RP2350"}).encode()
++                if "os.listdir" in command:
++                    return b"[]"
++                return b""
++
++            board.exec_ = execute
++            with tempfile.TemporaryDirectory() as directory:
++                root = Path(directory)
++                (root / "config.json").write_text(json.dumps(CONFIG))
++                args = types.SimpleNamespace(
++                    allow_write=True,
++                    config=root / "config.json",
++                    manifest=root / "manifest.json",
++                    replace_main=False,
++                    no_reset=no_reset,
++                )
++                with patch.dict(
++                    sys.modules, {"pyboard": types.SimpleNamespace(Pyboard=lambda _: board)}
++                ), patch.object(host, "port_for", return_value="synthetic-no-device"), patch(
++                    "sys.stdout", new_callable=io.StringIO
++                ):
++                    host.install(args, dict(MANIFEST, machine_contains="RP2350"))
++            with self.subTest(no_reset=no_reset):
++                self.assertEqual(writes, ["main.py"])
++                self.assertTrue(any("machine.mem_backup(2)[0] = 0" in cmd for cmd in commands))
++                self.assertEqual(any("machine.reset()" in cmd for cmd in commands), not no_reset)
++                self.assertFalse(any("exec(open" in cmd for cmd in commands))
++
++
 +class SimulatedReset(BaseException):
 +    pass
 +
@@ -2042,7 +2323,7 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +            unique_id=lambda: b"\x01\x23",
 +            reset_cause=lambda: 4,
 +            RTC=lambda: types.SimpleNamespace(datetime=lambda: (2026, 9, 26, 5, 0, 0, 1, 0)),
-+            mem32={0x4010002C: 0, 0x401000A0: 64},
++            mem32={0x4010002C: 0, 0x401000A0: 64, 0x400D8000: 0, 0x400D8008: 1},
 +            DEEPSLEEP_RESET=4,
 +            WDT_RESET=3,
 +            WDT=lambda **kwargs: None,
@@ -2054,6 +2335,10 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +            "MAGIC": self.state[0],
 +            "SENTINEL": b"sentinel",
 +            "EBUSY": 16,
++            "WATCHDOG_CTRL": 0x400D8000,
++            "WATCHDOG_REASON": 0x400D8008,
++            "WATCHDOG_ENABLE": 1 << 30,
++            "WATCHDOG_REASON_TIMER": 1,
 +            "open": lambda name, *a: (
 +                io.StringIO(json.dumps(self.config))
 +                if name.endswith(".json")
@@ -2095,6 +2380,58 @@ index 0000000000000000000000000000000000000000..03885d9732749cb7c3086883743ea47b
 +        self.namespace["run"]()
 +        self.assertEqual(emitted[0]["status"], "PASS")
 +        self.assertEqual(self.state[3], 2)
++
++    def test_watchdog_after_reset_runs_deep_sleep_without_rearming(self):
++        self.config.update(watchdog=True, watchdog_after_reset=True)
++        self.state[3] = 4
++        self.machine.reset_cause = lambda: 3
++        self.machine.WDT = lambda **kwargs: self.fail("watchdog rearmed after its timeout")
++        self.namespace["os"] = types.SimpleNamespace(sync=lambda: None)
++        self.machine.RTC = lambda: types.SimpleNamespace(datetime=lambda *args: None)
++        self.machine.deepsleep = lambda _: (_ for _ in ()).throw(SimulatedReset())
++        emitted = []
++        self.namespace["wait_for_host"] = lambda value: emitted.append(dict(value))
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual(
++            [(r["status"], r.get("phase")) for r in emitted], [("READY", 4), ("SLEEP", None)]
++        )
++        self.assertEqual((self.state[1], self.state[3]), (0, 1))
++        self.machine.reset_cause = lambda: 4
++        self.namespace["rtc_seconds"] = lambda: 106
++        self.machine.reset = lambda: (_ for _ in ()).throw(SimulatedReset())
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual((self.state[1], self.state[3]), (1, 5))
++        self.machine.reset_cause = lambda: 3
++        self.namespace["run"]()
++        self.assertEqual(
++            (emitted[-1]["status"], emitted[-1]["completed"], emitted[-1]["phase"]), ("PASS", 1, 5)
++        )
++
++    def test_watchdog_after_reset_consumed_before_host_wait(self):
++        self.config.update(watchdog=True, watchdog_after_reset=True)
++        self.state[3] = 4
++        self.machine.reset_cause = lambda: 3
++        self.namespace["wait_for_host"] = lambda _: (_ for _ in ()).throw(SimulatedReset())
++        with self.assertRaises(SimulatedReset):
++            self.namespace["run"]()
++        self.assertEqual((self.state[1], self.state[3]), (0, 9))
++        with self.assertRaisesRegex(AssertionError, "consumed watchdog"):
++            self.namespace["run"]()
++
++    def test_watchdog_after_reset_rejects_running_or_non_timeout_watchdog(self):
++        self.config.update(watchdog=True, watchdog_after_reset=True)
++        self.state[3] = 4
++        self.machine.reset_cause = lambda: 3
++        for ctrl, reason, error in ((1 << 30, 1, "still enabled"), (0, 2, "timeout required")):
++            self.machine.mem32[0x400D8000] = ctrl
++            self.machine.mem32[0x400D8008] = reason
++            with self.subTest(ctrl=ctrl, reason=reason), self.assertRaisesRegex(
++                AssertionError, error
++            ):
++                self.namespace["run"]()
++            self.assertEqual((self.state[1], self.state[3]), (0, 4))
 +
 +    def test_watchdog_pass_phase_written_only_after_busy(self):
 +        class ResetAtArming(list):

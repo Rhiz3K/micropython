@@ -23,10 +23,10 @@ index 6389b3f0883250f9f66fcca870705e95ffccde50..c1fd9d6ab1369decd375fe8834cf2fd5
  
     On stm32 the region index does not have a uniform meaning across boards:
 diff --git a/docs/rp2/quickref.rst b/docs/rp2/quickref.rst
-index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddbcaf243ef 100644
+index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..ed6e02ac86d421f0ee199db9de4c8ab4928311d6 100644
 --- a/docs/rp2/quickref.rst
 +++ b/docs/rp2/quickref.rst
-@@ -106,6 +106,55 @@ connection succeeds or the interface gets disabled.
+@@ -106,6 +106,59 @@ connection succeeds or the interface gets disabled.
  .. _Pico W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#picow-technical-specification
  .. _Pico 2 W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#pico2w-technical-specification
  
@@ -44,7 +44,9 @@ index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddb
 +timer wakes the chip through the normal ROM boot path. A successful timer wake
 +is reported as ``machine.DEEPSLEEP_RESET`` by ``machine.reset_cause()``. The RTC
 +continues using the low-power oscillator during sleep, so its accuracy differs
-+from the crystal used while awake. No particular board current is guaranteed.
++from the crystal used while awake and varies with voltage and temperature.
++Applications requiring accurate wall-clock time should synchronise the RTC
++after waking. No particular board current is guaranteed.
 +
 +USB disconnects and must enumerate again. Pico 2 W turns off CYW43; the new
 +program must reconnect Wi-Fi. After powering off CYW43, Pico 2 W also drives
@@ -65,6 +67,8 @@ index 8e0f6d6bae76ec648243cff21f9e63e51ec591ce..bdd38b709ad1ae119908e37d8c93fddb
 +An active watchdog, a running second Python thread, a call from core 1, or an
 +interrupt handler causes ``OSError(EBUSY)`` before teardown. The watchdog is not
 +silently disabled: it would lose both its counter and protection in P1.7.
++An expired watchdog left enabled by a previous reboot is cleared at startup
++and does not block timed deep sleep; the recorded reset cause is preserved.
 +Terminate the second thread cooperatively before calling deep sleep.
 +
 +Negative or out-of-range durations raise an exception.
@@ -119,7 +123,7 @@ index 304175b5370bbe148fb79c78ec1096a1a29f71a8..240edd1c8ae60222b366ef4eb2bf4ebb
      #if PICO_ARM
      SCB->SCR |= SCB_SCR_SEVONPEND_Msk;
 diff --git a/ports/rp2/modmachine.c b/ports/rp2/modmachine.c
-index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb86050e388b4e 100644
+index 41c371a367d6bcf9119955547847ccca42269951..5c201cfda30aef1039ff5cfe53f13958123e56ee 100644
 --- a/ports/rp2/modmachine.c
 +++ b/ports/rp2/modmachine.c
 @@ -28,6 +28,7 @@
@@ -130,7 +134,7 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
  #include "mp_usbd.h"
  #include "modmachine.h"
  #include "uart.h"
-@@ -53,11 +54,51 @@
+@@ -53,11 +54,58 @@
  #if MICROPY_PY_NETWORK_CYW43
  #include "lib/cyw43-driver/src/cyw43.h"
  #endif
@@ -155,6 +159,13 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
 +static void machine_deepsleep_prepare_wfi(void);
 +
 +void machine_deepsleep_init(void) {
++    // A watchdog timeout (including the ROM's delayed BOOTSEL reboot) can
++    // leave ENABLE set with an expired counter. Preserve any live watchdog.
++    uint32_t watchdog_ctrl = watchdog_hw->ctrl;
++    if ((watchdog_ctrl & (WATCHDOG_CTRL_ENABLE_BITS | WATCHDOG_CTRL_TIME_BITS))
++        == WATCHDOG_CTRL_ENABLE_BITS) {
++        hw_clear_bits(&watchdog_hw->ctrl, WATCHDOG_CTRL_ENABLE_BITS);
++    }
 +    if (watchdog_hw->reason) {
 +        machine_deepsleep_prepare_wfi();
 +    }
@@ -182,7 +193,7 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
      { MP_ROM_QSTR(MP_QSTR_Pin),                 MP_ROM_PTR(&machine_pin_type) }, \
      { MP_ROM_QSTR(MP_QSTR_RTC),                 MP_ROM_PTR(&machine_rtc_type) }, \
      { MP_ROM_QSTR(MP_QSTR_Timer),               MP_ROM_PTR(&machine_timer_type) }, \
-@@ -82,6 +123,10 @@ static mp_int_t mp_machine_reset_cause(void) {
+@@ -82,6 +130,10 @@ static mp_int_t mp_machine_reset_cause(void) {
      int reset_cause;
      if (watchdog_caused_reboot()) {
          reset_cause = RP2_RESET_WDT;
@@ -193,7 +204,7 @@ index 41c371a367d6bcf9119955547847ccca42269951..8ba14e86b84f56990ceb03aeccbb8605
      } else {
          reset_cause = RP2_RESET_PWRON;
      }
-@@ -376,7 +421,228 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+@@ -376,7 +428,228 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
      }
  }
  
