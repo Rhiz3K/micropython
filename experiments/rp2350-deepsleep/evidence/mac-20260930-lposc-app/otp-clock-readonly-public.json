@@ -1,0 +1,29 @@
+{
+  "result": "PASS",
+  "read_only": true,
+  "otp_valid": true,
+  "dft_lposc_ctrl": 0,
+  "lposc_div_frac": 37421,
+  "otp_hz": 32571,
+  "fc0_before": [
+    0,
+    0,
+    33554431,
+    1,
+    8,
+    0,
+    17,
+    0
+  ],
+  "clk_ref_ctrl": 2,
+  "otp_user_control_read_bits": 1,
+  "clk_ref_selected": 4,
+  "otp_page0_secure_lock": 1,
+  "lposc_control": 515,
+  "powman_timer": 65538,
+  "clk_ref_div": 65536,
+  "xosc_status": -2130702336,
+  "lposc_div_int": 32,
+  "host_utc": "2026-09-30T20:45:34.709054+00:00",
+  "host_monotonic": 622070.86887975
+}

@@ -1,0 +1,42 @@
+{
+  "stop_code": "bmp_header",
+  "schema": 1,
+  "radio_off_verified": true,
+  "content_type_category": "OTHER_IMAGE",
+  "body_magic_category": "OTHER",
+  "dns": {
+    "server_attempts": [
+      {
+        "tcp_probe_success": true,
+        "server_index": 0,
+        "configured": true,
+        "resolved_ip_equals_dhcp": true
+      }
+    ],
+    "selected_server_index": 0,
+    "policy_tcp_success": true,
+    "fallback_used": false,
+    "cache_used": false
+  },
+  "body_bytes": 2283,
+  "body_category": "OTHER",
+  "dns_backend": "bounded_UDP_A",
+  "rotation_180": false,
+  "http_phase_limit_ms": 35000,
+  "post_skipped_for_get_only_format_probe": true,
+  "bmp_valid": false,
+  "failure_stage": "BMP",
+  "result": "FAIL",
+  "dns_phase_limit_ms": 35000,
+  "download_bytes": 2283,
+  "accept_header_used": false,
+  "http_version": "HTTP/1.0",
+  "get_status": 200,
+  "error_type": "Stop",
+  "scope": "EXPLICIT_GET_ONLY_IMAGE_FORMAT_CLASSIFICATION",
+  "reset_performed": false,
+  "sleep_performed": false,
+  "panel_refresh_performed": false,
+  "host_utc": "2026-09-30T21:57:19.510197+00:00",
+  "host_monotonic": 626375.675346
+}

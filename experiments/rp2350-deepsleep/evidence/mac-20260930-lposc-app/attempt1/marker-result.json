@@ -1,0 +1,12 @@
+{
+  "schema": 2,
+  "result": "FAIL",
+  "run": "5e3e29e82e1087472fffb420d445e446",
+  "usb_mode": "USB_CONNECTED",
+  "boundaries": [],
+  "completed_intervals": 0,
+  "go_acknowledged": true,
+  "error_type": "KeyboardInterrupt",
+  "finished_utc": "2026-09-30T21:27:33.307551+00:00",
+  "finished_monotonic_ns": 624589473122208
+}

@@ -1,0 +1,9 @@
+{
+  "run": "lposc-timing-20260930-300s",
+  "cycles": 2,
+  "sleep_ms": 300000,
+  "expect_deep_cause": true,
+  "radio": "never",
+  "rtc_tolerance_s": 30.0,
+  "host_tolerance_s": 30.0
+}

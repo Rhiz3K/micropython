@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "result": "FRESH_SNAPSHOT_AND_COMPLETED_RESTORATION_VERIFIED",
+  "scope": "PILOT3_FRESH_ORIGINAL_BEFORE_STAGE",
+  "original_files_verified": 29,
+  "original_directories_verified": 7,
+  "backup_region_word_counts": [
+    4,
+    3,
+    8
+  ],
+  "fresh_snapshot_sha256": "47a5c1cd232ffec27c3c0b327bdbd350a18b5b0c52285bbecb4412d0a06a730a",
+  "final_state_record_sha256": "75465053a1722fdf09d3243098f2c4eea3bbb37a0c0a4a8da0474f3757a4f280",
+  "original_inventory_sha256": "9c0cb4591445f5c83437e8816f12388386f70dc9383f95ac7c8ff76686e96611",
+  "fresh_backup_values_sha256": "adf76d1e6934c03e36c20684f8306305171ca18065166aa5b1fe90ce4fc966a7",
+  "final_backup_values_sha256": "adf76d1e6934c03e36c20684f8306305171ca18065166aa5b1fe90ce4fc966a7",
+  "all_three_backup_regions_match_fresh_snapshot": true,
+  "watchdog_enabled": false,
+  "rtc_capture_bracket_s": 0.04609249997884035,
+  "rtc_initial_plus_host_elapsed_verified": true,
+  "raw_identity_RTC_and_backup_values_exported": false
+}

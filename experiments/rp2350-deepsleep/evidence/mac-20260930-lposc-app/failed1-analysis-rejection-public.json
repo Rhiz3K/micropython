@@ -1,0 +1,6 @@
+{
+  "result": "EXPECTED_REJECTION_CONFIRMED",
+  "actual_application_attempt": "FAIL",
+  "accepted_cycle_energy_created": false,
+  "completed_application_cycles": 0
+}

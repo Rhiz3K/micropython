@@ -1,0 +1,261 @@
+{
+  "interval": 15,
+  "samples": [
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 0
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 1
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 2
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 3
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 4
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 5
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 6
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 7
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 8
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 9
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 10
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 11
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 12
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 13
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 14
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 15
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 16
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 17
+    },
+    {
+      "raw_result": 1045,
+      "status": 17,
+      "hz": 32656.25,
+      "sample": 18
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 19
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 20
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 21
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 22
+    },
+    {
+      "raw_result": 1042,
+      "status": 17,
+      "hz": 32562.5,
+      "sample": 23
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 24
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 25
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 26
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 27
+    },
+    {
+      "raw_result": 1045,
+      "status": 17,
+      "hz": 32656.25,
+      "sample": 28
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 29
+    },
+    {
+      "raw_result": 1044,
+      "status": 17,
+      "hz": 32625.0,
+      "sample": 30
+    },
+    {
+      "raw_result": 1043,
+      "status": 17,
+      "hz": 32593.75,
+      "sample": 31
+    }
+  ],
+  "result_quantum_hz": 31.25,
+  "result": "PASS",
+  "clock_and_powman_after": {
+    "divider": [
+      32,
+      37421
+    ],
+    "clk_ref_ctrl": 2,
+    "lposc_control": 515,
+    "clk_ref_selected": 4,
+    "powman_timer": 65538,
+    "clk_ref_div": 65536
+  },
+  "rw_config_after": [
+    0,
+    0,
+    33554431,
+    1,
+    8,
+    0
+  ],
+  "ro_result_after": 0,
+  "clock_and_powman_before": {
+    "divider": [
+      32,
+      37421
+    ],
+    "clk_ref_ctrl": 2,
+    "lposc_control": 515,
+    "clk_ref_selected": 4,
+    "powman_timer": 65538,
+    "clk_ref_div": 65536
+  },
+  "clock_powman_unchanged": true,
+  "error": null,
+  "rw_config_before": [
+    0,
+    0,
+    33554431,
+    1,
+    8,
+    0
+  ],
+  "ro_status_and_result_restored": false,
+  "ro_status_after": 17,
+  "reference_khz": 12000,
+  "rw_config_restored": true,
+  "otp_hz": 32571,
+  "otp_valid": true,
+  "divider_hz": 32570.999145507812,
+  "divider_matches_otp": true,
+  "mean_hz": 32614.2578125,
+  "median_hz": 32625.0,
+  "min_hz": 32562.5,
+  "max_hz": 32656.25,
+  "sample_stdev_hz": 20.40630480282124,
+  "awake_prediction_sleep_ratio": 0.9986736271221966,
+  "reference": "XOSC 12MHz; hardware FC0 independent of POWMAN divider",
+  "absolute_accuracy_not_calibrated": true,
+  "deep_sleep_frequency_not_measured": true,
+  "device_file_writes": false,
+  "reset_performed": false,
+  "host_utc": "2026-09-30T20:47:32.105703+00:00",
+  "host_monotonic": 622188.266022041
+}

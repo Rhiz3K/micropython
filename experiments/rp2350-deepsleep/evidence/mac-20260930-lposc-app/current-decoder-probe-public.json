@@ -1,0 +1,29 @@
+{
+  "width": 296,
+  "download_bytes": 2187,
+  "format": "Z2",
+  "pixels": 37888,
+  "result": "PASS",
+  "rotation_180": false,
+  "red_plane_empty": true,
+  "get_status": 200,
+  "plane_bytes": [
+    4736,
+    4736
+  ],
+  "height": 128,
+  "image_valid": true,
+  "radio_off_verified": true,
+  "post_skipped": true,
+  "scope": "GET_ONLY_RAM_CURRENT_APPLICATION_DECODER",
+  "application_commit": "fd54396020b4154eb23c0188153a8d6f9a5b2813",
+  "decoder_sha256": "d6c93ac15c30c766378f2bb29aa3ab2ee3d5aff5e766ebbb46be2b837075446f",
+  "source_review_sha256": "ee7e6ce74b914bda55c0f9ce977cb29aa69c3c7015cedcca4ae62c3638c361f9",
+  "reset_performed": false,
+  "sleep_performed": false,
+  "panel_refresh_performed": false,
+  "original_files_and_firmware_unchanged": true,
+  "usb_mode": "USB_CONNECTED",
+  "host_utc": "2026-09-30T22:11:43.901253+00:00",
+  "host_monotonic": 627240.066502125
+}

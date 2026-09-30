@@ -1,0 +1,76 @@
+{
+  "schema": 2,
+  "result": "BOUNDARIES_COMPLETE",
+  "usb_mode": "USB_CONNECTED",
+  "boundaries": [
+    {
+      "kind": "DOWNLOAD_READY",
+      "index": 0,
+      "receipt_monotonic_ns": 627847611116916,
+      "ack_before_monotonic_ns": 627847612403791,
+      "ack_after_monotonic_ns": 627847612606333,
+      "duplicate": false,
+      "usb_mode": "USB_CONNECTED",
+      "meter_gate": {
+        "health_monotonic_ns": 627846930599708,
+        "recording_samples": 1108,
+        "recent_receipt_sample_rate_hz": 100.04864020341674,
+        "last_valid_measurement_age_s": 0.001226042,
+        "metadata_sha256": "dd42a6cf058e5fdd3b62f0357c5e40d55c3c5488b09464ae5e497b5360599863"
+      }
+    },
+    {
+      "kind": "DOWNLOAD_READY",
+      "index": 1,
+      "receipt_monotonic_ns": 628167528101875,
+      "ack_before_monotonic_ns": 628167533025791,
+      "ack_after_monotonic_ns": 628167533326166,
+      "duplicate": false,
+      "usb_mode": "USB_CONNECTED",
+      "meter_gate": {
+        "health_monotonic_ns": 628166991036625,
+        "recording_samples": 33116,
+        "recent_receipt_sample_rate_hz": 99.99572349614569,
+        "last_valid_measurement_age_s": 0.000951167,
+        "metadata_sha256": "dd42a6cf058e5fdd3b62f0357c5e40d55c3c5488b09464ae5e497b5360599863"
+      }
+    },
+    {
+      "kind": "DOWNLOAD_READY",
+      "index": 2,
+      "receipt_monotonic_ns": 628487395387375,
+      "ack_before_monotonic_ns": 628487406229458,
+      "ack_after_monotonic_ns": 628487406488416,
+      "duplicate": false,
+      "usb_mode": "USB_CONNECTED",
+      "meter_gate": {
+        "health_monotonic_ns": 628487011275708,
+        "recording_samples": 65120,
+        "recent_receipt_sample_rate_hz": 100.00149015272731,
+        "last_valid_measurement_age_s": 0.001132375,
+        "metadata_sha256": "dd42a6cf058e5fdd3b62f0357c5e40d55c3c5488b09464ae5e497b5360599863"
+      }
+    },
+    {
+      "kind": "DOWNLOAD_READY",
+      "index": 3,
+      "receipt_monotonic_ns": 628807499627625,
+      "ack_before_monotonic_ns": 628807502913208,
+      "ack_after_monotonic_ns": 628807502975375,
+      "duplicate": false,
+      "usb_mode": "USB_CONNECTED",
+      "meter_gate": {
+        "health_monotonic_ns": 628806878583125,
+        "recording_samples": 97108,
+        "recent_receipt_sample_rate_hz": 100.00283266055867,
+        "last_valid_measurement_age_s": 0.00023,
+        "metadata_sha256": "dd42a6cf058e5fdd3b62f0357c5e40d55c3c5488b09464ae5e497b5360599863"
+      }
+    }
+  ],
+  "completed_intervals": 3,
+  "go_acknowledged": true,
+  "finished_utc": "2026-09-30T22:38:03.349501+00:00",
+  "finished_monotonic_ns": 628819519881291,
+  "run": "00000003000000000000000000000000"
+}

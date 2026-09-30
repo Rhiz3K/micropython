@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "scope": "REDACTED_METADATA_POINTER",
+  "reader_sha256": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+  "expected_serial_number": "redacted-meter",
+  "source_private_metadata_sha256": "dd42a6cf058e5fdd3b62f0357c5e40d55c3c5488b09464ae5e497b5360599863",
+  "identity_removed": true,
+  "allowed_commands": [
+    "0x81",
+    "0x82",
+    "0x83"
+  ],
+  "usb_reset_used": false,
+  "kernel_detach_used": false,
+  "serial_port_opened": false,
+  "charging_or_voltage_commands_used": false,
+  "note": "Marker meter_gate hashes refer to original private metadata, not this redacted projection."
+}

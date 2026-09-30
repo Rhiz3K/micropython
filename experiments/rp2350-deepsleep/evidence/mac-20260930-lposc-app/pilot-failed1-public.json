@@ -1,0 +1,19 @@
+{
+  "result": "FAIL",
+  "scope": "USB_CONNECTED_APPLICATION_ATTEMPT1",
+  "sleep_cycles": 0,
+  "download_boundaries": 0,
+  "wifi_and_go_marker_verified": true,
+  "device_terminal": "FAIL",
+  "device_stages": [
+    "BOOT",
+    "FAIL"
+  ],
+  "error_types": [
+    "Stop"
+  ],
+  "original_files_and_firmware_unchanged": true,
+  "readback_without_reset": true,
+  "host_utc": "2026-09-30T21:28:51.537424+00:00",
+  "host_monotonic": 624667.699442541
+}

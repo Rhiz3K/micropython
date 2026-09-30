@@ -1,5 +1,17 @@
 # Handover pro PC s Picem a měřákem
 
+**Aktualizace 1. 10. 2026:** nejnovější Mac ověření je v
+[LPOSC, startup WDT a aplikačním měření](RESULTS-LPOSC-APP-MAC-20260930.md),
+navazuje na [opravu expirovaného watchdogu](RESULTS-WATCHDOG-MAC-20260930.md).
+Nová relace dokončila čtyři časovací a tři aplikační alarmové návraty,
+šest full refreshů a měření tří celých period s připojeným USB.
+Současný konečný Mac stav: přesný experimentální BIN `a0a2107d…ee08`,
+29 původních souborů a 7 adresářů ověřeno, všechny tři backup regiony
+a RTC obnoveny, rádio/BLE vypnuté, panel zaparkovaný, friendly REPL.
+Původní aplikace byla vrácena beze změn a nespustila se; Z2 dekodér byl
+pouze součástí odstraněného testu. Fyzický obraz dosud není potvrzený.
+Níže je zachováno původní předání z 29. 9., jeho počty nejsou současný stav.
+
 Připraveno 29. 9. 2026. Úkol na cílovém PC: převzít aktuální kandidát,
 ověřit jej na **tamní** desce a změřit odběr i energii cyklu. Toto předání
 nespouští testy, neflashuje a nepopisuje nově ověřený stav vzdálené sestavy.

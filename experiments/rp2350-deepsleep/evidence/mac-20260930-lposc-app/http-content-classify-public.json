@@ -1,0 +1,40 @@
+{
+  "http_calls": [
+    {
+      "complete": true,
+      "body_is_png": false,
+      "body_is_bmp": false,
+      "body_is_json": false,
+      "body_is_html": false,
+      "content_type": "other",
+      "method": "POST",
+      "rotate_code": "missing",
+      "body_bytes": 2285
+    },
+    {
+      "complete": true,
+      "body_is_png": false,
+      "body_is_bmp": false,
+      "body_is_json": false,
+      "body_is_html": false,
+      "content_type": "other",
+      "method": "GET",
+      "rotate_code": "missing",
+      "body_bytes": 2285
+    }
+  ],
+  "stage": "BMP",
+  "rotate_180": false,
+  "body_bytes": 2285,
+  "result": "FAIL",
+  "error_type": "Stop",
+  "radio_off_verified": true,
+  "error_code": "bmp_header",
+  "reset_performed": false,
+  "sleep_performed": false,
+  "panel_refresh_performed": false,
+  "original_files_unchanged": true,
+  "scope": "EXPLICIT_HTTP_CONTENT_CLASSIFICATION_AFTER_FAILED_ATTEMPT1",
+  "host_utc": "2026-09-30T21:33:27.599410+00:00",
+  "host_monotonic": 624943.763256541
+}

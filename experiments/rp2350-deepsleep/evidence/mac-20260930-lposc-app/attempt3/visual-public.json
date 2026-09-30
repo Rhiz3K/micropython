@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "scope": "APPLICATION_PILOT3_PHYSICAL_PANEL",
+  "status": "NOT_VERIFIED",
+  "reason": "No current user visual confirmation received",
+  "electronic_refresh_count_verified": 6
+}

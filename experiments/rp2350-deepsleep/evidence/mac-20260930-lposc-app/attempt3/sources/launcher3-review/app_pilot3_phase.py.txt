@@ -1,0 +1,361 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Third explicit USB_CONNECTED attempt from restored originals; no hardware/import side effects.
+
+Root supplies a pinned approval only after the distinct current-codec GET image probe PASS.
+Prior failed attempts stay immutable. New outputs live in ROOT/pilot3.
+"""
+import argparse
+import contextlib
+import fcntl
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import re
+import secrets
+import signal
+import subprocess
+import sys
+import time
+from datetime import datetime, timedelta, timezone
+ROOT = Path('<PRIVATE_HOST_PATH>')
+OUT = ROOT / 'pilot3'
+REVIEW = ROOT / 'adapter-usb-v3-review'
+APPROVAL = ROOT / 'launcher3-review/root-approval-private.json'
+BINDING = REVIEW / 'dns-policy-binding-private.json'
+AUTHORIZED_WIFI = Path('<PRIVATE_HOST_PATH>')
+PARKED = '/lposc_app_parked_main_20260930T203843Z.py'
+TEMP = '/lposc_app_staging_20260930T203843Z.py'
+ARMED = '/app-cycle-usb-armed.json'
+CONSUMED = '/app-cycle-usb-consumed.json'
+EVENTS = '/app-cycle-usb-events.jsonl'
+TERMINAL = '/app-cycle-usb-terminal.json'
+WIFI = '/app-cycle-usb-wifi-private.json'
+READER_SHA = 'a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45'
+READONLY_DEPENDENCY_SHA = {'drivers/ePaper2in9.py': '61b7dba6b6117993f52930fbfc83578f89a2f96bf9fb48c5cd68d88efa132f1e', 'url_utils.py': 'a63ee1f5d59333c3981a2a2884e35cf48624d3bdd2069d0e2c0cae0e5e142312', 'pico_epaper29_lowpower.py': '52d992cb94ab9fe8ebb0b6cc80a0cde7155bbc1879f81d3ee6746d57a3ff0dd0'}
+MAGIC = 1095783729
+p = timing = READER = APPROVAL_SHA = None
+
+def require(ok, message):
+    if not ok:
+        raise RuntimeError(message)
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def read_json(path):
+    return json.loads(Path(path).read_text())
+CODEC_SHA = 'd6c93ac15c30c766378f2bb29aa3ab2ee3d5aff5e766ebbb46be2b837075446f'
+APPLICATION_COMMIT = 'fd54396020b4154eb23c0188153a8d6f9a5b2813'
+PROBE_TRANSPORT_REVIEW_SHA = 'ee7e6ce74b914bda55c0f9ce977cb29aa69c3c7015cedcca4ae62c3638c361f9'
+PROBE = ROOT / 'current-decoder-probe-public.json'
+RESTORATION = ROOT / 'restoration-review/runs/after-failed-app-and-probes/result-public.json'
+INPUTS = ('inventory-before-private.json', 'directories-before-private.json', 'full-backup-public.json')
+INERT_GUARD = b"# Temporary PILOT3 guard; no original application import.\nprint('PILOT3 STAGING GUARD')\n"
+
+def probe_pass(probe):
+    require(probe.get('result') == 'PASS' and probe.get('image_valid') is True and (probe.get('format') in ('Z2', 'BMP')) and (probe.get('get_status') == 200) and (probe.get('decoder_sha256') == CODEC_SHA) and (probe.get('application_commit') == APPLICATION_COMMIT) and (probe.get('source_review_sha256') == PROBE_TRANSPORT_REVIEW_SHA) and (probe.get('plane_bytes') == [4736, 4736]) and (probe.get('red_plane_empty') is True) and ((probe.get('width'), probe.get('height'), probe.get('pixels')) == (296, 128, 37888)) and (probe.get('scope') == 'GET_ONLY_RAM_CURRENT_APPLICATION_DECODER') and (probe.get('post_skipped') is True) and (probe.get('original_files_and_firmware_unchanged') is True) and (probe.get('radio_off_verified') is True) and all((probe.get(k) is False for k in ('reset_performed', 'sleep_performed', 'panel_refresh_performed'))), 'Exact current-codec RAM GET image PASS required')
+
+def validate_approval(approval_sha, require_probe=True):
+    require(not sys.flags.optimize, 'Optimized Python forbidden')
+    require(re.fullmatch('[0-9a-f]{64}', approval_sha or '') and sha(APPROVAL) == approval_sha, 'Root approval SHA')
+    approval = read_json(APPROVAL)
+    require(set(approval) == {'schema', 'attempt', 'approved', 'scope', 'source_review_sha256', 'binding_sha256', 'probe_sha256', 'restoration_sha256', 'input_sha256', 'parent_launcher_sha256'}, 'Approval schema')
+    require(approval['schema'] == 1 and approval['attempt'] == 3 and (approval['approved'] is True) and (approval['scope'] == 'USB_CONNECTED_APPLICATION_ATTEMPT3'), 'Explicit third attempt approval')
+    require(sha(ROOT / 'launcher2-review/app_pilot2_phase.py') == approval['parent_launcher_sha256'], 'Reviewed parent launcher pin')
+    require(set(approval['input_sha256']) == set(INPUTS), 'Session original input pins')
+    for name in INPUTS:
+        require(sha(ROOT / name) == approval['input_sha256'][name], 'Original session input changed')
+    require(sha(RESTORATION) == approval['restoration_sha256'], 'Prior restoration result pin')
+    restoration = read_json(RESTORATION)
+    require(restoration['result'] == 'PASS' and restoration['original_files_verified'] == 29 and (restoration['original_directories_verified'] == 7) and (restoration['all_three_backup_regions_restored'] is True) and (restoration['original_application_started'] is False) and (restoration['friendly_repl'] is True), 'Prior exact-original restoration required')
+    require(sha(REVIEW / 'offline-review.json') == approval['source_review_sha256'], 'V3 source review pin')
+    prep = read_json(REVIEW / 'offline-review.json')
+    require(prep['hardware_executed'] is False and prep['network_executed'] is False, 'V3 source review scope')
+    require({'app_cycle.py', 'app_transport.py', 'app_image.py', 'main-draft.py', 'marker_listener.py', 'control-template.json'} <= set(prep['source_sha256']), 'V3 required source pins')
+    for name, digest in prep['source_sha256'].items():
+        require(Path(name).name == name and re.fullmatch('[0-9a-f]{64}', digest) and (sha(REVIEW / name) == digest), 'V3 source changed')
+    require(sha(REVIEW / 'app_image.py') == CODEC_SHA, 'Exact current application codec source')
+    for name in ('drivers/ePaper2in9.py', 'url_utils.py'):
+        require(sha(ROOT / 'original-files' / name) == READONLY_DEPENDENCY_SHA[name], 'Original BW V2 dependency pin')
+    require(sha(BINDING) == approval['binding_sha256'] == prep['private_binding_sha256'], 'Private DNS binding review pin')
+    binding = read_json(BINDING)
+    require(set(binding) == {'schema', 'endpoint_host_sha256', 'fallback_ipv4', 'main_source_sha256', 'config_source_sha256'} and binding['schema'] == 1, 'Private DNS binding schema')
+    original = p.mapping(read_json(ROOT / 'inventory-before-private.json'))
+    require(binding['main_source_sha256'] == original['/main.py'][1] and binding['config_source_sha256'] == original['/config.txt'][1], 'DNS binding original source hashes')
+    require(sha(READER) == READER_SHA and sha(PROBE) == approval['probe_sha256'], 'Reader/probe pins')
+    if require_probe:
+        probe_pass(read_json(PROBE))
+    return (approval, prep)
+
+def stage_guard(b, guard, files):
+    """Guard readback first; park original then install guard, without reset."""
+    require(PARKED not in files and TEMP not in files, 'Fresh owned path collision')
+    wanted = (guard.stat().st_size, sha(guard))
+    b.fs_put(str(guard), TEMP)
+    staged = dict(files)
+    staged[TEMP] = wanted
+    require(p.mapping(p.inventory(b)) == staged, 'Fresh guard staging readback')
+    b.exec_('import os; os.rename(%r,%r); os.sync()' % ('/main.py', PARKED), timeout=8)
+    parked = dict(staged)
+    parked[PARKED] = parked.pop('/main.py')
+    require(p.mapping(p.inventory(b)) == parked, 'Original main parked readback')
+    b.exec_('import os; os.rename(%r,%r); os.sync()' % (TEMP, '/main.py'), timeout=8)
+    final = dict(parked)
+    final['/main.py'] = final.pop(TEMP)
+    require(p.mapping(p.inventory(b)) == final, 'Inert guard installed readback')
+    return final
+
+def stage():
+    approval, prep = validate_approval(APPROVAL_SHA)
+    require(not OUT.exists() and (not OUT.is_symlink()), 'Third attempt output must be new')
+    original = p.mapping(p.read_json(ROOT / 'inventory-before-private.json'))
+    dirs = p.read_json(ROOT / 'directories-before-private.json')
+    require(len(original) == 29 and len(dirs) == 7 and ('/main.py' in original) and ('/boot.py' not in original), 'Original file topology')
+    owned = {PARKED, TEMP, '/panel_probe.py', '/rp2350_epd_vendor.py', '/pico_epaper29_lowpower.py', '/app_cycle.py', '/app_transport.py', '/app_image.py', ARMED, CONSUMED, EVENTS, TERMINAL, WIFI}
+    require(not set(original) & owned, 'Original owned-name collision')
+    for path, wanted in original.items():
+        file = ROOT / 'original-files' / path.lstrip('/')
+        require(file.is_file() and (not file.is_symlink()) and ((file.stat().st_size, sha(file)) == wanted), 'Original backup changed')
+    proof = p.read_json(ROOT / 'full-backup-public.json')
+    full = ROOT / 'full-flash-before.bin'
+    require(proof['result'] == 'PASS' and proof['independent_verify'] is True and (full.stat().st_size == 4194304) and (sha(full) == proof['full_flash_sha256']), 'Independent full backup gate')
+    require(hashlib.sha256(full.read_bytes()[:p.FW_SIZE]).hexdigest() == p.FW_SHA, 'Saved production prefix')
+    panel_proof = p.read_json(p.OLD / 'staging/provenance.json')['artifacts']
+    for name in ('panel_probe.py', 'rp2350_epd_vendor.py', 'pico_epaper29_lowpower.py'):
+        file = ROOT / 'staging' / name
+        require((file.stat().st_size, sha(file)) == (panel_proof[name]['bytes'], panel_proof[name]['sha256']), 'Panel source provenance')
+    require(sha(ROOT / 'staging/pico_epaper29_lowpower.py') == READONLY_DEPENDENCY_SHA['pico_epaper29_lowpower.py'], 'BW panel helper pin')
+    control = p.read_json(REVIEW / 'control-template.json')
+    nonce = secrets.token_hex(16)
+    require(int(nonce[:8], 16) != 0, 'New nonzero third-attempt nonce')
+    route = p.read_json(ROOT / 'lan-route-private.json')
+    control.update(run=nonce, firmware_version=p.NEW_VERSION, marker_ipv4=route['ipv4'], marker_port=route['port'])
+    control['dns_policy_binding'] = p.read_json(BINDING)
+    OUT.mkdir(mode=448)
+    controlfile = OUT / 'pilot-control-private.json'
+    p.write_json(controlfile, control)
+    credentials = p.read_json(AUTHORIZED_WIFI)
+    require(set(credentials) == {'ssid', 'password'} and all((isinstance(x, str) and x for x in credentials.values())), 'Authorized Wi-Fi source schema')
+    wifi = OUT / 'pilot-wifi-private.json'
+    p.write_json(wifi, credentials)
+    credentials = None
+    guard = OUT / 'inert-guard-main.py'
+    guard.write_bytes(INERT_GUARD)
+    phase = 'fresh_readonly_gates'
+    try:
+        with p.locks():
+            b, ident = p.connect(p.NEW_VERSION)
+            try:
+                files = p.mapping(p.inventory(b))
+                require(files == original and p.directories(b) == dirs and (p.firmware_hash(b, p.FW_SIZE) == p.FW_SHA), 'Fresh original29/7/BIN gate')
+                before = time.monotonic()
+                state = p.state(b)
+                after = time.monotonic()
+                require([len(r) for r in state['backup']] == [4, 3, 8] and (not state['wdt_ctrl'] & 1 << 30), 'Fresh state/WDT gate')
+                state.update(scope='PILOT3_FRESH_ORIGINAL_BEFORE_STAGE', rtc_capture_before=before, rtc_capture_after=after, original_inventory_sha256=sha(ROOT / 'inventory-before-private.json'))
+                p.write_json(OUT / 'fresh-initial-state-private.json', state)
+                maincopy = OUT / 'fresh-original-main-private.py'
+                b.fs_get('/main.py', str(maincopy))
+                require((maincopy.stat().st_size, sha(maincopy)) == original['/main.py'], 'Fresh original main readback')
+                require(p.mapping(p.inventory(b)) == original and p.directories(b) == dirs and (p.state(b)['backup'] == state['backup']), 'Fresh snapshot stable')
+                phase = 'stage_guard_then_park_original'
+                files = stage_guard(b, guard, files)
+                phase = 'install_panel_dependencies'
+                for name in ('panel_probe.py', 'rp2350_epd_vendor.py', 'pico_epaper29_lowpower.py'):
+                    files = timing.atomic(b, ROOT / 'staging' / name, '/' + name, files)
+                phase = 'install_v3_code_and_wifi_then_control_last'
+                for source, dest in ((REVIEW / 'app_cycle.py', '/app_cycle.py'), (REVIEW / 'app_transport.py', '/app_transport.py'), (REVIEW / 'app_image.py', '/app_image.py'), (wifi, WIFI), (REVIEW / 'main-draft.py', '/main.py'), (controlfile, ARMED)):
+                    files = timing.atomic(b, source, dest, files)
+                require(p.directories(b) == dirs and p.state(b)['backup'] == state['backup'], 'Stage changed directories or backup words')
+                p.write_json(OUT / 'pilot-installed-inventory-private.json', p.inventory(b))
+                p.write_json(OUT / 'pilot-preflight-private.json', dict(schema=2, usb_mode='USB_CONNECTED', attempt=3, run=nonce, identity=ident, files_verified=True, firmware_bin_sha256=p.FW_SHA, firmware_version=p.NEW_VERSION, backup_proof_sha256=sha(ROOT / 'full-backup-public.json'), source_review_sha256=approval['source_review_sha256'], binding_sha256=approval['binding_sha256'], current_decoder_probe_sha256=approval['probe_sha256'], decoder_sha256=CODEC_SHA, root_approval_sha256=APPROVAL_SHA, fresh_initial_state_sha256=sha(OUT / 'fresh-initial-state-private.json'), initial_rtc_or_backup_written=False, original_application_not_imported=True, **p.stamp()))
+                p.friendly(b)
+            finally:
+                b.close()
+        p.write_json(OUT / 'stage-public.json', dict(result='PILOT3_STAGED_INERT_REPL', attempt=3, usb_mode='USB_CONNECTED', armed_control_installed_last=True, original_main_parked=True, original_config_unchanged=True, fresh_original_state_captured=True, rtc_or_backup_written=False))
+        print(json.dumps(dict(result='PILOT3_STAGED_INERT_REPL', attempt=3, usb_mode='USB_CONNECTED')), flush=True)
+    except BaseException as exc:
+        p.write_json(OUT / 'stage-failure-public.json', dict(result='FAIL', phase=phase, error_type=type(exc).__name__, no_automatic_retry=True))
+        raise
+
+def postcheck(listener_complete):
+    proof = p.read_json(OUT / 'pilot-markers/result.json')
+    p.require(listener_complete is True and proof['result'] == 'BOUNDARIES_COMPLETE' and (proof['completed_intervals'] == 3) and (len(proof['boundaries']) == 4) and (proof['go_acknowledged'] is True), 'No automatic REPL on an incomplete application run')
+    p.require(proof['finished_monotonic_ns'] - proof['boundaries'][-1]['receipt_monotonic_ns'] >= 12000000000, 'Application listener tail incomplete')
+    installed = p.mapping(p.read_json(OUT / 'pilot-installed-inventory-private.json'))
+    b, ident = p.connect(p.NEW_VERSION)
+    try:
+        rows = p.inventory(b)
+        files = p.mapping(rows)
+        expected = dict(installed)
+        expected[CONSUMED] = expected.pop(ARMED)
+        extras = set(files) - set(expected)
+        p.require(extras == {EVENTS, TERMINAL} and all((files.get(k) == v for k, v in expected.items())), 'Pilot original/source file drift')
+        p.require(files[EVENTS][0] <= 32768 and files[TERMINAL][0] <= 2048 and (p.directories(b) == p.read_json(ROOT / 'directories-before-private.json')), 'Pilot output/directory bounds')
+        p.require(p.firmware_hash(b, p.FW_SIZE) == p.FW_SHA, 'Pilot actual firmware gate')
+        for device, local in ((EVENTS, 'pilot-device-events-private.jsonl'), (TERMINAL, 'pilot-device-terminal-private.json')):
+            b.fs_get(device, str(OUT / local))
+            p.require((OUT / local).stat().st_size == files[device][0] and p.sha(OUT / local) == files[device][1], 'Pilot mutable output readback')
+        terminal = p.read_json(OUT / 'pilot-device-terminal-private.json')
+        config = p.read_json(OUT / 'pilot-control-private.json')
+        s = p.state(b)
+        w = s['backup'][2]
+        check = 0
+        for val in w[:6]:
+            check ^= val
+        p.require(w[0] == 1095783729 and w[1] == int(config['run'][:8], 16) and (w[2] == 3) and (w[4:6] == [0, 0]) and (w[6:] == [check & 4294967295, ~1095783729 & 4294967295]) and (not s['wdt_ctrl'] & 1 << 30), 'Pilot not terminal stopped')
+        p.require(terminal['schema'] == 1 and terminal['result'] in ('COMPLETE', 'FAIL') and (w[3] == max(0, terminal['index'])), 'Pilot terminal/progress disagree')
+        p.write_json(OUT / 'pilot-post-inventory-private.json', rows)
+        p.write_json(OUT / 'pilot-post-state-private.json', dict(state=s, **p.stamp()))
+        p.friendly(b)
+        result = 'PASS' if terminal == dict(schema=1, result='COMPLETE', index=3) and listener_complete else 'FAIL'
+    finally:
+        b.close()
+    p.write_json(OUT / 'pilot-device-post-public.json', dict(result=result, attempt=3, terminal_result=terminal['result'], terminal_index=terminal['index'], usb_mode='USB_CONNECTED', all_original_files_preserved=True, firmware_bin_verified=True, persistent_stopped=True, friendly_repl=True, **p.stamp()))
+    print(json.dumps(dict(result=result, attempt=3, terminal_result=terminal['result'], terminal_index=terminal['index'], usb_mode='USB_CONNECTED')), flush=True)
+
+def run():
+    p.require(p.read_json(OUT / 'stage-public.json')['result'] == 'PILOT3_STAGED_INERT_REPL' and (OUT / 'pilot-preflight-private.json').is_file() and (not (OUT / 'pilot-go-proof-private.json').exists()), 'One-shot third pilot preflight')
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('pilot3_listener', REVIEW / 'marker_listener.py')
+    listenerlib = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(listenerlib)
+    cfg = p.read_json(OUT / 'pilot-control-private.json')
+    capture = OUT / 'pilot-meter'
+    markerout = OUT / 'pilot-markers'
+    stop = OUT / 'pilot-meter.stop'
+    reader = None
+    listener = None
+    caffeinate = None
+    files = []
+    validate_approval(APPROVAL_SHA, require_probe=True)
+    try:
+        with contextlib.ExitStack() as stack:
+            for name in ('.measure-variants.lock', '.wake-rtc.lock'):
+                lock = stack.enter_context((p.OLD / name).open('a+'))
+                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            caffeinate = subprocess.Popen(['/usr/bin/caffeinate', '-dims', '-w', str(os.getpid())], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            meterlog = stack.enter_context((OUT / 'pilot-meter-process-private.log').open('xb'))
+            reader = subprocess.Popen([sys.executable, str(READER), '--seconds', '1800', '--identity-json', str(ROOT / 'meter-identity-private.json'), '--output-dir', str(capture), '--stop-file', str(stop)], stdout=meterlog, stderr=subprocess.STDOUT)
+            deadline = time.monotonic() + 25
+            while listenerlib.meter_ready(capture, time.monotonic_ns()) is None:
+                p.require(reader.poll() is None and time.monotonic() < deadline, 'Meter startup failed; no Pico launch')
+                time.sleep(0.1)
+            b, ident = p.connect(p.NEW_VERSION)
+            try:
+                p.require(p.mapping(p.inventory(b)) == p.mapping(p.read_json(OUT / 'pilot-installed-inventory-private.json')) and p.firmware_hash(b, p.FW_SIZE) == p.FW_SHA and (not p.state(b)['wdt_ctrl'] & 1 << 30), 'Fresh GO identity/BIN/files gate')
+                stamp = time.monotonic_ns()
+                proof = dict(schema=2, run=cfg['run'], approved=True, usb_mode='USB_CONNECTED', usb_connected_verified=True, pico_identity_verified=True, firmware_verified=True, installed_files_verified=True, firmware_version=p.NEW_VERSION, firmware_bin_sha256=p.FW_SHA, root_preflight_sha256=p.sha(OUT / 'pilot-preflight-private.json'), board_verified_monotonic_ns=stamp)
+                p.write_json(OUT / 'pilot-go-proof-private.json', proof)
+                listenerlog = stack.enter_context((OUT / 'pilot-listener-process-private.log').open('xb'))
+                listener = subprocess.Popen([sys.executable, str(REVIEW / 'marker_listener.py'), '--bind-ip', cfg['marker_ipv4'], '--port', str(cfg['marker_port']), '--run', cfg['run'], '--output', str(markerout), '--go-proof', str(OUT / 'pilot-go-proof-private.json'), '--preflight-proof', str(OUT / 'pilot-preflight-private.json'), '--firmware-version', p.NEW_VERSION, '--firmware-sha256', p.FW_SHA, '--meter-dir', str(capture)], stdout=listenerlog, stderr=subprocess.STDOUT)
+                wait = time.monotonic() + 5
+                while not (markerout / 'events.jsonl').exists():
+                    p.require(listener.poll() is None and time.monotonic() < wait, 'LAN listener startup failed')
+                    time.sleep(0.05)
+                b.exec_raw_no_follow('time.sleep_ms(150); machine.reset()')
+            finally:
+                b.close()
+            print(json.dumps(dict(result='PILOT3_LAUNCHED', usb_mode='USB_CONNECTED', cycles=3, sleep_ms=300000)), flush=True)
+            first_limit = time.monotonic() + 210
+            last_progress = time.monotonic()
+            count = 0
+            while listener.poll() is None:
+                p.require(reader.poll() is None, 'Meter reader failed during application')
+                path = markerout / 'events.jsonl'
+                rows = []
+                if path.exists():
+                    for line in path.read_text().splitlines():
+                        try:
+                            rows.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            continue
+                boundaries = [r for r in rows if r.get('kind') == 'DOWNLOAD_READY' and r.get('duplicate') is False]
+                if len(boundaries) > count:
+                    count = len(boundaries)
+                    last_progress = time.monotonic()
+                    print(json.dumps(dict(event='DOWNLOAD_BOUNDARY', index=count - 1, usb_mode='USB_CONNECTED')), flush=True)
+                p.require(time.monotonic() < (first_limit if count == 0 else last_progress + 560), 'Application marker deadline; incomplete no retry')
+                time.sleep(0.2)
+            complete = listener.returncode == 0 and p.read_json(markerout / 'result.json')['result'] == 'BOUNDARIES_COMPLETE'
+            stop.write_bytes(b'root bounded application pilot tail complete\n')
+            reader.wait(timeout=15)
+            p.write_json(OUT / 'pilot-process-public.json', dict(result='PASS' if complete and reader.returncode == 0 else 'FAIL', listener_boundaries_complete=complete, capture_exit=reader.returncode, usb_mode='USB_CONNECTED', attempt=3, **p.stamp()))
+            p.require(complete, 'Application marker listener failed; no automatic REPL or device retry')
+            postcheck(True)
+    finally:
+        if listener is not None and listener.poll() is None:
+            listener.terminate()
+            try:
+                listener.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                listener.kill()
+                listener.wait()
+        if reader is not None and reader.poll() is None:
+            if not stop.exists():
+                stop.write_bytes(b'root incomplete pilot stop\n')
+            try:
+                reader.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                reader.terminate()
+                try:
+                    reader.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    reader.kill()
+                    reader.wait(timeout=5)
+        if caffeinate is not None and caffeinate.poll() is None:
+            caffeinate.terminate()
+
+def main(argv=None):
+    global p, timing, READER, APPROVAL_SHA
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('phase', choices=('check', 'stage', 'run'))
+    parser.add_argument('--approval-sha256', required=True)
+    parser.add_argument('--worker', action='store_true')
+    args = parser.parse_args(argv)
+    require(not sys.flags.optimize, 'Optimized Python forbidden')
+    os.umask(63)
+    sys.path.insert(0, str(ROOT))
+    import timing_phase as timing_module
+    timing = timing_module
+    p = timing.p
+    READER = p.OLD / 'meter_reader.py'
+    APPROVAL_SHA = args.approval_sha256
+    require((timing.ROOT, timing.PARKED, timing.TEMP) == (ROOT, PARKED, TEMP), 'Root timing helper identity')
+    if args.phase == 'check':
+        validate_approval(APPROVAL_SHA)
+        print(json.dumps({'result': 'PILOT3_LOCAL_PREFLIGHT_PASS', 'hardware_executed': False}))
+        return
+    if args.worker:
+
+        def interrupted(*_):
+            raise KeyboardInterrupt()
+        signal.signal(signal.SIGTERM, interrupted)
+        try:
+            globals()[args.phase]()
+        except BaseException as exc:
+            print(json.dumps({'result': 'PILOT3_PHASE_FAIL', 'phase': args.phase, 'error_type': type(exc).__name__, 'no_automatic_retry': True}), flush=True)
+            raise SystemExit(1) from None
+        return
+    child = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), args.phase, '--approval-sha256', APPROVAL_SHA, '--worker'], start_new_session=True)
+    try:
+        code = child.wait(timeout=1950 if args.phase == 'run' else 180)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(child.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+        try:
+            child.wait(timeout=25)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(child.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            child.wait(timeout=5)
+        raise SystemExit('Pilot3 deadline; no automatic device retry') from None
+    raise SystemExit(code)
+if __name__ == '__main__':
+    main()

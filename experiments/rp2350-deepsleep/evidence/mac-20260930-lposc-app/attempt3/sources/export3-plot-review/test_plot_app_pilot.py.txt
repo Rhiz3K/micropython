@@ -1,0 +1,99 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Synthetic plot contract tests; no actual meter or device data."""
+import copy
+import csv
+import hashlib
+import io
+import json
+from pathlib import Path
+import tempfile
+import unittest
+import plot_app_pilot as p
+
+def digest(value):
+    return hashlib.sha256(value).hexdigest()
+
+def fixture():
+    origin = 1000000000000
+    periods = []
+    for index in range(3):
+        periods.append({'name': 'app_period_' + str(index + 1), 'result': 'PASS', 'reasons': [], 'start_host_monotonic_ns': origin + index * 300 * p.NS, 'end_host_monotonic_ns': origin + (index + 1) * 300 * p.NS, 'duration_host_s': 300, 'samples': 30000, 'minimum_samples': 29696, 'invalid_frames': 0, 'receipt_gaps_over_200ms': 0, 'integral_estimates': {'host_receipt_frame_mean_trapezoid': {'covered_host_s': 300}}})
+    value = {'schema': 1, 'result': 'PASS', 'scope': p.SCOPE, 'usb_mode': 'USB_CONNECTED', 'valid_complete_period_energy': True, 'valid_sleep_only_energy': False, 'valid_refresh_only_energy': False, 'full_capture_result': 'PASS', 'full_capture_data_quality': 'PASS', 'primary_model': 'host_receipt_frame_mean_trapezoid', 'sensitivity_model': 'nominal_10ms_per_in_window_received_sample', 'source_evidence': [{'role': k, 'sha256': v} for k, v in p.PINS.items()], 'periods': periods, 'full_capture_quality': {'invalid_frames': 0, 'receipt_gap_count_over_200ms': 0, 'observed_nominal_sample_rate_hz': 100, 'recording_receipt_span_s': 916.96, 'recording_samples': 91700}}
+    stream = io.StringIO(newline='')
+    writer = csv.writer(stream)
+    writer.writerow(p.HEADER)
+    for second in range(-2, 915):
+        current = 58 if second % 300 < 16 else 0.37
+        minimum = 0 if second % 43 == 0 else current * 0.8
+        maximum = 185 if second % 300 == 8 else current * 1.2
+        writer.writerow([second, second + 1, 100, current, minimum, maximum, 5.08, current * 5.08, 0])
+    return (value, stream.getvalue().encode())
+
+class Tests(unittest.TestCase):
+
+    def test_scope_status_source_and_window_gates(self):
+        value, raw = fixture()
+        boundaries, total = p.validate_analysis(value)
+        self.assertEqual(boundaries, [0, 300, 600, 900])
+        self.assertEqual(sum((r['samples'] for r in p.validate_bins(raw, boundaries, total))), total)
+        for path, bad in [('result', 'FAIL'), ('scope', 'other'), ('full_capture_result', 'ERROR')]:
+            modified = copy.deepcopy(value)
+            modified[path] = bad
+            with self.assertRaises(ValueError):
+                p.validate_analysis(modified)
+        modified = copy.deepcopy(value)
+        modified['source_evidence'][0]['sha256'] = 'a' * 64
+        with self.assertRaises(ValueError):
+            p.validate_analysis(modified)
+        modified = copy.deepcopy(value)
+        modified['periods'][1]['result'] = 'FAIL'
+        with self.assertRaises(ValueError):
+            p.validate_analysis(modified)
+        modified = copy.deepcopy(value)
+        modified['periods'][0]['duration_host_s'] = float('nan')
+        with self.assertRaises(ValueError):
+            p.validate_analysis(modified)
+
+    def test_csv_all_samples_zeros_peaks_gap_preservation(self):
+        value, raw = fixture()
+        bounds, total = p.validate_analysis(value)
+        rows = p.validate_bins(raw, bounds, total)
+        self.assertEqual(max((r['max'] for r in rows)), 185)
+        self.assertEqual(min((r['min'] for r in rows)), 0)
+        parsed = list(csv.reader(io.StringIO(raw.decode())))
+        del parsed[20]
+        stream = io.StringIO()
+        csv.writer(stream).writerows(parsed)
+        with self.assertRaises(ValueError):
+            p.validate_bins(stream.getvalue().encode(), bounds, total)
+        for bad in (raw.replace(b'185', b'nan', 1), raw.replace(b'185', b'-185', 1)):
+            with self.assertRaises(ValueError):
+                p.validate_bins(bad, bounds, total)
+        with self.assertRaises(ValueError):
+            p.validate_bins(raw, bounds, total + 4)
+
+    def test_synthetic_render_metadata_privacy_and_exclusive_output(self):
+        value, raw = fixture()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            ap = root / 'analysis-public.json'
+            tp = root / 'trace-bins.csv'
+            ab = json.dumps(value).encode()
+            ap.write_bytes(ab)
+            tp.write_bytes(raw)
+            out = root / 'plot'
+            result = p.render(ap, tp, digest(ab), digest(raw), out)
+            self.assertEqual(result['download_boundaries_host_elapsed_s'], [0, 300, 600, 900])
+            self.assertFalse(result['state_intervals_inferred'])
+            svg = (out / 'current.svg').read_text()
+            self.assertTrue(all((svg.count('DOWNLOAD_READY ' + str(i)) == 1 for i in range(4))))
+            self.assertNotIn(str(root), svg)
+            self.assertTrue((out / 'current.png').read_bytes().startswith(b'\x89PNG'))
+            self.assertEqual(len((out / 'SHA256SUMS').read_text().splitlines()), 3)
+            with self.assertRaises(ValueError):
+                p.render(ap, tp, digest(ab), digest(raw), out)
+            with self.assertRaises(ValueError):
+                p.render(ap, tp, '0' * 64, digest(raw), root / 'bad')
+            self.assertFalse((root / 'bad').exists())
+if __name__ == '__main__':
+    unittest.main()

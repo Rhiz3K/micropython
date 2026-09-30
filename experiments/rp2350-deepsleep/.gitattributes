@@ -21,3 +21,9 @@ evidence/mac-20260929-wake-rtc/**/*.svg -whitespace
 evidence/mac-20260929-meter/sources/rp2350_epd_vendor.py.txt -whitespace
 # Preserve the byte-identical Linux REPL transcript (CRLF from the device).
 evidence/linux-20260929/regressions.txt -text whitespace=cr-at-eol
+# Preserve the September 30/October 1 evidence and generated plots byte-for-byte.
+evidence/mac-20260930-lposc-app/** -text
+evidence/mac-20260930-lposc-app/**/*.csv whitespace=cr-at-eol
+evidence/mac-20260930-lposc-app/**/*.svg -whitespace
+# Empty unified-diff context lines intentionally contain a single space.
+evidence/mac-20260930-lposc-app/sources/diagnostic-only.diff -whitespace

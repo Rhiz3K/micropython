@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "status": "REPORT_DRAFT_NOT_FINAL_SESSION_RESULT",
+  "hardware_accessed_by_draft": false,
+  "source_results": {
+    "live-wdt-result-public.json": {
+      "sha256": "7750c60e652fac28cc5baaffec5a95b56e693da08391d6196e16d0f33c9be54f",
+      "result": "PASS"
+    },
+    "fc0-lposc-public.json": {
+      "sha256": "5ae070b9c11e7813b092d6a042ae66a9655017eb767d518ab76a184b276e06be",
+      "result": "PASS"
+    },
+    "full-backup-public.json": {
+      "sha256": "82ae524432acbcd35dffe4a20837610d84a59cbb0519eb0d987d230eb44944c1",
+      "result": "PASS"
+    },
+    "production-return-launch-public.json": {
+      "sha256": "7a458f69bfe32935b1f6eff0dbbaa0091787900d79ba5de79f4f99a0fde94542",
+      "result": "PASS"
+    }
+  },
+  "diagnostic_build": {
+    "base_commit": "6ce738ae0f13ab0732ed66f761a35aee04e64fab",
+    "board": "RPI_PICO2_W",
+    "platform": "rp2350-arm-s",
+    "runtime_prefix": "v1.30.0-preview.105.g6ce738ae0f.dirty.livewdt1",
+    "build_type": "MinSizeRel",
+    "compiler": "GNU Arm GCC 14.3.1",
+    "dependencies": {
+      "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+      "btstack": "77e752abd6a0992334047a48038a5a3960e5c6bc",
+      "cyw43-driver": "055d64274b014dd7b1c2fc94d26e8a18face7124",
+      "lwip": "77dcd25a72509eb83f72b033d219b1d40cd8eb95",
+      "mbedtls": "0bebf8b8c7f07abe3571ded48a11aa907a1ffb20",
+      "micropython-lib": "ee4bb8ff139e24c42b739935fbd8ec7c4d061e02",
+      "tinyusb": "b549ac1d84cbbe550c9590951e2290098b3fb16c"
+    },
+    "tinyusb_local_diff_sha256": "c0dcb56bd9888f3fda3279847010b12535ce93e1d60f7085f88ca96d1213409d",
+    "production_modmachine_sha256": "dc734722cec8b531dbf05f406b3f1fa75d62584a998307978b3c49feb33ec0b4",
+    "source_sha256": {
+      "ports/rp2/main.c": "d54c197756dd96508c4c51dfafbd87a35a3a84f5e3acfae6685428f28294cbb1",
+      "ports/rp2/modmachine.c": "dc734722cec8b531dbf05f406b3f1fa75d62584a998307978b3c49feb33ec0b4",
+      "ports/rp2/live_wdt_startup_probe.h": "39e7db5bb058e45abfca4065339d95e7c195e7a726fdf8b4a232305a8fd01cc1"
+    },
+    "diagnostic_diff_sha256": "e60dade73a5430ef4256739368807b9c4d1c066f21e6e8f66bc21ce3ba46eebd",
+    "artifacts": {
+      "firmware.bin": {
+        "bytes": 890592,
+        "sha256": "d4e32b0a4ee757b96936e5eba2f2fe9b568629d025024eda9bde685e4df055de"
+      },
+      "firmware.elf": {
+        "bytes": 8800864,
+        "sha256": "a8515543910886fc5d2a8280ff113592d850f2dd9e9cd548cd28333871542292"
+      },
+      "firmware.uf2": {
+        "bytes": 1781760,
+        "sha256": "47dcbc766ea3b652285d2b8c95c0c529eb0039757f0f919e94f31d0c33054724"
+      }
+    },
+    "manifest_proofs": {
+      "artifact-manifest.json": "4c6bd7c2f448aaed5e75ebcec536883d59fa10341ad2361b35437fcf71b542d2",
+      "source-manifest.json": "b7ebb108c0afd255ff2bb652e5b75e7d19d9980de9a712ee20164c25a3d6b0f4",
+      "protocol-plan.json": "ccd34525c55a255bca5f611b929423950813c34c80d142afaf87c92d67ec0be3",
+      "diagnostic-only.diff": "e60dade73a5430ef4256739368807b9c4d1c066f21e6e8f66bc21ce3ba46eebd",
+      "source-change.diff": "a16f37b7f1c2e53dd241b483d0fe803f82a2ab14f4a5cf83ff28d8e3958f7afd"
+    },
+    "target_compiler_warnings": 0,
+    "bin_end": "0x100d96e0",
+    "erase_end": "0x100da000",
+    "filesystem_start": "0x10180000",
+    "hardware_result_at_build_time": "NOT_RUN",
+    "later_hardware_result_source": "live-wdt-result-public.json"
+  },
+  "production_firmware_bin_sha256": "a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08",
+  "pending_root_sections": [
+    "timing",
+    "application",
+    "final_restoration"
+  ],
+  "limits": [
+    "synthetic C startup; no ROM TBYB exercised",
+    "73us bracket includes diagnostic instrumentation",
+    "FC0 measured LPOSC while awake against uncalibrated XOSC",
+    "31.25Hz sample quantum; no deep-state LPOSC measurement or calibration",
+    "production-return launch proof is separate from final original-file/RTC/backup restoration"
+  ]
+}

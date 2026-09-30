@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "result": "PASS",
+  "scope": "CLOSED_PILOT3_PUBLIC_EXPORT_AFTER_FRESH_RESTORATION",
+  "application_periods": 3,
+  "sleep_wakes": 3,
+  "full_refreshes": 6,
+  "usb_mode": "USB_CONNECTED",
+  "visual_result": "NOT_INCLUDED_SEPARATE_USER_PROOF",
+  "closed_analysis_replay_verified": true,
+  "root_worker_exit0_verified": true,
+  "fresh_completed_restoration_verified": true,
+  "public_run_nonce": "00000003000000000000000000000000",
+  "original_source_hashes_in_analysis_retained": true,
+  "private_decoder_sha256_only": "d6c93ac15c30c766378f2bb29aa3ab2ee3d5aff5e766ebbb46be2b837075446f",
+  "private_decoder_source_exported": false,
+  "raw_gzip": {
+    "frames.jsonl.gz": {
+      "uncompressed_sha256": "e487fa75ee6ad55a102e3330163ed9062fb93dafe7149299f6e21627050d23ae",
+      "lines": 24633,
+      "gzip_mtime": 0,
+      "gzip_original_filename": "",
+      "raw_bytes_preserved": true
+    },
+    "samples.jsonl.gz": {
+      "uncompressed_sha256": "488475ab0aa6cd53031c119cca5a4423c901fb804a67250d0341030bf755adef",
+      "lines": 98528,
+      "gzip_mtime": 0,
+      "gzip_original_filename": "",
+      "raw_bytes_preserved": true
+    },
+    "events.jsonl.gz": {
+      "uncompressed_sha256": "6ca2b4d26e141b597e7e5208da81ea753d52009648869256f7b31a9f74b82238",
+      "lines": 1917,
+      "gzip_mtime": 0,
+      "gzip_original_filename": "",
+      "raw_bytes_preserved": true
+    }
+  },
+  "sources": [
+    {
+      "role": "adapter-usb-v3-review/app_cycle.py",
+      "original_sha256": "a3d56054681b29fdc29280a2fe6740f12fa9ce539bc4709106d5223cb92702bb",
+      "public_sha256": "0dd3053477c812821931a774482cafe0872c7d008855478ab042ddd3b0cd4567",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "adapter-usb-v3-review/app_transport.py",
+      "original_sha256": "94e98f133d2260c46919a31215c93ba3ed619f8d9264f0a82cbffe7a9fd53218",
+      "public_sha256": "1cd5e4bf78f38afebbe20f93ec91d13de69287ce12b110742420a0e213566d94",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "adapter-usb-v3-review/marker_listener.py",
+      "original_sha256": "0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959",
+      "public_sha256": "b65747530b4989a138d62d1a4699668693e57c6757f43f9da4995efacf531592",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "adapter-usb-v3-review/test_offline.py",
+      "original_sha256": "15b0e4e509be9ff30236102331a89305e54801c7a0cce00d410943e985c40985",
+      "public_sha256": "944a92aacc0d9d143de7fd7232f1b0a20516bd28951f644e27a53a262e898464",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "adapter-usb-v3-review/test_v2.py",
+      "original_sha256": "f6dd9777b2b32ad94d770848f192996f8c84ef796d72776b78bfcb8229ea4998",
+      "public_sha256": "e5b913330d1b43701ca68bfc9a344d9ec9cae1ac3f6f8965e07321e5667db80b",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "adapter-usb-v3-review/test_image.py",
+      "original_sha256": "1bff1fe3787e75bd4601fc64ba4f7dda501c56aff7aa7b8e8093c5e98a5d7efe",
+      "public_sha256": "2dbac2e84e3d5e36127169452eb408ac63097b49d2b45fa3125189d779d7541a",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "app-meter-v3-review/analyze_app_meter.py",
+      "original_sha256": "98dc2d5ad799b66e2a655f7ff1afe140d15b4f5453f056e5874eb2cf5b3fdc96",
+      "public_sha256": "87d5ab60b645ecf27a2d420859cc46fd0b8a2c40372b33fca91effe870fa3a73",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "app-meter-v3-review/test_analyze_app_meter.py",
+      "original_sha256": "16303d14118bbf4c2c54842b41f1896d36b5dcb59805514567bdee551cb674a1",
+      "public_sha256": "1c3d7d5fbc3ff4b8be8c68974feec5d2585f8a8f41c3fde1f98db92655f9460f",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "launcher3-review/app_pilot3_phase.py",
+      "original_sha256": "ce40d50fe775ee6a9c51f85a10b9e3a934ca3e9018d6ea44fb7b3cfbc601e298",
+      "public_sha256": "b414cb71088fea95c0172432d7794529b1a788bebe43662684ff93ad4054a55c",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "launcher3-review/test_launcher3_offline.py",
+      "original_sha256": "471be74245c19587775328984161e5ccdaa29efbb1f5b66904f22d8b49fbab01",
+      "public_sha256": "cbf08ae97ab1002253aeb1cbf876b48d77206b5821749f6b343c1c995f163530",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "restoration3-review/restore_session3.py",
+      "original_sha256": "2e5f56ab2c2988f25801c2ff52244ef1fa782a059e101a68a74f65df45576d21",
+      "public_sha256": "d882c319c54ba57383040ec836b57a743ca2700872124ffe542fb1593de793aa",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "restoration3-review/test_restore3_offline.py",
+      "original_sha256": "f58d2e9965eb88fc8a854d3434bb270695f77974378a0d4b1994d7ddd9287e84",
+      "public_sha256": "046463af7b060a28edb53f285897b9b2933ffe908de2aa28b4c66f2669cfcba1",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "export3-plot-review/plot_app_pilot.py",
+      "original_sha256": "6838baff67af7a4d94cc3b91b75414d50212715ec4d0bb67e15e75e98222e30a",
+      "public_sha256": "2f08c7b096f3b75dace597f2886f3e0684154b2f003616286397c67a1e40e549",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "export3-plot-review/test_plot_app_pilot.py",
+      "original_sha256": "baafc4ac26cbd70fdcf1e9eb61ed2337852fbfae5a1793d29862a6744c34fbb5",
+      "public_sha256": "da3a6af2e29993fddfffccf70640a69771d2bb1b94c4f50a35e366124f7463d4",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "export3-review/export_public_pilot3.py",
+      "original_sha256": "9bfc08a6c8666215eb067b7bc80c0c7f60617257da52241593af24fc8288891a",
+      "public_sha256": "5b7cab58784bff2b15f28a39ba0cef67ffdb6b925773d3b91c7856fc7beb31a3",
+      "projection": "AST review copy; host path literals and comments removed"
+    },
+    {
+      "role": "export3-review/test_export_public_pilot3.py",
+      "original_sha256": "79b84cd03f2384d5d8f6e468c3fcb0002f6765869dffb834a41bab0672b0d0d7",
+      "public_sha256": "fd5acd4c3454a227c8fec0e9eb35e7aaa1efbe96a563b106cd09cf9cad4b8b4a",
+      "projection": "AST review copy; host path literals and comments removed"
+    }
+  ],
+  "files": [
+    {
+      "file": "analysis-public.json",
+      "sha256": "a044d760b37ab8ccf3d789a79aa3e41c2799a668e9179612addc625046e1c402",
+      "bytes": 22075
+    },
+    {
+      "file": "device-events.jsonl",
+      "sha256": "8b402b09ccf54f11cb587faa7954b358b2deb3c95b5c70c5fefdb4d38cc8f648",
+      "bytes": 3641
+    },
+    {
+      "file": "device-post-public.json",
+      "sha256": "30505f5e7e459b4bef84c28c96e5ae53766ff2fd8c5e7f30db75e589c68ad29f",
+      "bytes": 342
+    },
+    {
+      "file": "device-terminal.json",
+      "sha256": "a1d8ff7711241b4e607561075bbe5a306eeeae5212b8dd7efc84a885701a602a",
+      "bytes": 56
+    },
+    {
+      "file": "events.jsonl.gz",
+      "sha256": "62ab48785a3971d870a0a6c2523270e0d0e19088215dc85477a09947ad0c1bb5",
+      "bytes": 138950
+    },
+    {
+      "file": "frames.jsonl.gz",
+      "sha256": "550606e8f71180f1ea7f30872ac31aad227246053f64282bb596f8ba2a0c92f0",
+      "bytes": 812703
+    },
+    {
+      "file": "fresh-state-restoration-public.json",
+      "sha256": "7c3a7656dd6c157554d44d6a12ba5b0f0feda9773421b89074fde14d51c42fa8",
+      "bytes": 994
+    },
+    {
+      "file": "marker-events.jsonl",
+      "sha256": "4a92de2f76884d0641097cbcecd14e158703ce2b943b32f6cb27d1f5edbc894b",
+      "bytes": 2406
+    },
+    {
+      "file": "marker-metadata-redacted.json",
+      "sha256": "594c7db728ed40f9777f2f16d291dcb5b717a218f96994cecc53f95c1cbe67f3",
+      "bytes": 946
+    },
+    {
+      "file": "marker-result.json",
+      "sha256": "68ac599870ea9d3cf6c91632d4b9a13b0cea7081a0003f8f6e4120dd6ac1ea14",
+      "bytes": 2666
+    },
+    {
+      "file": "meter-metadata-redacted.json",
+      "sha256": "42079766d1a8e45c4e9415d89c8573b7ed06820735296f91573a8411e68d3523",
+      "bytes": 626
+    },
+    {
+      "file": "meter-summary-public.json",
+      "sha256": "950691c43f6ed739c8bc90bc3e5b53b1a687b9c1ace553e70ff9b924702f5024",
+      "bytes": 1303
+    },
+    {
+      "file": "process-public.json",
+      "sha256": "0e302d5d2f5a7f72ee1c75810b08a757ae2c8b1900029e8ea3d15fbcc0838b47",
+      "bytes": 219
+    },
+    {
+      "file": "restoration-result-public.json",
+      "sha256": "4909e8a7b73a1052c9e4ef0ab119e8617a5db9a56ddc32c745d46aa50b6b3d99",
+      "bytes": 707
+    },
+    {
+      "file": "root-completion-public.json",
+      "sha256": "0ffe7c5d52f9fb650f4338df75d9126fb1491ac1ea58225e94c28d97a012563f",
+      "bytes": 406
+    },
+    {
+      "file": "samples.jsonl.gz",
+      "sha256": "4d26f66cf9126dc4cf83142ed14dd83331e024537e3e8ba07db48e12e3278a08",
+      "bytes": 1200175
+    },
+    {
+      "file": "sources/adapter-usb-v3-review/app_cycle.py.txt",
+      "sha256": "0dd3053477c812821931a774482cafe0872c7d008855478ab042ddd3b0cd4567",
+      "bytes": 14634
+    },
+    {
+      "file": "sources/adapter-usb-v3-review/app_transport.py.txt",
+      "sha256": "1cd5e4bf78f38afebbe20f93ec91d13de69287ce12b110742420a0e213566d94",
+      "bytes": 14100
+    },
+    {
+      "file": "sources/adapter-usb-v3-review/marker_listener.py.txt",
+      "sha256": "b65747530b4989a138d62d1a4699668693e57c6757f43f9da4995efacf531592",
+      "bytes": 9089
+    },
+    {
+      "file": "sources/adapter-usb-v3-review/test_image.py.txt",
+      "sha256": "2dbac2e84e3d5e36127169452eb408ac63097b49d2b45fa3125189d779d7541a",
+      "bytes": 3381
+    },
+    {
+      "file": "sources/adapter-usb-v3-review/test_offline.py.txt",
+      "sha256": "944a92aacc0d9d143de7fd7232f1b0a20516bd28951f644e27a53a262e898464",
+      "bytes": 10158
+    },
+    {
+      "file": "sources/adapter-usb-v3-review/test_v2.py.txt",
+      "sha256": "e5b913330d1b43701ca68bfc9a344d9ec9cae1ac3f6f8965e07321e5667db80b",
+      "bytes": 4091
+    },
+    {
+      "file": "sources/app-meter-v3-review/analyze_app_meter.py.txt",
+      "sha256": "87d5ab60b645ecf27a2d420859cc46fd0b8a2c40372b33fca91effe870fa3a73",
+      "bytes": 23769
+    },
+    {
+      "file": "sources/app-meter-v3-review/test_analyze_app_meter.py.txt",
+      "sha256": "1c3d7d5fbc3ff4b8be8c68974feec5d2585f8a8f41c3fde1f98db92655f9460f",
+      "bytes": 16053
+    },
+    {
+      "file": "sources/export3-plot-review/plot_app_pilot.py.txt",
+      "sha256": "2f08c7b096f3b75dace597f2886f3e0684154b2f003616286397c67a1e40e549",
+      "bytes": 12889
+    },
+    {
+      "file": "sources/export3-plot-review/test_plot_app_pilot.py.txt",
+      "sha256": "da3a6af2e29993fddfffccf70640a69771d2bb1b94c4f50a35e366124f7463d4",
+      "bytes": 5394
+    },
+    {
+      "file": "sources/export3-review/export_public_pilot3.py.txt",
+      "sha256": "5b7cab58784bff2b15f28a39ba0cef67ffdb6b925773d3b91c7856fc7beb31a3",
+      "bytes": 28224
+    },
+    {
+      "file": "sources/export3-review/test_export_public_pilot3.py.txt",
+      "sha256": "fd5acd4c3454a227c8fec0e9eb35e7aaa1efbe96a563b106cd09cf9cad4b8b4a",
+      "bytes": 10653
+    },
+    {
+      "file": "sources/launcher3-review/app_pilot3_phase.py.txt",
+      "sha256": "b414cb71088fea95c0172432d7794529b1a788bebe43662684ff93ad4054a55c",
+      "bytes": 25366
+    },
+    {
+      "file": "sources/launcher3-review/test_launcher3_offline.py.txt",
+      "sha256": "cbf08ae97ab1002253aeb1cbf876b48d77206b5821749f6b343c1c995f163530",
+      "bytes": 9401
+    },
+    {
+      "file": "sources/restoration3-review/restore_session3.py.txt",
+      "sha256": "d882c319c54ba57383040ec836b57a743ca2700872124ffe542fb1593de793aa",
+      "bytes": 18765
+    },
+    {
+      "file": "sources/restoration3-review/test_restore3_offline.py.txt",
+      "sha256": "046463af7b060a28edb53f285897b9b2933ffe908de2aa28b4c66f2669cfcba1",
+      "bytes": 8533
+    },
+    {
+      "file": "trace-bins.csv",
+      "sha256": "5f43487cd372acfe38e2cc9dda0f81f9360b910ab27be452446e2f451a82e491",
+      "bytes": 82660
+    }
+  ],
+  "exporter_sha256": "9bfc08a6c8666215eb067b7bc80c0c7f60617257da52241593af24fc8288891a",
+  "excluded": [
+    "private application decoder source",
+    "original configuration/main",
+    "DNS binding",
+    "Wi-Fi credentials",
+    "private preflight",
+    "identity",
+    "raw RTC/backup values",
+    "process private logs"
+  ],
+  "limits": [
+    "Connected USB pilot; no inferred exact sleep-only/refresh-only interval.",
+    "Redacted metadata/nonces change publication hashes; original private-source hashes remain provenance pointers.",
+    "Raw meter bytes preserved; no zero/spike filtering or offset subtraction.",
+    "Private file hashes are evidence pointers, not the private file contents."
+  ]
+}

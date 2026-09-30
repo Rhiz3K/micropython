@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "attempt": 3,
+  "terminal_result": "COMPLETE",
+  "terminal_index": 3,
+  "usb_mode": "USB_CONNECTED",
+  "all_original_files_preserved": true,
+  "firmware_bin_verified": true,
+  "persistent_stopped": true,
+  "friendly_repl": true,
+  "host_utc": "2026-09-30T22:38:08.343418+00:00",
+  "host_monotonic": 628824.509797625
+}

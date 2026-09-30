@@ -1,0 +1,186 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Synthetic filesystem only. Never reads actual pilot data or credentials."""
+import copy
+import gzip
+import importlib.util
+import json
+from pathlib import Path
+import shutil
+import sys
+import tempfile
+import types
+import unittest
+import export_public_pilot3 as ex
+V3 = ex.SOURCE_ROOT / 'app-meter-v3-review'
+sys.path.insert(0, str(V3))
+import analyze_app_meter as analysis
+import test_analyze_app_meter as fixture_module
+sys.path.pop(0)
+
+def dump(path, value):
+    path.write_text(json.dumps(value) + '\n')
+
+def fixture(root):
+    pilot = root / 'pilot3'
+    pilot.mkdir()
+    args, meta, result, markers, device, terminal, events = fixture_module.fixture(pilot)
+    for old, new in [('meter', 'pilot-meter'), ('marker', 'pilot-markers'), ('device-events.jsonl', 'pilot-device-events-private.jsonl'), ('device-terminal.json', 'pilot-device-terminal-private.json'), ('preflight.json', 'pilot-preflight-private.json')]:
+        (pilot / old).rename(pilot / new)
+    args.meter_dir = pilot / 'pilot-meter'
+    args.marker_dir = pilot / 'pilot-markers'
+    args.device_events = pilot / 'pilot-device-events-private.jsonl'
+    args.device_terminal = pilot / 'pilot-device-terminal-private.json'
+    args.preflight_proof = pilot / 'pilot-preflight-private.json'
+    args.firmware_sha256 = ex.FW
+    args.output = root / 'analysis'
+    meta.update(firmware_bin_sha256=ex.FW, firmware_version=ex.VERSION, go_proof_role=ex.GO_ROLE, listener_seconds=1800)
+    dump(args.marker_dir / 'metadata.json', meta)
+    summary = ex.read(args.meter_dir / 'summary.json')
+    summary.update(requested_seconds=910, requested_duration_completed=True, elapsed_host_s=913.2, empty_timed_reads=0)
+    dump(args.meter_dir / 'summary.json', summary)
+    for event in events:
+        if event['event'] == 'recording_started':
+            event['deadline_monotonic_ns'] = fixture_module.BASE + 910000000000
+        elif event['event'] == 'health':
+            event.update(schema=1, last_valid_measurement_age_s=0.04, frames_total=125, log_bytes_written=10000, free_disk_bytes=100000000, empty_timed_reads=0, since_last_health={k: {'count': 500, 'mean': v, 'min': v, 'max': v, 'population_stddev': 0, 'median': None, 'p05': None, 'p95': None, 'quantiles_note': ex.QUANTILES_NOTE} for k, v in [('current_A', 0.001), ('voltage_V', 5), ('power_W_calculated', 0.005)]})
+    fixture_module.rows(args.meter_dir / 'events.jsonl', events)
+    result = analysis.analyze(args)
+    stamp = {'host_utc': fixture_module.utc(920), 'host_monotonic': fixture_module.BASE / 1000000000.0 + 920}
+    process = dict(result='PASS', listener_boundaries_complete=True, capture_exit=0, usb_mode=ex.MODE, attempt=3, **stamp)
+    post = dict(result='PASS', attempt=3, terminal_result='COMPLETE', terminal_index=3, usb_mode=ex.MODE, all_original_files_preserved=True, firmware_bin_verified=True, persistent_stopped=True, friendly_repl=True, **stamp)
+    dump(pilot / 'pilot-process-public.json', process)
+    dump(pilot / 'pilot-device-post-public.json', post)
+    fresh = dict(scope='PILOT3_FRESH_ORIGINAL_BEFORE_STAGE', uid=fixture_module.CANARY, version=ex.VERSION + ' on synthetic', build=0, reset_cause=3, rtc=[2026, 1, 1, 1, 1, 1, 1, 0], backup=[[11] * 4, [12] * 3, [13] * 8], wdt_ctrl=0, wdt_reason=0, chip_reset=0, last_swcore_pwrup=0, rtc_capture_before=1.0, rtc_capture_after=1.02, original_inventory_sha256='e' * 64)
+    dump(pilot / 'fresh-initial-state-private.json', fresh)
+    restore_dir = root / 'restoration3-review/runs/synthetic-completed'
+    restore_dir.mkdir(parents=True)
+    manifest = {'purpose': 'completed', 'state_gate': {'kind': 'app_usb_terminal', 'result': 'COMPLETE', 'index': 3}, 'input_sha256': {'pilot3/fresh-initial-state-private.json': ex.sha(pilot / 'fresh-initial-state-private.json'), 'inventory-before-private.json': 'e' * 64}}
+    manifest_path = root / 'restore-manifest-private.json'
+    dump(manifest_path, manifest)
+    final = dict(fresh)
+    dump(restore_dir / 'final-state-private.json', {'state': final, **stamp})
+    restoration = dict(result='PASS', purpose='completed', manifest_sha256=ex.sha(manifest_path), firmware_bin_sha256=ex.FW, original_files_verified=29, original_directories_verified=7, all_three_backup_regions_restored=True, rtc_initial_plus_host_elapsed=True, initial_rtc_capture_bracket_s=0.02, rtc_quantization_s=1, original_main_restored_last=True, panel_parked_without_refresh=True, radio_and_ble_inactive=True, friendly_repl=True, reset_performed=False, original_application_started=False, removed_owned_count=12)
+    dump(restore_dir / 'result-public.json', restoration)
+    root_proof = dict(schema=1, attempt=3, result='PASS', phase='run', exit_code=0, timed_out=False, signal=None, process_result_sha256=ex.sha(pilot / 'pilot-process-public.json'), device_post_sha256=ex.sha(pilot / 'pilot-device-post-public.json'), analysis_sha256=ex.sha(args.output / 'analysis-public.json'))
+    proof_path = root / 'root-completion.json'
+    dump(proof_path, root_proof)
+    return types.SimpleNamespace(session=root, analysis_dir=args.output, root_completion=proof_path, restoration_result=restore_dir / 'result-public.json', restoration_manifest=manifest_path, output=root / 'export')
+
+class ExportTests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory(prefix='synthetic-export-', dir=ex.HERE)
+        cls.root = Path(cls.tmp.name)
+        cls.args = fixture(cls.root)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_positive_closed_export_raw_bytes_and_no_identity(self):
+        result = ex.export(self.args)
+        self.assertEqual(result['result'], 'PASS')
+        output = self.args.output
+        for kind in ('frames', 'samples', 'events'):
+            self.assertEqual(gzip.decompress((output / (kind + '.jsonl.gz')).read_bytes()), (self.root / 'pilot3/pilot-meter' / (kind + '.jsonl')).read_bytes())
+        for path in output.rglob('*'):
+            if path.is_file() and path.suffix != '.gz':
+                text = path.read_text()
+                forbidden_values = ['<PRIVATE_HOST_PATH>', '<PRIVATE_HOST_PATH>']
+                if 'sources' not in path.relative_to(output).parts:
+                    forbidden_values += [fixture_module.CANARY, fixture_module.RUN]
+                for forbidden in forbidden_values:
+                    self.assertNotIn(forbidden, text)
+        self.assertFalse(any((p.name == 'app_image.py.txt' for p in output.rglob('*'))))
+        self.assertIs(result['private_decoder_source_exported'], False)
+        self.assertNotIn('hid', sys.modules)
+        self.assertNotIn('serial', sys.modules)
+        with self.assertRaises(ValueError):
+            ex.export(self.args)
+
+    def test_recovery_not_completed(self):
+        path = self.args.restoration_result
+        saved = path.read_bytes()
+        value = json.loads(saved)
+        value['purpose'] = 'recovery'
+        dump(path, value)
+        try:
+            with self.assertRaises(ValueError):
+                ex.closed_proofs(self.args)
+        finally:
+            path.write_bytes(saved)
+
+    def test_worker_timeout_nonzero_or_unbound_analysis_rejected(self):
+        path = self.args.root_completion
+        saved = path.read_bytes()
+        try:
+            for field, value in [('timed_out', True), ('exit_code', 1), ('signal', 15), ('analysis_sha256', 'f' * 64)]:
+                row = json.loads(saved)
+                row[field] = value
+                dump(path, row)
+                with self.assertRaises(ValueError):
+                    ex.closed_proofs(self.args)
+        finally:
+            path.write_bytes(saved)
+
+    def test_missing_public_completion_before_private_read(self):
+        path = self.args.root_completion
+        saved = path.read_bytes()
+        path.unlink()
+        try:
+            with self.assertRaises(ValueError):
+                ex.closed_proofs(self.args)
+        finally:
+            path.write_bytes(saved)
+
+    def test_private_backup_mismatch_rejected(self):
+        path = self.args.restoration_result.parent / 'final-state-private.json'
+        saved = path.read_bytes()
+        row = json.loads(saved)
+        row['state']['backup'][2][0] += 1
+        dump(path, row)
+        try:
+            _, post, _, _, restoration = ex.closed_proofs(self.args)
+            with self.assertRaises(ValueError):
+                ex.restore_projection(self.args, post, restoration)
+        finally:
+            path.write_bytes(saved)
+
+    def test_summary_text_in_numeric_field_rejected(self):
+        summary = ex.read(self.root / 'pilot3/pilot-meter/summary.json')
+        for field in ('requested_seconds', 'elapsed_host_s', 'empty_timed_reads', 'requested_duration_completed'):
+            wrong = summary | {field: fixture_module.CANARY}
+            with self.assertRaises(ValueError):
+                ex.summary_projection(wrong, {'full_capture_quality': {}})
+
+    def test_raw_unknown_identity_and_crc_rejected(self):
+        reader, _ = analysis.load_frozen(ex.OLD)
+        path = self.root / 'pilot3/pilot-meter/frames.jsonl'
+        with path.open() as stream:
+            first = json.loads(stream.readline())
+        with self.assertRaises(ValueError):
+            ex.validate_raw_row('frames', first | {'uid': fixture_module.CANARY}, reader)
+        corrupt = first.copy()
+        raw = bytearray.fromhex(first['raw_hex'])
+        raw[12] ^= 1
+        corrupt['raw_hex'] = raw.hex()
+        with self.assertRaises(ValueError):
+            ex.validate_raw_row('frames', corrupt, reader)
+
+    def test_gzip_deterministic_header_and_allowlist(self):
+        reader, _ = analysis.load_frozen(ex.OLD)
+        source = self.root / 'pilot3/pilot-meter/events.jsonl'
+        for name in ('copy1.gz', 'copy2.gz'):
+            ex.gzip_exact(source, self.root / name, 'events', ex.sha(source), reader)
+        self.assertEqual((self.root / 'copy1.gz').read_bytes(), (self.root / 'copy2.gz').read_bytes())
+        self.assertEqual((self.root / 'copy1.gz').read_bytes()[4:8], b'\x00' * 4)
+
+    def test_duplicate_json_key_cannot_hide_preserved_raw_text(self):
+        reader, _ = analysis.load_frozen(ex.OLD)
+        source = self.root / 'duplicate.jsonl'
+        source.write_text('{"event":"PRIVATE_HIDDEN_VALUE","event":"closed","host_monotonic_ns":1000000000000,"host_receipt_utc":"2026-09-30T00:00:00+00:00"}\n')
+        with self.assertRaises(ValueError):
+            ex.gzip_exact(source, self.root / 'duplicate.gz', 'events', ex.sha(source), reader)
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,2 @@
+{"force_refresh": true, "retention_policy": "POWMAN_region2_only", "stage": "BOOT", "index": 0, "schema": 1, "cause": 3, "ticks_ms": 645, "run": "5e3e29e82e1087472fffb420d445e446", "usb_mode": "USB_CONNECTED"}
+{"stage": "FAIL", "ticks_ms": 6214, "index": 0, "schema": 1, "run": "5e3e29e82e1087472fffb420d445e446", "usb_mode": "USB_CONNECTED", "error_type": "Stop"}

@@ -1,0 +1,177 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Synthetic restoration gates/order only; never imports boot_ops/device APIs."""
+import ast
+import copy
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import tempfile
+import time
+import types
+import unittest
+from unittest.mock import patch
+SOURCE = Path(__file__).with_name('restore_session3.py')
+spec = importlib.util.spec_from_file_location('restore_draft', SOURCE)
+r = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(r)
+
+def fake_plan(directory):
+    original = {'/main.py': (4, 'a' * 64), '/kept.py': (5, 'b' * 64)}
+    installed = dict(original)
+    installed['/main.py'] = (6, 'c' * 64)
+    installed[r.PARKED] = original['/main.py']
+    installed['/panel_probe.py'] = (7, 'd' * 64)
+    helper = Path(directory) / 'helper.py'
+    helper.write_text('# synthetic radio helper')
+    initial = {'uid': 'synthetic-uid', 'backup': [[10] * 4, [20] * 3, [30] * 8], 'rtc': [2026, 9, 30, 2, 20, 0, 0, 0], 'rtc_capture_before': time.monotonic() - 10, 'rtc_capture_after': time.monotonic() - 10}
+    return {'original': original, 'installed': installed, 'directories': ['/'], 'initial': initial, 'radio_helper': helper, 'manifest_sha256': 'f' * 64, 'manifest': {'state_gate': {'kind': 'safe_guard'}, 'purpose': 'completed', 'owned': {r.PARKED: {}, '/panel_probe.py': {}}}}
+
+class Fake:
+
+    def __init__(self, plan, fail=None):
+        self.plan = plan
+        self.files = dict(plan['installed'])
+        self.trace = []
+        self.fail = fail
+        self.s = {'uid': 'synthetic-uid', 'version': r.VERSION + ' on DATE', 'wdt_ctrl': 0, 'backup': [[0] * 4, [0] * 3, [0] * 8], 'rtc': list(plan['initial']['rtc'])}
+
+    def firmware_hash(self, b, n):
+        return r.FW_SHA
+
+    def inventory(self, b):
+        return [dict(path=p, size=v[0], sha256=v[1]) for p, v in self.files.items()]
+
+    def directories(self, b):
+        return self.plan['directories']
+
+    def state(self, b):
+        return copy.deepcopy(self.s)
+
+    def stamp(self):
+        return {}
+
+    def write_json(self, path, value):
+        Path(path).write_text(json.dumps(value))
+
+    def friendly(self, b):
+        self.trace.append('friendly')
+
+    def fs_put(self, source, dest):
+        self.trace.append('put_guard')
+        data = Path(source).read_bytes()
+        self.files[dest] = (len(data), hashlib.sha256(data).hexdigest())
+        if self.fail == 'staging':
+            self.files[dest] = (0, '0' * 64)
+
+    def exec_(self, code, timeout):
+        if 'os.rename(' in code:
+            source = ast.literal_eval(code.split('os.rename(', 1)[1].split(',', 1)[0])
+            self.trace.append('main_original' if source == r.PARKED else 'main_guard')
+            self.files['/main.py'] = self.files.pop(source)
+        elif 'os.remove(' in code:
+            self.trace.append('remove_owned')
+            if self.fail == 'remove':
+                raise OSError('synthetic')
+            self.files.pop(ast.literal_eval(code.split('os.remove(', 1)[1].split(')', 1)[0]))
+        elif code.startswith('_rs_saved='):
+            self.trace.append('backup_rtc')
+            self.s['backup'] = ast.literal_eval(code.splitlines()[0].split('=', 1)[1])
+            self.s['rtc'] = ast.literal_eval(code.rsplit('machine.RTC().datetime(', 1)[1][:-1])
+        elif "_rs_helper['radio_off" in code:
+            self.trace.append('radio_off')
+        elif 'panel_probe.prepare()' in code:
+            self.trace.append('panel_park')
+            return json.dumps(dict(status='PREPARED', refreshed=False, vendor_sleep_completed=True, park_registers_verified=True)).encode()
+        elif code == r.PANEL_CHECK:
+            return b'{"parked":true}'
+        elif code == r.RADIO_CHECK:
+            return b'{"sta":false,"ap":false,"ble":false}'
+        return b''
+
+class Tests(unittest.TestCase):
+
+    def test_fresh_pilot3_anchor_and_codec_are_explicit(self):
+        self.assertEqual(r.INPUTS[0], 'pilot3/fresh-initial-state-private.json')
+        self.assertIn('/app_image.py', r.OWNED)
+        self.assertNotIn('/app_image.py', r.MUTABLE)
+        self.assertNotIn('/bmp.py', r.OWNED)
+
+    def test_import_has_no_local_io_or_device_import(self):
+        fresh = importlib.util.module_from_spec(spec)
+        with patch('builtins.open', side_effect=AssertionError('import IO')), patch.object(Path, 'read_text', side_effect=AssertionError('import IO')), patch.object(Path, 'read_bytes', side_effect=AssertionError('import IO')):
+            exec(compile(SOURCE_BYTES, str(SOURCE), 'exec'), fresh.__dict__)
+        self.assertNotIn('boot_ops', fresh.__dict__)
+
+    def test_exact_timing_stop_and_live_wdt_rejected(self):
+        plan = {'manifest': {'state_gate': {'kind': 'timing_stopped'}}}
+        state = {'wdt_ctrl': 0, 'backup': [[0] * 4, [0] * 3, [1146310706, 2, 123, 2, 0, 4, 0, 324508639]]}
+        r.stopped(plan, state)
+        for index, value in ((1, 1), (3, 1), (5, 3), (7, 0)):
+            bad = copy.deepcopy(state)
+            bad['backup'][2][index] = value
+            with self.assertRaises(RuntimeError):
+                r.stopped(plan, bad)
+        state['wdt_ctrl'] = 1 << 30
+        with self.assertRaises(RuntimeError):
+            r.stopped(plan, state)
+
+    def test_app_requires_matching_terminal_nonce_commit(self):
+        gate = dict(kind='app_terminal', run='12345678' + '0' * 24, result='COMPLETE', index=3)
+        plan = {'manifest': {'state_gate': gate}}
+        words = [1095779121, 305419896, 3, 3, 0, 0]
+        check = 0
+        for value in words:
+            check ^= value
+        state = {'wdt_ctrl': 0, 'backup': [[0] * 4, [0] * 3, words + [check, ~1095779121 & 4294967295]]}
+        terminal = dict(schema=1, result='COMPLETE', index=3)
+        r.stopped(plan, state, terminal)
+        with self.assertRaises(RuntimeError):
+            r.stopped(plan, state, dict(terminal, result='FAIL'))
+        state['backup'][2][7] = 0
+        with self.assertRaises(RuntimeError):
+            r.stopped(plan, state, terminal)
+
+    def test_success_write_order_and_main_last(self):
+        with tempfile.TemporaryDirectory() as directory:
+            plan = fake_plan(directory)
+            fake = Fake(plan)
+            checkpoint = dict(phase='initial', removed=[], inert_guard_verified=False, original_main_restored=False)
+            result = r.restore_connected(fake, fake, plan, Path(directory), checkpoint)
+            self.assertEqual(fake.trace, ['put_guard', 'main_guard', 'radio_off', 'panel_park', 'remove_owned', 'backup_rtc', 'main_original', 'friendly'])
+            self.assertEqual(fake.files, plan['original'])
+            self.assertEqual(fake.s['backup'], plan['initial']['backup'])
+            self.assertEqual(result['result'], 'PASS')
+
+    def test_usb_terminal_uses_own_magic(self):
+        gate = dict(kind='app_usb_terminal', run='12345678' + '0' * 24, result='COMPLETE', index=3)
+        plan = {'manifest': {'state_gate': gate}}
+        words = [1095783729, 305419896, 3, 3, 0, 0]
+        check = 0
+        for value in words:
+            check ^= value
+        state = {'wdt_ctrl': 0, 'backup': [[0] * 4, [0] * 3, words + [check, ~1095783729 & 4294967295]]}
+        terminal = dict(schema=1, result='COMPLETE', index=3)
+        r.stopped(plan, state, terminal)
+        plan['manifest']['state_gate']['kind'] = 'app_terminal'
+        with self.assertRaises(RuntimeError):
+            r.stopped(plan, state, terminal)
+
+    def test_staging_drift_has_no_rename_and_delete_failure_keeps_guard(self):
+        for failure in ('staging', 'remove'):
+            with self.subTest(failure=failure), tempfile.TemporaryDirectory() as directory:
+                plan = fake_plan(directory)
+                fake = Fake(plan, failure)
+                checkpoint = dict(phase='initial', removed=[], inert_guard_verified=False, original_main_restored=False)
+                with self.assertRaises((RuntimeError, OSError)):
+                    r.restore_connected(fake, fake, plan, Path(directory), checkpoint)
+                self.assertNotIn('main_original', fake.trace)
+                self.assertIn(r.PARKED, fake.files)
+                self.assertNotIn('friendly', fake.trace)
+                if failure == 'staging':
+                    self.assertNotIn('main_guard', fake.trace)
+                else:
+                    self.assertEqual(fake.files['/main.py'][1], hashlib.sha256(r.GUARD).hexdigest())
+SOURCE_BYTES = SOURCE.read_text()
+if __name__ == '__main__':
+    unittest.main()

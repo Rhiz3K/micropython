@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "completed": 2,
+  "sleep_ms": 30000,
+  "exact_firmware_verified": true,
+  "stopped": true,
+  "files_unchanged": true,
+  "friendly_repl": true,
+  "host_utc": "2026-09-30T21:12:47.204219+00:00",
+  "host_monotonic": 623703.365098625
+}

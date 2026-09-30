@@ -1,0 +1,399 @@
+#!/usr/bin/env python3
+"""Offline, fail-closed analysis of a three-period USB_CONNECTED V2 app pilot.
+
+No hardware or network imports/actions. Only the two SHA-pinned historical
+modules are imported; their imports and the pure functions used here do no I/O.
+Inputs are private; outputs use fixed schemas and never copy identity/network
+metadata. The root must review and freeze this source before use.
+"""
+from __future__ import annotations
+import argparse
+import collections
+import hashlib
+import importlib.util
+import itertools
+import json
+import math
+import os
+from pathlib import Path
+import re
+import sys
+
+NS = 1_000_000_000
+MODE = 'USB_CONNECTED'
+READER_SHA = 'a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45'
+ANALYZER_SHA = '60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630'
+APP_SHA = '0be438c50c381a49d7cebfed4668f485d1865362fb14c8afe44ceac3afd17517'
+TRANSPORT_SHA = '688f33e6bb930d547da7a792822cfbf582922157c160c915846b85965f8dfd7d'
+LISTENER_SHA = '0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959'
+HEX64 = re.compile('[0-9a-f]{64}')
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)  # Never copied to public JSON/stdout.
+
+
+def finite(value):
+    return type(value) in (int, float) and math.isfinite(value)
+
+
+def regular(path, limit=2_000_000):
+    require(not path.is_symlink() and path.is_file(), 'Regular nonsymlink file required')
+    require(path.stat().st_size <= limit, 'Input exceeds size bound')
+    return path
+
+
+def sha(path):
+    value = hashlib.sha256()
+    with regular(path, 2_000_000_000).open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            value.update(block)
+    return value.hexdigest()
+
+
+def read_json(path):
+    value = json.loads(regular(path).read_text())
+    require(type(value) is dict, 'JSON object required')
+    return value
+
+
+def source(role, path):
+    return {'role': role, 'sha256': sha(path)}
+
+
+def load_frozen(directory):
+    """Use the actual pinned pure logic, without calling capture or old analyze."""
+    modules = []
+    old = sys.modules.get('meter_reader')
+    try:
+        for name, filename, expected in (
+            ('meter_reader', 'meter_reader.py', READER_SHA),
+            ('_app_frozen_analysis', 'analyze_stream.py', ANALYZER_SHA),
+        ):
+            path = directory / filename
+            require(sha(path) == expected, 'Frozen dependency hash changed')
+            spec = importlib.util.spec_from_file_location(name, path)
+            module = importlib.util.module_from_spec(spec)
+            # The pinned sources have no import-time hardware actions.
+            spec.loader.exec_module(module)
+            if name == 'meter_reader':
+                sys.modules[name] = module
+            modules.append(module)
+    finally:
+        if old is None:
+            sys.modules.pop('meter_reader', None)
+        else:
+            sys.modules['meter_reader'] = old
+    return modules
+
+
+def read_rows(a, path, limit=2_000_000):
+    regular(path, limit)
+    log = a.JsonLines(path)
+    rows = list(log)
+    return rows
+
+
+def meter_metadata(meta):
+    require(meta.get('schema') == 2 and meta.get('reader_sha256') == READER_SHA,
+            'Wrong meter reader metadata')
+    require(meta.get('allowed_commands') == ['0x81', '0x82', '0x83'], 'Meter command contract')
+    require(all(meta.get(k) is False for k in ('usb_reset_used', 'kernel_detach_used',
+        'serial_port_opened', 'charging_or_voltage_commands_used')), 'Meter action contract')
+
+
+def validate_marker(meta, result, rows, meter_meta_sha, firmware_sha, preflight_sha):
+    require(meta.get('schema') == 2 and meta.get('usb_mode') == MODE, 'Wrong marker schema/mode')
+    run = meta.get('run')
+    require(type(run) is str and re.fullmatch('[0-9a-f]{32}', run), 'Invalid internal run nonce')
+    require(meta.get('cycles') == 3 and meta.get('sleep_ms') == 300000
+            and meta.get('force_refresh') is True, 'Wrong app cycle configuration')
+    require(meta.get('boundary') == 'first_DOWNLOAD_READY_receipt_to_next_first_receipt', 'Boundary contract')
+    require(meta.get('firmware_bin_sha256') == firmware_sha and HEX64.fullmatch(firmware_sha), 'Firmware proof')
+    require(meta.get('meter_reader_sha256') == READER_SHA
+            and meta.get('root_preflight_sha256') == preflight_sha, 'Root/source proof')
+    anchor = meta.get('host_anchor', {})
+    require(set(anchor) == {'utc_ns', 'monotonic_before_ns', 'monotonic_after_ns'}
+            and all(type(v) is int and v > 0 for v in anchor.values()), 'Host clock anchor')
+    before, after = anchor['monotonic_before_ns'], anchor['monotonic_after_ns']
+    require(0 <= after - before <= 10_000_000, 'Anchor bracket exceeds 10 ms')
+    seen, boundaries = set(), []
+    previous = after
+    ack_delays, write_spans, health_rates = [], [], []
+    fields = {'kind', 'index', 'receipt_monotonic_ns', 'ack_before_monotonic_ns',
+              'ack_after_monotonic_ns', 'duplicate', 'usb_mode', 'meter_gate'}
+    for row in rows:
+        require(set(row) == fields and row['usb_mode'] == MODE, 'Marker fields/mode')
+        key = row['kind'], row['index']
+        require(key[0] in ('GO', 'DOWNLOAD_READY') and type(key[1]) is int
+                and 0 <= key[1] <= 3 and (key[0] != 'GO' or key[1] == 0), 'Marker kind/index')
+        t, b, e = (row[k] for k in ('receipt_monotonic_ns', 'ack_before_monotonic_ns', 'ack_after_monotonic_ns'))
+        require(all(type(x) is int for x in (t, b, e)) and previous <= t <= b <= e, 'Marker monotonic order')
+        previous = e
+        require(type(row['duplicate']) is bool and row['duplicate'] == (key in seen), 'Duplicate flag proof')
+        gate = row['meter_gate']
+        require(type(gate) is dict and set(gate) == {'health_monotonic_ns', 'recording_samples',
+            'recent_receipt_sample_rate_hz', 'last_valid_measurement_age_s', 'metadata_sha256'}, 'Live meter gate shape')
+        stamp = gate['health_monotonic_ns']
+        require(type(stamp) is int and 0 <= b - stamp <= 3 * NS, 'Live meter health stale')
+        require(type(gate['recording_samples']) is int and gate['recording_samples'] >= 500, 'Live meter samples')
+        rate, age = gate['recent_receipt_sample_rate_hz'], gate['last_valid_measurement_age_s']
+        require(finite(rate) and 95 <= rate <= 105 and finite(age) and 0 <= age <= 1.5, 'Live meter cadence/age')
+        require(gate['metadata_sha256'] == meter_meta_sha, 'Marker belongs to different meter capture')
+        health_rates.append(rate)
+        if key[0] == 'DOWNLOAD_READY':
+            require(('GO', 0) in seen, 'Boundary before GO')
+            if not row['duplicate']:
+                require(key[1] == len(boundaries), 'First boundary order')
+                boundaries.append(row)
+        seen.add(key)
+        ack_delays.append((b - t) / NS)
+        write_spans.append((e - b) / NS)
+    require(len(boundaries) == 4 and ('GO', 0) in seen, 'Require GO and four first boundaries')
+    require(result.get('schema') == 2 and result.get('usb_mode') == MODE
+            and result.get('run') == run and result.get('result') == 'BOUNDARIES_COMPLETE'
+            and result.get('boundaries') == boundaries and result.get('completed_intervals') == 3
+            and result.get('go_acknowledged') is True and 'error_type' not in result,
+            'Listener not completely successful')
+    require(type(result.get('finished_monotonic_ns')) is int
+            and result['finished_monotonic_ns'] >= previous, 'Listener end clock')
+    stamps = [r['receipt_monotonic_ns'] for r in boundaries]
+    require(all(299 * NS <= y - x <= 600 * NS for x, y in zip(stamps, stamps[1:])),
+            'App interval outside bounded 300-second-sleep pilot')
+    return run, boundaries, {'accepted_datagrams': len(rows), 'duplicate_datagrams': len(rows) - 5,
+        'maximum_receipt_to_ACK_before_s': max(ack_delays), 'maximum_ACK_send_span_s': max(write_spans),
+        'minimum_marker_health_rate_hz': min(health_rates), 'maximum_marker_health_rate_hz': max(health_rates),
+        'anchor_bracket_s': (after - before) / NS}
+
+
+def validate_device(rows, terminal, run):
+    common = {'schema', 'run', 'index', 'stage', 'ticks_ms', 'usb_mode'}
+    fields = {
+        'BOOT': {'cause', 'retention_policy', 'force_refresh'},
+        'WAKE': {'cause', 'last_swcore', 'sleep_rtc_elapsed_ms'},
+        'DOWNLOAD_READY': {'bmp_bytes', 'timestamp_changed_vs_original_file', 'timestamp_present',
+                           'server_sleep_present', 'server_partial_present'},
+        'SLEEP': {'sleep_ms', 'panel_refreshes', 'panel_elapsed_ms',
+                  'panel_sleep_and_park_verified', 'radio_off_verified'},
+        'COMPLETE': {'completed_cycles', 'full_refreshes', 'final_download_not_refreshed'},
+    }
+    expected = [(0, 'BOOT'), (0, 'DOWNLOAD_READY'), (0, 'SLEEP')]
+    for index in range(1, 4):
+        expected += [(index, 'WAKE'), (index, 'BOOT'), (index, 'DOWNLOAD_READY'),
+                     (index, 'SLEEP' if index < 3 else 'COMPLETE')]
+    require([(r.get('index'), r.get('stage')) for r in rows] == expected, 'Device event order/incomplete/FAIL')
+    rtc, panel, downloads = [], [], []
+    last_ticks, last_index = -1, -1
+    for row in rows:
+        stage, index = row['stage'], row['index']
+        require(set(row) == common | fields[stage], 'Device record fields')
+        require(row['schema'] == 1 and row['run'] == run and row['usb_mode'] == MODE, 'Device run/mode')
+        ticks = row['ticks_ms']
+        require(type(ticks) is int and ticks >= 0, 'Device tick type')
+        require(index != last_index or ticks >= last_ticks, 'Within-boot ticks not monotonic')
+        last_index, last_ticks = index, ticks
+        if stage == 'BOOT':
+            # This connected-USB root launcher explicitly calls machine.reset().
+            require(type(row['cause']) is int and row['cause'] == (3 if index == 0 else 4),
+                    'BOOT reset cause differs from reviewed ordinary-reset launch')
+            require(row['retention_policy'] == 'POWMAN_region2_only' and row['force_refresh'] is True, 'BOOT policy')
+        elif stage == 'WAKE':
+            value = row['sleep_rtc_elapsed_ms']
+            require(row['cause'] == 4 and row['last_swcore'] == 64 and type(value) is int
+                    and 299000 <= value <= 305000, 'Deep wake cause/alarm/RTC')
+            rtc.append(value)
+        elif stage == 'DOWNLOAD_READY':
+            require(type(row['bmp_bytes']) is int and 1 <= row['bmp_bytes'] <= 65536, 'BMP size')
+            require(all(type(row[k]) is bool for k in fields[stage] - {'bmp_bytes'}), 'Download metadata evidence')
+            downloads.append({k: row[k] for k in sorted(fields[stage])})
+        elif stage == 'SLEEP':
+            value = row['panel_elapsed_ms']
+            require(row['sleep_ms'] == 300000 and row['panel_refreshes'] == 2 and type(value) is int
+                    and 0 < value <= 120000 and row['panel_sleep_and_park_verified'] is True
+                    and row['radio_off_verified'] is True, 'Panel/radio/sleep evidence')
+            panel.append(value)
+        elif stage == 'COMPLETE':
+            require(row['completed_cycles'] == 3 and row['full_refreshes'] == 6
+                    and row['final_download_not_refreshed'] is True, 'Complete evidence')
+    require(terminal == {'schema': 1, 'result': 'COMPLETE', 'index': 3}, 'Terminal not complete')
+    return {'completed_cycles': 3, 'full_refreshes': 6, 'final_download_not_refreshed': True,
+            'RTC_sleep_elapsed_ms_by_cycle': rtc, 'panel_operation_elapsed_ms_by_cycle': panel,
+            'initial_reset_cause': rows[0]['cause'], 'downloads': downloads,
+            'device_durations_are_not_host_alignment_anchors': True}
+
+
+def check_meter_events(a, rows, summary):
+    safe = {'opened_identity_verified', 'command_sent', 'recording_started', 'health',
+            'recording_finished', 'draining_started', 'closed'}
+    errors = {'error', 'drain_error', 'invalid_frame', 'receipt_gap', 'wall_vs_monotonic_clock_offset_jump'}
+    commands, counts = collections.Counter(), collections.Counter()
+    health_rates = []
+    previous = -1
+    for row in rows:
+        kind = row.get('event')
+        require(kind in safe | errors, 'Unknown meter event')
+        counts[kind] += 1
+        require(kind not in errors, 'Entire capture contains error/gap/clock/CRC event')
+        ns = row.get('host_monotonic_ns')
+        require(type(ns) is int and ns >= previous, 'Meter event clock order')
+        previous = ns
+        if kind == 'command_sent':
+            require(row.get('command') in ('0x81', '0x82', '0x83'), 'Meter command not allowed')
+            command = int(row['command'], 16)
+            require(row.get('report_hex') == a.command_report(command).hex()
+                    and row.get('bytes_reported') == 65, 'Meter command bytes proof')
+            commands[row['command']] += 1
+        elif kind == 'health':
+            require(all(row.get(k) == 0 for k in ('invalid_frames', 'receipt_gap_count_over_200ms',
+                                                 'clock_offset_jump_count')), 'Meter health issue')
+            if row.get('elapsed_host_s', 0) >= 5 and row.get('recording_samples', 0) >= 500:
+                rate = row.get('recent_receipt_sample_rate_hz')
+                require(finite(rate) and 95 <= rate <= 105, 'Capture health cadence outside 95..105 Hz')
+                health_rates.append(rate)
+        elif kind == 'recording_finished':
+            require(row.get('stop_reason') == summary['stop_reason']
+                    and row.get('stopped_by_signal') is None, 'Meter stopped unexpectedly')
+    require(commands['0x81'] == 1 and commands['0x82'] == 2 and commands['0x83'] > 0, 'Meter handshake proof')
+    require(all(counts[k] == 1 for k in ('opened_identity_verified', 'recording_started',
+        'recording_finished', 'draining_started', 'closed')), 'Meter lifecycle proof')
+    require(health_rates, 'No closed capture health proof')
+    return {'event_counts': dict(counts), 'measurement_commands': dict(commands),
+            'minimum_recorded_health_rate_hz_after_startup': min(health_rates),
+            'maximum_recorded_health_rate_hz_after_startup': max(health_rates)}
+
+
+def check_clock(a, proof, first, marker_meta, marker_result):
+    offsets = proof['meter_UTC_minus_monotonic_offset_change_s']
+    require(offsets['max'] - offsets['min'] <= .1, 'Full-capture UTC/monotonic clock jump')
+    anchor = marker_meta['host_anchor']
+    low, high = anchor['utc_ns'] - anchor['monotonic_after_ns'], anchor['utc_ns'] - anchor['monotonic_before_ns']
+    first_offset = a.epoch_ns(first['host_receipt_utc']) - first['host_receipt_monotonic_ns']
+    final_offset = a.epoch_ns(marker_result['finished_utc']) - marker_result['finished_monotonic_ns']
+    require(low - .1 * NS <= first_offset <= high + .1 * NS
+            and low - .1 * NS <= final_offset <= high + .1 * NS, 'Meter/listener host clock mismatch')
+    return {'kind': 'SAME_HOST_MONOTONIC_RECEIPT',
+        'meter_minus_listener_anchor_midpoint_s': (first_offset - (low + high) / 2) / NS,
+        'listener_end_minus_anchor_midpoint_s': (final_offset - (low + high) / 2) / NS,
+        'clock_check_tolerance_s': .1, 'anchor_bracket_limit_s': .01}
+
+
+def analyze(args):
+    require(not sys.flags.optimize, 'Optimization mode is unsupported')
+    _, a = load_frozen(args.frozen_dir)
+    transport_source = args.app_source.with_name('app_transport.py')
+    require(sha(args.app_source) == APP_SHA and sha(args.listener_source) == LISTENER_SHA
+            and sha(transport_source) == TRANSPORT_SHA, 'Reviewed V2 app/transport/listener source changed')
+    summary = read_json(args.meter_dir / 'summary.json')
+    require(summary.get('schema') == 2 and summary.get('result') == 'PASS'
+            and summary.get('capture_result') == 'PASS' and summary.get('data_quality') == 'PASS'
+            and summary.get('error') is None and summary.get('stop_reason') in ('duration', 'stop_file')
+            and summary.get('clock_offset_jump_count') == 0 and summary.get('stopped_by_signal') is None,
+            'Entire meter capture incomplete/error/degraded')
+    span = summary.get('recording_receipt_span_s')
+    require(finite(span) and 0 < span <= 3600, 'Capture must fit bounded one-hour pilot')
+    mm = read_json(args.meter_dir / 'metadata.json')
+    meter_metadata(mm)
+    marker_meta = read_json(args.marker_dir / 'metadata.json')
+    marker_result = read_json(args.marker_dir / 'result.json')
+    marker_rows = read_rows(a, args.marker_dir / 'events.jsonl')
+    preflight_sha = sha(args.preflight_proof)
+    run, boundaries, marker_stats = validate_marker(marker_meta, marker_result, marker_rows,
+        sha(args.meter_dir / 'metadata.json'), args.firmware_sha256, preflight_sha)
+    device = validate_device(read_rows(a, args.device_events), read_json(args.device_terminal), run)
+    meter_events = check_meter_events(a, read_rows(a, args.meter_dir / 'events.jsonl', 20_000_000), summary)
+    windows = [a.Window('app_period_' + str(n + 1), boundaries[n]['receipt_monotonic_ns'],
+                       boundaries[n + 1]['receipt_monotonic_ns'], .99) for n in range(3)]
+    require(not args.output.exists() and not args.output.is_symlink(), 'Output must be new')
+    os.umask(0o077)
+    args.output.mkdir(mode=0o700)
+    frames = a.JsonLines(regular(args.meter_dir / 'frames.jsonl', 2_000_000_000))
+    samples = a.JsonLines(regular(args.meter_dir / 'samples.jsonl', 2_000_000_000))
+    iterator = iter(frames)
+    first = next(iterator, None)
+    require(first is not None, 'Empty raw capture')
+    bins = a.Bins(args.output / 'trace-bins.csv', boundaries[0]['receipt_monotonic_ns'], max(1, math.ceil(span / 6000)))
+    try:
+        proof = a.prove_samples(itertools.chain([first], iterator), samples, [a.Group(windows)], bins, summary)
+    finally:
+        bins.close()
+    require(proof['invalid_frames'] == 0 and proof['receipt_gap_count_over_200ms'] == 0,
+            'Invalid/gapped complete capture')
+    rate = proof['observed_nominal_sample_rate_hz']
+    require(finite(rate) and 95 <= rate <= 105, 'Full-capture cadence outside 95..105 Hz')
+    clock = check_clock(a, proof, first, marker_meta, marker_result)
+    results = [w.result() for w in windows]
+    require(all(r['result'] == 'PASS' for r in results), 'One or more periods fail frozen coverage/density')
+    provenance = [source(role, path) for role, path in (
+        ('meter_metadata', args.meter_dir / 'metadata.json'), ('meter_summary', args.meter_dir / 'summary.json'),
+        ('meter_events', args.meter_dir / 'events.jsonl'), ('marker_metadata', args.marker_dir / 'metadata.json'),
+        ('marker_events', args.marker_dir / 'events.jsonl'), ('marker_result', args.marker_dir / 'result.json'),
+        ('device_events', args.device_events), ('device_terminal', args.device_terminal),
+        ('root_preflight', args.preflight_proof), ('app_adapter_source', args.app_source),
+        ('app_transport_source', transport_source),
+        ('marker_listener_source', args.listener_source), ('app_analyzer_source', Path(__file__)),
+    )]
+    provenance += [{'role': 'meter_raw_frames', 'sha256': frames.sha.hexdigest(), 'lines': frames.lines},
+                   {'role': 'meter_decoded_samples', 'sha256': samples.sha.hexdigest(), 'lines': samples.lines},
+                   {'role': 'frozen_meter_reader', 'sha256': READER_SHA},
+                   {'role': 'frozen_integration_and_raw_proof', 'sha256': ANALYZER_SHA}]
+    result = {'schema': 1, 'result': 'PASS', 'scope': 'USB_CONNECTED_application_v2_three_period_pilot',
+        'usb_mode': MODE, 'firmware_bin_sha256': args.firmware_sha256,
+        'valid_complete_period_energy': True, 'valid_sleep_only_energy': False,
+        'valid_refresh_only_energy': False, 'device': device, 'marker_quality': marker_stats,
+        'periods': results, 'repeat_summary': a.repeated_summary(results),
+        'full_capture_result': 'PASS', 'full_capture_data_quality': 'PASS',
+        'full_capture_quality': {k: proof[k] for k in ('frames_total', 'valid_frames', 'invalid_frames',
+            'recording_samples', 'drain_measurement_frames', 'recording_receipt_span_s',
+            'observed_nominal_sample_rate_hz', 'receipt_gap_count_over_200ms',
+            'maximum_interframe_receipt_gap_s', 'samples_exactly_zero_current',
+            'raw_to_samples_proof', 'meter_UTC_minus_monotonic_offset_change_s')},
+        'meter_events': meter_events,
+        'clock_alignment': clock,
+        'gates': {'complete_capture_and_terminal_required': True, 'raw_crc_and_exact_samples_required': True,
+            'global_and_poststartup_health_rate_hz': [95, 105], 'maximum_receipt_gap_s': .2,
+            'maximum_clock_offset_range_s': .1, 'minimum_nominal_density_fraction': .99,
+            'sample_boundary_allowance': 4, 'edge_receipt_tolerance_s': .1,
+            'full_trapezoid_window_coverage_required': True},
+        'primary_model': 'host_receipt_frame_mean_trapezoid',
+        'sensitivity_model': 'nominal_10ms_per_in_window_received_sample',
+        'source_evidence': provenance,
+        'limits': [
+            'Each first DOWNLOAD_READY host receipt n to n+1 includes marker ACK/retry delay, two full panel refreshes, panel sleep/parking, deep sleep, reboot and next network/download.',
+            'No exact host sleep-entry, sleep-exit, panel-start or panel-end anchor exists. Device RTC/ticks durations are evidence only, not mapped host timestamps.',
+            'No sleep-only or refresh-only charge, energy, average current, or saving can be identified from these boundaries. Do not subtract durations or infer state solely from low current.',
+            'The final download closes period 3 and is not refreshed. Initial download and terminal cleanup outside the four boundaries are not complete periods.',
+            'This connected-USB pilot measures USB-input current and power of the entire connected assembly. It is not a no-data deployment, RP2350-core current, or absolute deep-sleep-frequency measurement.',
+            'Every valid received sample, including exact zeros and spikes, is retained. No offset subtraction, clipping, smoothing or missing-data compensation.',
+            'Four samples share each actual frame receipt. Device timestamps/sequence, USB buffering delay and exact missing-sample count are unknown.',
+            'Frame-mean trapezoid and nominal 10-ms estimates are approximate. Their difference is sensitivity, not uncertainty bounds or a confidence interval.',
+            'Meter resolution and CRC integrity do not prove calibration, absolute accuracy or capture of brief peaks. Three sequential repeats do not isolate temperature or time drift.',
+            'Root-owned installed-source/BIN verification and final application/backup/RTC restoration are separate proofs; this offline result does not perform or assert restoration.',
+            'V2 applies the reviewed configured DNS order/cache/fallback through a bounded UDP A backend, with Rotate value 2 and HTTP/1.0. Native getaddrinfo/cache byte-equivalence is not claimed. Successful app events do not record the selected DNS path; the separate root-owned BMP probe is a launch proof, not an energy interval.',
+        ]}
+    with (args.output / 'analysis-public.json').open('x') as stream:
+        json.dump(result, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for flag in ('frozen-dir', 'meter-dir', 'marker-dir', 'device-events', 'device-terminal',
+                 'preflight-proof', 'app-source', 'listener-source', 'output'):
+        parser.add_argument('--' + flag, type=Path, required=True)
+    parser.add_argument('--firmware-sha256', required=True)
+    args = parser.parse_args()
+    try:
+        result = analyze(args)
+    except Exception as exc:
+        # Neither exception text nor input objects/paths may reach public output.
+        print(json.dumps({'result': 'REJECTED', 'error_type': type(exc).__name__,
+            'accepted_energy_result_written': False}))
+        return 1
+    print(json.dumps({'result': result['result'], 'complete_periods': 3, 'usb_mode': MODE}))
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

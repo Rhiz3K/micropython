@@ -1,0 +1,179 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Offline scientific plot of a verified V3 pilot and its replay-produced bins.
+
+No raw capture, hardware, network, private app source or configuration is read.
+The caller supplies independently verified SHA256 for both input files.
+"""
+import argparse
+import csv
+import hashlib
+import io
+import json
+import math
+import os
+from pathlib import Path
+import re
+SCOPE = 'USB_CONNECTED_application_v3_three_period_pilot'
+PINS = {'app_adapter_source': 'a3d56054681b29fdc29280a2fe6740f12fa9ce539bc4709106d5223cb92702bb', 'app_transport_source': '94e98f133d2260c46919a31215c93ba3ed619f8d9264f0a82cbffe7a9fd53218', 'private_application_decoder_source': 'd6c93ac15c30c766378f2bb29aa3ab2ee3d5aff5e766ebbb46be2b837075446f', 'marker_listener_source': '0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959', 'app_analyzer_source': '98dc2d5ad799b66e2a655f7ff1afe140d15b4f5453f056e5874eb2cf5b3fdc96', 'frozen_meter_reader': 'a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45', 'frozen_integration_and_raw_proof': '60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630'}
+HEADER = ['start_host_elapsed_s', 'end_host_elapsed_s', 'samples', 'mean_current_mA', 'min_current_mA', 'max_current_mA', 'mean_voltage_V', 'mean_power_mW', 'invalid_frames']
+NS = 1000000000
+
+def require(value, message):
+    if not value:
+        raise ValueError(message)
+
+def finite(value):
+    return type(value) in (int, float) and math.isfinite(value)
+
+def reject_nonfinite(value):
+    if isinstance(value, dict):
+        for child in value.values():
+            reject_nonfinite(child)
+    elif isinstance(value, list):
+        for child in value:
+            reject_nonfinite(child)
+    elif type(value) is float:
+        require(math.isfinite(value), 'Nonfinite JSON value')
+
+def read_bound(path, digest, limit):
+    path = Path(path)
+    require(re.fullmatch('[0-9a-f]{64}', digest or '') is not None, 'Expected SHA256 required')
+    require(path.is_file() and (not path.is_symlink()) and (path.stat().st_size <= limit), 'Regular bounded input required')
+    content = path.read_bytes()
+    require(hashlib.sha256(content).hexdigest() == digest, 'Input hash mismatch')
+    return content
+
+def validate_analysis(value):
+    reject_nonfinite(value)
+    require(isinstance(value, dict) and value.get('schema') == 1 and (value.get('result') == 'PASS') and (value.get('scope') == SCOPE) and (value.get('usb_mode') == 'USB_CONNECTED'), 'Verified V3 PASS scope required')
+    require(value.get('valid_complete_period_energy') is True and value.get('valid_sleep_only_energy') is False and (value.get('valid_refresh_only_energy') is False) and (value.get('full_capture_result') == 'PASS') and (value.get('full_capture_data_quality') == 'PASS'), 'Analysis quality/status gate')
+    require(value.get('primary_model') == 'host_receipt_frame_mean_trapezoid' and value.get('sensitivity_model') == 'nominal_10ms_per_in_window_received_sample', 'Integration model identity')
+    evidence = value.get('source_evidence')
+    require(isinstance(evidence, list) and all((isinstance(x, dict) for x in evidence)), 'Source proof shape')
+    roles = [x.get('role') for x in evidence]
+    require(all((isinstance(x, str) for x in roles)) and len(roles) == len(set(roles)), 'Unique source roles required')
+    source_map = {x['role']: x.get('sha256') for x in evidence}
+    require(all((source_map.get(k) == digest for k, digest in PINS.items())), 'Pinned V3 source proof required')
+    quality = value.get('full_capture_quality', {})
+    require(quality.get('invalid_frames') == 0 and quality.get('receipt_gap_count_over_200ms') == 0, 'Entire capture must retain clean quality')
+    rate = quality.get('observed_nominal_sample_rate_hz')
+    span = quality.get('recording_receipt_span_s')
+    require(finite(rate) and 95 <= rate <= 105 and finite(span) and (0 < span <= 3600), 'Capture cadence/span gate')
+    total = quality.get('recording_samples')
+    require(type(total) is int and total > 0 and (total % 4 == 0), 'Capture count gate')
+    windows = value.get('periods')
+    require(isinstance(windows, list) and len(windows) == 3, 'Three periods required')
+    boundaries = []
+    for index, window in enumerate(windows):
+        require(window.get('name') == 'app_period_' + str(index + 1) and window.get('result') == 'PASS' and (window.get('reasons') == []), 'Window PASS gate')
+        start, end = (window.get('start_host_monotonic_ns'), window.get('end_host_monotonic_ns'))
+        require(type(start) is int and type(end) is int and (0 < start < end), 'Exact receipt bounds required')
+        require(not boundaries or start == boundaries[-1], 'Periods must share exact boundary')
+        duration = (end - start) / NS
+        require(299 <= duration <= 600 and finite(window.get('duration_host_s')) and (abs(window['duration_host_s'] - duration) < 1e-09), 'Window duration binding')
+        integral = window.get('integral_estimates', {}).get('host_receipt_frame_mean_trapezoid', {})
+        require(finite(integral.get('covered_host_s')) and abs(integral['covered_host_s'] - duration) < 1e-09 and (window.get('invalid_frames') == 0) and (window.get('receipt_gaps_over_200ms') == 0), 'Complete clean trapezoid coverage required')
+        count, minimum = (window.get('samples'), window.get('minimum_samples'))
+        require(type(count) is int and type(minimum) is int and (count >= minimum > 0), 'Window sample count gate')
+        if not boundaries:
+            boundaries.append(start)
+        boundaries.append(end)
+    return ([(stamp - boundaries[0]) / NS for stamp in boundaries], total)
+
+def validate_bins(content, boundaries, total):
+    reader = csv.DictReader(io.StringIO(content.decode('utf-8'), newline=''))
+    require(reader.fieldnames == HEADER, 'Exact frozen replay CSV header required')
+    rows = []
+    for row in reader:
+        require(len(rows) < 6102 and set(row) == set(HEADER) and (None not in row.values()), 'CSV row shape/count')
+        require(re.fullmatch('[0-9]+', row['samples']) and re.fullmatch('[0-9]+', row['invalid_frames']), 'CSV integer counts')
+        n, invalid = (int(row['samples']), int(row['invalid_frames']))
+        start, end = (float(row[HEADER[0]]), float(row[HEADER[1]]))
+        require(finite(start) and finite(end) and (end - start == 1) and (start == math.floor(start)), 'One-second bins required')
+        require(not rows or start == rows[-1]['end'], 'Bins must preserve all gaps explicitly')
+        require(invalid == 0 and n % 4 == 0, 'Clean four-sample groups required')
+        fields = [row[k] for k in HEADER[3:8]]
+        if n:
+            require(all((x != '' for x in fields)), 'Nonempty bin metrics required')
+            mean, low, high, voltage, power = map(float, fields)
+            require(all((finite(x) and x >= 0 for x in (mean, low, high, voltage, power))) and low <= mean <= high, 'Finite ordered nonnegative bin metrics required')
+        else:
+            require(all((x == '' for x in fields)), 'Empty bins must remain blank')
+            mean = low = high = None
+        rows.append({'start': start, 'end': end, 'samples': n, 'mean': mean, 'min': low, 'max': high})
+    require(rows and rows[0]['start'] <= 0 and (rows[-1]['end'] >= boundaries[-1]), 'Full four-boundary trace coverage')
+    require(sum((r['samples'] for r in rows)) == total, 'Trace/replay capture sample count mismatch')
+    return rows
+
+def render(analysis, trace, analysis_sha256, trace_sha256, output):
+    raw_analysis = read_bound(analysis, analysis_sha256, 2000000)
+    raw_trace = read_bound(trace, trace_sha256, 5000000)
+    value = json.loads(raw_analysis)
+    boundaries, total = validate_analysis(value)
+    rows = validate_bins(raw_trace, boundaries, total)
+    output = Path(output)
+    require(not output.exists() and (not output.is_symlink()) and (not output.parent.is_symlink()), 'Exclusive nonsymlink output required')
+    os.umask(63)
+    output.mkdir(mode=448)
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib import pyplot as plt
+    from matplotlib.collections import LineCollection
+    with plt.rc_context({'font.family': 'DejaVu Sans', 'svg.fonttype': 'none', 'svg.hashsalt': 'rp2350-app-pilot-v3', 'font.size': 10}):
+        fig, ax = plt.subplots(figsize=(12, 5.8), layout=None)
+        try:
+            x, low, high = ([], [], [])
+            lines = []
+            for row in rows:
+                x.extend((row['start'], row['end']))
+                lo = float('nan') if row['min'] is None else row['min']
+                hi = float('nan') if row['max'] is None else row['max']
+                low.extend((lo, lo))
+                high.extend((hi, hi))
+                if row['mean'] is not None:
+                    lines.append(((row['start'], row['mean']), (row['end'], row['mean'])))
+            ax.fill_between(x, low, high, color='#6baed6', alpha=0.35, linewidth=0, label='Received-sample min–max in each 1 s bin')
+            ax.add_collection(LineCollection(lines, colors='#08519c', linewidths=1.15, label='Received-sample mean in each 1 s bin'))
+            for index, boundary in enumerate(boundaries):
+                ax.axvline(boundary, color='#b35806', linestyle='--', linewidth=0.95)
+                ax.annotate('DOWNLOAD_READY ' + str(index), (boundary, 1), xycoords=('data', 'axes fraction'), xytext=(3, -6), textcoords='offset points', ha='left', va='top', rotation=90, fontsize=8, color='#8c4504')
+            maximum = max((r['max'] for r in rows if r['max'] is not None), default=0)
+            ax.set_xlim(rows[0]['start'], rows[-1]['end'])
+            ax.set_ylim(0, maximum * 1.08 if maximum else 1)
+            ax.set_xlabel('Host time since first DOWNLOAD_READY receipt (s)')
+            ax.set_ylabel('USB-input current, entire connected assembly (mA)')
+            fig.text(0.09, 0.94, 'USB_CONNECTED application pilot — three complete periods', fontsize=12, ha='left')
+            ax.grid(axis='y', alpha=0.22)
+            ax.spines[['top', 'right']].set_visible(False)
+            ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=2, frameon=False, fontsize=9)
+            fig.subplots_adjust(left=0.09, right=0.985, bottom=0.24, top=0.78)
+            fig.text(0.09, 0.12, '1 s bins retain all received samples, including zeros and spikes; no filtering or offset subtraction.', fontsize=9)
+            fig.text(0.09, 0.08, 'Dashed lines are observed host receipts. No sleep/refresh states or their separate energies are inferred.', fontsize=9)
+            fig.text(0.09, 0.04, 'Calibration is unverified; bins and USB buffering limit brief-peak timing and amplitude.', fontsize=9, color='#444444')
+            title = 'USB_CONNECTED three-period application pilot current'
+            fig.savefig(output / 'current.png', dpi=180, metadata={'Software': 'RP2350 application pilot plot', 'Title': title})
+            fig.savefig(output / 'current.svg', metadata={'Date': None, 'Creator': 'RP2350 application pilot plot', 'Title': title})
+        finally:
+            plt.close(fig)
+    metadata = {'schema': 1, 'result': 'PLOTTED_VERIFIED_ANALYSIS', 'scope': SCOPE, 'source_sha256': {'analysis_public': analysis_sha256, 'replay_trace_bins': trace_sha256, 'plot_helper': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}, 'bin_width_s': 1, 'bin_count': len(rows), 'received_samples': total, 'download_boundaries_host_elapsed_s': boundaries, 'zero_baseline_included': True, 'all_bins_preserved': True, 'filtering_or_offset_subtraction': False, 'state_intervals_inferred': False, 'private_image_source_exported': False, 'raw_replay_performed_by_plotter': False, 'note': 'Input hashes are caller-verified bindings. Plotting does not establish calibration or repeat raw CRC/sample replay.'}
+    (output / 'plot-metadata.json').write_text(json.dumps(metadata, indent=2, allow_nan=False) + '\n')
+    names = ['current.png', 'current.svg', 'plot-metadata.json']
+    (output / 'SHA256SUMS').write_text(''.join((hashlib.sha256((output / n).read_bytes()).hexdigest() + '  ' + n + '\n' for n in names)))
+    return metadata
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for option in ('analysis', 'trace', 'output'):
+        parser.add_argument('--' + option, type=Path, required=True)
+    parser.add_argument('--analysis-sha256', required=True)
+    parser.add_argument('--trace-sha256', required=True)
+    args = parser.parse_args()
+    try:
+        result = render(args.analysis, args.trace, args.analysis_sha256, args.trace_sha256, args.output)
+    except Exception as exc:
+        print(json.dumps({'result': 'REJECTED', 'error_type': type(exc).__name__}))
+        return 1
+    print(json.dumps({'result': result['result'], 'bin_count': result['bin_count']}))
+    return 0
+if __name__ == '__main__':
+    raise SystemExit(main())

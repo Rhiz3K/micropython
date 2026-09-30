@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "attempt": 3,
+  "result": "PASS",
+  "phase": "run",
+  "exit_code": 0,
+  "timed_out": false,
+  "signal": null,
+  "process_result_sha256": "0e302d5d2f5a7f72ee1c75810b08a757ae2c8b1900029e8ea3d15fbcc0838b47",
+  "device_post_sha256": "30505f5e7e459b4bef84c28c96e5ae53766ff2fd8c5e7f30db75e589c68ad29f",
+  "analysis_sha256": "a044d760b37ab8ccf3d789a79aa3e41c2799a668e9179612addc625046e1c402"
+}

@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "OFFLINE_REVIEWED_NOT_HARDWARE_RESULT",
+  "source_sha256": {
+    "analyze_app_meter.py": "5832cce560bc33ecc1638b562dd96dcc2e3172c2f00e39c37f1d1af5eef6b310",
+    "test_analyze_app_meter.py": "7c6f09e3fedd490620cbc04a06ba43b60e49fc2d11b0fa42d6ae1b88078d365f",
+    "README.md": "b9f1bfbc623535f521a0df898f3cbaee480289f1ed039e104b2af4910b9336ba"
+  },
+  "synthetic_tests": {
+    "result": "PASS",
+    "tests": 13,
+    "elapsed_s": 2.726,
+    "python": "3.14.7",
+    "synthetic_capture_s": 910,
+    "synthetic_periods": 3,
+    "actual_capture_data_read": false
+  },
+  "peer_review": {
+    "result": "PASS",
+    "scope": "marker/device contract, complete capture quality, public allowlist",
+    "method": "read-only source review; no import, capture, hardware or network"
+  },
+  "frozen_dependencies": {
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "app_cycle.py": "1710635a2e0f97f41adfabc23dd696dcf7f9e099d3460babc83429e9889e6281",
+    "marker_listener.py": "0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959"
+  },
+  "scope": "USB_CONNECTED pilot; first DOWNLOAD_READY host receipt n to n+1; three complete periods",
+  "sleep_only_energy_identified": false,
+  "refresh_only_energy_identified": false,
+  "root_review_before_use_required": true,
+  "hardware_or_network_access": false,
+  "repository_modified": false,
+  "final_restoration": "SEPARATE_ROOT_OWNED_PROOF"
+}

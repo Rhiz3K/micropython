@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "files_backed_up": 29,
+  "directories": 7,
+  "fresh_file_hashes_verified": true,
+  "firmware_sha256": "a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08",
+  "rtc_and_all3_backups_saved": true,
+  "original_files_changed_from_prior": false,
+  "board_file_writes": false,
+  "reset_performed": false,
+  "friendly_repl": true,
+  "host_utc": "2026-09-30T20:45:34.725260+00:00",
+  "host_monotonic": 622070.885063333
+}

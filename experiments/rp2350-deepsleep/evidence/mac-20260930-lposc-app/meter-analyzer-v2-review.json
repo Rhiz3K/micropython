@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "status": "OFFLINE_REVIEWED_NOT_HARDWARE_RESULT",
+  "fixture_revision": "V2",
+  "source_sha256": {
+    "analyze_app_meter.py": "858851e468c0d445b83f2114d1d5dbf08d891438391ac03b26f897f1b302f6e4",
+    "test_analyze_app_meter.py": "9d8c260e054e7c5fb8bd76b2e3d90d7364d8e0b447f0f51b4c49be75d63a8476",
+    "README.md": "215278ba8e91e6b2694e39bf468752cb8ec73ac25b3d29deca6e92abd70badb2"
+  },
+  "synthetic_tests": {
+    "result": "PASS",
+    "tests": 14,
+    "elapsed_s": 2.68,
+    "python": "3.14.7",
+    "synthetic_capture_s": 910,
+    "synthetic_periods": 3,
+    "actual_capture_data_read": false,
+    "zero_cycle_BMP_FAIL_with_complete_meter_capture_rejected_without_energy_output": true
+  },
+  "peer_review": {
+    "result": "PASS",
+    "scope": "V2 source pins, unchanged success contract and quality, zero-cycle FAIL, public allowlist",
+    "method": "read-only source/delta review; no import, capture, hardware or network"
+  },
+  "frozen_dependencies": {
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "app_cycle.py": "0be438c50c381a49d7cebfed4668f485d1865362fb14c8afe44ceac3afd17517",
+    "app_transport.py": "688f33e6bb930d547da7a792822cfbf582922157c160c915846b85965f8dfd7d",
+    "marker_listener.py": "0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959"
+  },
+  "V1_freeze_preserved": true,
+  "scope": "USB_CONNECTED V2 pilot; first DOWNLOAD_READY host receipt n to n+1; three complete periods",
+  "success_event_schema_unchanged": true,
+  "FAIL_additional_fields": [
+    "failure_stage",
+    "stop_code"
+  ],
+  "FAIL_can_produce_accepted_energy": false,
+  "selected_DNS_path_in_success_events": false,
+  "sleep_only_energy_identified": false,
+  "refresh_only_energy_identified": false,
+  "root_BMP_probe_launch_gate": "SEPARATE_ROOT_OWNED_PROOF",
+  "root_review_before_use_required": true,
+  "hardware_or_network_access": false,
+  "private_DNS_binding_read": false,
+  "repository_writes_by_this_task": false,
+  "final_restoration": "SEPARATE_ROOT_OWNED_PROOF"
+}

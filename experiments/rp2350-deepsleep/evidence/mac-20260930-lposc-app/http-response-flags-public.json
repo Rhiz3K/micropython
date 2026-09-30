@@ -1,0 +1,61 @@
+{
+  "stop_code": "bmp_header",
+  "schema": 1,
+  "radio_off_verified": true,
+  "response_flags": [
+    {
+      "method": "POST",
+      "known_body_flags": [],
+      "mime_contains_javascript": false,
+      "mime_contains_html": false,
+      "mime_contains_css": false,
+      "body_bytes": 2283,
+      "mime_contains_image": true
+    },
+    {
+      "method": "GET",
+      "known_body_flags": [],
+      "mime_contains_javascript": false,
+      "mime_contains_html": false,
+      "mime_contains_css": false,
+      "body_bytes": 2283,
+      "mime_contains_image": true
+    }
+  ],
+  "dns": {
+    "server_attempts": [
+      {
+        "tcp_probe_success": true,
+        "server_index": 0,
+        "configured": true,
+        "resolved_ip_equals_dhcp": true
+      }
+    ],
+    "selected_server_index": 0,
+    "policy_tcp_success": true,
+    "fallback_used": false,
+    "cache_used": false
+  },
+  "body_category": "OTHER",
+  "dns_backend": "bounded_UDP_A",
+  "rotation_180": false,
+  "http_phase_limit_ms": 35000,
+  "post_status": 200,
+  "bmp_valid": false,
+  "failure_stage": "BMP",
+  "result": "FAIL",
+  "dns_phase_limit_ms": 35000,
+  "download_bytes": 2283,
+  "accept_header_used": false,
+  "http_version": "HTTP/1.0",
+  "get_status": 200,
+  "error_type": "Stop",
+  "source_review_sha256": "ee7e6ce74b914bda55c0f9ce977cb29aa69c3c7015cedcca4ae62c3638c361f9",
+  "binding_sha256": "9b7d3f50a6174a8dbcefa7115a9ef2bc6581dd9ee13f3b1c190444a4ede175fa",
+  "scope": "SAFE_HTTP_RESPONSE_FLAGS_AFTER_FAILED_ATTEMPT1",
+  "reset_performed": false,
+  "sleep_performed": false,
+  "panel_refresh_performed": false,
+  "host_utc": "2026-09-30T21:52:10.126880+00:00",
+  "host_monotonic": 626066.291605125
+}

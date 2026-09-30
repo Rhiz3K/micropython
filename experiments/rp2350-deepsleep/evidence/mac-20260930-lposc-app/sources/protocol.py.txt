@@ -1,0 +1,81 @@
+"""Pure RAM-record codec; no hardware imports, enumeration, I/O or action on import."""
+import struct
+import zlib
+
+FIELDS = ('magic magic_inv schema words nonce nonce_inv command phase phase_inv '
+          'entry_ctrl entry_reason before_ctrl before_reason before_us_lo before_us_hi '
+          'after_ctrl after_reason after_us_lo after_us_hi recovery_ctrl recovery_reason '
+          'recovery_after_ctrl recovery_after_reason timeout_ms failure arm_count recovery_count '
+          'failure_cleanup_ctrl entry_scratch4 entry_wdsel crc32 commit').split()
+INDEX = {name: i for i, name in enumerate(FIELDS)}
+MAGIC, COMMAND, COMMIT = 0x57504431, 0x41524d31, 0x434d5431
+ENABLE, TIME, PAUSE = 0x40000000, 0x00ffffff, 0x07000000
+
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+def pack(words):
+    require(len(words) == 32 and all(type(x) is int and 0 <= x <= 0xffffffff for x in words),
+            'Exactly 32 unsigned words required')
+    return struct.pack('<32I', *words)
+
+def committed(words):
+    result = list(words)
+    result[INDEX['crc32']] = zlib.crc32(pack(result)[:120])
+    result[INDEX['commit']] = COMMIT
+    return pack(result)
+
+def make_request(nonce):
+    require(type(nonce) is int and 0 < nonce <= 0xffffffff, 'Fresh nonzero uint32 nonce required')
+    words = [0] * 32
+    for name, value in {'magic': MAGIC, 'magic_inv': MAGIC ^ 0xffffffff, 'schema': 1,
+                        'words': 32, 'nonce': nonce, 'nonce_inv': nonce ^ 0xffffffff,
+                        'command': COMMAND, 'phase': 1, 'phase_inv': 0xfffffffe,
+                        'timeout_ms': 8000}.items():
+        words[INDEX[name]] = value
+    return committed(words)
+
+def request_write_segments(nonce):
+    """Root writes these in order, then reads all128 bytes back before reset."""
+    data = make_request(nonce)
+    return ((124, b'\0\0\0\0'), (0, data[:124]), (124, data[124:]))
+
+def decode(data, expected_nonce):
+    require(type(data) is bytes and len(data) == 128, 'Exact128-byte RAM record required')
+    words = struct.unpack('<32I', data)
+    row = dict(zip(FIELDS, words))
+    require(row['magic'] == MAGIC and row['magic_inv'] == MAGIC ^ 0xffffffff
+            and row['schema'] == 1 and row['words'] == 32 and row['commit'] == COMMIT
+            and row['crc32'] == zlib.crc32(data[:120]), 'Record incomplete or corrupted')
+    require(type(expected_nonce) is int and expected_nonce != 0 and row['nonce'] == expected_nonce
+            and row['nonce_inv'] == expected_nonce ^ 0xffffffff, 'Nonce continuity failed')
+    require(row['phase_inv'] == row['phase'] ^ 0xffffffff and row['timeout_ms'] == 8000,
+            'Phase or fixed timeout differs')
+    return row
+
+def validate_complete(data, expected_nonce):
+    row = decode(data, expected_nonce)
+    require(row['phase'] == 4 and row['command'] == 0 and row['failure'] == 0
+            and row['arm_count'] == row['recovery_count'] == 1, 'One-shot timeout did not complete')
+    require(row['entry_reason'] == row['before_reason'] == row['after_reason'] == 2,
+            'Initial ordinary-reset/unchanged REASON proof differs')
+    before, after = row['before_ctrl'], row['after_ctrl']
+    require(before & ENABLE and after & ENABLE and 0 < (after & TIME) <= (before & TIME) <= 8000000
+            and (before & ~TIME) == (after & ~TIME) and before & PAUSE == PAUSE,
+            'Live watchdog TIME, ENABLE or pause flags were not preserved')
+    start = row['before_us_lo'] | row['before_us_hi'] << 32
+    end = row['after_us_lo'] | row['after_us_hi'] << 32
+    require(start <= end and end - start < 8000000, 'Init timestamp bracket invalid')
+    before, after = row['recovery_ctrl'], row['recovery_after_ctrl']
+    require(row['recovery_reason'] == row['recovery_after_reason'] == 1
+            and before & (ENABLE | TIME) == ENABLE and after & (ENABLE | TIME) == 0
+            and before & ~ENABLE == after, 'Real TIMER timeout/expired-init cleanup not verified')
+    require(row['failure_cleanup_ctrl'] == 0, 'Failure-only disable path was used')
+    return {'result': 'PASS', 'scope': 'SYNTHETIC_C_STARTUP_BEFORE_INIT_NOT_ROM_TBYB',
+            'nonce_retained': True, 'record_crc32_verified': True, 'arms': 1, 'timer_recoveries': 1,
+            'timeout_ms': 8000, 'live_enable_time_and_pause_flags_preserved': True,
+            'reason_preserved_across_init': True, 'actual_TIMER_timeout_verified': True,
+            'expired_enable_cleared_on_recovery': True, 'failure_cleanup_used': False,
+            'before_time_us': row['before_ctrl'] & TIME, 'after_time_us': row['after_ctrl'] & TIME,
+            'init_bracket_us': end - start, 'original_app_guard_and_final_production_restore_are_separate': True}

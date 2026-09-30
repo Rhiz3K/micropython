@@ -1,0 +1,283 @@
+"""Synthetic only: never imports HID/serial/socket or opens a real capture."""
+import copy
+import datetime as dt
+import json
+from pathlib import Path
+import struct
+import tempfile
+import types
+import unittest
+
+import analyze_app_meter as app
+
+HERE = Path(__file__).resolve().parent
+OLD = Path('/Users/rhiz3k/pico-work/meter-mac-20260929T135728Z')
+ADAPTER = HERE.parent / 'adapter-usb-v2-review'
+BASE = 1_000_000_000_000
+EPOCH = dt.datetime(2026, 9, 30, tzinfo=dt.timezone.utc)
+EPOCH_NS = int(EPOCH.timestamp()) * app.NS
+RUN = '1234567890abcdef' * 2
+FW = 'a' * 64
+CANARY = 'PRIVATE_IDENTITY_NETWORK_OR_PATH_CANARY_DO_NOT_EXPORT'
+
+
+def utc(seconds):
+    return (EPOCH + dt.timedelta(seconds=seconds)).isoformat()
+
+
+def dump(path, value):
+    path.write_text(json.dumps(value) + '\n')
+
+
+def rows(path, values):
+    path.write_text(''.join(json.dumps(x) + '\n' for x in values))
+
+
+def fixture(root):
+    m, a = app.load_frozen(OLD)
+    meter, marker = root / 'meter', root / 'marker'
+    meter.mkdir(); marker.mkdir()
+    ledger = m.StreamAccounting()
+    index = 0
+    # 910 seconds of actual 25-Hz frame receipts, four samples per frame.
+    with (meter / 'frames.jsonl').open('w') as f, (meter / 'samples.jsonl').open('w') as s:
+        for k in range(22751):
+            ns = BASE + k * 40_000_000
+            raw = bytearray([0xaa, 4])
+            for j in range(4):
+                current = 0 if (k, j) == (375, 0) else 50000 if (k, j) == (375, 1) else 100
+                raw.extend(struct.pack('<IIHHBH', 500000, current, 0, 0, 0, 0))
+            raw.append(0)
+            raw.append(m.crc8(raw))
+            parsed = m.parse_frame(raw)
+            common = {'phase': 'recording', 'frame_index': k,
+                'host_receipt_monotonic_ns': ns, 'host_receipt_monotonic_s': ns / app.NS,
+                'host_receipt_utc': utc(k * .04)}
+            f.write(json.dumps({key: value for key, value in parsed.items() if key != 'samples'} | common) + '\n')
+            for row in parsed['samples']:
+                s.write(json.dumps(row | common | {'sample_index': index}) + '\n')
+                index += 1
+            ledger.add(parsed, 'recording', ns, k)
+    mm = {'schema': 2, 'reader_sha256': app.READER_SHA, 'allowed_commands': ['0x81', '0x82', '0x83'],
+          'usb_reset_used': False, 'kernel_detach_used': False, 'serial_port_opened': False,
+          'charging_or_voltage_commands_used': False, 'expected_serial_number': CANARY}
+    dump(meter / 'metadata.json', mm)
+    summary = {'schema': 2, 'result': 'PASS', 'capture_result': 'PASS', 'data_quality': 'PASS',
+        'error': None, 'stop_reason': 'duration', 'clock_offset_jump_count': 0,
+        'stopped_by_signal': None, **ledger.snapshot()}
+    dump(meter / 'summary.json', summary)
+    events = []
+    def ev(kind, t, **fields):
+        events.append({'event': kind, 'host_monotonic_ns': BASE + round(t * app.NS),
+                       'host_receipt_utc': utc(t), **fields})
+    ev('opened_identity_verified', 0)
+    for t, command in ((.01, 0x81), (.02, 0x82), (.03, 0x82)):
+        ev('command_sent', t, command=hex(command), report_hex=m.command_report(command).hex(), bytes_reported=65)
+    ev('recording_started', .04)
+    ev('command_sent', 1, command='0x83', report_hex=m.command_report(0x83).hex(), bytes_reported=65)
+    ev('health', 5, elapsed_host_s=5, recording_samples=500, recent_receipt_sample_rate_hz=100,
+       invalid_frames=0, receipt_gap_count_over_200ms=0, clock_offset_jump_count=0)
+    ev('recording_finished', 910.1, stop_reason='duration', stopped_by_signal=None)
+    ev('draining_started', 910.11)
+    ev('closed', 913.2)
+    rows(meter / 'events.jsonl', events)
+    preflight = root / 'preflight.json'
+    dump(preflight, {'test_fixture': True, 'do_not_export': CANARY})
+    meta = {'schema': 2, 'run': RUN, 'usb_mode': app.MODE, 'cycles': 3, 'sleep_ms': 300000,
+        'force_refresh': True, 'boundary': 'first_DOWNLOAD_READY_receipt_to_next_first_receipt',
+        'firmware_bin_sha256': FW, 'firmware_version': 'v1.synthetic',
+        'meter_reader_sha256': app.READER_SHA, 'root_preflight_sha256': app.sha(preflight),
+        'host_anchor': {'utc_ns': EPOCH_NS + 4 * app.NS, 'monotonic_before_ns': BASE + 4 * app.NS - 100,
+                        'monotonic_after_ns': BASE + 4 * app.NS + 100}}
+    dump(marker / 'metadata.json', meta)
+    mr = []
+    for kind, index, t in [('GO', 0, 5)] + [('DOWNLOAD_READY', i, 6 + 300 * i) for i in range(4)]:
+        ns = BASE + t * app.NS
+        mr.append({'kind': kind, 'index': index, 'receipt_monotonic_ns': ns,
+                   'ack_before_monotonic_ns': ns + 1_000_000, 'ack_after_monotonic_ns': ns + 2_000_000,
+                   'duplicate': False, 'usb_mode': app.MODE,
+                   'meter_gate': {'health_monotonic_ns': ns - 100_000_000, 'recording_samples': 500 + t * 100,
+                                  'recent_receipt_sample_rate_hz': 100, 'last_valid_measurement_age_s': .04,
+                                  'metadata_sha256': app.sha(meter / 'metadata.json')}})
+    rows(marker / 'events.jsonl', mr)
+    result = {'schema': 2, 'run': RUN, 'usb_mode': app.MODE, 'result': 'BOUNDARIES_COMPLETE',
+        'boundaries': mr[1:], 'completed_intervals': 3, 'go_acknowledged': True,
+        'finished_monotonic_ns': BASE + 918 * app.NS, 'finished_utc': utc(918)}
+    dump(marker / 'result.json', result)
+    device = []
+    def dev(stage, index, ticks, **fields):
+        device.append({'schema': 1, 'run': RUN, 'index': index, 'stage': stage,
+                       'ticks_ms': ticks, 'usb_mode': app.MODE, **fields})
+    for index in range(4):
+        if index:
+            dev('WAKE', index, 50, cause=4, last_swcore=64, sleep_rtc_elapsed_ms=300200)
+        dev('BOOT', index, 100, cause=3 if index == 0 else 4, retention_policy='POWMAN_region2_only', force_refresh=True)
+        dev('DOWNLOAD_READY', index, 200, bmp_bytes=5182, timestamp_changed_vs_original_file=False,
+            timestamp_present=True, server_sleep_present=False, server_partial_present=False)
+        if index < 3:
+            dev('SLEEP', index, 450, sleep_ms=300000, panel_refreshes=2, panel_elapsed_ms=220,
+                panel_sleep_and_park_verified=True, radio_off_verified=True)
+        else:
+            dev('COMPLETE', index, 450, completed_cycles=3, full_refreshes=6, final_download_not_refreshed=True)
+    rows(root / 'device-events.jsonl', device)
+    terminal = {'schema': 1, 'result': 'COMPLETE', 'index': 3}
+    dump(root / 'device-terminal.json', terminal)
+    args = types.SimpleNamespace(frozen_dir=OLD, meter_dir=meter, marker_dir=marker,
+        device_events=root / 'device-events.jsonl', device_terminal=root / 'device-terminal.json',
+        preflight_proof=preflight, app_source=ADAPTER / 'app_cycle.py', listener_source=ADAPTER / 'marker_listener.py',
+        firmware_sha256=FW, output=root / 'analysis')
+    return args, meta, result, mr, device, terminal, events
+
+
+class OfflineTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory(prefix='synthetic-', dir=HERE)
+        cls.args, cls.meta, cls.result, cls.markers, cls.device, cls.terminal, cls.events = fixture(Path(cls.tmp.name))
+        cls.m, cls.a = app.load_frozen(OLD)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def marker_check(self, rows=None, result=None, meta=None):
+        return app.validate_marker(meta or self.meta, result or self.result, rows or self.markers,
+            app.sha(self.args.meter_dir / 'metadata.json'), FW, app.sha(self.args.preflight_proof))
+
+    def test_end_to_end_retains_zero_spike_and_sanitizes(self):
+        result = app.analyze(self.args)
+        self.assertEqual(result['result'], 'PASS')
+        self.assertEqual(len(result['periods']), 3)
+        first = result['periods'][0]
+        self.assertEqual(first['samples'], 30000)
+        self.assertEqual(first['samples_exactly_zero_current'], 1)
+        self.assertEqual(first['current_A']['min'], 0)
+        self.assertEqual(first['current_A']['max'], .5)
+        energy = first['integral_estimates']
+        self.assertAlmostEqual(energy['host_receipt_frame_mean_trapezoid']['energy_J'], 1.5249, places=9)
+        self.assertAlmostEqual(energy['nominal_10ms_per_in_window_received_sample']['energy_J'], 1.5249, places=9)
+        self.assertEqual(result['full_capture_quality']['samples_exactly_zero_current'], 1)
+        self.assertFalse(result['valid_sleep_only_energy'])
+        text = (self.args.output / 'analysis-public.json').read_text()
+        for secret in (CANARY, RUN, str(HERE), 'expected_serial_number'):
+            self.assertNotIn(secret, text)
+        self.assertFalse(any(x in __import__('sys').modules for x in ('hid', 'serial')))
+
+    def test_duplicate_keeps_first_boundary(self):
+        values = copy.deepcopy(self.markers)
+        dup = copy.deepcopy(values[1])
+        for key in ('receipt_monotonic_ns', 'ack_before_monotonic_ns', 'ack_after_monotonic_ns'):
+            dup[key] += 5_000_000
+        dup['duplicate'] = True
+        values.insert(2, dup)
+        _, boundaries, stats = self.marker_check(rows=values)
+        self.assertEqual(boundaries[0], self.markers[1])
+        self.assertEqual(stats['duplicate_datagrams'], 1)
+
+    def test_missing_boundary_rejected(self):
+        with self.assertRaises(ValueError): self.marker_check(rows=self.markers[:-1])
+
+    def test_stale_live_gate_rejected(self):
+        values = copy.deepcopy(self.markers)
+        values[2]['meter_gate']['health_monotonic_ns'] -= 4 * app.NS
+        with self.assertRaises(ValueError): self.marker_check(rows=values)
+
+    def test_listener_fail_rejected(self):
+        result = copy.deepcopy(self.result); result['result'] = 'FAIL'
+        with self.assertRaises(ValueError): self.marker_check(result=result)
+
+    def test_device_final_and_cause_required(self):
+        for value in (self.device[:-1], self.device[:3] + self.device[4:]):
+            with self.assertRaises(ValueError): app.validate_device(value, self.terminal, RUN)
+        wrong = copy.deepcopy(self.device); wrong[3]['cause'] = 3
+        with self.assertRaises(ValueError): app.validate_device(wrong, self.terminal, RUN)
+        with self.assertRaises(ValueError): app.validate_device(self.device, {'schema': 1, 'result': 'FAIL', 'index': 3}, RUN)
+
+    def test_presence_flags_are_observations(self):
+        proof = app.validate_device(self.device, self.terminal, RUN)
+        self.assertIs(proof['downloads'][0]['server_partial_present'], False)
+
+    def test_capture_error_clock_gap_events_rejected(self):
+        summary = app.read_json(self.args.meter_dir / 'summary.json')
+        for kind in ('error', 'drain_error', 'invalid_frame', 'receipt_gap', 'wall_vs_monotonic_clock_offset_jump'):
+            with self.assertRaises(ValueError): app.check_meter_events(self.a, self.events + [{'event': kind}], summary)
+
+    def test_health_cadence_rejected(self):
+        values = copy.deepcopy(self.events)
+        next(x for x in values if x['event'] == 'health')['recent_receipt_sample_rate_hz'] = 106
+        with self.assertRaises(ValueError): app.check_meter_events(self.a, values, app.read_json(self.args.meter_dir / 'summary.json'))
+
+    def test_host_clock_jump_and_different_boot_rejected(self):
+        proof = {'meter_UTC_minus_monotonic_offset_change_s': {'min': 0, 'max': 0}}
+        first = {'host_receipt_utc': utc(0), 'host_receipt_monotonic_ns': BASE}
+        self.assertEqual(app.check_clock(self.a, proof, first, self.meta, self.result)['kind'], 'SAME_HOST_MONOTONIC_RECEIPT')
+        changed = copy.deepcopy(proof); changed['meter_UTC_minus_monotonic_offset_change_s']['max'] = .101
+        with self.assertRaises(ValueError): app.check_clock(self.a, changed, first, self.meta, self.result)
+        first_wrong = first | {'host_receipt_monotonic_ns': BASE + app.NS}
+        with self.assertRaises(ValueError): app.check_clock(self.a, proof, first_wrong, self.meta, self.result)
+        wrong_end = self.result | {'finished_utc': utc(919)}
+        with self.assertRaises(ValueError): app.check_clock(self.a, proof, first, self.meta, wrong_end)
+
+    def test_capture_summary_failure_rejected(self):
+        path = self.args.meter_dir / 'summary.json'
+        original = path.read_bytes()
+        for key, value in (('capture_result', 'ERROR'), ('clock_offset_jump_count', 1), ('data_quality', 'DEGRADED')):
+            data = json.loads(original); data[key] = value; dump(path, data)
+            try:
+                with self.assertRaises(ValueError): app.analyze(self.args)
+            finally: path.write_bytes(original)
+
+    def test_frozen_window_rejects_gap_and_missing_edges(self):
+        for connected, end in ((False, 1 * app.NS), (True, int(1.01 * app.NS))):
+            window = self.a.Window('synthetic', 0, end)
+            for n in range(26):
+                t = n * 40_000_000
+                values = [{'current_A': .001, 'voltage_V': 5., 'power_W_calculated': .005,
+                           'current_raw': 100, 'voltage_raw': 500000}] * 4
+                window.frame(t, values)
+                if n: window.segment(((n - 1) * 40_000_000, .001, .005), (t, .001, .005), connected)
+            self.assertEqual(window.result()['result'], 'FAIL')
+
+    def test_raw_crc_and_exact_sample_proof_rejects_tamper(self):
+        # One real synthetic frame/sample group passed to the same frozen proof.
+        frames = iter(self.a.JsonLines(self.args.meter_dir / 'frames.jsonl'))
+        first = next(frames); frames.close()
+        samples = iter(self.a.JsonLines(self.args.meter_dir / 'samples.jsonl'))
+        values = [next(samples) for _ in range(4)]; samples.close()
+        ledger = self.m.StreamAccounting()
+        parsed = self.m.parse_frame(bytes.fromhex(first['raw_hex']))
+        ledger.add(parsed, 'recording', first['host_receipt_monotonic_ns'], 0)
+        class NoBins:
+            def add(self, *args): pass
+        forged = copy.deepcopy(values); forged[0]['current_A'] = 999
+        with self.assertRaises(ValueError): self.a.prove_samples([first], forged, [], NoBins(), ledger.snapshot())
+        wrong_crc = copy.deepcopy(first); raw = bytearray.fromhex(first['raw_hex']); raw[12] ^= 1; wrong_crc['raw_hex'] = raw.hex()
+        with self.assertRaises(ValueError): self.a.prove_samples([wrong_crc], values, [], NoBins(), ledger.snapshot())
+
+    def test_v2_zero_cycle_failure_never_creates_accepted_energy(self):
+        paths = [self.args.marker_dir / 'events.jsonl', self.args.marker_dir / 'result.json',
+                 self.args.device_events, self.args.device_terminal]
+        original = [path.read_bytes() for path in paths]
+        fail = copy.deepcopy(self.device[0])
+        fail.update({'stage': 'FAIL', 'ticks_ms': 500, 'error_type': 'Stop',
+                     'failure_stage': 'BMP', 'stop_code': 'bmp_header'})
+        for key in ('cause', 'retention_policy', 'force_refresh'): fail.pop(key)
+        failed_listener = self.result | {'result': 'FAIL', 'boundaries': [], 'completed_intervals': 0,
+                                         'error_type': 'RuntimeError'}
+        candidate = types.SimpleNamespace(**vars(self.args))
+        candidate.output = Path(self.tmp.name) / 'rejected-zero-cycle'
+        try:
+            rows(paths[0], self.markers[:1])
+            dump(paths[1], failed_listener)
+            rows(paths[2], [self.device[0], fail])
+            dump(paths[3], {'schema': 1, 'result': 'FAIL', 'index': 0})
+            with self.assertRaises(ValueError): app.analyze(candidate)
+            with self.assertRaises(ValueError): app.validate_device([self.device[0], fail],
+                {'schema': 1, 'result': 'FAIL', 'index': 0}, RUN)
+            self.assertFalse(candidate.output.exists())
+        finally:
+            for path, data in zip(paths, original): path.write_bytes(data)
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

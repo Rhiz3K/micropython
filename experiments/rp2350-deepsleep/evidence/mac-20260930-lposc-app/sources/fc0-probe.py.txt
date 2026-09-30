@@ -1,0 +1,36 @@
+# Device-side bounded LPOSC measurement. Only FC0 RW registers are changed.
+import machine,time,json
+def _lp_fc0_probe():
+ base=0x4001008c
+ saved=[machine.mem32[base+4*i] for i in range(6)]
+ if saved[5]!=0 or machine.mem32[0x400100a4]&0x1100: raise RuntimeError('FC0 is not idle')
+ if machine.mem32[0x400d8000]&(1<<30): raise RuntimeError('Watchdog active')
+ if machine.mem32[0x40010030]&3!=2 or machine.mem32[0x40010038]!=4 or machine.mem32[0x40010034]&0xff0000!=0x10000: raise RuntimeError('clk_ref is not XOSC divided by one')
+ if not machine.mem32[0x40048004]&0x80000000: raise RuntimeError('XOSC not stable')
+ if machine.mem32[0x40010080]!=0: raise RuntimeError('Unexpected LPOSC DFT mux')
+ before={'lposc_control':machine.mem32[0x40100028],'clk_ref_ctrl':machine.mem32[0x40010030],'clk_ref_div':machine.mem32[0x40010034],'clk_ref_selected':machine.mem32[0x40010038],'powman_timer':machine.mem32[0x40100088],'divider':[machine.mem32[0x40100050]&0x3f,machine.mem32[0x40100054]&0xffff]}
+ results=[];error=None
+ try:
+  for i,v in enumerate((12000,0,0x1ffffff,1,15)): machine.mem32[base+4*i]=v
+  for sample in range(32):
+   machine.mem32[0x400100a0]=0x0e
+   deadline=time.ticks_add(time.ticks_ms(),500)
+   while True:
+    status=machine.mem32[0x400100a4]&0xffffffff
+    if status&0x10000000: raise RuntimeError('FC0 source died')
+    if status&0x10 and not status&0x1100: break
+    if time.ticks_diff(deadline,time.ticks_ms())<=0: raise RuntimeError('FC0 timeout')
+    time.sleep_ms(1)
+   if status&0x00010000 or not status&1: raise RuntimeError('FC0 measurement failed')
+   raw=machine.mem32[0x400100a8]&0x3fffffff
+   results.append({'sample':sample,'raw_result':raw,'status':status,'hz':raw*1000/32})
+ except Exception as exc: error=repr(exc)
+ finally:
+  # SRC=0 stops the one instrument. RO STATUS/RESULT cannot be restored.
+  machine.mem32[0x400100a0]=0
+  for i,v in enumerate(saved[:5]): machine.mem32[base+4*i]=v
+  machine.mem32[0x400100a0]=0
+ after=[machine.mem32[base+4*i] for i in range(6)]
+ now={'lposc_control':machine.mem32[0x40100028],'clk_ref_ctrl':machine.mem32[0x40010030],'clk_ref_div':machine.mem32[0x40010034],'clk_ref_selected':machine.mem32[0x40010038],'powman_timer':machine.mem32[0x40100088],'divider':[machine.mem32[0x40100050]&0x3f,machine.mem32[0x40100054]&0xffff]}
+ print(json.dumps({'result':'PASS' if error is None and len(results)==32 and saved==after and before==now else 'FAIL','error':error,'samples':results,'rw_config_before':saved,'rw_config_after':after,'clock_and_powman_before':before,'clock_and_powman_after':now,'ro_status_after':machine.mem32[0x400100a4]&0xffffffff,'ro_result_after':machine.mem32[0x400100a8]&0xffffffff,'rw_config_restored':saved==after,'clock_powman_unchanged':before==now,'ro_status_and_result_restored':False,'reference_khz':12000,'interval':15,'result_quantum_hz':31.25}))
+_lp_fc0_probe()

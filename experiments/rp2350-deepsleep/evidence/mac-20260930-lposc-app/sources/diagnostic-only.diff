@@ -1,0 +1,213 @@
+diff --git a/ports/rp2/main.c b/ports/rp2/main.c
+index 240edd1c8..585dda395 100644
+--- a/ports/rp2/main.c
++++ b/ports/rp2/main.c
+@@ -92,9 +92,15 @@ bi_decl(bi_program_feature_group_with_flags(BINARY_INFO_TAG_MICROPYTHON,
+     BINARY_INFO_ID_MP_FROZEN, "frozen modules",
+     BI_NAMED_GROUP_SEPARATE_COMMAS | BI_NAMED_GROUP_SORT_ALPHA));
+ 
++#if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++#include "live_wdt_startup_probe.h"
++#endif
++
+ int main(int argc, char **argv) {
+     #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
++    uint32_t live_probe_action = live_probe_before_init();
+     machine_deepsleep_init();
++    live_probe_after_init(live_probe_action);
+     #endif
+ 
+     // This is a tickless port, interrupts should always trigger SEV.
+diff --git a/ports/rp2/live_wdt_startup_probe.h b/ports/rp2/live_wdt_startup_probe.h
+new file mode 100644
+index 000000000..43d8674c5
+--- /dev/null
++++ b/ports/rp2/live_wdt_startup_probe.h
+@@ -0,0 +1,187 @@
++// Private diagnostic fixture: synthetic C startup before init, NOT ROM TBYB.
++// Inert until the host arms a CRC-protected retained-RAM request and resets.
++#include "hardware/structs/watchdog.h"
++#include "hardware/structs/psm.h"
++#include "hardware/sync.h"
++#include "hardware/watchdog.h"
++#include "pico/platform/sections.h"
++
++#if !PICO_RP2350 || !PICO_ARM
++#error "This private fixture requires RP2350 ARM"
++#endif
++
++enum {
++    LP_MAGIC, LP_MAGIC_INV, LP_SCHEMA, LP_WORDS, LP_NONCE, LP_NONCE_INV,
++    LP_COMMAND, LP_PHASE, LP_PHASE_INV, LP_ENTRY_CTRL, LP_ENTRY_REASON,
++    LP_BEFORE_CTRL, LP_BEFORE_REASON, LP_BEFORE_US_LO, LP_BEFORE_US_HI,
++    LP_AFTER_CTRL, LP_AFTER_REASON, LP_AFTER_US_LO, LP_AFTER_US_HI,
++    LP_RECOVERY_CTRL, LP_RECOVERY_REASON, LP_RECOVERY_AFTER_CTRL,
++    LP_RECOVERY_AFTER_REASON, LP_TIMEOUT_MS, LP_FAILURE, LP_ARM_COUNT,
++    LP_RECOVERY_COUNT, LP_FAILURE_CLEANUP_CTRL, LP_ENTRY_SCRATCH4,
++    LP_ENTRY_WDSEL, LP_CRC32, LP_COMMIT, LP_RECORD_WORDS
++};
++enum {
++    LP_REQUEST = 1, LP_PREPARED = 2, LP_WAITING_TIMEOUT = 3,
++    LP_COMPLETE = 4, LP_FAILED = 5, LP_RECOVERING = 6
++};
++#define LP_MAGIC_VALUE (0x57504431u)
++#define LP_ARM_COMMAND (0x41524d31u)
++#define LP_COMMIT_VALUE (0x434d5431u)
++#define LP_TIMEOUT_VALUE (8000u)
++#define LP_PAUSE_MASK (WATCHDOG_CTRL_PAUSE_DBG0_BITS | WATCHDOG_CTRL_PAUSE_DBG1_BITS | WATCHDOG_CTRL_PAUSE_JTAG_BITS)
++
++// SDK linker puts this NOLOAD section before .bss and outside the GC heap.
++// The exported ELF symbol is the only host-facing diagnostic interface.
++volatile uint32_t __uninitialized_ram(rp2_live_wdt_probe)[LP_RECORD_WORDS];
++_Static_assert(LP_RECORD_WORDS == 32, "Host record schema requires 128 bytes");
++
++static uint32_t live_probe_crc(void) {
++    uint32_t crc = 0xffffffffu;
++    for (uint32_t i = 0; i < LP_CRC32; ++i) {
++        uint32_t value = rp2_live_wdt_probe[i];
++        for (uint32_t byte = 0; byte < 4; ++byte) {
++            crc ^= value & 0xffu;
++            value >>= 8;
++            for (uint32_t bit = 0; bit < 8; ++bit) {
++                crc = (crc >> 1) ^ (0xedb88320u & (0u - (crc & 1u)));
++            }
++        }
++    }
++    return ~crc;
++}
++
++static bool live_probe_valid(void) {
++    return rp2_live_wdt_probe[LP_COMMIT] == LP_COMMIT_VALUE
++        && rp2_live_wdt_probe[LP_MAGIC] == LP_MAGIC_VALUE
++        && rp2_live_wdt_probe[LP_MAGIC_INV] == ~LP_MAGIC_VALUE
++        && rp2_live_wdt_probe[LP_SCHEMA] == 1
++        && rp2_live_wdt_probe[LP_WORDS] == LP_RECORD_WORDS
++        && rp2_live_wdt_probe[LP_NONCE] != 0
++        && rp2_live_wdt_probe[LP_NONCE_INV] == ~rp2_live_wdt_probe[LP_NONCE]
++        && rp2_live_wdt_probe[LP_PHASE_INV] == ~rp2_live_wdt_probe[LP_PHASE]
++        && rp2_live_wdt_probe[LP_TIMEOUT_MS] == LP_TIMEOUT_VALUE
++        && rp2_live_wdt_probe[LP_CRC32] == live_probe_crc();
++}
++
++static void live_probe_begin_write(void) {
++    rp2_live_wdt_probe[LP_COMMIT] = 0;
++    __dsb();
++}
++
++static void live_probe_commit(uint32_t phase) {
++    rp2_live_wdt_probe[LP_PHASE] = phase;
++    rp2_live_wdt_probe[LP_PHASE_INV] = ~phase;
++    rp2_live_wdt_probe[LP_CRC32] = live_probe_crc();
++    __dsb();
++    rp2_live_wdt_probe[LP_COMMIT] = LP_COMMIT_VALUE;
++    __dsb();
++}
++
++static bool live_probe_preserved(void) {
++    uint32_t before = rp2_live_wdt_probe[LP_BEFORE_CTRL];
++    uint32_t after = rp2_live_wdt_probe[LP_AFTER_CTRL];
++    return (before & WATCHDOG_CTRL_ENABLE_BITS) && (after & WATCHDOG_CTRL_ENABLE_BITS)
++        && (before & WATCHDOG_CTRL_TIME_BITS) > 0
++        && (after & WATCHDOG_CTRL_TIME_BITS) > 0
++        && (after & WATCHDOG_CTRL_TIME_BITS) <= (before & WATCHDOG_CTRL_TIME_BITS)
++        && (before & ~WATCHDOG_CTRL_TIME_BITS) == (after & ~WATCHDOG_CTRL_TIME_BITS)
++        && (before & LP_PAUSE_MASK) == LP_PAUSE_MASK
++        && rp2_live_wdt_probe[LP_BEFORE_REASON] == rp2_live_wdt_probe[LP_AFTER_REASON];
++}
++
++// Return 1 for the freshly armed boot, 2 for its timeout recovery, 0 otherwise.
++static uint32_t live_probe_before_init(void) {
++    if (!live_probe_valid()) {
++        return 0;
++    }
++    if (rp2_live_wdt_probe[LP_COMMAND] == LP_ARM_COMMAND
++        && rp2_live_wdt_probe[LP_PHASE] == LP_REQUEST) {
++        live_probe_begin_write();
++        // Consume the request before any watchdog write. A later reset cannot
++        // re-arm; a torn SRAM transaction is invalid and therefore inert.
++        rp2_live_wdt_probe[LP_COMMAND] = 0;
++        __dsb();
++        for (uint32_t i = LP_ENTRY_CTRL; i < LP_CRC32; ++i) {
++            rp2_live_wdt_probe[i] = 0;
++        }
++        rp2_live_wdt_probe[LP_TIMEOUT_MS] = LP_TIMEOUT_VALUE;
++        rp2_live_wdt_probe[LP_ENTRY_CTRL] = watchdog_hw->ctrl;
++        rp2_live_wdt_probe[LP_ENTRY_REASON] = watchdog_hw->reason;
++        rp2_live_wdt_probe[LP_ENTRY_SCRATCH4] = watchdog_hw->scratch[4];
++        rp2_live_wdt_probe[LP_ENTRY_WDSEL] = psm_hw->wdsel;
++        if ((rp2_live_wdt_probe[LP_ENTRY_CTRL] & WATCHDOG_CTRL_ENABLE_BITS)
++            && (rp2_live_wdt_probe[LP_ENTRY_CTRL] & WATCHDOG_CTRL_TIME_BITS)) {
++            rp2_live_wdt_probe[LP_FAILURE] = 1; // Refuse an unexpected live watchdog.
++            live_probe_commit(LP_FAILED);
++            return 0;
++        }
++        if (rp2_live_wdt_probe[LP_ENTRY_REASON] != WATCHDOG_REASON_FORCE_BITS) {
++            rp2_live_wdt_probe[LP_FAILURE] = 2; // Host must use ordinary reset.
++            live_probe_commit(LP_FAILED);
++            return 0;
++        }
++        rp2_live_wdt_probe[LP_ARM_COUNT] = 1;
++        watchdog_enable(LP_TIMEOUT_VALUE, true);
++        uint64_t now = time_us_64();
++        rp2_live_wdt_probe[LP_BEFORE_CTRL] = watchdog_hw->ctrl;
++        rp2_live_wdt_probe[LP_BEFORE_REASON] = watchdog_hw->reason;
++        rp2_live_wdt_probe[LP_BEFORE_US_LO] = (uint32_t)now;
++        rp2_live_wdt_probe[LP_BEFORE_US_HI] = now >> 32;
++        live_probe_commit(LP_PREPARED);
++        return 1;
++    }
++    if (rp2_live_wdt_probe[LP_COMMAND] == 0
++        && rp2_live_wdt_probe[LP_PHASE] == LP_WAITING_TIMEOUT
++        && rp2_live_wdt_probe[LP_ARM_COUNT] == 1
++        && rp2_live_wdt_probe[LP_RECOVERY_COUNT] == 0) {
++        live_probe_begin_write();
++        rp2_live_wdt_probe[LP_RECOVERY_CTRL] = watchdog_hw->ctrl;
++        rp2_live_wdt_probe[LP_RECOVERY_REASON] = watchdog_hw->reason;
++        rp2_live_wdt_probe[LP_RECOVERY_COUNT] = 1;
++        live_probe_commit(LP_RECOVERING);
++        return 2;
++    }
++    return 0;
++}
++
++static void live_probe_after_init(uint32_t action) {
++    if (action == 1) {
++        live_probe_begin_write();
++        rp2_live_wdt_probe[LP_AFTER_CTRL] = watchdog_hw->ctrl;
++        rp2_live_wdt_probe[LP_AFTER_REASON] = watchdog_hw->reason;
++        uint64_t now = time_us_64();
++        rp2_live_wdt_probe[LP_AFTER_US_LO] = (uint32_t)now;
++        rp2_live_wdt_probe[LP_AFTER_US_HI] = now >> 32;
++        if (!live_probe_preserved()) {
++            rp2_live_wdt_probe[LP_FAILURE] = 3;
++        }
++        live_probe_commit(LP_WAITING_TIMEOUT);
++        // Successful armed path: no print, feed, disable, Python or filesystem.
++        // The real watchdog reset must terminate this wait before its 9s bound.
++        while (time_us_64() - now < 9000000u) {
++            tight_loop_contents();
++        }
++        live_probe_begin_write();
++        rp2_live_wdt_probe[LP_FAILURE] = 4; // No observed reset in bounded wait.
++        // Failure-only cleanup of the fixture-owned watchdog allows the guard
++        // to be reached even when the tested init/timer contract was broken.
++        watchdog_disable();
++        rp2_live_wdt_probe[LP_FAILURE_CLEANUP_CTRL] = watchdog_hw->ctrl;
++        live_probe_commit(LP_FAILED);
++    } else if (action == 2) {
++        live_probe_begin_write();
++        rp2_live_wdt_probe[LP_RECOVERY_AFTER_CTRL] = watchdog_hw->ctrl;
++        rp2_live_wdt_probe[LP_RECOVERY_AFTER_REASON] = watchdog_hw->reason;
++        uint32_t before = rp2_live_wdt_probe[LP_RECOVERY_CTRL];
++        uint32_t after = rp2_live_wdt_probe[LP_RECOVERY_AFTER_CTRL];
++        bool timed_out = rp2_live_wdt_probe[LP_RECOVERY_REASON] == WATCHDOG_REASON_TIMER_BITS
++            && rp2_live_wdt_probe[LP_RECOVERY_AFTER_REASON] == WATCHDOG_REASON_TIMER_BITS
++            && (before & (WATCHDOG_CTRL_ENABLE_BITS | WATCHDOG_CTRL_TIME_BITS)) == WATCHDOG_CTRL_ENABLE_BITS
++            && (after & (WATCHDOG_CTRL_ENABLE_BITS | WATCHDOG_CTRL_TIME_BITS)) == 0
++            && (before & ~WATCHDOG_CTRL_ENABLE_BITS) == after;
++        if (!timed_out || !live_probe_preserved()) {
++            rp2_live_wdt_probe[LP_FAILURE] = 5;
++        }
++        live_probe_commit(rp2_live_wdt_probe[LP_FAILURE] == 0 ? LP_COMPLETE : LP_FAILED);
++    }
++}

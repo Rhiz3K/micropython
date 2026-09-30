@@ -1,0 +1,53 @@
+"""Synthetic protocol tests only; no hardware and no application/credential reads."""
+import struct
+import unittest
+import protocol as p
+
+def final_record():
+    w = list(struct.unpack('<32I', p.make_request(12345)))
+    fields = {'command': 0, 'phase': 4, 'phase_inv': 0xfffffffb,
+              'entry_reason': 2, 'before_reason': 2, 'after_reason': 2,
+              'before_ctrl': p.ENABLE | p.PAUSE | 7999000,
+              'after_ctrl': p.ENABLE | p.PAUSE | 7998000,
+              'before_us_lo': 10000, 'after_us_lo': 11000,
+              'recovery_reason': 1, 'recovery_after_reason': 1,
+              'recovery_ctrl': p.ENABLE | p.PAUSE, 'recovery_after_ctrl': p.PAUSE,
+              'arm_count': 1, 'recovery_count': 1}
+    for k, v in fields.items():
+        w[p.INDEX[k]] = v
+    return p.committed(w)
+
+class Protocol(unittest.TestCase):
+    def test_request_is_commit_last_and_not_a_result(self):
+        steps = p.request_write_segments(12345)
+        data = bytearray(b'\xff' * 128)
+        for offset, payload in steps:
+            data[offset:offset + len(payload)] = payload
+        self.assertEqual(bytes(data), p.make_request(12345))
+        self.assertEqual(p.decode(bytes(data), 12345)['command'], p.COMMAND)
+        with self.assertRaises(ValueError):
+            p.validate_complete(bytes(data), 12345)
+
+    def test_valid_synthetic_timeout_record(self):
+        self.assertEqual(p.validate_complete(final_record(), 12345)['result'], 'PASS')
+
+    def test_every_single_byte_corruption_is_rejected(self):
+        for index in range(128):
+            data = bytearray(final_record()); data[index] ^= 1
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                p.validate_complete(bytes(data), 12345)
+
+    def test_semantic_failures_even_with_recomputed_crc(self):
+        for name, value in (('command', p.COMMAND), ('phase', 5), ('failure', 3),
+                            ('after_ctrl', p.PAUSE), ('before_ctrl', p.ENABLE | p.PAUSE),
+                            ('recovery_reason', 2), ('arm_count', 2), ('failure_cleanup_ctrl', 1)):
+            w = list(struct.unpack('<32I', final_record())); w[p.INDEX[name]] = value
+            if name == 'phase':
+                w[p.INDEX['phase_inv']] = value ^ 0xffffffff
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                p.validate_complete(p.committed(w), 12345)
+        with self.assertRaises(ValueError):
+            p.validate_complete(final_record(), 12346)
+
+if __name__ == '__main__':
+    unittest.main()

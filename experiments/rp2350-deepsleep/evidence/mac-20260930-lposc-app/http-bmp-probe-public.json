@@ -1,0 +1,30 @@
+{
+  "http_calls": [
+    {
+      "complete": true,
+      "rotate_present": false,
+      "method": "POST",
+      "body_bytes": 2293
+    },
+    {
+      "complete": true,
+      "rotate_present": false,
+      "method": "GET",
+      "body_bytes": 2293
+    }
+  ],
+  "stage": "BMP",
+  "rotate_180": false,
+  "body_bytes": 2293,
+  "result": "FAIL",
+  "error_type": "Stop",
+  "radio_off_verified": true,
+  "error_code": "bmp_header",
+  "reset_performed": false,
+  "sleep_performed": false,
+  "panel_refresh_performed": false,
+  "original_files_unchanged": true,
+  "scope": "EXPLICIT_HTTP_BMP_DIAGNOSTIC_AFTER_FAILED_ATTEMPT1",
+  "host_utc": "2026-09-30T21:30:55.408192+00:00",
+  "host_monotonic": 624791.571867833
+}

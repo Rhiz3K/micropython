@@ -1,0 +1,340 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""PRIVATE USB_CONNECTED REVIEW DRAFT. Explicit run() only; never import the original main.
+
+Root must verify fresh backups, firmware BIN, dependency hashes and ownership
+before installation. All on-device writes use the dedicated owned paths below.
+No original app file or RTC setter is used. No automatic recovery/retry/reset.
+"""
+import json
+import os
+import time
+import struct
+from app_transport import Stop, Deadline, request, marker, ipv4, OriginalDNSPolicy, binding_valid, safe_stop_code
+ARMED = '/app-cycle-usb-armed.json'
+CONSUMED = '/app-cycle-usb-consumed.json'
+RESULTS = '/app-cycle-usb-events.jsonl'
+WIFI = '/app-cycle-usb-wifi-private.json'
+TERMINAL = '/app-cycle-usb-terminal.json'
+MAGIC = 1095783729
+RUNNING, SLEEPING, STOPPED = (1, 2, 3)
+SLEEP_MS = 300000
+CYCLES = 3
+CONTROL_KEYS = ('schema', 'run', 'firmware_version', 'marker_ipv4', 'marker_port', 'force_refresh', 'cycles', 'sleep_ms', 'root_go_required', 'usb_mode', 'dns_policy_binding')
+
+def control_valid(cfg):
+    return set(cfg) == set(CONTROL_KEYS) and cfg['schema'] == 2 and (len(cfg['run']) == 32) and all((x in '0123456789abcdef' for x in cfg['run'])) and (int(cfg['run'][:8], 16) != 0) and isinstance(cfg['firmware_version'], str) and cfg['firmware_version'].startswith('v') and ipv4(cfg['marker_ipv4']) and (type(cfg['marker_port']) is int) and (1024 <= cfg['marker_port'] <= 65535) and (cfg['force_refresh'] is True) and (cfg['root_go_required'] is True) and (cfg['usb_mode'] == 'USB_CONNECTED') and (cfg['cycles'] == CYCLES) and (cfg['sleep_ms'] == SLEEP_MS) and binding_valid(cfg['dns_policy_binding'])
+
+def exists(path):
+    try:
+        os.stat(path)
+        return True
+    except OSError:
+        return False
+
+def read_json(path, limit=2048):
+    if os.stat(path)[6] > limit:
+        raise Stop('config_size')
+    with open(path) as stream:
+        return json.load(stream)
+
+def app_config():
+    result = {}
+    with open('/config.txt') as stream:
+        for line in stream:
+            line = line.strip()
+            if line and (not line.startswith('#')) and ('=' in line):
+                key, value = line.split('=', 1)
+                result[key.strip()] = value.strip()
+    if result.get('DISPLAY_TYPE') != 'ePaper2in9' or result.get('COLOR_MODE') != 'BW' or result.get('X_RES') != '296' or (result.get('Y_RES') != '128'):
+        raise Stop('display_config')
+    if not result.get('ENDPOINT') or not result.get('API_KEY'):
+        raise Stop('endpoint_config')
+    return result
+
+def rtc_ms(machine):
+    for _ in range(10):
+        hi = machine.mem32[1074790512] & 4294967295
+        lo = machine.mem32[1074790516] & 4294967295
+        if hi == machine.mem32[1074790512] & 4294967295:
+            return hi << 32 | lo
+    raise Stop('rtc_coherent_read')
+
+def progress_write(machine, nonce, phase, index, checkpoint=0):
+    region = machine.mem_backup(2)
+    if len(region) != 8:
+        raise Stop('retention_shape')
+    words = [MAGIC, nonce, phase, index, checkpoint & 4294967295, checkpoint >> 32 & 4294967295]
+    check = 0
+    for value in words:
+        check ^= value
+    region[7] = 0
+    for i, value in enumerate(words + [check & 4294967295]):
+        region[i] = value
+    region[7] = ~MAGIC & 4294967295
+    if list(region) != words + [check & 4294967295, ~MAGIC & 4294967295]:
+        raise Stop('retention_write')
+
+def progress_read(machine, nonce):
+    words = list(machine.mem_backup(2))
+    if len(words) != 8:
+        raise Stop('retention_shape')
+    check = 0
+    for value in words[:6]:
+        check ^= value
+    if words[0] != MAGIC or words[1] != nonce or words[6] != check & 4294967295 or (words[7] != ~MAGIC & 4294967295):
+        raise Stop('retention_invalid')
+    return (words[2], words[3], words[5] << 32 | words[4])
+
+def event(run, index, stage, **fields):
+    row = {'schema': 1, 'run': run, 'index': index, 'stage': stage, 'ticks_ms': time.ticks_ms(), 'usb_mode': 'USB_CONNECTED'}
+    row.update(fields)
+    if exists(RESULTS) and os.stat(RESULTS)[6] > 32768:
+        raise Stop('event_size')
+    with open(RESULTS, 'a') as stream:
+        stream.write(json.dumps(row) + '\n')
+        stream.flush()
+    os.sync()
+
+def terminal(result, index):
+    if not exists(TERMINAL):
+        with open(TERMINAL, 'w') as stream:
+            stream.write(json.dumps({'schema': 1, 'result': result, 'index': index}))
+            stream.flush()
+        os.sync()
+
+def radio_off(network):
+    sta = network.WLAN(network.STA_IF)
+    sta.disconnect()
+    sta.active(False)
+    ap = network.WLAN(network.AP_IF)
+    ap.active(False)
+    if sta.active() or ap.active() or sta.isconnected():
+        raise Stop('radio_not_off')
+    sta.deinit()
+
+def connect(network, credentials):
+    if set(credentials) != {'ssid', 'password'} or not all((isinstance(x, str) and x for x in credentials.values())):
+        raise Stop('wifi_config')
+    network.WLAN(network.AP_IF).active(False)
+    sta = network.WLAN(network.STA_IF)
+    sta.active(True)
+    sta.connect(credentials['ssid'], credentials['password'])
+    deadline = Deadline(30000)
+    while not sta.isconnected():
+        deadline.left()
+        if sta.status() < 0:
+            raise Stop('wifi_status')
+        time.sleep_ms(50)
+    return sta
+
+def fetch(sta, cfg, nonce, index, binding, stage=None, policy=None):
+    from url_utils import parse_url, build_query_string
+    endpoint = cfg['ENDPOINT']
+    if not endpoint.startswith('http://') or '@' in endpoint.split('/', 3)[2] or '#' in endpoint:
+        raise Stop('endpoint_form')
+    scheme, host, port, path = parse_url(endpoint)
+    if scheme != 'http' or port <= 0 or port > 65535:
+        raise Stop('endpoint_scheme')
+    if stage is not None:
+        stage('DNS_POLICY')
+    if policy is None:
+        policy = OriginalDNSPolicy(sta, cfg, host, binding, nonce + index, Deadline(35000))
+        policy.apply()
+    deadline = Deadline(35000)
+    policy.deadline = deadline
+    if stage is not None:
+        stage('POST')
+    ip = policy.resolve()
+    mac = ':'.join(('%02x' % x for x in sta.config('mac')))
+    ssid = sta.config('essid')
+    rssi = sta.status('rssi')
+    payload = {'fwVersion': 'bounded-app-cycle-fixture', 'board': 'RPi_Pico2W', 'system': {}, 'network': {'mac': mac, 'ssid': ssid, 'rssi': rssi, 'ipAddress': sta.ifconfig()[0]}, 'display': {'type': cfg['DISPLAY_TYPE'], 'width': 296, 'height': 128, 'colorType': 'BW'}}
+    join = '&' if '?' in path else '?'
+    headers, _ = request(ip, host, port, path + join + 'timestampCheck=1', 'POST', cfg['API_KEY'], json.dumps(payload).encode(), deadline)
+    try:
+        with open('/timestamp.txt') as stream:
+            old_timestamp = stream.read(256).strip()
+    except OSError:
+        old_timestamp = ''
+    timestamp = headers.get('timestamp')
+    changed = bool(timestamp and timestamp != old_timestamp)
+    query = build_query_string((('mac', mac), ('x', 296), ('y', 128), ('c', 'BW'), ('rssi', rssi), ('ssid', ssid)))
+    if stage is not None:
+        stage('GET')
+    ip = policy.resolve()
+    download, body = request(ip, host, port, path + join + query, 'GET', cfg['API_KEY'], None, deadline)
+    rotation = str(download.get('rotate', '0'))
+    return (body, rotation == '2', {'timestamp_changed_vs_original_file': changed, 'timestamp_present': timestamp is not None, 'server_sleep_present': 'sleep' in headers or 'precisesleep' in headers, 'server_partial_present': 'partial' in download or 'partialrefresh' in download})
+
+def bmp_metadata(data):
+    if len(data) < 62 or data[:2] != b'BM':
+        raise Stop('bmp_header')
+    offset = struct.unpack('<I', data[10:14])[0]
+    dib, width, height, planes, bits, compression = struct.unpack('<IiiHHI', data[14:34])
+    if dib != 40 or width != 296 or abs(height) != 128 or (planes != 1) or (bits != 1) or (compression != 0) or (offset < 62) or (offset > 1024):
+        raise Stop('bmp_format')
+    stride = (width + 31) // 32 * 4
+    if len(data) != offset + stride * abs(height):
+        raise Stop('bmp_length')
+    palette = data[54:62]
+    luminance = [sum(palette[i:i + 3]) for i in (0, 4)]
+    if sorted(luminance) != [0, 765]:
+        raise Stop('bmp_palette')
+    return (offset, stride, height, luminance[1] > luminance[0])
+
+def decode_image(body, rotate):
+    from io import BytesIO
+    from app_image import decode
+    if body[:2] not in (b'BM', b'Z2'):
+        raise Stop('image_signature')
+    try:
+        black, red = decode(BytesIO(body), 'BW', 2 if rotate else 0)
+    except ValueError:
+        raise Stop('image_decode')
+    if len(black) != 4736 or len(red) != 4736 or any(red):
+        raise Stop('image_planes')
+    return (black, red)
+
+def image_pixel(black, x, y):
+    return 1 - (black[x * 16 + 15 - y // 8] >> y % 8 & 1)
+
+def refresh(black, red):
+    import machine
+    from drivers.ePaper2in9 import EPD
+    from pico_epaper29_lowpower import park_after_sleep
+    if len(black) != 4736 or len(red) != 4736 or any(red):
+        raise Stop('image_planes')
+    deadline = Deadline(75000)
+
+    class Bounded(EPD):
+
+        def wait_until_ready(self):
+            busy_deadline = Deadline(30000)
+            time.sleep_ms(50)
+            while self._as_busy or self._busy() == 1:
+                deadline.left()
+                busy_deadline.left()
+                time.sleep_ms(20)
+            deadline.left()
+    spi = machine.SPI(1, baudrate=4000000, sck=machine.Pin(10), mosi=machine.Pin(11))
+    panel = None
+    try:
+        panel = Bounded(spi, machine.Pin(9, machine.Pin.OUT, value=1), machine.Pin(8, machine.Pin.OUT, value=0), machine.Pin(12, machine.Pin.OUT, value=0), machine.Pin(13, machine.Pin.IN, pull=None), landscape=True, asyn=False, full=True)
+        panel.fill(0)
+        panel.show()
+        panel.wait_until_ready()
+        panel.init()
+        panel.fill(0)
+        for y in range(128):
+            deadline.left()
+            for x in range(296):
+                panel.pixel(x, y, image_pixel(black, x, y))
+        panel.show()
+        panel.wait_until_ready()
+        panel._command(b'\x10', b'\x01')
+        time.sleep_ms(2000)
+        panel._rst(0)
+        spi.deinit()
+        park_after_sleep()
+    except Exception:
+        spi.deinit()
+        machine.Pin(12, machine.Pin.OUT, value=0)
+        raise
+
+def run():
+    if exists(TERMINAL):
+        return
+    import machine
+    import network
+    cfg = None
+    index = -1
+    nonce = None
+    radio_started = False
+    stage = ['CONTROL']
+
+    def set_stage(value):
+        if value not in ('CONTROL', 'WIFI', 'GO', 'DNS_POLICY', 'POST', 'GET', 'BMP', 'MARKER', 'REFRESH', 'SLEEP', 'TERMINAL'):
+            raise Stop('control')
+        stage[0] = value
+    try:
+        first = exists(ARMED)
+        if first and exists(CONSUMED):
+            raise Stop('already_consumed')
+        cfg = read_json(ARMED if first else CONSUMED)
+        if not control_valid(cfg):
+            raise Stop('control')
+        if os.uname().machine != 'Raspberry Pi Pico 2 W with RP2350' or os.uname().version.split(' on ')[0] != cfg['firmware_version'] or machine.mem32[1074626560] & 1073741824:
+            raise Stop('runtime_gate')
+        nonce = int(cfg['run'][:8], 16)
+        if first:
+            if exists(RESULTS):
+                raise Stop('old_results')
+            os.rename(ARMED, CONSUMED)
+            os.sync()
+            index = 0
+            progress_write(machine, nonce, RUNNING, index)
+        else:
+            phase, prior, checkpoint = progress_read(machine, nonce)
+            if phase != SLEEPING or not 0 <= prior < CYCLES or machine.reset_cause() != 4 or (machine.mem32[1074790560] != 64):
+                raise Stop('unexpected_boot_or_terminal')
+            sleep_elapsed = rtc_ms(machine) - checkpoint
+            if not 299000 <= sleep_elapsed <= 305000:
+                raise Stop('sleep_rtc_duration')
+            index = prior + 1
+            progress_write(machine, nonce, RUNNING, index)
+            event(cfg['run'], index, 'WAKE', cause=machine.reset_cause(), last_swcore=64, sleep_rtc_elapsed_ms=sleep_elapsed)
+        event(cfg['run'], index, 'BOOT', cause=machine.reset_cause(), retention_policy='POWMAN_region2_only', force_refresh=True)
+        app = app_config()
+        credentials = read_json(WIFI)
+        radio_started = True
+        set_stage('WIFI')
+        sta = connect(network, credentials)
+        credentials = None
+        address = (cfg['marker_ipv4'], cfg['marker_port'])
+        if index == 0:
+            set_stage('GO')
+            marker(address, cfg['run'], index, 'GO', Deadline(120000), permit=True)
+        body, rotate, metadata = fetch(sta, app, nonce, index, cfg['dns_policy_binding'], set_stage)
+        set_stage('BMP')
+        black, red = decode_image(body, rotate)
+        set_stage('MARKER')
+        marker(address, cfg['run'], index, 'DOWNLOAD_READY', Deadline(10000))
+        event(cfg['run'], index, 'DOWNLOAD_READY', bmp_bytes=len(body), **metadata)
+        if index == CYCLES:
+            set_stage('TERMINAL')
+            radio_off(network)
+            progress_write(machine, nonce, STOPPED, index)
+            terminal('COMPLETE', index)
+            event(cfg['run'], index, 'COMPLETE', completed_cycles=CYCLES, full_refreshes=CYCLES * 2, final_download_not_refreshed=True)
+            return
+        radio_off(network)
+        set_stage('REFRESH')
+        started = time.ticks_ms()
+        refresh(black, red)
+        event(cfg['run'], index, 'SLEEP', sleep_ms=SLEEP_MS, panel_refreshes=2, panel_elapsed_ms=time.ticks_diff(time.ticks_ms(), started), panel_sleep_and_park_verified=True, radio_off_verified=True)
+        set_stage('SLEEP')
+        progress_write(machine, nonce, SLEEPING, index, rtc_ms(machine))
+        time.sleep_ms(200)
+        machine.deepsleep(SLEEP_MS)
+        raise Stop('deepsleep_returned')
+    except Exception as exc:
+        if radio_started:
+            try:
+                radio_off(network)
+            except Exception:
+                pass
+        try:
+            terminal('FAIL', index)
+        except Exception:
+            pass
+        if nonce is not None:
+            try:
+                progress_write(machine, nonce, STOPPED, max(index, 0))
+            except Exception:
+                pass
+        if cfg is not None and isinstance(cfg.get('run'), str) and (len(cfg['run']) == 32) and all((x in '0123456789abcdef' for x in cfg['run'])):
+            try:
+                event(cfg['run'], index, 'FAIL', error_type=type(exc).__name__, failure_stage=stage[0], stop_code=safe_stop_code(exc))
+            except Exception:
+                pass
+        print('APP_CYCLE STOPPED')

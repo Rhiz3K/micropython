@@ -1,0 +1,141 @@
+"""Offline only: validate two complete protocol-2 logs and fit ACK-to-READY timing."""
+import argparse
+import importlib.util
+import json
+import math
+import statistics
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def observer_module():
+    spec = importlib.util.spec_from_file_location("private_timing_observer", HERE / "timing-host.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)  # imports no serial module and opens no device
+    return module
+
+
+def check_log(path, config, host):
+    rows = [json.loads(line) for line in Path(path).read_text().splitlines()]
+    require(rows and "host_start" in rows[0], "Missing host header")
+    uid = rows[0].get("usb_serial", "").lower()
+    require(bool(uid), "Missing private device identity")
+    progress = host.TimingProgress(config)
+    pending = None
+    sample_rows = []
+    ack_keys = set()
+    last_marker = {}
+    completed = False
+    boots = set()
+    for row in rows[1:]:
+        if row.get("host_event") == "timing_ack":
+            key = (row.get("run"), row.get("boot"), row.get("marker_status"))
+            require(key not in ack_keys, "Duplicate timing ACK")
+            require(key in last_marker, "ACK without matching received marker")
+            ack_keys.add(key)
+            before, after = row.get("host_ack_before_ns"), row.get("host_ack_after_ns")
+            require(type(before) is int and type(after) is int and 0 <= after-before <= 1_000_000_000,
+                    "Invalid or unbounded ACK API span")
+            require(row.get("write_span_ns") == after-before, "ACK span mismatch")
+            require(row.get("write_bytes") == len(host.acknowledgement(last_marker[key]).encode()),
+                    "Partial ACK recorded as success")
+            if key[2] == "SLEEP":
+                require(pending is None, "Second sleep ACK before a matching wake")
+                pending = row
+                progress.acknowledged(last_marker[key], before / 1e9)
+            continue
+        if row.get("host_event"):
+            # Record corruption/reconnect details remain available, but the
+            # complete validated sequence and exactly one ACK must still exist.
+            continue
+        if "status" not in row:
+            continue
+        require(not completed, "Device record after terminal PASS")
+        require(row.get("status") not in ("FAIL", "STOPPED"), "Device failure/incomplete run")
+        require(row.get("protocol") == 2, "Protocol 2 required")
+        require(row.get("uid", "").lower() == uid, "Mixed device identity")
+        host.validate_expected_record(row, config)
+        stamp = row.get("host_read_monotonic_ns")
+        require(type(stamp) is int, "Missing monotonic receipt stamp")
+        key = (row["run"], row["boot"], row["status"])
+        progress.check(row, stamp / 1e9)
+        last_marker[key] = row
+        boots.add(row["boot"])
+        if row["status"] == "READY" and row.get("phase") == 1:
+            require(pending is not None and pending["boot"] + 1 == row["boot"], "Wake/ACK mismatch")
+            a, b = pending["host_ack_before_ns"], pending["host_ack_after_ns"]
+            require(stamp > b, "Non-monotonic wake")
+            wall_elapsed = (row["host_read_wall_ns"] - pending["host_ack_wall_ns"]) / 1e9
+            elapsed = (stamp - a) / 1e9
+            # Detect a large host suspend / wall-clock step; this is a validity
+            # check only, not a use of wall time as the measuring clock.
+            require(abs(wall_elapsed - elapsed) <= 0.5, "Host suspend/clock-step suspicion")
+            sample_rows.append({"run":row["run"], "wake_boot":row["boot"],
+                "requested_s":config["sleep_ms"]/1000, "ack_to_ready_s":elapsed,
+                "ack_return_to_ready_s":(stamp-b)/1e9,
+                "ack_api_span_s":(b-a)/1e9, "wall_minus_monotonic_s":wall_elapsed-elapsed,
+                "panel_prepare_ms":row["panel_prep"]["elapsed_ms"],
+                "rtc_elapsed_s":row.get("rtc_elapsed_s")})
+            pending = None
+        if row["status"] == "PASS":
+            require(row["completed"] == 2 and row["boot"] == 4, "Wrong terminal count/boot")
+            completed = True
+    require(completed and pending is None and len(sample_rows) == 2 and boots == {1,2,3,4},
+            "Missing complete two-cycle run with final reset")
+    require((config["run"],4,"PASS") in ack_keys, "Missing terminal PASS ACK")
+    return uid, sample_rows
+
+
+def fit(samples):
+    require(len(samples) == 4, "Exactly four independent cycle samples required")
+    groups = {x:[r["ack_to_ready_s"] for r in samples if r["requested_s"] == x] for x in (30.0,300.0)}
+    require(all(len(g) == 2 for g in groups.values()), "Two samples of each duration required")
+    m30,m300 = (statistics.mean(groups[x]) for x in (30.0,300.0))
+    slope = (m300-m30)/270.0
+    intercept = m30 - slope*30
+    residuals = [r["ack_to_ready_s"] - intercept - slope*r["requested_s"] for r in samples]
+    sse = sum(r*r for r in residuals)
+    slope_se = math.sqrt((sse/2)/72900)  # four samples, two fitted parameters
+    pairs = [(long-short)/270 for long in groups[300.0] for short in groups[30.0]]
+    return {"mean_30s_observed_s":m30,"mean_300s_observed_s":m300,
+        "slope_s_per_requested_s":slope,"intercept_s":intercept,
+        "apparent_rate_error_ppm":(slope-1)*1e6,
+        "within_30s_range_s":max(groups[30.0])-min(groups[30.0]),
+        "within_300s_range_s":max(groups[300.0])-min(groups[300.0]),
+        "observed_pair_slope_range":[min(pairs),max(pairs)],
+        "residuals_s":residuals,"slope_standard_error_iid_assumption":slope_se,
+        "slope_95pct_interval_iid_normal_assumption":[slope-4.30265273*slope_se,slope+4.30265273*slope_se],
+        "sample_count":4,"distinct_requested_durations":2,
+        "model":"observed host interval = fixed overhead + slope * requested duration",
+        "limits":["ACK timestamps bracket a host write API call, not physical device ACK receipt",
+                  "USB enumeration, full boot, panel preparation and BIN hash precede READY",
+                  "Fit removes only overhead that is constant across both durations",
+                  "Two repeats per duration cannot establish temperature/voltage drift or robust absolute accuracy",
+                  "Host wall/monotonic consistency is only a coarse suspend/clock-step check",
+                  "This is not a direct measurement of oscillator frequency during deep sleep"]}
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output",type=Path,required=True)
+    args=parser.parse_args()
+    host=observer_module()
+    samples=[]; identities=[]
+    for seconds in (30,300):
+        cfg=json.loads((HERE/("config-%ds.json"%seconds)).read_text())
+        uid,found=check_log(HERE/("%ds-events-private.jsonl"%seconds),cfg,host)
+        identities.append(uid);samples.extend(found)
+    require(len(set(identities))==1,"Two scenarios used different devices")
+    result={"result":"PASS", "meaning":"Complete timing evidence; no accuracy threshold asserted",
+            "samples":samples, "fit":fit(samples)}
+    with args.output.open("x") as stream:
+        json.dump(result,stream,indent=2);stream.write("\n")
+    print(json.dumps(result["fit"],sort_keys=True))  # no UID, endpoint, or credentials
+
+if __name__=="__main__":
+    main()

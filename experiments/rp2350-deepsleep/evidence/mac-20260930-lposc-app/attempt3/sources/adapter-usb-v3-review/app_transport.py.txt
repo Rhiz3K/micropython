@@ -1,0 +1,337 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Private bounded HTTP/IPv4 DNS helpers. Import has no IO or hardware effects.
+
+HTTP only, no redirect/proxy/TLS/NTP/OTA. Never log host, URL, headers or body.
+The caller owns radio activation. Python deadlines cannot cure a native hang.
+"""
+import time
+import socket
+import struct
+import hashlib
+
+class Stop(Exception):
+    pass
+STOP_CODES = ('deadline', 'dns_format', 'dns_resolver', 'dns_host', 'dns_source', 'dns_response', 'dns_question', 'dns_no_a', 'dns_binding', 'dns_config', 'dns_unresolved', 'http_chunks', 'http_request', 'http_header', 'http_send', 'http_size', 'http_headers', 'http_duplicate_header', 'http_encoding', 'http_transfer', 'http_length', 'http_status_or_size', 'marker_address', 'marker_ack', 'config_size', 'display_config', 'endpoint_config', 'rtc_coherent_read', 'retention_shape', 'retention_write', 'retention_invalid', 'event_size', 'radio_not_off', 'wifi_config', 'wifi_status', 'endpoint_form', 'endpoint_scheme', 'bmp_header', 'bmp_format', 'bmp_length', 'bmp_palette', 'already_consumed', 'control', 'runtime_gate', 'old_results', 'unexpected_boot_or_terminal', 'sleep_rtc_duration', 'deepsleep_returned', 'image_signature', 'image_decode', 'image_planes')
+
+def safe_stop_code(exc):
+    if isinstance(exc, Stop) and len(exc.args) == 1 and (exc.args[0] in STOP_CODES):
+        return exc.args[0]
+    return 'unclassified'
+
+def binding_valid(value):
+    keys = ('schema', 'endpoint_host_sha256', 'fallback_ipv4', 'main_source_sha256', 'config_source_sha256')
+    return isinstance(value, dict) and set(value) == set(keys) and (value['schema'] == 1) and (value['fallback_ipv4'] is None or ipv4(value['fallback_ipv4'])) and all((isinstance(value[k], str) and len(value[k]) == 64 and all((c in '0123456789abcdef' for c in value[k])) for k in keys if k.endswith('_sha256')))
+
+class Deadline:
+
+    def __init__(self, ms):
+        self.end = time.ticks_add(time.ticks_ms(), ms)
+
+    def left(self):
+        ms = time.ticks_diff(self.end, time.ticks_ms())
+        if ms <= 0:
+            raise Stop('deadline')
+        return ms
+
+    def timeout(self, sock):
+        sock.settimeout(min(3000, self.left()) / 1000)
+
+def ipv4(value):
+    if not isinstance(value, str):
+        return False
+    try:
+        parts = value.split('.')
+        return len(parts) == 4 and all((str(int(x)) == x and 0 <= int(x) <= 255 for x in parts))
+    except (ValueError, TypeError):
+        return False
+
+def _name_end(data, at):
+    for _ in range(128):
+        if at >= len(data):
+            raise Stop('dns_format')
+        size = data[at]
+        if size & 192 == 192:
+            if at + 1 >= len(data):
+                raise Stop('dns_format')
+            return at + 2
+        if size & 192:
+            raise Stop('dns_format')
+        at += 1
+        if size == 0:
+            return at
+        at += size
+    raise Stop('dns_format')
+
+def dns_a(host, resolver, transaction, deadline):
+    if ipv4(host):
+        return host
+    if not ipv4(resolver):
+        raise Stop('dns_resolver')
+    labels = host.encode().split(b'.')
+    if any((not x or len(x) > 63 for x in labels)) or len(host) > 253:
+        raise Stop('dns_host')
+    question = b''.join((bytes((len(x),)) + x for x in labels)) + b'\x00\x00\x01\x00\x01'
+    query = struct.pack('>HHHHHH', transaction & 65535, 256, 1, 0, 0, 0) + question
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        deadline.timeout(sock)
+        sock.sendto(query, (resolver, 53))
+        data, source = sock.recvfrom(1500)
+        if source[0] != resolver or source[1] != 53 or len(data) < 12:
+            raise Stop('dns_source')
+        ident, flags, qd, an, _, _ = struct.unpack('>HHHHHH', data[:12])
+        if ident != transaction & 65535 or flags & 32783 != 32768 or flags & 512 or (qd != 1) or (an > 32):
+            raise Stop('dns_response')
+        at = _name_end(data, 12) + 4
+        if data[12:at] != question:
+            raise Stop('dns_question')
+        for _ in range(an):
+            at = _name_end(data, at)
+            if at + 10 > len(data):
+                raise Stop('dns_format')
+            kind, klass, _, size = struct.unpack('>HHIH', data[at:at + 10])
+            at += 10
+            if at + size > len(data):
+                raise Stop('dns_format')
+            if kind == 1 and klass == 1 and (size == 4):
+                return '.'.join((str(x) for x in data[at:at + 4]))
+            at += size
+        raise Stop('dns_no_a')
+    finally:
+        sock.close()
+
+class OriginalDNSPolicy:
+    """Original configured order/probe/retry/cache/fallback, bounded UDP A backend.
+
+    No network IO in construction. Host/fallback stay private. One explicit
+    35-second budget covers policy selection; fetch supplies a fresh shared
+    35-second budget for both request resolutions and HTTP exchanges.
+    This is not byte-identical native getaddrinfo or an OS resolver cache.
+    """
+
+    def __init__(self, sta, cfg, host, binding, nonce, deadline):
+        if not binding_valid(binding):
+            raise Stop('dns_binding')
+        actual = ''.join(('%02x' % x for x in hashlib.sha256(host.encode()).digest()))
+        if actual != binding['endpoint_host_sha256']:
+            raise Stop('dns_binding')
+        servers = [s.strip() for s in cfg.get('DNS_SERVERS', '').split(',') if s.strip()]
+        if not 1 <= len(servers) <= 3 or not all((ipv4(s) for s in servers)):
+            raise Stop('dns_config')
+        raw = cfg.get('API_TIMEOUT_S') or cfg.get('SOCKET_TIMEOUT_S') or '12'
+        try:
+            timeout = int(raw)
+            if timeout <= 0:
+                timeout = 12
+        except (ValueError, TypeError):
+            timeout = 12
+        self.sta, self.host, self.servers = (sta, host, servers)
+        self.fallback = binding['fallback_ipv4']
+        self.deadline, self.transaction = (deadline, nonce & 65535)
+        self.probe_timeout = min(5, timeout)
+        self.resolver = sta.ifconfig()[3]
+        self.dhcp_resolver = self.resolver
+        self.cache = None
+        self.dhcp_ip = None
+        self.rows = []
+        self.selected_index = None
+        self.fallback_used = False
+        self.cache_used = False
+
+    def _resolve_live(self, resolver):
+        self.deadline.left()
+        self.transaction = self.transaction + 1 & 65535
+        return dns_a(self.host, resolver, self.transaction, self.deadline)
+
+    def _tcp_probe(self, ip):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.settimeout(min(self.probe_timeout * 1000, self.deadline.left()) / 1000)
+            sock.connect((ip, 80))
+            return True
+        except OSError:
+            return False
+        finally:
+            sock.close()
+
+    def apply(self, probe_dhcp=False):
+        import network
+        try:
+            network.ipconfig(prefer=4)
+        except Exception:
+            pass
+        if probe_dhcp:
+            try:
+                self.dhcp_ip = self._resolve_live(self.dhcp_resolver)
+            except (OSError, Stop):
+                self.deadline.left()
+        for index, server in enumerate(self.servers):
+            self.deadline.left()
+            configured = True
+            try:
+                network.ipconfig(dns=server)
+            except Exception:
+                try:
+                    self.sta.config(dns=(server,))
+                except Exception:
+                    configured = False
+            if not configured:
+                self.rows.append({'server_index': index, 'configured': False, 'resolved_ip_equals_dhcp': None, 'tcp_probe_success': False})
+                continue
+            self.resolver = server
+            resolved, success = (None, False)
+            try:
+                resolved = self._resolve_live(server)
+                success = self._tcp_probe(resolved)
+            except (OSError, Stop):
+                self.deadline.left()
+            self.rows.append({'server_index': index, 'configured': True, 'resolved_ip_equals_dhcp': resolved == self.dhcp_ip if resolved is not None and self.dhcp_ip is not None else None, 'tcp_probe_success': success})
+            if success:
+                self.selected_index = index
+                break
+        return self.public_observation()
+
+    def resolve(self):
+        if ipv4(self.host):
+            return self.host
+        for attempt in range(2):
+            try:
+                value = self._resolve_live(self.resolver)
+                self.cache = value
+                return value
+            except (OSError, Stop):
+                self.deadline.left()
+                if attempt == 0:
+                    time.sleep_ms(100)
+        if self.cache is not None:
+            self.cache_used = True
+            return self.cache
+        if self.fallback is not None:
+            self.fallback_used = True
+            return self.fallback
+        raise Stop('dns_unresolved')
+
+    def public_observation(self):
+        return {'server_attempts': self.rows, 'selected_server_index': self.selected_index, 'policy_tcp_success': self.selected_index is not None, 'fallback_used': self.fallback_used, 'cache_used': self.cache_used}
+
+def _unchunk(data, limit):
+    result = bytearray()
+    at = 0
+    for _ in range(2048):
+        end = data.find(b'\r\n', at)
+        if end < at or end - at > 32:
+            raise Stop('http_chunks')
+        try:
+            size = int(data[at:end].split(b';', 1)[0], 16)
+        except ValueError:
+            raise Stop('http_chunks')
+        at = end + 2
+        if size == 0:
+            return bytes(result)
+        if size < 0 or len(result) + size > limit or at + size + 2 > len(data):
+            raise Stop('http_chunks')
+        result.extend(data[at:at + size])
+        at += size
+        if data[at:at + 2] != b'\r\n':
+            raise Stop('http_chunks')
+        at += 2
+    raise Stop('http_chunks')
+
+def request(ip, host, port, path, method, api_key, body, deadline, max_body=12288):
+    if method not in ('GET', 'POST') or not ipv4(ip) or (not path.startswith('/')):
+        raise Stop('http_request')
+    if any(('\r' in x or '\n' in x for x in (host, path, api_key))):
+        raise Stop('http_header')
+    headers = [method + ' ' + path + ' HTTP/1.0', 'Host: ' + host + (':' + str(port) if port != 80 else ''), 'Connection: close']
+    if api_key:
+        headers.append('X-API-Key: ' + api_key)
+    if body is not None:
+        headers.extend(('Content-Type: application/json', 'Content-Length: ' + str(len(body))))
+    outgoing = ('\r\n'.join(headers) + '\r\n\r\n').encode() + (body or b'')
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        deadline.timeout(sock)
+        sock.connect((ip, port))
+        sent = 0
+        while sent < len(outgoing):
+            deadline.timeout(sock)
+            count = sock.send(outgoing[sent:])
+            if not count:
+                raise Stop('http_send')
+            sent += count
+        raw = bytearray()
+        split = -1
+        needed = None
+        while True:
+            deadline.timeout(sock)
+            block = sock.recv(1024)
+            if not block:
+                break
+            raw.extend(block)
+            if len(raw) > max_body + 8192:
+                raise Stop('http_size')
+            if split < 0:
+                split = raw.find(b'\r\n\r\n')
+                if split < 0 and len(raw) > 8192:
+                    raise Stop('http_headers')
+                if split >= 0:
+                    lines = bytes(raw[:split]).decode().split('\r\n')
+                    code = int(lines[0].split(' ', 2)[1])
+                    response = {}
+                    for line in lines[1:]:
+                        key, value = line.split(':', 1)
+                        key = key.lower().strip()
+                        if key in response:
+                            raise Stop('http_duplicate_header')
+                        response[key] = value.strip()
+                    if 'content-length' in response:
+                        needed = int(response['content-length'])
+                        if needed < 0 or needed > max_body:
+                            raise Stop('http_size')
+            if split >= 0 and needed is not None and (len(raw) >= split + 4 + needed):
+                break
+        if split < 0:
+            raise Stop('http_headers')
+        payload = bytes(raw[split + 4:])
+        if response.get('content-encoding', 'identity').lower() != 'identity':
+            raise Stop('http_encoding')
+        transfer = response.get('transfer-encoding', '').lower()
+        if transfer:
+            if transfer != 'chunked' or needed is not None:
+                raise Stop('http_transfer')
+            payload = _unchunk(payload, max_body)
+        elif needed is not None and len(payload) != needed:
+            raise Stop('http_length')
+        if len(payload) > max_body or code != 200:
+            raise Stop('http_status_or_size')
+        return (response, payload)
+    finally:
+        sock.close()
+
+def marker(address, run, index, kind, deadline, permit=False):
+    """One UDP request, retry same id up to 3 times; receipt boundary is deduped.
+
+    GO may wait up to the caller's fixed deadline, no work has been measured yet.
+    No identity, credentials, URL, network parameters or image data in packet.
+    """
+    if not ipv4(address[0]):
+        raise Stop('marker_address')
+    message = ('APP_USB1 %s %d %s' % (run, index, kind)).encode()
+    expected = b'ACK ' + message
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        attempts = 0
+        while permit or attempts < 3:
+            attempts += 1
+            deadline.timeout(sock)
+            sock.sendto(message, address)
+            try:
+                answer, source = sock.recvfrom(200)
+            except OSError:
+                deadline.left()
+                continue
+            if source[0] == address[0] and source[1] == address[1] and (answer == expected):
+                return
+        raise Stop('marker_ack')
+    finally:
+        sock.close()

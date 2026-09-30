@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""Private USB_CONNECTED pilot LAN receiver; no Pico/HID/serial/USB access.
+
+Import does no network/IO. Never log peer address or unrecognized datagrams.
+Fresh USB identity/BIN/install proof is root-owned. Live meter gates read only
+its metadata/health JSON, never open HID. No physical cable changes.
+"""
+import argparse
+import datetime
+import json
+import hashlib
+import math
+import os
+from pathlib import Path
+import re
+import signal
+import socket
+import time
+
+METER_READER_SHA = 'a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45'
+USB_MODE = 'USB_CONNECTED'
+
+
+def save(path, value):
+    with path.open('x') as stream:
+        json.dump(value, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def permit(path, run, firmware_version, firmware_sha256, preflight_sha256, now_ns):
+    if not path.is_file() or path.is_symlink() or path.stat().st_size > 2048:
+        return False
+    try:
+        value = json.loads(path.read_text())
+    except (ValueError, OSError):
+        return False
+    stamp = value.get('board_verified_monotonic_ns') if isinstance(value, dict) else None
+    if type(stamp) is not int or not 0 <= now_ns - stamp <= 300_000_000_000:
+        return False
+    return value == {'schema': 2, 'run': run, 'approved': True, 'usb_mode': USB_MODE,
+                     'usb_connected_verified': True, 'pico_identity_verified': True,
+                     'firmware_verified': True, 'installed_files_verified': True,
+                     'firmware_version': firmware_version, 'firmware_bin_sha256': firmware_sha256,
+                     'root_preflight_sha256': preflight_sha256,
+                     'board_verified_monotonic_ns': stamp}
+
+
+def meter_ready(directory, now_ns):
+    """Same actual reader health fields and strict existing startup limits."""
+    try:
+        meta_path, health_path = directory / 'metadata.json', directory / 'health.json'
+        if any(p.is_symlink() or not p.is_file() or p.stat().st_size > 32768
+               for p in (meta_path, health_path)):
+            return None
+        metadata = json.loads(meta_path.read_text())
+        health = json.loads(health_path.read_text())
+        if (metadata.get('schema') != 2 or metadata.get('reader_sha256') != METER_READER_SHA
+                or metadata.get('allowed_commands') != ['0x81', '0x82', '0x83']
+                or any(metadata.get(k) is not False for k in ('usb_reset_used', 'kernel_detach_used',
+                    'serial_port_opened', 'charging_or_voltage_commands_used'))):
+            return None
+        stamp = health.get('host_monotonic_ns')
+        if (health.get('schema') != 2 or health.get('phase') != 'recording'
+                or type(stamp) is not int or not 0 <= now_ns - stamp <= 3_000_000_000):
+            return None
+        numbers = [health.get(k) for k in ('elapsed_host_s', 'last_valid_measurement_age_s',
+                                           'recent_receipt_sample_rate_hz')]
+        if any(type(v) not in (int, float) or not math.isfinite(v) for v in numbers):
+            return None
+        elapsed, age, rate = numbers
+        if (elapsed < 5 or not 0 <= age <= 1.5 or not 95 <= rate <= 105
+                or type(health.get('recording_samples')) is not int or health['recording_samples'] < 500
+                or any(health.get(k) != 0 for k in ('invalid_frames',
+                    'receipt_gap_count_over_200ms', 'clock_offset_jump_count'))):
+            return None
+        return {'health_monotonic_ns': stamp, 'recording_samples': health['recording_samples'],
+                'recent_receipt_sample_rate_hz': rate, 'last_valid_measurement_age_s': age,
+                'metadata_sha256': hashlib.sha256(meta_path.read_bytes()).hexdigest()}
+    except (OSError, ValueError, TypeError):
+        return None
+
+
+def parse(data, run):
+    try:
+        text = data.decode('ascii')
+    except UnicodeDecodeError:
+        return None
+    match = re.fullmatch(r'APP_USB1 ([0-9a-f]{32}) ([0-3]) (GO|DOWNLOAD_READY)', text)
+    if not match or match[1] != run or (match[3] == 'GO' and match[2] != '0'):
+        return None
+    return int(match[2]), match[3]
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--bind-ip', required=True)
+    parser.add_argument('--port', type=int, required=True)
+    parser.add_argument('--run', required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--go-proof', type=Path, required=True)
+    parser.add_argument('--preflight-proof', type=Path, required=True)
+    parser.add_argument('--firmware-version', required=True)
+    parser.add_argument('--firmware-sha256', required=True)
+    parser.add_argument('--meter-dir', type=Path, required=True)
+    args = parser.parse_args()
+    if not re.fullmatch('[0-9a-f]{32}', args.run) or not 1024 <= args.port <= 65535:
+        parser.error('Invalid run/port')
+    if not re.fullmatch('[0-9a-f]{64}', args.firmware_sha256) or not args.firmware_version.startswith('v'):
+        parser.error('Invalid firmware identity')
+    if (args.preflight_proof.is_symlink() or not args.preflight_proof.is_file()
+            or args.preflight_proof.stat().st_size > 131072):
+        parser.error('Require bounded regular root preflight proof')
+    preflight_sha256 = hashlib.sha256(args.preflight_proof.read_bytes()).hexdigest()
+    if args.output.is_symlink() or args.output.exists():
+        parser.error('Output must be new')
+    args.output.mkdir(mode=0o700)
+    before = time.monotonic_ns()
+    utc_ns = time.time_ns()
+    after = time.monotonic_ns()
+    save(args.output / 'metadata.json', {'schema': 2, 'run': args.run, 'usb_mode': USB_MODE,
+        'host_anchor': {'utc_ns': utc_ns, 'monotonic_before_ns': before, 'monotonic_after_ns': after},
+        'boundary': 'first_DOWNLOAD_READY_receipt_to_next_first_receipt',
+        'cycles': 3, 'sleep_ms': 300000, 'force_refresh': True,
+        'go_proof_role': 'root_owned_USB_connected_identity_firmware_installation_plus_live_meter_health',
+        'firmware_version': args.firmware_version, 'firmware_bin_sha256': args.firmware_sha256,
+        'root_preflight_sha256': preflight_sha256, 'meter_reader_sha256': METER_READER_SHA,
+        'listener_seconds': 1800})
+    state = {'schema': 2, 'result': 'FAIL', 'run': args.run, 'usb_mode': USB_MODE, 'boundaries': [],
+             'completed_intervals': 0, 'go_acknowledged': False}
+    seen = set()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    def interrupted(*_):
+        raise KeyboardInterrupt()
+    signal.signal(signal.SIGTERM, interrupted)
+    try:
+        sock.bind((args.bind_ip, args.port))
+        sock.settimeout(1)
+        end = time.monotonic() + 1800
+        with (args.output / 'events.jsonl').open('x') as events:
+            while time.monotonic() < end:
+                try:
+                    data, peer = sock.recvfrom(256)
+                    receipt = time.monotonic_ns()
+                except socket.timeout:
+                    continue
+                parsed = parse(data, args.run)
+                if parsed is None:
+                    continue
+                index, kind = parsed
+                if kind == 'GO' and not permit(args.go_proof, args.run, args.firmware_version,
+                        args.firmware_sha256, preflight_sha256, receipt):
+                    continue
+                meter_gate = meter_ready(args.meter_dir, time.monotonic_ns())
+                if meter_gate is None:
+                    if kind == 'DOWNLOAD_READY' or state['go_acknowledged']:
+                        raise RuntimeError('Live meter gate failed after GO')
+                    continue
+                if kind == 'DOWNLOAD_READY' and (not state['go_acknowledged']
+                        or (parsed not in seen and index != len(state['boundaries']))):
+                    raise RuntimeError('Unexpected marker sequence')
+                duplicate = parsed in seen
+                ack_before = time.monotonic_ns()
+                sock.sendto(b'ACK ' + data, peer)
+                ack_after = time.monotonic_ns()
+                row = {'kind': kind, 'index': index, 'receipt_monotonic_ns': receipt,
+                       'ack_before_monotonic_ns': ack_before, 'ack_after_monotonic_ns': ack_after,
+                       'duplicate': duplicate, 'usb_mode': USB_MODE, 'meter_gate': meter_gate}
+                events.write(json.dumps(row) + '\n')
+                events.flush()
+                os.fsync(events.fileno())
+                seen.add(parsed)
+                if kind == 'GO':
+                    state['go_acknowledged'] = True
+                elif not duplicate:
+                    state['boundaries'].append(row)
+                    state['completed_intervals'] = max(0, len(state['boundaries']) - 1)
+                    if len(state['boundaries']) == 4:
+                        state['result'] = 'BOUNDARIES_COMPLETE'
+                        # Short bounded tail ACKs final retransmission if ACK was lost.
+                        end = min(end, time.monotonic() + 12)
+    except BaseException as exc:
+        state['result'] = 'FAIL'
+        state['error_type'] = type(exc).__name__
+    finally:
+        sock.close()
+        state['finished_utc'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        state['finished_monotonic_ns'] = time.monotonic_ns()
+        # BOUNDARIES_COMPLETE is not an application, capture or energy PASS.
+        save(args.output / 'result.json', state)
+    return 0 if state['result'] == 'BOUNDARIES_COMPLETE' else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

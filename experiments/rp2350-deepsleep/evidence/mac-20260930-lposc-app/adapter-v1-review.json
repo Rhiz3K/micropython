@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "status": "OFFLINE_REVIEWED_USB_CONNECTED_DRAFT",
+  "usb_mode": "USB_CONNECTED",
+  "hardware_executed": false,
+  "network_executed": false,
+  "physical_changes_performed": false,
+  "created_utc": "2026-09-30T21:19:10.315302+00:00",
+  "source_sha256": {
+    "app_cycle.py": "1710635a2e0f97f41adfabc23dd696dcf7f9e099d3460babc83429e9889e6281",
+    "app_transport.py": "a273ea2eed7ffc80660901ca46406b339881bf63d19435decb58ece710b5d4d2",
+    "marker_listener.py": "0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959",
+    "main-draft.py": "1875c27d33246b130df749f468d2188b0d50fc6edd7d613d4649c91075544287",
+    "test_offline.py": "5f54ec4ee2a8c397beb30390f0d79c4132c340774491b7542e1efeefee5cf83f",
+    "control-template.json": "d6a71f6ca20631454b37233be8d9ea0881978bfa95675eac3fa88d8c0fa124af",
+    "go-proof-template.json": "440f09ccb412b921f7a9fd8613f5850548a4f4fcc973e160e5fdfb83ce7b4f8d",
+    "transfer-schema.json": "bbfd581dc1237db8362e98451c0f2373866182bde6b9186ad7c20b1f2fcfb43d",
+    "README.cs.md": "ae6bd094320a1bf00a2db90c22e993f50a7fb6a64278e9bbe1a843a7e27b8d8b"
+  },
+  "readonly_dependency_sha256": {
+    "drivers/ePaper2in9.py": "61b7dba6b6117993f52930fbfc83578f89a2f96bf9fb48c5cd68d88efa132f1e",
+    "url_utils.py": "a63ee1f5d59333c3981a2a2884e35cf48624d3bdd2069d0e2c0cae0e5e142312",
+    "pico_epaper29_lowpower.py": "52d992cb94ab9fe8ebb0b6cc80a0cde7155bbc1879f81d3ee6746d57a3ff0dd0",
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630"
+  },
+  "parent_no_data_review_sha256": "182f333a005babe7e14ae8f438c651de68281c503c024f6ea90735de39a4a811",
+  "parent_no_data_sources_verified_unchanged": true,
+  "synthetic_tests": {
+    "count": 8,
+    "result": "PASS"
+  },
+  "targeted_peer": {
+    "agent": "arm_toolchain",
+    "result": "NO_MATERIAL_BLOCKER",
+    "scope": [
+      "USB derivative app and transport diff",
+      "full listener GO and live meter gates",
+      "actual pinned reader schema",
+      "eight synthetic tests read-only"
+    ],
+    "does_not_replace_root_hardware_gates": true
+  },
+  "remaining": [
+    "root actual installation/identity/BIN/source proof and one arming reset",
+    "source-bound closed meter/device/listener analysis in app-meter-review",
+    "separate actual final restoration"
+  ]
+}

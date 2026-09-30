@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "hardware_executed": false,
+  "network_executed": false,
+  "tests": {
+    "result": "PASS",
+    "count": 13
+  },
+  "source_sha256": {
+    "app_transport.py": "688f33e6bb930d547da7a792822cfbf582922157c160c915846b85965f8dfd7d",
+    "app_cycle.py": "0be438c50c381a49d7cebfed4668f485d1865362fb14c8afe44ceac3afd17517",
+    "dns_http_probe.py": "5bd6f2cec606289cfbbefbd96e4bef3cb6c4e97fbed76239d51d6fed40babb43",
+    "prepare_dns_binding.py": "7f2cfdb94cbee550262063b1a5f8b835c88b24fbc52641f1bd7e9ffaf0c02d1d",
+    "marker_listener.py": "0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959",
+    "main-draft.py": "1875c27d33246b130df749f468d2188b0d50fc6edd7d613d4649c91075544287",
+    "test_offline.py": "15b0e4e509be9ff30236102331a89305e54801c7a0cce00d410943e985c40985",
+    "test_v2.py": "f6dd9777b2b32ad94d770848f192996f8c84ef796d72776b78bfcb8229ea4998",
+    "control-template.json": "5c971e9e197bb038d31aef6b15c5a61be277c589ab2543ae9b1322d41c212818",
+    "go-proof-template.json": "440f09ccb412b921f7a9fd8613f5850548a4f4fcc973e160e5fdfb83ce7b4f8d"
+  },
+  "private_binding_sha256": "9b7d3f50a6174a8dbcefa7115a9ef2bc6581dd9ee13f3b1c190444a4ede175fa"
+}

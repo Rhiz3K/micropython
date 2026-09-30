@@ -1,0 +1,36 @@
+{
+  "accept_header": false,
+  "radio_off_verified": true,
+  "both_bodies_equal": true,
+  "error_type": "Stop",
+  "http_calls": [
+    {
+      "rotate_is_2": false,
+      "method": "POST",
+      "body_bytes": 2291,
+      "magic": "OTHER",
+      "complete": true,
+      "content_type": "OTHER",
+      "content_type_present": true
+    },
+    {
+      "rotate_is_2": false,
+      "method": "GET",
+      "body_bytes": 2291,
+      "magic": "OTHER",
+      "complete": true,
+      "content_type": "OTHER",
+      "content_type_present": true
+    }
+  ],
+  "dns_policy": "UNCHANGED_DHCP_FOR_PARITY",
+  "error_code": "bmp_header",
+  "http_version": "1.0",
+  "result": "FAIL",
+  "reset_performed": false,
+  "sleep_performed": false,
+  "panel_refresh_performed": false,
+  "scope": "EXPLICIT_HTTP10_PARITY_AFTER_FAILED_ATTEMPT1",
+  "host_utc": "2026-09-30T21:36:26.963194+00:00",
+  "host_monotonic": 625123.127053166
+}

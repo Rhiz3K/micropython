@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "result": "PLOTTED_VERIFIED_ANALYSIS",
+  "scope": "USB_CONNECTED_application_v3_three_period_pilot",
+  "source_sha256": {
+    "analysis_public": "a044d760b37ab8ccf3d789a79aa3e41c2799a668e9179612addc625046e1c402",
+    "replay_trace_bins": "5f43487cd372acfe38e2cc9dda0f81f9360b910ab27be452446e2f451a82e491",
+    "plot_helper": "6838baff67af7a4d94cc3b91b75414d50212715ec4d0bb67e15e75e98222e30a"
+  },
+  "bin_width_s": 1,
+  "bin_count": 985,
+  "received_samples": 98384,
+  "download_boundaries_host_elapsed_s": [
+    0.0,
+    319.916984959,
+    639.784270459,
+    959.888510709
+  ],
+  "zero_baseline_included": true,
+  "all_bins_preserved": true,
+  "filtering_or_offset_subtraction": false,
+  "state_intervals_inferred": false,
+  "private_image_source_exported": false,
+  "raw_replay_performed_by_plotter": false,
+  "note": "Input hashes are caller-verified bindings. Plotting does not establish calibration or repeat raw CRC/sample replay."
+}

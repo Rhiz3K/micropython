@@ -1,0 +1,82 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+import json
+import sys
+import types
+import unittest
+from unittest.mock import patch
+import app_cycle as app
+import app_transport as t
+from test_offline import binding, bmp
+
+class Budget:
+
+    def left(self):
+        return 35000
+
+class STA:
+
+    def ifconfig(self):
+        return ('192.0.2.9', '', '', '192.0.2.10')
+
+    def config(self, key=None, **kw):
+        return b'123456' if key == 'mac' else 'synthetic'
+
+    def status(self, key):
+        return -42
+
+def cfg():
+    return {'DNS_SERVERS': '192.0.2.11, 192.0.2.12,192.0.2.13', 'ENDPOINT': 'http://fixture.invalid/image', 'API_KEY': 'synthetic', 'DISPLAY_TYPE': 'ePaper2in9'}
+
+class Tests(unittest.TestCase):
+
+    def test_order_dhcp_comparison_and_first_tcp_success(self):
+        calls = []
+        n = types.SimpleNamespace(ipconfig=lambda **kw: calls.append(kw))
+        with patch.dict(sys.modules, {'network': n}), patch.object(t, 'dns_a', return_value='192.0.2.99'):
+            p = t.OriginalDNSPolicy(STA(), cfg(), 'fixture.invalid', binding(), 1, Budget())
+            with patch.object(p, '_tcp_probe', side_effect=[False, True]):
+                result = p.apply(probe_dhcp=True)
+        self.assertEqual(calls, [{'prefer': 4}, {'dns': '192.0.2.11'}, {'dns': '192.0.2.12'}])
+        self.assertEqual(result['selected_server_index'], 1)
+        self.assertEqual([r['resolved_ip_equals_dhcp'] for r in result['server_attempts']], [True, True])
+        self.assertNotIn('192.0.2', json.dumps(result))
+
+    def test_two_live_then_cache_then_static_and_host_binding(self):
+        with patch.object(t.time, 'sleep_ms', create=True) as sleep:
+            p = t.OriginalDNSPolicy(STA(), cfg(), 'fixture.invalid', binding(), 1, Budget())
+            with patch.object(p, '_resolve_live', side_effect=OSError('SECRET')) as live:
+                self.assertEqual(p.resolve(), '192.0.2.200')
+                self.assertEqual(live.call_count, 2)
+                self.assertTrue(p.fallback_used)
+                p.cache = '192.0.2.201'
+                self.assertEqual(p.resolve(), p.cache)
+                self.assertTrue(p.cache_used)
+            self.assertEqual(sleep.call_count, 2)
+        with self.assertRaises(t.Stop):
+            t.OriginalDNSPolicy(STA(), cfg(), 'other.invalid', binding(), 1, Budget())
+
+    def test_deadline_cannot_be_hidden_by_fallback(self):
+        p = t.OriginalDNSPolicy(STA(), cfg(), 'fixture.invalid', binding(), 1, Budget())
+        p.deadline = types.SimpleNamespace(left=lambda: (_ for _ in ()).throw(t.Stop('deadline')))
+        with self.assertRaisesRegex(t.Stop, 'deadline'):
+            p.resolve()
+
+    def test_rotation_original_literal_two_and_fresh_resolve_each_request(self):
+        urls = types.SimpleNamespace(parse_url=lambda e: ('http', 'fixture.invalid', 80, '/image'), build_query_string=lambda x: 'synthetic=1')
+        for rotation, expected in [('2', True), ('180', False), ('0', False), ('other', False)]:
+            policy = types.SimpleNamespace(resolve=lambda: '192.0.2.99', deadline=None)
+            with patch.dict(sys.modules, {'url_utils': urls}), patch.object(app, 'Deadline', return_value=Budget()), patch.object(app, 'request', side_effect=[({}, b''), ({'rotate': rotation}, bmp())]) as req, patch('builtins.open', side_effect=OSError):
+                data, rotate, flags = app.fetch(STA(), cfg(), 1, 0, binding(), policy=policy)
+            self.assertEqual(rotate, expected)
+            self.assertEqual(req.call_count, 2)
+
+    def test_fixed_error_tags_and_http_wire(self):
+        self.assertEqual(t.safe_stop_code(t.Stop('bmp_header')), 'bmp_header')
+        self.assertEqual(t.safe_stop_code(t.Stop('SECRET_PRIVATE_VALUE')), 'unclassified')
+        self.assertEqual(t.safe_stop_code(ValueError('SECRET_PRIVATE_VALUE')), 'unclassified')
+        from pathlib import Path
+        source = Path(t.__file__).read_text()
+        self.assertIn("' HTTP/1.0'", source)
+        self.assertNotIn('Accept: */*', source)
+if __name__ == '__main__':
+    unittest.main()

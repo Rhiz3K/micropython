@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "meter_identity_matches_verified_fixture": true,
+  "hid_instances": 1,
+  "lan_specific_bind_verified": true,
+  "firewall": "disabled_read_only_observed",
+  "host_network_unchanged": true,
+  "host_utc": "2026-09-30T21:13:28.710406+00:00",
+  "host_monotonic": 623744.871443166
+}

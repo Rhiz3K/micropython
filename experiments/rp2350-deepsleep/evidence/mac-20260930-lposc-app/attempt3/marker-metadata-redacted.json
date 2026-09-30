@@ -1,0 +1,21 @@
+{
+  "schema": 2,
+  "usb_mode": "USB_CONNECTED",
+  "host_anchor": {
+    "utc_ns": 1790806906146928000,
+    "monotonic_before_ns": 627842312175750,
+    "monotonic_after_ns": 627842312176541
+  },
+  "boundary": "first_DOWNLOAD_READY_receipt_to_next_first_receipt",
+  "cycles": 3,
+  "sleep_ms": 300000,
+  "force_refresh": true,
+  "go_proof_role": "root_owned_USB_connected_identity_firmware_installation_plus_live_meter_health",
+  "firmware_bin_sha256": "a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08",
+  "root_preflight_sha256": "2627df430dc6d45a14f66261f92209068b91947ba5508acc6feba124b1ef7cc3",
+  "meter_reader_sha256": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+  "listener_seconds": 1800,
+  "run": "00000003000000000000000000000000",
+  "firmware_version": "v1.30.0-preview.105.g6ce738ae0f.dirty",
+  "source_private_metadata_sha256": "3bf23f1f58945f39e3c15487a5bf04fe8e4783bae7fca9fb0864bd0803b8f5b8"
+}

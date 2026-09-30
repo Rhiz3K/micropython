@@ -1,0 +1,186 @@
+"""Root-only one-shot USB-connected application pilot, with bounded capture."""
+import contextlib, fcntl, hashlib, json, math, os, secrets, signal, subprocess, sys, time
+from datetime import datetime, timedelta
+from pathlib import Path
+sys.path.insert(0,'/Users/rhiz3k/pico-work/watchdog-device-20260930T150044Z')
+import support as p
+import timing_phase as timing
+ROOT=Path(__file__).resolve().parent
+REVIEW=ROOT/'adapter-usb-review'
+PARKED=timing.PARKED
+TEMP=timing.TEMP
+ARMED='/app-cycle-usb-armed.json'
+CONSUMED='/app-cycle-usb-consumed.json'
+EVENTS='/app-cycle-usb-events.jsonl'
+TERMINAL='/app-cycle-usb-terminal.json'
+WIFI='/app-cycle-usb-wifi-private.json'
+READER=p.OLD/'meter_reader.py'
+READER_SHA='a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45'
+os.umask(0o077)
+
+def stage():
+ p.require(p.read_json(ROOT/'timing-300s-post-public.json')['result']=='PASS','Long timing incomplete')
+ p.require(p.sha(REVIEW/'offline-review.json')=='3d6feb484e515a2f40e3fa7646a5e01bac511cc352d4b1a8c320a84372e76b2a','Root-reviewed pilot proof pin')
+ prep=p.read_json(REVIEW/'offline-review.json')
+ p.require(prep['hardware_executed'] is False and prep['network_executed'] is False,'Offline review must be hardware-free')
+ for name,digest in prep['source_sha256'].items():
+  p.require(p.sha(REVIEW/name)==digest,'Pilot reviewed source changed')
+ for name in ('drivers/ePaper2in9.py','url_utils.py'):
+  p.require(p.sha(ROOT/'original-files'/name)==prep['readonly_dependency_sha256'][name],'Original app dependency pin')
+ p.require(p.sha(READER)==READER_SHA,'Frozen meter reader changed')
+ initial=p.read_json(ROOT/'initial-state-private.json')
+ originals=p.mapping(p.read_json(ROOT/'inventory-before-private.json'))
+ for path,(size,digest) in originals.items():
+  source=ROOT/'original-files'/path.lstrip('/')
+  p.require(source.is_file() and not source.is_symlink() and (source.stat().st_size,p.sha(source))==(size,digest),'Original backup changed')
+ p.require(p.sha(ROOT/'full-flash-before.bin')==p.read_json(ROOT/'full-backup-public.json')['full_flash_sha256'],'Own full backup changed')
+ credentials=p.read_json(Path('/Users/rhiz3k/pico-work/rp2350-mac-20260927-112409/wifi-ASUS2014.json'))
+ p.require(credentials.get('ssid')=='ASUS2014' and isinstance(credentials.get('password'),str) and credentials['password'],'Explicit authorized Wi-Fi source gate')
+ wifi=ROOT/'pilot-wifi-private.json';p.write_json(wifi,{k:credentials[k] for k in ('ssid','password')});credentials=None
+ control=p.read_json(REVIEW/'control-template.json')
+ nonce=secrets.token_hex(16)
+ p.require(int(nonce[:8],16)!=0,'Nonzero random nonce')
+ route=p.read_json(ROOT/'lan-route-private.json')
+ control.update(run=nonce,firmware_version=p.NEW_VERSION,marker_ipv4=route['ipv4'],marker_port=route['port'])
+ controlfile=ROOT/'pilot-control-private.json';p.write_json(controlfile,control)
+ with p.locks():
+  b,ident=p.connect(p.NEW_VERSION)
+  try:
+   files=p.mapping(p.inventory(b));s=p.state(b);w=s['backup'][2]
+   p.require(files==p.mapping(p.read_json(ROOT/'timing-300s-post-inventory-private.json')) and p.directories(b)==p.read_json(ROOT/'directories-before-private.json'),'Timing layout changed')
+   p.require(w[:2]==[0x44535032,2] and w[3:]==[2,0,4,0,0x13579bdf] and not s['wdt_ctrl']&(1<<30),'Timing not stopped')
+   p.require(files[PARKED]==originals['/main.py'] and p.firmware_hash(b,p.FW_SIZE)==p.FW_SHA,'Firmware/parked original gate')
+   p.require(files['/pico_epaper29_lowpower.py'][1]==prep['readonly_dependency_sha256']['pico_epaper29_lowpower.py'],'Live panel helper source pin')
+   p.require(not set(files)&{ARMED,CONSUMED,EVENTS,TERMINAL,WIFI,'/app_cycle.py','/app_transport.py'},'Pilot file collision')
+   # Restore the original RTC trajectory before the application workload.
+   start=time.monotonic();elapsed=start-(initial['rtc_capture_before']+initial['rtc_capture_after'])/2
+   p.require(0<=elapsed<86400,'Fresh RTC anchor gate')
+   r=initial['rtc'];dt=datetime(r[0],r[1],r[2],r[4],r[5],r[6])+timedelta(seconds=elapsed)
+   target=(dt.year,dt.month,dt.day,dt.weekday(),dt.hour,dt.minute,dt.second,0)
+   b.exec_('_ap_saved=%r\n_ap_regions=machine.mem_backup(-1)\nfor _ap_i,_ap_region in enumerate(_ap_regions):\n for _ap_j,_ap_v in enumerate(_ap_saved[_ap_i]):\n  _ap_region[_ap_j]=_ap_v\nmachine.RTC().datetime(%r)'%(initial['backup'],target),timeout=8)
+   restored=p.state(b);restore_after=time.monotonic()
+   p.require(restored['backup']==initial['backup'],'All3 backup restore before pilot')
+   got=restored['rtc'];got_dt=datetime(got[0],got[1],got[2],got[4],got[5],got[6])
+   target_dt=datetime(target[0],target[1],target[2],target[4],target[5],target[6])
+   p.require(0<=(got_dt-target_dt).total_seconds()<=math.ceil(restore_after-start)+1,'RTC restored trajectory readback')
+   p.write_json(ROOT/'pilot-rtc-restored-private.json',dict(state=restored,target=target,restore_before=start,restore_after=restore_after,initial_rtc_capture_bracket_s=initial['rtc_capture_after']-initial['rtc_capture_before'],**p.stamp()))
+   for source,targetpath in ((REVIEW/'app_cycle.py','/app_cycle.py'),(REVIEW/'app_transport.py','/app_transport.py'),(wifi,WIFI),(REVIEW/'main-draft.py','/main.py'),(controlfile,ARMED)):
+    files=timing.atomic(b,source,targetpath,files)
+   p.write_json(ROOT/'pilot-installed-inventory-private.json',p.inventory(b))
+   p.write_json(ROOT/'pilot-preflight-private.json',dict(schema=2,usb_mode='USB_CONNECTED',run=nonce,identity=ident,files_verified=True,firmware_bin_sha256=p.FW_SHA,firmware_version=p.NEW_VERSION,backup_proof_sha256=p.sha(ROOT/'full-backup-public.json'),source_review_sha256=p.sha(REVIEW/'offline-review.json'),rtc_restored_initial_plus_elapsed=True,original_application_not_imported=True,**p.stamp()))
+   p.friendly(b)
+   print(json.dumps(dict(result='PILOT_STAGED_INERT_REPL',usb_mode='USB_CONNECTED',armed_control_installed_last=True)),flush=True)
+  finally:b.close()
+
+def postcheck(listener_complete):
+ proof=p.read_json(ROOT/'pilot-markers/result.json')
+ p.require(listener_complete is True and proof['result']=='BOUNDARIES_COMPLETE' and proof['completed_intervals']==3 and len(proof['boundaries'])==4 and proof['go_acknowledged'] is True,'No automatic REPL on an incomplete application run')
+ p.require(proof['finished_monotonic_ns']-proof['boundaries'][-1]['receipt_monotonic_ns']>=12_000_000_000,'Application listener tail incomplete')
+ installed=p.mapping(p.read_json(ROOT/'pilot-installed-inventory-private.json'))
+ b,ident=p.connect(p.NEW_VERSION)
+ try:
+  rows=p.inventory(b);files=p.mapping(rows)
+  expected=dict(installed);expected[CONSUMED]=expected.pop(ARMED)
+  extras=set(files)-set(expected)
+  p.require(extras=={EVENTS,TERMINAL} and all(files.get(k)==v for k,v in expected.items()),'Pilot original/source file drift')
+  p.require(files[EVENTS][0]<=32768 and files[TERMINAL][0]<=2048 and p.directories(b)==p.read_json(ROOT/'directories-before-private.json'),'Pilot output/directory bounds')
+  p.require(p.firmware_hash(b,p.FW_SIZE)==p.FW_SHA,'Pilot actual firmware gate')
+  for device,local in ((EVENTS,'pilot-device-events-private.jsonl'),(TERMINAL,'pilot-device-terminal-private.json')):
+   b.fs_get(device,str(ROOT/local));p.require((ROOT/local).stat().st_size==files[device][0] and p.sha(ROOT/local)==files[device][1],'Pilot mutable output readback')
+  terminal=p.read_json(ROOT/'pilot-device-terminal-private.json')
+  config=p.read_json(ROOT/'pilot-control-private.json');s=p.state(b);w=s['backup'][2]
+  check=0
+  for val in w[:6]:check^=val
+  p.require(w[0]==0x41505531 and w[1]==int(config['run'][:8],16) and w[2]==3 and w[4:6]==[0,0] and w[6:]==[check&0xffffffff,(~0x41505531)&0xffffffff] and not s['wdt_ctrl']&(1<<30),'Pilot not terminal stopped')
+  p.require(terminal['schema']==1 and terminal['result'] in ('COMPLETE','FAIL') and w[3]==max(0,terminal['index']),'Pilot terminal/progress disagree')
+  p.write_json(ROOT/'pilot-post-inventory-private.json',rows)
+  p.write_json(ROOT/'pilot-post-state-private.json',dict(state=s,**p.stamp()))
+  p.friendly(b)
+  result='PASS' if terminal==dict(schema=1,result='COMPLETE',index=3) and listener_complete else 'FAIL'
+  p.write_json(ROOT/'pilot-device-post-public.json',dict(result=result,terminal_result=terminal['result'],terminal_index=terminal['index'],usb_mode='USB_CONNECTED',all_original_files_preserved=True,firmware_bin_verified=True,persistent_stopped=True,friendly_repl=True,**p.stamp()))
+  print(json.dumps(dict(result=result,terminal_result=terminal['result'],terminal_index=terminal['index'],usb_mode='USB_CONNECTED')),flush=True)
+ finally:b.close()
+
+def run():
+ p.require((ROOT/'pilot-preflight-private.json').is_file() and not (ROOT/'pilot-go-proof-private.json').exists(),'One-shot pilot preflight')
+ import importlib.util
+ spec=importlib.util.spec_from_file_location('pilot_listener',REVIEW/'marker_listener.py');listenerlib=importlib.util.module_from_spec(spec);spec.loader.exec_module(listenerlib)
+ cfg=p.read_json(ROOT/'pilot-control-private.json')
+ capture=ROOT/'pilot-meter';markerout=ROOT/'pilot-markers';stop=ROOT/'pilot-meter.stop'
+ reader=None;listener=None;caffeinate=None
+ files=[]
+ try:
+  with contextlib.ExitStack() as stack:
+   for name in ('.measure-variants.lock','.wake-rtc.lock'):
+    lock=stack.enter_context((p.OLD/name).open('a+'));fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+   caffeinate=subprocess.Popen(['/usr/bin/caffeinate','-dims','-w',str(os.getpid())],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+   meterlog=stack.enter_context((ROOT/'pilot-meter-process-private.log').open('xb'))
+   reader=subprocess.Popen([sys.executable,str(READER),'--seconds','1800','--identity-json',str(ROOT/'meter-identity-private.json'),'--output-dir',str(capture),'--stop-file',str(stop)],stdout=meterlog,stderr=subprocess.STDOUT)
+   deadline=time.monotonic()+25
+   while listenerlib.meter_ready(capture,time.monotonic_ns()) is None:
+    p.require(reader.poll() is None and time.monotonic()<deadline,'Meter startup failed; no Pico launch')
+    time.sleep(.1)
+   b,ident=p.connect(p.NEW_VERSION)
+   try:
+    p.require(p.mapping(p.inventory(b))==p.mapping(p.read_json(ROOT/'pilot-installed-inventory-private.json')) and p.firmware_hash(b,p.FW_SIZE)==p.FW_SHA and not p.state(b)['wdt_ctrl']&(1<<30),'Fresh GO identity/BIN/files gate')
+    stamp=time.monotonic_ns()
+    proof=dict(schema=2,run=cfg['run'],approved=True,usb_mode='USB_CONNECTED',usb_connected_verified=True,pico_identity_verified=True,firmware_verified=True,installed_files_verified=True,firmware_version=p.NEW_VERSION,firmware_bin_sha256=p.FW_SHA,root_preflight_sha256=p.sha(ROOT/'pilot-preflight-private.json'),board_verified_monotonic_ns=stamp)
+    p.write_json(ROOT/'pilot-go-proof-private.json',proof)
+    listenerlog=stack.enter_context((ROOT/'pilot-listener-process-private.log').open('xb'))
+    listener=subprocess.Popen([sys.executable,str(REVIEW/'marker_listener.py'),'--bind-ip',cfg['marker_ipv4'],'--port',str(cfg['marker_port']),'--run',cfg['run'],'--output',str(markerout),'--go-proof',str(ROOT/'pilot-go-proof-private.json'),'--preflight-proof',str(ROOT/'pilot-preflight-private.json'),'--firmware-version',p.NEW_VERSION,'--firmware-sha256',p.FW_SHA,'--meter-dir',str(capture)],stdout=listenerlog,stderr=subprocess.STDOUT)
+    wait=time.monotonic()+5
+    while not (markerout/'events.jsonl').exists():
+     p.require(listener.poll() is None and time.monotonic()<wait,'LAN listener startup failed')
+     time.sleep(.05)
+    b.exec_raw_no_follow('time.sleep_ms(150); machine.reset()')
+   finally:b.close()
+   print(json.dumps(dict(result='PILOT_LAUNCHED',usb_mode='USB_CONNECTED',cycles=3,sleep_ms=300000)),flush=True)
+   first_limit=time.monotonic()+120;last_progress=time.monotonic();count=0
+   while listener.poll() is None:
+    p.require(reader.poll() is None,'Meter reader failed during application')
+    path=markerout/'events.jsonl'
+    rows=[]
+    if path.exists():
+     for line in path.read_text().splitlines():
+      try:rows.append(json.loads(line))
+      except json.JSONDecodeError:continue
+    boundaries=[r for r in rows if r.get('kind')=='DOWNLOAD_READY' and r.get('duplicate') is False]
+    if len(boundaries)>count:
+     count=len(boundaries);last_progress=time.monotonic()
+     print(json.dumps(dict(event='DOWNLOAD_BOUNDARY',index=count-1,usb_mode='USB_CONNECTED')),flush=True)
+    p.require(time.monotonic()<(first_limit if count==0 else last_progress+480),'Application marker deadline; incomplete no retry')
+    time.sleep(.2)
+   complete=listener.returncode==0 and p.read_json(markerout/'result.json')['result']=='BOUNDARIES_COMPLETE'
+   stop.write_bytes(b'root bounded application pilot tail complete\n')
+   reader.wait(timeout=15)
+   p.write_json(ROOT/'pilot-process-public.json',dict(result='PASS' if complete and reader.returncode==0 else 'FAIL',listener_boundaries_complete=complete,capture_exit=reader.returncode,usb_mode='USB_CONNECTED',**p.stamp()))
+   p.require(complete,'Application marker listener failed; no automatic REPL or device retry')
+   postcheck(True)
+ finally:
+  if listener is not None and listener.poll() is None:
+   listener.terminate()
+   try:listener.wait(timeout=5)
+   except subprocess.TimeoutExpired:listener.kill();listener.wait()
+  if reader is not None and reader.poll() is None:
+   if not stop.exists():stop.write_bytes(b'root incomplete pilot stop\n')
+   try:reader.wait(timeout=15)
+   except subprocess.TimeoutExpired:reader.terminate();reader.wait(timeout=5)
+  if caffeinate is not None and caffeinate.poll() is None:caffeinate.terminate()
+
+def main():
+ p.require(sys.argv[1] in ('stage','run'),'Explicit pilot phase')
+ phase=sys.argv[1]
+ if len(sys.argv)==3 and sys.argv[2]=='--worker':
+  globals()[phase]()
+  return
+ p.require(len(sys.argv)==2,'Invalid arguments')
+ child=subprocess.Popen([sys.executable,str(Path(__file__).resolve()),phase,'--worker'],start_new_session=True)
+ try:code=child.wait(timeout=1950 if phase=='run' else 120)
+ except subprocess.TimeoutExpired:
+  os.killpg(child.pid,signal.SIGTERM)
+  try:child.wait(timeout=5)
+  except subprocess.TimeoutExpired:os.killpg(child.pid,signal.SIGKILL);child.wait()
+  raise RuntimeError('Pilot root phase deadline; no automatic device retry') from None
+ raise SystemExit(code)
+
+if __name__=='__main__':main()

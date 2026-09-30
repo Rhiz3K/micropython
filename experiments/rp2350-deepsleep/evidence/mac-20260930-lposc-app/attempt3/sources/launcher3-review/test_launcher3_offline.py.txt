@@ -1,0 +1,163 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Synthetic only: no real support, network, device, original app or credentials."""
+import ast
+import contextlib
+import copy
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import tempfile
+import time
+import types
+import unittest
+from unittest.mock import patch
+SOURCE = Path(__file__).with_name('app_pilot3_phase.py')
+TEXT = SOURCE.read_text()
+spec = importlib.util.spec_from_file_location('launcher3', SOURCE)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+
+def item(data):
+    return (len(data), hashlib.sha256(data).hexdigest())
+
+def rows(files):
+    return [dict(path=p, size=v[0], sha256=v[1]) for p, v in files.items()]
+
+def mapping(data):
+    return {r['path']: (r['size'], r['sha256']) for r in data}
+
+def write_json(path, data):
+    with Path(path).open('x') as f:
+        json.dump(data, f)
+
+def good_probe():
+    return dict(result='PASS', image_valid=True, format='Z2', get_status=200, decoder_sha256=m.CODEC_SHA, application_commit=m.APPLICATION_COMMIT, source_review_sha256=m.PROBE_TRANSPORT_REVIEW_SHA, plane_bytes=[4736, 4736], red_plane_empty=True, width=296, height=128, pixels=37888, scope='GET_ONLY_RAM_CURRENT_APPLICATION_DECODER', post_skipped=True, original_files_and_firmware_unchanged=True, radio_off_verified=True, reset_performed=False, sleep_performed=False, panel_refresh_performed=False)
+
+class Fake:
+
+    def __init__(self, root, fail=None):
+        self.root = root
+        self.fail = fail
+        self.trace = []
+        self.original = {'/main.py': item(b'original main')}
+        self.original.update({'/f%d.py' % i: item(b'original') for i in range(28)})
+        self.files = dict(self.original)
+        (root / 'original-files').mkdir()
+        for path in self.original:
+            (root / 'original-files' / path[1:]).write_bytes(b'original main' if path == '/main.py' else b'original')
+        self.dirs = ['/'] + ['/d%d' % i for i in range(6)]
+        self.s = dict(uid='synthetic', wdt_ctrl=0, backup=[[1] * 4, [2] * 3, [3] * 8], rtc=[2026, 10, 1, 3, 0, 0, 0, 0])
+        write_json(root / 'inventory-before-private.json', rows(self.original))
+        write_json(root / 'directories-before-private.json', self.dirs)
+        write_json(root / 'lan-route-private.json', dict(ipv4='192.0.2.1', port=47831))
+        self.auth = root / 'authorized-synthetic-wifi.json'
+        write_json(self.auth, dict(ssid='synthetic', password='synthetic'))
+        full = root / 'full-flash-before.bin'
+        full.write_bytes(b'\x00' * 4194304)
+        write_json(root / 'full-backup-public.json', dict(result='PASS', independent_verify=True, full_flash_sha256=m.sha(full)))
+        review = root / 'adapter-usb-v3-review'
+        review.mkdir()
+        for name in ('app_cycle.py', 'app_transport.py', 'app_image.py', 'main-draft.py'):
+            (review / name).write_bytes(b'new fixture')
+        write_json(review / 'control-template.json', dict(schema=2))
+        write_json(review / 'dns-policy-binding-private.json', dict(synthetic='binding'))
+        (root / 'staging').mkdir()
+        old = root / 'old'
+        (old / 'staging').mkdir(parents=True)
+        artifacts = {}
+        for name in ('panel_probe.py', 'rp2350_epd_vendor.py', 'pico_epaper29_lowpower.py'):
+            data = ('panel' + name).encode()
+            (root / 'staging' / name).write_bytes(data)
+            artifacts[name] = dict(bytes=len(data), sha256=item(data)[1])
+        write_json(old / 'staging/provenance.json', dict(artifacts=artifacts))
+        self.dependencies = {'pico_epaper29_lowpower.py': artifacts['pico_epaper29_lowpower.py']['sha256']}
+        self.approval = dict(source_review_sha256='a' * 64, binding_sha256='b' * 64, probe_sha256='c' * 64)
+        fw = item(b'\x00')[1]
+        self.p = types.SimpleNamespace(mapping=mapping, read_json=m.read_json, write_json=write_json, sha=m.sha, locks=contextlib.nullcontext, connect=lambda v: (self, {}), inventory=lambda b: rows(self.files), directories=lambda b: self.dirs, state=lambda b: copy.deepcopy(self.s), firmware_hash=lambda b, n: fw, FW_SIZE=1, FW_SHA=fw, NEW_VERSION='v-test', OLD=old, stamp=lambda: {}, friendly=lambda b: self.trace.append('friendly'))
+
+    def close(self):
+        self.trace.append('close')
+
+    def fs_get(self, path, dest):
+        assert path == '/main.py'
+        Path(dest).write_bytes(b'original main')
+        self.trace.append('get_original_main')
+
+    def fs_put(self, source, dest):
+        self.trace.append(('put', dest))
+        self.files[dest] = item(Path(source).read_bytes())
+        if self.fail == 'staging':
+            self.files[dest] = (0, '0' * 64)
+
+    def atomic(self, b, source, dest, expected):
+        assert self.files == expected and m.TEMP not in expected
+        self.trace.append(('atomic', dest))
+        self.files = dict(self.files)
+        self.files[dest] = item(Path(source).read_bytes())
+        return dict(self.files)
+
+    def exec_(self, code, timeout):
+        assert 'RTC().datetime(' not in code and 'mem_backup' not in code
+        if 'os.rename(' in code:
+            args = code.split('os.rename(', 1)[1].split(');', 1)[0]
+            source, dest = ast.literal_eval('(' + args + ')')
+            if self.fail == 'after_park' and source == m.TEMP:
+                raise OSError('synthetic')
+            self.trace.append(('rename', source, dest))
+            self.files[dest] = self.files.pop(source)
+        return b''
+
+class Tests(unittest.TestCase):
+
+    def test_import_is_inert(self):
+        fresh = importlib.util.module_from_spec(spec)
+        with patch('builtins.open', side_effect=AssertionError('IO')), patch.object(Path, 'read_bytes', side_effect=AssertionError('IO')), patch.object(Path, 'read_text', side_effect=AssertionError('IO')):
+            exec(compile(TEXT, str(SOURCE), 'exec'), fresh.__dict__)
+        self.assertIsNone(fresh.p)
+        self.assertIsNone(fresh.timing)
+
+    def test_exact_probe_and_codec_gate(self):
+        probe = good_probe()
+        m.probe_pass(probe)
+        for key, value in [('result', 'FAIL'), ('image_valid', False), ('format', 'OTHER'), ('decoder_sha256', 'f' * 64), ('red_plane_empty', False), ('plane_bytes', [4736]), ('width', 128), ('source_review_sha256', 'f' * 64), ('panel_refresh_performed', True)]:
+            with self.subTest(key=key), self.assertRaises(RuntimeError):
+                m.probe_pass(dict(probe, **{key: value}))
+
+    def test_fresh_stage_snapshot_guard_before_dependencies_and_armed_last(self):
+        for fail in (None, 'staging', 'after_park'):
+            with self.subTest(fail=fail), tempfile.TemporaryDirectory() as d:
+                root = Path(d)
+                fake = Fake(root, fail)
+                before = copy.deepcopy(fake.s)
+                oldsha = m.sha(root / 'full-flash-before.bin')
+                with patch.multiple(m, ROOT=root, OUT=root / 'pilot3', REVIEW=root / 'adapter-usb-v3-review', BINDING=root / 'adapter-usb-v3-review/dns-policy-binding-private.json', AUTHORIZED_WIFI=fake.auth, p=fake.p, timing=types.SimpleNamespace(atomic=fake.atomic), READONLY_DEPENDENCY_SHA=fake.dependencies, APPROVAL_SHA='d' * 64), patch.object(m, 'validate_approval', return_value=(fake.approval, {})):
+                    if fail:
+                        with self.assertRaises((RuntimeError, OSError)):
+                            m.stage()
+                        self.assertNotIn(m.ARMED, fake.files)
+                        if fail == 'after_park':
+                            self.assertNotIn('/main.py', fake.files)
+                            self.assertEqual(fake.files[m.PARKED], fake.original['/main.py'])
+                        else:
+                            self.assertEqual(fake.files['/main.py'], fake.original['/main.py'])
+                    else:
+                        m.stage()
+                        self.assertEqual(fake.trace[:4], ['get_original_main', ('put', m.TEMP), ('rename', '/main.py', m.PARKED), ('rename', m.TEMP, '/main.py')])
+                        self.assertEqual([t for t in fake.trace if isinstance(t, tuple) and t[0] == 'atomic'][-1], ('atomic', m.ARMED))
+                        self.assertIn('/app_image.py', fake.files)
+                        self.assertEqual(fake.trace[-2:], ['friendly', 'close'])
+                    saved = m.read_json(root / 'pilot3/fresh-initial-state-private.json')
+                    self.assertEqual(saved['backup'], before['backup'])
+                    self.assertEqual(saved['rtc'], before['rtc'])
+                    self.assertEqual(saved['scope'], 'PILOT3_FRESH_ORIGINAL_BEFORE_STAGE')
+                    self.assertEqual(fake.s, before)
+                    self.assertEqual(m.sha(root / 'full-flash-before.bin'), oldsha)
+
+    def test_postcheck_refuses_repl_without_complete_tail(self):
+        for proof in ({'result': 'FAIL'}, {'result': 'BOUNDARIES_COMPLETE', 'completed_intervals': 3, 'boundaries': [{}, {}, {}, {'receipt_monotonic_ns': 1}], 'go_acknowledged': True, 'finished_monotonic_ns': 2}):
+            p = types.SimpleNamespace(read_json=lambda path: proof, require=m.require, connect=lambda *a: (_ for _ in ()).throw(AssertionError('REPL opened')))
+            with patch.object(m, 'p', p), self.assertRaises(RuntimeError):
+                m.postcheck(True)
+if __name__ == '__main__':
+    unittest.main()

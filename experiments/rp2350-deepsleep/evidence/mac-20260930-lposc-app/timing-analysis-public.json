@@ -1,0 +1,85 @@
+{
+  "result": "PASS",
+  "meaning": "Complete timing evidence; no accuracy threshold asserted",
+  "samples": [
+    {
+      "run": "lposc-timing-20260930-30s",
+      "wake_boot": 2,
+      "requested_s": 30.0,
+      "ack_to_ready_s": 33.454643667,
+      "ack_return_to_ready_s": 33.454626917,
+      "ack_api_span_s": 1.675e-05,
+      "wall_minus_monotonic_s": -3.9666999995802144e-05,
+      "panel_prepare_ms": 2119,
+      "rtc_elapsed_s": 32
+    },
+    {
+      "run": "lposc-timing-20260930-30s",
+      "wake_boot": 3,
+      "requested_s": 30.0,
+      "ack_to_ready_s": 33.466423583,
+      "ack_return_to_ready_s": 33.466389875,
+      "ack_api_span_s": 3.3708e-05,
+      "wall_minus_monotonic_s": -3.958300000306281e-05,
+      "panel_prepare_ms": 2119,
+      "rtc_elapsed_s": 33
+    },
+    {
+      "run": "lposc-timing-20260930-300s",
+      "wake_boot": 2,
+      "requested_s": 300.0,
+      "ack_to_ready_s": 305.086132916,
+      "ack_return_to_ready_s": 305.086112166,
+      "ack_api_span_s": 2.075e-05,
+      "wall_minus_monotonic_s": -0.0003589159999819458,
+      "panel_prepare_ms": 2119,
+      "rtc_elapsed_s": 302
+    },
+    {
+      "run": "lposc-timing-20260930-300s",
+      "wake_boot": 3,
+      "requested_s": 300.0,
+      "ack_to_ready_s": 305.183163084,
+      "ack_return_to_ready_s": 305.183146334,
+      "ack_api_span_s": 1.675e-05,
+      "wall_minus_monotonic_s": -0.0003600840000217431,
+      "panel_prepare_ms": 2119,
+      "rtc_elapsed_s": 303
+    }
+  ],
+  "fit": {
+    "mean_30s_observed_s": 33.460533625,
+    "mean_300s_observed_s": 305.13464799999997,
+    "slope_s_per_requested_s": 1.006200423611111,
+    "intercept_s": 3.2745209166666633,
+    "apparent_rate_error_ppm": 6200.423611111061,
+    "within_30s_range_s": 0.011779916000001833,
+    "within_300s_range_s": 0.09703016800000341,
+    "observed_pair_slope_range": [
+      1.0059989234555555,
+      1.0064019237666668
+    ],
+    "residuals_s": [
+      -0.005889957999997364,
+      0.005889958000004469,
+      -0.04851508400003013,
+      0.048515083999973285
+    ],
+    "slope_standard_error_iid_assumption": 0.00018100485335439576,
+    "slope_95pct_interval_iid_normal_assumption": [
+      1.0054216225846826,
+      1.0069792246375395
+    ],
+    "sample_count": 4,
+    "distinct_requested_durations": 2,
+    "model": "observed host interval = fixed overhead + slope * requested duration",
+    "limits": [
+      "ACK timestamps bracket a host write API call, not physical device ACK receipt",
+      "USB enumeration, full boot, panel preparation and BIN hash precede READY",
+      "Fit removes only overhead that is constant across both durations",
+      "Two repeats per duration cannot establish temperature/voltage drift or robust absolute accuracy",
+      "Host wall/monotonic consistency is only a coarse suspend/clock-step check",
+      "This is not a direct measurement of oscillator frequency during deep sleep"
+    ]
+  }
+}

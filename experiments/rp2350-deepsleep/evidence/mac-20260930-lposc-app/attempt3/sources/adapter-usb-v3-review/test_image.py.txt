@@ -1,0 +1,74 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Synthetic image/bridge fixtures only. No device or image/secret input."""
+import struct
+import unittest
+from app_cycle import decode_image, image_pixel
+from app_transport import Stop
+WIDTH, HEIGHT = (296, 128)
+POINTS = {(0, 0), (1, 7), (37, 8), (295, 127)}
+
+def z2(points=POINTS, color=1):
+    values = [color if (x, y) in points else 0 for y in range(HEIGHT) for x in range(WIDTH)]
+    result = bytearray(b'Z2')
+    index = 0
+    while index < len(values):
+        end = index + 1
+        while end < len(values) and values[end] == values[index] and (end - index < 63):
+            end += 1
+        result.append(values[index] << 6 | end - index)
+        index = end
+    return result
+
+def bmp(points=POINTS, top_down=False):
+    size = 62 + 40 * HEIGHT
+    result = bytearray(size)
+    result[:2] = b'BM'
+    struct.pack_into('<I', result, 2, size)
+    struct.pack_into('<I', result, 10, 62)
+    struct.pack_into('<IiiHHII', result, 14, 40, WIDTH, -HEIGHT if top_down else HEIGHT, 1, 1, 0, 40 * HEIGHT)
+    result[58:61] = b'\xff\xff\xff'
+    result[62:] = b'\xff' * (size - 62)
+    for x, y in points:
+        file_y = y if top_down else HEIGHT - 1 - y
+        result[62 + file_y * 40 + x // 8] &= 255 ^ 1 << 7 - x % 8
+    return result
+
+class Tests(unittest.TestCase):
+
+    def test_z2_bmp_native_parity_both_rotations_and_row_directions(self):
+        for rotate in (False, True):
+            expected_points = {(WIDTH - 1 - x, HEIGHT - 1 - y) for x, y in POINTS} if rotate else POINTS
+            baseline = decode_image(z2(), rotate)
+            self.assertEqual(baseline, decode_image(bmp(), rotate))
+            self.assertEqual(baseline, decode_image(bmp(top_down=True), rotate))
+            black, red = baseline
+            self.assertEqual((len(black), len(red)), (4736, 4736))
+            self.assertFalse(any(red))
+            actual = {(x, y) for y in range(HEIGHT) for x in range(WIDTH) if image_pixel(black, x, y)}
+            self.assertEqual(actual, expected_points)
+
+    def test_z2_bounds_reject_truncation_zero_reserved_overrun_and_trailing(self):
+        white = z2(set())
+        for body in (b'', b'Z2', white[:-1], b'Z2\x00', b'Z2\xc1', white[:-1] + bytes([white[-1] + 1]), white + b'\x01', bmp()[:-1]):
+            with self.assertRaises(Stop):
+                decode_image(body, False)
+
+    def test_native_to_original_driver_inverse_at_every_corner(self):
+        black = bytearray(b'\xff' * 4736)
+        for x, y in ((0, 0), (295, 0), (0, 127), (295, 127)):
+            address, bit = (x * 16 + 15 - y // 8, 1 << y % 8)
+            self.assertEqual(image_pixel(black, x, y), 0)
+            black[address] &= 255 ^ bit
+            self.assertEqual(image_pixel(black, x, y), 1)
+        framebuffer = bytearray(4736)
+        for y in range(HEIGHT):
+            for x in range(WIDTH):
+                framebuffer[y // 8 * WIDTH + x] |= image_pixel(black, x, y) << y % 8
+        wire = bytes((~framebuffer[(15 - col) * WIDTH + x] & 255 for x in range(WIDTH) for col in range(16)))
+        self.assertEqual(wire, bytes(black))
+
+    def test_bw_red_color_folds_into_black(self):
+        black, red = decode_image(z2(color=2), False)
+        self.assertEqual((black, red), decode_image(z2(color=1), False))
+if __name__ == '__main__':
+    unittest.main()

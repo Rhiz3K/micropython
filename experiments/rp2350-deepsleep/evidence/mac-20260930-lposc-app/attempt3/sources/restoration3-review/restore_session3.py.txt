@@ -1,0 +1,267 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Explicit PILOT3 fresh-snapshot restoration; import does not read files or import device APIs.
+
+Root owns fresh installed manifest + its out-of-band SHA and the outer timeout.
+No reset, auto retry, original application import, or firmware/filesystem erase.
+"""
+import argparse
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import re
+import sys
+import time
+from datetime import datetime, timedelta, timezone
+ROOT = Path('<PRIVATE_HOST_PATH>')
+PRIOR = Path('<PRIVATE_HOST_PATH>')
+OLD = Path('<PRIVATE_HOST_PATH>')
+PARKED = '/lposc_app_parked_main_20260930T203843Z.py'
+TEMP = '/lposc_app_staging_20260930T203843Z.py'
+VERSION = 'v1.30.0-preview.105.g6ce738ae0f.dirty'
+FW_SHA = 'a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08'
+FW_SIZE = 889840
+PANEL = {'/panel_probe.py', '/rp2350_epd_vendor.py', '/pico_epaper29_lowpower.py'}
+TIMING = {'/deepsleep-config.json', '/deepsleep-sentinel.bin'}
+APP = {'/app_cycle.py', '/app_transport.py', '/app-cycle-armed.json', '/app-cycle-consumed.json', '/app-cycle-terminal.json', '/app-cycle-events.jsonl', '/app-cycle-wifi-private.json'}
+APP_USB = {'/app_cycle.py', '/app_transport.py', '/app_image.py', '/app-cycle-usb-armed.json', '/app-cycle-usb-consumed.json', '/app-cycle-usb-terminal.json', '/app-cycle-usb-events.jsonl', '/app-cycle-usb-wifi-private.json'}
+OWNED = PANEL | TIMING | APP | APP_USB | {PARKED}
+MUTABLE = {'/deepsleep-config.json', '/app-cycle-armed.json', '/app-cycle-consumed.json', '/app-cycle-terminal.json', '/app-cycle-events.jsonl', '/app-cycle-wifi-private.json'}
+MUTABLE |= APP_USB - {'/app_cycle.py', '/app_transport.py', '/app_image.py'}
+INPUTS = ('pilot3/fresh-initial-state-private.json', 'inventory-before-private.json', 'directories-before-private.json', 'full-backup-public.json', 'guarded-inventory-private.json')
+GUARD = b"# Temporary inert restoration guard; original application remains parked.\nprint('SESSION RESTORE GUARD')\n"
+PANEL_CHECK = "\n_rs_hiz=sum(1<<g for g in (8,9,10,11,13))\n_rs_oe=machine.mem32[0xd0000030]\n_rs_out=machine.mem32[0xd0000010]\n_rs_pads=[machine.mem32[0x40038004+4*g] for g in range(8,14)]\nprint(json.dumps({'parked':bool(not (_rs_oe&_rs_hiz) and (_rs_oe&(1<<12)) and not (_rs_out&(1<<12)) and not any(p&0x4c for p in _rs_pads))}))\n"
+RADIO_CHECK = "import network,bluetooth; print(json.dumps({'sta':bool(network.WLAN(network.STA_IF).active()),'ap':bool(network.WLAN(network.AP_IF).active()),'ble':bool(bluetooth.BLE().active())}))"
+
+def require(ok, message):
+    if not ok:
+        raise RuntimeError(message)
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def digest_ok(value):
+    return isinstance(value, str) and re.fullmatch('[0-9a-f]{64}', value) is not None
+
+def read_json(path):
+    return json.loads(Path(path).read_text())
+
+def local(path, base=ROOT):
+    path = Path(path)
+    require(path.is_file() and (not path.is_symlink()) and path.resolve().is_relative_to(base.resolve()), 'Local path gate')
+    require(not any((p.is_symlink() for p in path.parents if p != base.parent)), 'Symlink parent gate')
+    return path
+
+def mapping(rows):
+    require(isinstance(rows, list), 'Inventory schema')
+    result = {}
+    for row in rows:
+        require(set(row) == {'path', 'size', 'sha256'}, 'Inventory row schema')
+        path = row['path']
+        require(isinstance(path, str) and path.startswith('/') and ('..' not in Path(path).parts) and ('//' not in path) and (path not in result), 'Inventory path')
+        require(type(row['size']) is int and row['size'] >= 0 and digest_ok(row['sha256']), 'Inventory hash/size')
+        result[path] = (row['size'], row['sha256'])
+    return result
+
+def calendar(rtc):
+    return datetime(rtc[0], rtc[1], rtc[2], rtc[4], rtc[5], rtc[6], tzinfo=timezone.utc)
+
+def rtc_tuple(value):
+    return (value.year, value.month, value.day, value.weekday(), value.hour, value.minute, value.second, 0)
+
+def preflight(path, manifest_sha):
+    require(not sys.flags.optimize, 'Optimized Python is prohibited')
+    path = local(path)
+    require(digest_ok(manifest_sha) and sha(path) == manifest_sha, 'Root manifest pin')
+    manifest = read_json(path)
+    require(set(manifest) == {'schema', 'purpose', 'inventory', 'directories', 'owned', 'state_gate', 'input_sha256', 'helper_sha256'}, 'Manifest schema')
+    require(manifest['schema'] == 1 and manifest['purpose'] in ('completed', 'recovery'), 'Manifest purpose')
+    require(set(manifest['input_sha256']) == set(INPUTS), 'Input pins schema')
+    for name in INPUTS:
+        require(digest_ok(manifest['input_sha256'][name]) and sha(local(ROOT / name)) == manifest['input_sha256'][name], 'Fresh backup metadata pin')
+    original = mapping(read_json(ROOT / 'inventory-before-private.json'))
+    installed = mapping(manifest['inventory'])
+    dirs = read_json(ROOT / 'directories-before-private.json')
+    require(len(original) == 29 and len(dirs) == 7 and (len(set(dirs)) == 7) and (manifest['directories'] == dirs), 'Original topology')
+    require('/main.py' in original and '/boot.py' not in original and (not set(original) & (OWNED | {TEMP})), 'Original ownership collision')
+    for name, wanted in original.items():
+        file = local(ROOT / 'original-files' / name.lstrip('/'))
+        require((file.stat().st_size, sha(file)) == wanted, 'Original backup bytes changed')
+    require(TEMP not in installed and installed.get(PARKED) == original['/main.py'], 'Parked/TEMP gate')
+    require(all((installed.get(p) == v for p, v in original.items() if p != '/main.py')), 'Installed original map differs')
+    extra = set(installed) - set(original)
+    require(extra <= OWNED and PANEL | {PARKED} <= extra and (set(manifest['owned']) == extra), 'Unknown/undeclared owned files')
+    for name, item in manifest['owned'].items():
+        require(set(item) == {'size', 'sha256', 'mutable'} and type(item['mutable']) is bool, 'Owned schema')
+        require((item['size'], item['sha256']) == installed[name] and (not item['mutable'] or name in MUTABLE), 'Owned exact hash gate')
+    panel_proof = read_json(OLD / 'staging/provenance.json')['artifacts']
+    for name in PANEL:
+        p = panel_proof[name[1:]]
+        require(installed[name] == (p['bytes'], p['sha256']), 'Panel dependency pin')
+    helpers = {'boot_ops.py': ROOT / 'boot_ops.py', 'support.py': PRIOR / 'support.py', 'pico2w_vsys_lowpower.py': OLD / 'staging/pico2w_vsys_lowpower.py'}
+    require(set(manifest['helper_sha256']) == set(helpers), 'Helper pins schema')
+    for name, file in helpers.items():
+        require(digest_ok(manifest['helper_sha256'][name]) and sha(file) == manifest['helper_sha256'][name], 'Helper source pin')
+    require(sha(helpers['pico2w_vsys_lowpower.py']) == panel_proof['pico2w_vsys_lowpower.py']['sha256'], 'Radio helper provenance')
+    proof = read_json(ROOT / 'full-backup-public.json')
+    full = local(ROOT / 'full-flash-before.bin')
+    require(proof['result'] == 'PASS' and proof['independent_verify'] is True and (full.stat().st_size == 4194304) and (sha(full) == proof['full_flash_sha256']), 'Independent full backup gate')
+    require(hashlib.sha256(full.read_bytes()[:FW_SIZE]).hexdigest() == FW_SHA, 'Full backup production prefix')
+    initial = read_json(ROOT / 'pilot3/fresh-initial-state-private.json')
+    require(initial.get('scope') == 'PILOT3_FRESH_ORIGINAL_BEFORE_STAGE' and initial.get('original_inventory_sha256') == sha(ROOT / 'inventory-before-private.json'), 'Pilot3 fresh snapshot binding')
+    require([len(r) for r in initial['backup']] == [4, 3, 8] and all((type(v) is int and 0 <= v <= 4294967295 for r in initial['backup'] for v in r)), 'Saved backup topology')
+    a, z = (initial['rtc_capture_before'], initial['rtc_capture_after'])
+    require(all((type(v) in (int, float) and math.isfinite(v) for v in (a, z))) and 0 <= a <= z <= time.monotonic(), 'Initial RTC anchor')
+    calendar(initial['rtc'])
+    gate = manifest['state_gate']
+    require(isinstance(gate, dict) and gate.get('kind') in ('safe_guard', 'timing_stopped', 'app_terminal', 'app_usb_terminal'), 'Stopped gate type')
+    if gate['kind'] == 'safe_guard':
+        guard = local(ROOT / 'pilot3/inert-guard-main.py')
+        require(set(gate) == {'kind'} and installed['/main.py'] == (guard.stat().st_size, sha(guard)), 'Exact pilot3 inert guard pin')
+    elif gate['kind'] == 'timing_stopped':
+        require(set(gate) == {'kind'} and manifest['purpose'] == 'completed' and (TIMING <= extra), 'Timing stopped contract')
+        require(installed['/main.py'] == (local(ROOT / 'timing-review/timing-main.py.txt').stat().st_size, sha(ROOT / 'timing-review/timing-main.py.txt')), 'Timing main pin')
+    else:
+        require(set(gate) == {'kind', 'run', 'result', 'index'} and isinstance(gate['run'], str) and re.fullmatch('[0-9a-f]{32}', gate['run']) and int(gate['run'][:8], 16), 'App terminal gate schema')
+        require(gate['result'] == ('COMPLETE' if manifest['purpose'] == 'completed' else 'FAIL'), 'Recovery must be explicit')
+        require(type(gate['index']) is int and -1 <= gate['index'] <= 3 and (gate['result'] != 'COMPLETE' or gate['index'] == 3), 'App terminal index')
+        usb = gate['kind'] == 'app_usb_terminal'
+        terminal_path = '/app-cycle-usb-terminal.json' if usb else '/app-cycle-terminal.json'
+        require({'/app_cycle.py', '/app_transport.py', terminal_path} <= extra, 'App terminal owned files')
+        wrong_family = (APP if usb else APP_USB) - {'/app_cycle.py', '/app_transport.py'}
+        require(not extra & wrong_family, 'Mixed connected/no-data app state')
+    return {'manifest': manifest, 'initial': initial, 'original': original, 'installed': installed, 'directories': dirs, 'manifest_sha256': manifest_sha, 'radio_helper': helpers['pico2w_vsys_lowpower.py']}
+
+def stopped(plan, state, terminal=None):
+    require(not state['wdt_ctrl'] & 1 << 30 and [len(r) for r in state['backup']] == [4, 3, 8], 'Live watchdog/topology gate')
+    gate = plan['manifest']['state_gate']
+    words = state['backup'][2]
+    if gate['kind'] == 'timing_stopped':
+        require(words[:2] == [1146310706, 2] and words[3:] == [2, 0, 4, 0, 324508639], 'Timing is not exact final STOPPED')
+    elif gate['kind'] in ('app_terminal', 'app_usb_terminal'):
+        require(terminal == {'schema': 1, 'result': gate['result'], 'index': gate['index']}, 'App terminal bytes/fields')
+        magic = 1095783729 if gate['kind'] == 'app_usb_terminal' else 1095779121
+        require(words[:4] == [magic, int(gate['run'][:8], 16), 3, max(0, gate['index'])] and words[4:6] == [0, 0], 'App STOPPED progress')
+        check = 0
+        for value in words[:6]:
+            check ^= value
+        require(words[6:] == [check & 4294967295, ~magic & 4294967295], 'App STOPPED commit/checksum')
+
+def restore_connected(b, prior, plan, out, checkpoint):
+
+    def mark(value):
+        checkpoint['phase'] = value
+        (out / 'phase-private.json').write_text(json.dumps(checkpoint) + '\n')
+
+    def inventory_equals(expected):
+        require(mapping(prior.inventory(b)) == expected and prior.directories(b) == plan['directories'], 'Exact live inventory/directory gate')
+    mark('initial_readonly_gates')
+    require(prior.firmware_hash(b, FW_SIZE) == FW_SHA, 'Actual production BIN gate')
+    inventory_equals(plan['installed'])
+    state = prior.state(b)
+    require(state['uid'].lower() == plan['initial']['uid'].lower() and state['version'].split(' on ')[0] == VERSION, 'Fresh runtime identity')
+    terminal = None
+    if plan['manifest']['state_gate']['kind'] in ('app_terminal', 'app_usb_terminal'):
+        terminal_path = '/app-cycle-usb-terminal.json' if plan['manifest']['state_gate']['kind'] == 'app_usb_terminal' else '/app-cycle-terminal.json'
+        terminal = json.loads(b.exec_('import json; print(json.dumps(json.load(open(%r))))' % terminal_path, timeout=8))
+    stopped(plan, state, terminal)
+    prior.write_json(out / 'before-private.json', {'state': state, **prior.stamp()})
+    guard = out / 'restore-guard.py'
+    guard.write_bytes(GUARD)
+    known = dict(plan['installed'])
+    guard_row = (len(GUARD), hashlib.sha256(GUARD).hexdigest())
+    mark('stage_inert_guard')
+    b.fs_put(str(guard), TEMP)
+    inventory_equals(dict(known, **{TEMP: guard_row}))
+    mark('activate_inert_guard')
+    b.exec_("import os; os.rename(%r,'/main.py'); os.sync()" % TEMP, timeout=8)
+    known['/main.py'] = guard_row
+    inventory_equals(known)
+    checkpoint['inert_guard_verified'] = True
+    mark('park_peripherals')
+    b.exec_('import bluetooth; _rs_ble=bluetooth.BLE(); _rs_ble.active(False) if _rs_ble.active() else None', timeout=8)
+    b.exec_("_rs_helper={}\nexec(%r,_rs_helper)\n_rs_helper['radio_off_and_disable_vsys_monitor']()" % plan['radio_helper'].read_text(), timeout=10)
+    panel = json.loads(b.exec_('import panel_probe; print(json.dumps(panel_probe.prepare()))', timeout=55))
+    require(panel['status'] == 'PREPARED' and panel['refreshed'] is False and panel['vendor_sleep_completed'] and panel['park_registers_verified'], 'Panel sleep/park gate')
+    require(json.loads(b.exec_(PANEL_CHECK, timeout=8))['parked'] and (not any(json.loads(b.exec_(RADIO_CHECK, timeout=8)).values())), 'Peripheral readback gate')
+    inventory_equals(known)
+    prior.write_json(out / 'peripherals-private.json', panel)
+    remove = sorted(set(plan['manifest']['owned']) - {PARKED})
+    mark('remove_exact_verified_owned_files')
+    for path in remove:
+        b.exec_('import os; os.remove(%r)' % path, timeout=8)
+        del known[path]
+        checkpoint['removed'].append(path)
+    b.exec_('import os; os.sync()', timeout=8)
+    inventory_equals(known)
+    require(set(known) == set(plan['original']) | {PARKED}, 'Pre-final original-only map')
+    mark('restore_backup_and_initial_rtc_plus_elapsed')
+    begin = time.monotonic()
+    initial = plan['initial']
+    elapsed = begin - (initial['rtc_capture_before'] + initial['rtc_capture_after']) / 2
+    target = rtc_tuple(calendar(initial['rtc']) + timedelta(seconds=elapsed))
+    b.exec_('_rs_saved=%r\n_rs_regions=machine.mem_backup(-1)\nfor _rs_i,_rs_region in enumerate(_rs_regions):\n for _rs_j,_rs_v in enumerate(_rs_saved[_rs_i]):\n  _rs_region[_rs_j]=_rs_v\nmachine.RTC().datetime(%r)' % (initial['backup'], target), timeout=8)
+    restored = prior.state(b)
+    after = time.monotonic()
+    require(restored['backup'] == initial['backup'] and (not restored['wdt_ctrl'] & 1 << 30), 'Backup/WDT readback')
+    require(0 <= (calendar(restored['rtc']) - calendar(target)).total_seconds() <= math.ceil(after - begin) + 1, 'RTC restore readback')
+    prior.write_json(out / 'restored-state-before-main-private.json', {'state': restored, 'target': target, 'elapsed_host_s': elapsed})
+    inventory_equals(known)
+    mark('restore_original_main_last')
+    b.exec_("import os; os.rename(%r,'/main.py'); os.sync()" % PARKED, timeout=8)
+    checkpoint['original_main_restored'] = True
+    mark('final_readonly_checks')
+    inventory_equals(plan['original'])
+    final = prior.state(b)
+    require(final['backup'] == initial['backup'] and (not final['wdt_ctrl'] & 1 << 30), 'Final backup/WDT gate')
+    require(not any(json.loads(b.exec_(RADIO_CHECK, timeout=8)).values()) and json.loads(b.exec_(PANEL_CHECK, timeout=8))['parked'], 'Final peripherals gate')
+    require(prior.firmware_hash(b, FW_SIZE) == FW_SHA, 'Final actual BIN gate')
+    require(abs((calendar(final['rtc']) - calendar(target)).total_seconds() - (time.monotonic() - begin)) <= 2 + after - begin, 'Final RTC elapsed gate')
+    prior.write_json(out / 'final-state-private.json', {'state': final, **prior.stamp()})
+    prior.friendly(b)
+    mark('friendly_verified')
+    return {'result': 'PASS', 'purpose': plan['manifest']['purpose'], 'manifest_sha256': plan['manifest_sha256'], 'firmware_bin_sha256': FW_SHA, 'original_files_verified': 29, 'original_directories_verified': 7, 'all_three_backup_regions_restored': True, 'rtc_initial_plus_host_elapsed': True, 'initial_rtc_capture_bracket_s': initial['rtc_capture_after'] - initial['rtc_capture_before'], 'rtc_quantization_s': 1, 'original_main_restored_last': True, 'panel_parked_without_refresh': True, 'radio_and_ble_inactive': True, 'friendly_repl': True, 'reset_performed': False, 'original_application_started': False, 'removed_owned_count': len(remove)}
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--manifest', type=Path, required=True)
+    parser.add_argument('--manifest-sha256', required=True)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--check-only', action='store_true')
+    mode.add_argument('--execute', action='store_true')
+    parser.add_argument('--label')
+    args = parser.parse_args(argv)
+    os.umask(63)
+    plan = preflight(args.manifest, args.manifest_sha256)
+    if args.check_only:
+        print(json.dumps({'result': 'LOCAL_PREFLIGHT_PASS', 'hardware_accessed': False, 'installed_file_count': len(plan['installed']), 'purpose': plan['manifest']['purpose']}))
+        return
+    require(args.label and re.fullmatch('[a-z0-9][a-z0-9-]{0,63}', args.label), 'Unique output label required')
+    parent = ROOT / 'restoration3-review' / 'runs'
+    require(not parent.is_symlink() and parent.resolve().is_relative_to(ROOT.resolve()), 'Output parent path')
+    parent.mkdir(mode=448, exist_ok=True)
+    out = parent / args.label
+    require(not out.is_symlink(), 'Output symlink')
+    out.mkdir(mode=448)
+    sys.path.insert(0, str(ROOT))
+    import boot_ops
+    require((boot_ops.ROOT, boot_ops.PARKED, boot_ops.TEMP) == (ROOT, PARKED, TEMP), 'Current session constants')
+    prior = boot_ops.prior
+    checkpoint = {'phase': 'not_connected', 'inert_guard_verified': False, 'original_main_restored': False, 'removed': []}
+    try:
+        with prior.locks():
+            b, _ = prior.connect(VERSION)
+            try:
+                result = restore_connected(b, prior, plan, out, checkpoint)
+            finally:
+                b.close()
+        prior.write_json(out / 'result-public.json', result)
+        print(json.dumps(result), flush=True)
+    except BaseException as exc:
+        failure = {'result': 'FAIL', 'exception_type': type(exc).__name__, 'phase': checkpoint['phase'], 'inert_guard_verified': checkpoint['inert_guard_verified'], 'original_main_restored': checkpoint['original_main_restored'], 'manual_recovery_required': True, 'reset_performed': False}
+        (out / 'failure-public.json').write_text(json.dumps(failure, indent=2) + '\n')
+        print(json.dumps(failure), flush=True)
+        raise SystemExit(1) from None
+if __name__ == '__main__':
+    main()

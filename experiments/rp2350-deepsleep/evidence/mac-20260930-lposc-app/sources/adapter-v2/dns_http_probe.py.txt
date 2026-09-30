@@ -1,0 +1,40 @@
+"""Explicit RAM-only probe. Caller owns connected STA and verified app config.
+
+No execution on import; no radio activation, flash write, RTC, panel or sleep.
+No raw exceptions, addresses, headers, body or identity leave this function.
+The transport/app modules must be the reviewed v2 sources in RAM.
+"""
+from app_transport import Stop, Deadline, OriginalDNSPolicy, safe_stop_code
+from app_cycle import fetch, bmp_metadata
+
+
+def probe(sta, cfg, binding, nonce):
+    from url_utils import parse_url
+    stage = ['DNS_POLICY']
+    def set_stage(value):
+        stage[0] = value
+    result = {'schema': 1, 'result': 'FAIL', 'bmp_valid': False,
+              'http_version': 'HTTP/1.0', 'accept_header_used': False,
+              'dns_backend': 'bounded_UDP_A', 'dns_phase_limit_ms': 35000,
+              'http_phase_limit_ms': 35000, 'dns': None}
+    policy = None
+    try:
+        host = parse_url(cfg['ENDPOINT'])[1]
+        policy = OriginalDNSPolicy(sta, cfg, host, binding, nonce, Deadline(35000))
+        policy.apply(probe_dhcp=True)
+        body, rotate, metadata = fetch(sta, cfg, nonce, 0, binding, set_stage, policy)
+        result.update({'post_status': 200, 'get_status': 200,
+                       'download_bytes': len(body), 'rotation_180': rotate,
+                       'body_category': 'BMP' if body[:2] == b'BM' else 'OTHER'})
+        stage[0] = 'BMP'
+        offset, stride, height, palette = bmp_metadata(body)
+        result.update({'result': 'PASS', 'bmp_valid': True, 'bmp_width': 296,
+                       'bmp_height': height, 'bmp_bits': 1, 'bmp_offset': offset,
+                       'bmp_stride': stride})
+    except Exception as exc:
+        result.update({'failure_stage': stage[0], 'error_type': type(exc).__name__,
+                       'stop_code': safe_stop_code(exc)})
+    finally:
+        if policy is not None:
+            result['dns'] = policy.public_observation()
+    return result

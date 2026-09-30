@@ -1,0 +1,346 @@
+# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.
+"""Explicit offline publication preparation, only after completed PILOT3 + restore.
+
+Never enumerates/opens hardware, imports a device client, reads credentials or
+copies a directory recursively. Private app_image is only SHA-checked by the
+pinned offline analyzer. No import-time I/O; output must be new.
+"""
+from __future__ import annotations
+import argparse
+import ast
+import csv
+import datetime as dt
+import gzip
+import hashlib
+import importlib.util
+import json
+import math
+import os
+from pathlib import Path
+import re
+import shutil
+import sys
+import tempfile
+import types
+SOURCE_ROOT = Path('<PRIVATE_HOST_PATH>')
+OLD = Path('<PRIVATE_HOST_PATH>')
+HERE = Path(__file__).resolve().parent
+FW = 'a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08'
+VERSION = 'v1.30.0-preview.105.g6ce738ae0f.dirty'
+MODE = 'USB_CONNECTED'
+PUBLIC_RUN = '00000003000000000000000000000000'
+ANALYZER_SHA = '98dc2d5ad799b66e2a655f7ff1afe140d15b4f5453f056e5874eb2cf5b3fdc96'
+CODEC_SHA = 'd6c93ac15c30c766378f2bb29aa3ab2ee3d5aff5e766ebbb46be2b837075446f'
+HEX64 = re.compile('[0-9a-f]{64}')
+SOURCE_PINS = {'adapter-usb-v3-review/app_cycle.py': 'a3d56054681b29fdc29280a2fe6740f12fa9ce539bc4709106d5223cb92702bb', 'adapter-usb-v3-review/app_transport.py': '94e98f133d2260c46919a31215c93ba3ed619f8d9264f0a82cbffe7a9fd53218', 'adapter-usb-v3-review/marker_listener.py': '0d59761010a6a0c60122bbdc8747a11a1cffc60a041ecd15cc7871408fc6d959', 'adapter-usb-v3-review/test_offline.py': '15b0e4e509be9ff30236102331a89305e54801c7a0cce00d410943e985c40985', 'adapter-usb-v3-review/test_v2.py': 'f6dd9777b2b32ad94d770848f192996f8c84ef796d72776b78bfcb8229ea4998', 'adapter-usb-v3-review/test_image.py': '1bff1fe3787e75bd4601fc64ba4f7dda501c56aff7aa7b8e8093c5e98a5d7efe', 'app-meter-v3-review/analyze_app_meter.py': ANALYZER_SHA, 'app-meter-v3-review/test_analyze_app_meter.py': '16303d14118bbf4c2c54842b41f1896d36b5dcb59805514567bdee551cb674a1', 'launcher3-review/app_pilot3_phase.py': 'ce40d50fe775ee6a9c51f85a10b9e3a934ca3e9018d6ea44fb7b3cfbc601e298', 'launcher3-review/test_launcher3_offline.py': '471be74245c19587775328984161e5ccdaa29efbb1f5b66904f22d8b49fbab01', 'restoration3-review/restore_session3.py': '2e5f56ab2c2988f25801c2ff52244ef1fa782a059e101a68a74f65df45576d21', 'restoration3-review/test_restore3_offline.py': 'f58d2e9965eb88fc8a854d3434bb270695f77974378a0d4b1994d7ddd9287e84', 'export3-plot-review/plot_app_pilot.py': '6838baff67af7a4d94cc3b91b75414d50212715ec4d0bb67e15e75e98222e30a', 'export3-plot-review/test_plot_app_pilot.py': 'baafc4ac26cbd70fdcf1e9eb61ed2337852fbfae5a1793d29862a6744c34fbb5'}
+GO_ROLE = 'root_owned_USB_connected_identity_firmware_installation_plus_live_meter_health'
+PROCESS_KEYS = set('result listener_boundaries_complete capture_exit usb_mode attempt host_utc host_monotonic'.split())
+POST_KEYS = set('result attempt terminal_result terminal_index usb_mode all_original_files_preserved firmware_bin_verified persistent_stopped friendly_repl host_utc host_monotonic'.split())
+ROOT_COMPLETION_KEYS = set('schema attempt result phase exit_code timed_out signal process_result_sha256 device_post_sha256 analysis_sha256'.split())
+RESTORE_KEYS = set('result purpose manifest_sha256 firmware_bin_sha256 original_files_verified original_directories_verified all_three_backup_regions_restored rtc_initial_plus_host_elapsed initial_rtc_capture_bracket_s rtc_quantization_s original_main_restored_last panel_parked_without_refresh radio_and_ble_inactive friendly_repl reset_performed original_application_started removed_owned_count'.split())
+STATS_KEYS = set('count mean min max population_stddev median p05 p95 quantiles_note'.split())
+QUANTILES_NOTE = 'Not accumulated online; compute from preserved raw samples offline.'
+COMMON_FRAME = set('phase frame_index host_receipt_monotonic_ns host_receipt_monotonic_s host_receipt_utc'.split())
+SAMPLE_KEYS = set('sample_in_frame voltage_raw current_raw voltage_V current_A power_W_calculated dp_raw dn_raw dp_V dn_V temperature_sign_raw temperature_magnitude_raw sample_index'.split()) | COMMON_FRAME
+HEALTH_KEYS = set('schema elapsed_host_s last_valid_measurement_age_s frames_total recording_samples invalid_frames receipt_gap_count_over_200ms clock_offset_jump_count log_bytes_written free_disk_bytes empty_timed_reads recent_receipt_sample_rate_hz since_last_health'.split())
+
+def require(ok, reason):
+    if not ok:
+        raise ValueError(reason)
+
+def regular(path, limit=2000000000):
+    path = Path(path)
+    require(path.is_file() and (not path.is_symlink()) and (path.stat().st_size <= limit), 'missing_or_invalid_regular_input')
+    require(not any((p.is_symlink() for p in path.parents)), 'symlink_parent')
+    return path
+
+def sha(path):
+    h = hashlib.sha256()
+    with regular(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            h.update(block)
+    return h.hexdigest()
+
+def canonical(obj):
+    return json.dumps(obj, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
+
+def strict_json(content):
+
+    def unique(pairs):
+        value = {}
+        for key, child in pairs:
+            require(key not in value, 'duplicate_JSON_key')
+            value[key] = child
+        return value
+
+    def invalid_constant(value):
+        raise ValueError('nonfinite_JSON_constant')
+    return json.loads(content, object_pairs_hook=unique, parse_constant=invalid_constant)
+
+def object_hash(obj):
+    return hashlib.sha256(canonical(obj)).hexdigest()
+
+def read(path):
+    value = strict_json(regular(path, 2000000).read_text())
+    require(type(value) is dict, 'object_required')
+    return value
+
+def stamp(row):
+    require(type(row['host_monotonic']) in (int, float) and math.isfinite(row['host_monotonic']) and (row['host_monotonic'] > 0), 'host_stamp')
+    utc(row['host_utc'])
+
+def utc(value):
+    require(type(value) is str and re.fullmatch('\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d(?:\\.\\d+)?\\+00:00', value), 'UTC_stamp')
+    dt.datetime.fromisoformat(value)
+
+def finite_tree(value):
+    if value is None or type(value) is bool or type(value) is int:
+        return
+    if type(value) is float:
+        require(math.isfinite(value), 'nonfinite_value')
+    elif type(value) is list:
+        for item in value:
+            finite_tree(item)
+    elif type(value) is dict:
+        for item in value.values():
+            finite_tree(item)
+    else:
+        raise ValueError('unexpected_text_in_numeric_tree')
+
+def stats(value):
+    require(type(value) is dict and set(value) == STATS_KEYS and (value['quantiles_note'] == QUANTILES_NOTE), 'stats_schema')
+    finite_tree({k: v for k, v in value.items() if k != 'quantiles_note'})
+
+def summary_projection(summary, replay):
+    require(summary['schema'] == 2 and all((summary[k] == 'PASS' for k in ('result', 'capture_result', 'data_quality'))) and (summary['error'] is None) and (summary['stopped_by_signal'] is None) and (summary['stop_reason'] in ('duration', 'stop_file')), 'summary_status_allowlist')
+    require(type(summary['requested_duration_completed']) is bool and summary['requested_duration_completed'] == (summary['stop_reason'] == 'duration'), 'summary_duration_flag')
+    for field in ('requested_seconds', 'elapsed_host_s'):
+        require(type(summary[field]) in (int, float) and math.isfinite(summary[field]) and (0 < summary[field] <= 3600), 'summary_numeric_allowlist')
+    for field in ('empty_timed_reads', 'clock_offset_jump_count'):
+        require(type(summary[field]) is int and summary[field] >= 0, 'summary_counter_allowlist')
+    require(summary['clock_offset_jump_count'] == 0, 'summary_clock_gate')
+    fields = 'schema result capture_result data_quality error stop_reason requested_seconds requested_duration_completed elapsed_host_s empty_timed_reads clock_offset_jump_count stopped_by_signal'.split()
+    return {k: summary[k] for k in fields} | replay['full_capture_quality']
+
+def load_analyzer():
+    path = SOURCE_ROOT / 'app-meter-v3-review/analyze_app_meter.py'
+    require(sha(path) == ANALYZER_SHA, 'analyzer_pin')
+    spec = importlib.util.spec_from_file_location('_export_v3_analysis', path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+def closed_proofs(args):
+    """All public completion gates before any private runtime-state reading."""
+    pilot = args.session / 'pilot3'
+    required = [pilot / name for name in ('pilot-process-public.json', 'pilot-device-post-public.json', 'pilot-markers/result.json', 'pilot-device-terminal-private.json', 'pilot-device-events-private.jsonl', 'pilot-meter/summary.json', 'fresh-initial-state-private.json', 'pilot-preflight-private.json')]
+    required += [args.analysis_dir / 'analysis-public.json', args.root_completion, args.restoration_result, args.restoration_manifest, args.restoration_result.parent / 'final-state-private.json']
+    for path in required:
+        regular(path)
+    require(args.restoration_result.name == 'result-public.json' and args.restoration_result.parent.parent.resolve() == (args.session / 'restoration3-review/runs').resolve(), 'explicit_new_restoration3_run_required')
+    process, post = (read(required[0]), read(required[1]))
+    require(set(process) == PROCESS_KEYS and set(post) == POST_KEYS, 'process_or_post_schema')
+    for row in (process, post):
+        require(row['result'] == 'PASS' and row['attempt'] == 3 and (row['usb_mode'] == MODE), 'closed_pilot_PASS_required')
+        stamp(row)
+    require(process['listener_boundaries_complete'] is True and type(process['capture_exit']) is int and (process['capture_exit'] == 0), 'closed_reader_listener_required')
+    require(post['terminal_result'] == 'COMPLETE' and post['terminal_index'] == 3 and all((post[k] is True for k in ('all_original_files_preserved', 'firmware_bin_verified', 'persistent_stopped', 'friendly_repl'))) and (post['host_monotonic'] >= process['host_monotonic']), 'complete_device_post_required')
+    root = read(args.root_completion)
+    require(set(root) == ROOT_COMPLETION_KEYS and root['schema'] == 1 and (root['attempt'] == 3) and (root['result'] == 'PASS') and (root['phase'] == 'run') and (type(root['exit_code']) is int) and (root['exit_code'] == 0) and (root['timed_out'] is False) and (root['signal'] is None), 'actual_root_run_exit0_required')
+    for field, path in (('process_result_sha256', required[0]), ('device_post_sha256', required[1]), ('analysis_sha256', args.analysis_dir / 'analysis-public.json')):
+        require(root[field] == sha(path), 'root_completion_binding')
+    analysis = read(args.analysis_dir / 'analysis-public.json')
+    require(analysis.get('result') == 'PASS' and analysis.get('scope') == 'USB_CONNECTED_application_v3_three_period_pilot' and (analysis.get('valid_complete_period_energy') is True), 'actual_V3_analysis_PASS_required')
+    restoration = read(args.restoration_result)
+    require(set(restoration) == RESTORE_KEYS and restoration['result'] == 'PASS' and (restoration['purpose'] == 'completed') and (restoration['firmware_bin_sha256'] == FW) and (restoration['original_files_verified'] == 29) and (restoration['original_directories_verified'] == 7) and (restoration['rtc_quantization_s'] == 1) and (type(restoration['removed_owned_count']) is int) and (restoration['removed_owned_count'] >= 1), 'new_completed_restoration_required')
+    for field in ('all_three_backup_regions_restored', 'rtc_initial_plus_host_elapsed', 'original_main_restored_last', 'panel_parked_without_refresh', 'radio_and_ble_inactive', 'friendly_repl'):
+        require(restoration[field] is True, 'restoration_gate')
+    require(restoration['reset_performed'] is False and restoration['original_application_started'] is False, 'no_reset_or_application_autostart')
+    require(restoration['manifest_sha256'] == sha(args.restoration_manifest), 'restoration_manifest_pin')
+    marker = read(pilot / 'pilot-markers/result.json')
+    require(marker.get('result') == 'BOUNDARIES_COMPLETE' and len(marker.get('boundaries', [])) == 4 and (marker['finished_monotonic_ns'] - marker['boundaries'][-1]['receipt_monotonic_ns'] >= 12000000000), 'closed_marker_tail')
+    return (process, post, root, analysis, restoration)
+
+def restore_projection(args, post, restoration):
+    pilot = args.session / 'pilot3'
+    fresh_path = pilot / 'fresh-initial-state-private.json'
+    fresh, manifest = (read(fresh_path), read(args.restoration_manifest))
+    final_path = args.restoration_result.parent / 'final-state-private.json'
+    final_doc = read(final_path)
+    final = final_doc['state']
+    stamp(final_doc)
+    require(final_doc['host_monotonic'] >= post['host_monotonic'], 'restore_precedes_closed_device_post')
+    require(fresh['scope'] == 'PILOT3_FRESH_ORIGINAL_BEFORE_STAGE' and manifest['purpose'] == 'completed' and (manifest['state_gate']['kind'] == 'app_usb_terminal') and (manifest['state_gate']['result'] == 'COMPLETE') and (manifest['state_gate']['index'] == 3), 'fresh_restore_scope')
+    require(manifest['input_sha256']['pilot3/fresh-initial-state-private.json'] == sha(fresh_path) and HEX64.fullmatch(fresh['original_inventory_sha256']) and (fresh['original_inventory_sha256'] == manifest['input_sha256']['inventory-before-private.json']), 'fresh_restore_input_binding')
+    require(type(fresh['backup']) is list and [len(r) for r in fresh['backup']] == [4, 3, 8] and all((type(v) is int and 0 <= v <= 4294967295 for region in fresh['backup'] for v in region)), 'fresh_backup_shape')
+    require(final['backup'] == fresh['backup'] and final['uid'].lower() == fresh['uid'].lower() and (final['version'].split(' on ')[0] == VERSION) and (not final['wdt_ctrl'] & 1 << 30) and (not fresh['wdt_ctrl'] & 1 << 30), 'exact_fresh_state_restoration')
+    a, z = (fresh['rtc_capture_before'], fresh['rtc_capture_after'])
+    require(type(a) in (int, float) and type(z) in (int, float) and math.isfinite(a) and math.isfinite(z) and (0 <= a <= z) and math.isclose(restoration['initial_rtc_capture_bracket_s'], z - a, abs_tol=1e-09), 'fresh_RTC_bracket_binding')
+    return {'schema': 1, 'result': 'FRESH_SNAPSHOT_AND_COMPLETED_RESTORATION_VERIFIED', 'scope': 'PILOT3_FRESH_ORIGINAL_BEFORE_STAGE', 'original_files_verified': 29, 'original_directories_verified': 7, 'backup_region_word_counts': [4, 3, 8], 'fresh_snapshot_sha256': sha(fresh_path), 'final_state_record_sha256': sha(final_path), 'original_inventory_sha256': fresh['original_inventory_sha256'], 'fresh_backup_values_sha256': object_hash(fresh['backup']), 'final_backup_values_sha256': object_hash(final['backup']), 'all_three_backup_regions_match_fresh_snapshot': True, 'watchdog_enabled': False, 'rtc_capture_bracket_s': z - a, 'rtc_initial_plus_host_elapsed_verified': True, 'raw_identity_RTC_and_backup_values_exported': False}
+
+def validate_raw_row(kind, row, reader):
+    if kind in ('frames', 'samples'):
+        require(row.get('phase') in ('recording', 'drain'), 'raw_phase')
+        utc(row['host_receipt_utc'])
+        finite_tree({k: row[k] for k in COMMON_FRAME - {'phase', 'host_receipt_utc'}})
+        if kind == 'samples':
+            require(set(row) == SAMPLE_KEYS, 'sample_allowlist')
+            finite_tree({k: row[k] for k in SAMPLE_KEYS - {'phase', 'host_receipt_utc'}})
+        else:
+            parsed = reader.parse_frame(bytes.fromhex(row['raw_hex']))
+            require(parsed['valid'] is True and set(row) == set(parsed) - {'samples'} | COMMON_FRAME, 'raw_frame_allowlist_CRC')
+            require(all((row[k] == v for k, v in parsed.items() if k != 'samples')), 'raw_frame_decoding')
+    else:
+        basic = {'event', 'host_receipt_utc', 'host_monotonic_ns'}
+        utc(row['host_receipt_utc'])
+        require(type(row['host_monotonic_ns']) is int, 'event_clock')
+        extra = {'opened_identity_verified': set(), 'command_sent': {'command', 'report_hex', 'bytes_reported'}, 'recording_started': {'deadline_monotonic_ns'}, 'health': HEALTH_KEYS, 'recording_finished': {'stop_reason', 'stopped_by_signal'}, 'draining_started': set(), 'closed': set()}
+        event = row.get('event')
+        require(event in extra and set(row) == basic | extra[event], 'event_allowlist')
+        if event == 'command_sent':
+            require(row['command'] in ('0x81', '0x82', '0x83') and row['bytes_reported'] == 65 and (row['report_hex'] == reader.command_report(int(row['command'], 16)).hex()), 'command_proof')
+        elif event == 'recording_finished':
+            require(row['stop_reason'] in ('duration', 'stop_file') and row['stopped_by_signal'] is None, 'finish_event')
+        elif event == 'health':
+            require(set(row['since_last_health']) == {'voltage_V', 'current_A', 'power_W_calculated'}, 'health_metric_keys')
+            for value in row['since_last_health'].values():
+                stats(value)
+            finite_tree({k: row[k] for k in HEALTH_KEYS - {'since_last_health'}})
+        else:
+            finite_tree({k: row[k] for k in extra[event]})
+
+def gzip_exact(source, dest, kind, expected_sha, reader):
+    """Preserve each original raw JSONL byte; deterministic gzip header."""
+    h = hashlib.sha256()
+    lines = 0
+    with regular(source).open('rb') as src, dest.open('xb') as raw:
+        with gzip.GzipFile(filename='', fileobj=raw, mode='wb', compresslevel=9, mtime=0) as gz:
+            while True:
+                line = src.readline(2000001)
+                if not line:
+                    break
+                require(len(line) <= 2000000 and line.endswith(b'\n'), 'raw_JSONL_line_bound')
+                row = strict_json(line)
+                require(type(row) is dict, 'raw_object')
+                validate_raw_row(kind, row, reader)
+                h.update(line)
+                gz.write(line)
+                lines += 1
+    require(h.hexdigest() == expected_sha, 'raw_changed_since_analysis_replay')
+    return {'uncompressed_sha256': h.hexdigest(), 'lines': lines, 'gzip_mtime': 0, 'gzip_original_filename': '', 'raw_bytes_preserved': True}
+
+def write(path, value):
+    with path.open('x') as stream:
+        json.dump(value, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+
+def write_rows(path, rows):
+    with path.open('x') as stream:
+        for row in rows:
+            stream.write(json.dumps(row, allow_nan=False) + '\n')
+
+def source_text(path):
+    """AST-only review copy; remove comments and private absolute host literals."""
+    tree = ast.parse(regular(path, 2000000).read_text())
+
+    class Public(ast.NodeTransformer):
+
+        def visit_Constant(self, node):
+            if isinstance(node.value, str) and ('<PRIVATE_HOST_PATH>' in node.value or '<PRIVATE_HOST_PATH>' in node.value):
+                return ast.copy_location(ast.Constant('<PRIVATE_HOST_PATH>'), node)
+            return node
+    tree = Public().visit(tree)
+    text = ast.unparse(tree) + '\n'
+    require('<PRIVATE_HOST_PATH>' not in text and '<PRIVATE_HOST_PATH>' not in text, 'private_host_path_in_source')
+    return '# Public AST review copy; comments/host path literals redacted. Original SHA is in export manifest.\n' + text
+
+def export(args):
+    require(not sys.flags.optimize, 'optimized_python_forbidden')
+    require(not args.output.exists() and (not args.output.is_symlink()), 'output_must_be_new')
+    process, post, root, supplied, restoration = closed_proofs(args)
+    fresh_public = restore_projection(args, post, restoration)
+    for name, expected in SOURCE_PINS.items():
+        require(sha(SOURCE_ROOT / name) == expected, 'generic_source_pin')
+    publication_inputs = [(SOURCE_ROOT / name, digest, name) for name, digest in SOURCE_PINS.items()]
+    publication_inputs += [(HERE / name, sha(HERE / name), 'export3-review/' + name) for name in ('export_public_pilot3.py', 'test_export_public_pilot3.py')]
+    analyzer = load_analyzer()
+    pilot = args.session / 'pilot3'
+    with tempfile.TemporaryDirectory(prefix='closed-replay-', dir=HERE) as temp:
+        replay_dir = Path(temp) / 'analysis'
+        replay = analyzer.analyze(types.SimpleNamespace(frozen_dir=OLD, meter_dir=pilot / 'pilot-meter', marker_dir=pilot / 'pilot-markers', device_events=pilot / 'pilot-device-events-private.jsonl', device_terminal=pilot / 'pilot-device-terminal-private.json', preflight_proof=pilot / 'pilot-preflight-private.json', app_source=SOURCE_ROOT / 'adapter-usb-v3-review/app_cycle.py', listener_source=SOURCE_ROOT / 'adapter-usb-v3-review/marker_listener.py', firmware_sha256=FW, output=replay_dir))
+        require(canonical(replay) == canonical(supplied), 'supplied_analysis_does_not_match_pinned_raw_replay')
+        reader, _ = analyzer.load_frozen(OLD)
+        sources = {r['role']: r['sha256'] for r in replay['source_evidence']}
+        bound_inputs = {'meter_metadata': pilot / 'pilot-meter/metadata.json', 'meter_summary': pilot / 'pilot-meter/summary.json', 'meter_events': pilot / 'pilot-meter/events.jsonl', 'meter_raw_frames': pilot / 'pilot-meter/frames.jsonl', 'meter_decoded_samples': pilot / 'pilot-meter/samples.jsonl', 'marker_metadata': pilot / 'pilot-markers/metadata.json', 'marker_events': pilot / 'pilot-markers/events.jsonl', 'marker_result': pilot / 'pilot-markers/result.json', 'device_events': pilot / 'pilot-device-events-private.jsonl', 'device_terminal': pilot / 'pilot-device-terminal-private.json', 'root_preflight': pilot / 'pilot-preflight-private.json'}
+
+        def check_bound_inputs():
+            require(all((sha(path) == sources[role] for role, path in bound_inputs.items())), 'input_changed_after_raw_replay')
+        check_bound_inputs()
+        meta_path = pilot / 'pilot-meter/metadata.json'
+        meter_meta = read(meta_path)
+        analyzer.meter_metadata(meter_meta)
+        marker_meta = read(pilot / 'pilot-markers/metadata.json')
+        require(marker_meta['go_proof_role'] == GO_ROLE and type(marker_meta['listener_seconds']) is int and (marker_meta['listener_seconds'] == 1800), 'marker_fixed_allowlist')
+        marker_result = read(pilot / 'pilot-markers/result.json')
+        utc(marker_result['finished_utc'])
+        marker_events = analyzer.read_rows(analyzer.load_frozen(OLD)[1], pilot / 'pilot-markers/events.jsonl')
+        device_events = analyzer.read_rows(analyzer.load_frozen(OLD)[1], pilot / 'pilot-device-events-private.jsonl')
+        os.umask(63)
+        args.output.mkdir(mode=448)
+        raw = {}
+        for kind, role in (('frames', 'meter_raw_frames'), ('samples', 'meter_decoded_samples'), ('events', 'meter_events')):
+            raw[kind + '.jsonl.gz'] = gzip_exact(pilot / 'pilot-meter' / (kind + '.jsonl'), args.output / (kind + '.jsonl.gz'), kind, sources[role], reader)
+        write(args.output / 'analysis-public.json', replay)
+        with (replay_dir / 'trace-bins.csv').open('rb') as src, (args.output / 'trace-bins.csv').open('xb') as dest:
+            shutil.copyfileobj(src, dest)
+        summary = read(pilot / 'pilot-meter/summary.json')
+        summary_public = summary_projection(summary, replay)
+        summary_public['source_private_summary_sha256'] = sha(pilot / 'pilot-meter/summary.json')
+        summary_public['raw_to_samples_proof'] = 'Closed pinned analyzer replay reparsed every raw frame and matched every decoded sample; no filtering or compensation.'
+        write(args.output / 'meter-summary-public.json', summary_public)
+        write(args.output / 'meter-metadata-redacted.json', {'schema': 1, 'scope': 'REDACTED_METADATA_POINTER', 'reader_sha256': analyzer.READER_SHA, 'expected_serial_number': 'redacted-meter', 'source_private_metadata_sha256': sha(meta_path), 'identity_removed': True, 'allowed_commands': ['0x81', '0x82', '0x83'], 'usb_reset_used': False, 'kernel_detach_used': False, 'serial_port_opened': False, 'charging_or_voltage_commands_used': False, 'note': 'Marker meter_gate hashes refer to original private metadata, not this redacted projection.'})
+        marker_fields = 'schema usb_mode host_anchor boundary cycles sleep_ms force_refresh go_proof_role firmware_bin_sha256 root_preflight_sha256 meter_reader_sha256 listener_seconds'.split()
+        mm = {k: marker_meta[k] for k in marker_fields}
+        mm.update(run=PUBLIC_RUN, firmware_version=VERSION, source_private_metadata_sha256=sha(pilot / 'pilot-markers/metadata.json'))
+        write(args.output / 'marker-metadata-redacted.json', mm)
+        mr = {k: marker_result[k] for k in ('schema', 'result', 'usb_mode', 'boundaries', 'completed_intervals', 'go_acknowledged', 'finished_utc', 'finished_monotonic_ns')}
+        mr['run'] = PUBLIC_RUN
+        write(args.output / 'marker-result.json', mr)
+        write_rows(args.output / 'marker-events.jsonl', marker_events)
+        write_rows(args.output / 'device-events.jsonl', [dict(row, run=PUBLIC_RUN) for row in device_events])
+        write(args.output / 'device-terminal.json', {'schema': 1, 'result': 'COMPLETE', 'index': 3})
+        write(args.output / 'process-public.json', process)
+        write(args.output / 'device-post-public.json', post)
+        write(args.output / 'root-completion-public.json', root)
+        write(args.output / 'restoration-result-public.json', restoration)
+        write(args.output / 'fresh-state-restoration-public.json', fresh_public)
+        source_rows = []
+        for source_path, digest, name in publication_inputs:
+            dest = args.output / 'sources' / (name + '.txt')
+            dest.parent.mkdir(parents=True, mode=448, exist_ok=True)
+            with dest.open('x') as stream:
+                stream.write(source_text(source_path))
+            source_rows.append({'role': name, 'original_sha256': digest, 'public_sha256': sha(dest), 'projection': 'AST review copy; host path literals and comments removed'})
+        check_bound_inputs()
+        require(canonical(closed_proofs(args)) == canonical((process, post, root, supplied, restoration)) and canonical(restore_projection(args, post, restoration)) == canonical(fresh_public), 'closed_proof_changed')
+        require(all((sha(path) == digest for path, digest, _ in publication_inputs)), 'source_changed')
+        files = [{'file': str(p.relative_to(args.output)), 'sha256': sha(p), 'bytes': p.stat().st_size} for p in sorted(args.output.rglob('*')) if p.is_file()]
+        manifest = {'schema': 1, 'result': 'PASS', 'scope': 'CLOSED_PILOT3_PUBLIC_EXPORT_AFTER_FRESH_RESTORATION', 'application_periods': 3, 'sleep_wakes': 3, 'full_refreshes': 6, 'usb_mode': MODE, 'visual_result': 'NOT_INCLUDED_SEPARATE_USER_PROOF', 'closed_analysis_replay_verified': True, 'root_worker_exit0_verified': True, 'fresh_completed_restoration_verified': True, 'public_run_nonce': PUBLIC_RUN, 'original_source_hashes_in_analysis_retained': True, 'private_decoder_sha256_only': CODEC_SHA, 'private_decoder_source_exported': False, 'raw_gzip': raw, 'sources': source_rows, 'files': files, 'exporter_sha256': sha(Path(__file__)), 'excluded': ['private application decoder source', 'original configuration/main', 'DNS binding', 'Wi-Fi credentials', 'private preflight', 'identity', 'raw RTC/backup values', 'process private logs'], 'limits': ['Connected USB pilot; no inferred exact sleep-only/refresh-only interval.', 'Redacted metadata/nonces change publication hashes; original private-source hashes remain provenance pointers.', 'Raw meter bytes preserved; no zero/spike filtering or offset subtraction.', 'Private file hashes are evidence pointers, not the private file contents.']}
+        write(args.output / 'export-manifest.json', manifest)
+    return manifest
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--session', type=Path, default=SOURCE_ROOT)
+    for name in ('analysis-dir', 'root-completion', 'restoration-result', 'restoration-manifest', 'output'):
+        parser.add_argument('--' + name, type=Path, required=True)
+    args = parser.parse_args()
+    try:
+        result = export(args)
+    except Exception as exc:
+        print(json.dumps({'result': 'REJECTED', 'error_type': type(exc).__name__, 'publishable_export': False}))
+        return 1
+    print(json.dumps({'result': result['result'], 'publishable_export': True, 'application_periods': 3}))
+    return 0
+if __name__ == '__main__':
+    raise SystemExit(main())

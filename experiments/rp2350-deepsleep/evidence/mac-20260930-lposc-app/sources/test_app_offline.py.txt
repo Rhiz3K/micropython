@@ -1,0 +1,233 @@
+"""Synthetic protocol/state tests only; no hardware/network/filesystem originals."""
+import copy
+import json
+from pathlib import Path
+import struct
+import sys
+import tempfile
+import types
+import unittest
+from unittest.mock import patch
+import app_cycle as app
+import app_transport as transport
+import marker_listener as listener
+
+
+def control():
+    return {'schema': 1, 'run': '12345678123456781234567812345678',
+            'firmware_version': 'v-test', 'marker_ipv4': '192.0.2.1',
+            'marker_port': 47831, 'force_refresh': True, 'cycles': 3,
+            'sleep_ms': 300000, 'root_go_required': True, 'usb_mode': 'USB_CONNECTED'}
+
+
+def go_proof(now=10_000_000_000):
+    return {'schema': 2, 'run': control()['run'], 'approved': True,
+            'usb_mode': 'USB_CONNECTED', 'usb_connected_verified': True,
+            'pico_identity_verified': True, 'firmware_verified': True,
+            'installed_files_verified': True, 'firmware_version': 'v-test',
+            'firmware_bin_sha256': 'a' * 64, 'root_preflight_sha256': 'b' * 64,
+            'board_verified_monotonic_ns': now}
+
+
+def bmp(height=128):
+    size = 62 + 40 * 128
+    data = bytearray(size)
+    data[:2] = b'BM'
+    data[2:6] = struct.pack('<I', size)
+    data[10:14] = struct.pack('<I', 62)
+    data[14:34] = struct.pack('<IiiHHI', 40, 296, height, 1, 1, 0)
+    data[58:61] = b'\xff\xff\xff'
+    return data
+
+
+class Deep(BaseException):
+    pass
+
+
+class FakeMachine:
+    def __init__(self):
+        self.regions = [[1, 2, 3, 4], [5, 6, 7], [0] * 8]
+        self.cause = 1
+        self.clock = 1000000
+        self.sleeps = []
+        self.mem32 = {0x400d8000: 0, 0x401000a0: 64}
+
+    def mem_backup(self, index):
+        return self.regions[index]
+
+    def reset_cause(self):
+        return self.cause
+
+    def deepsleep(self, ms):
+        self.sleeps.append(ms)
+        self.cause = 4
+        self.clock += ms
+        raise Deep()
+
+
+class FakeOS:
+    def __init__(self):
+        self.files = {app.ARMED}
+
+    def stat(self, path):
+        if path not in self.files:
+            raise OSError()
+        return [0] * 10
+
+    def rename(self, source, target):
+        assert source in self.files and target not in self.files
+        self.files.remove(source)
+        self.files.add(target)
+
+    def sync(self):
+        pass
+
+    def uname(self):
+        return types.SimpleNamespace(machine='Raspberry Pi Pico 2 W with RP2350', version='v-test on DATE')
+
+
+class Tests(unittest.TestCase):
+    def test_control_is_fixed_and_fail_closed(self):
+        self.assertTrue(app.control_valid(control()))
+        for key, bad in [('cycles', 4), ('sleep_ms', 2500), ('force_refresh', False),
+                         ('root_go_required', False), ('run', '0' * 32),
+                         ('usb_mode', 'USB_DATA_ABSENT'), ('marker_ipv4', 'host.example'), ('extra', 'x')]:
+            cfg = control()
+            cfg[key] = bad
+            self.assertFalse(app.control_valid(cfg))
+
+    def test_retention_nonce_commit_and_only_region2(self):
+        m = FakeMachine()
+        before = copy.deepcopy(m.regions[:2])
+        app.progress_write(m, 123, app.SLEEPING, 2, (1 << 45) + 9)
+        self.assertEqual(app.progress_read(m, 123), (app.SLEEPING, 2, (1 << 45) + 9))
+        self.assertEqual(m.regions[:2], before)
+        with self.assertRaises(transport.Stop):
+            app.progress_read(m, 124)
+        m.regions[2][7] = 0
+        with self.assertRaises(transport.Stop):
+            app.progress_read(m, 123)
+
+    def test_bmp_geometry_and_malformed_rejected(self):
+        self.assertEqual(app.bmp_metadata(bmp()), (62, 40, 128, True))
+        self.assertEqual(app.bmp_metadata(bmp(-128))[2], -128)
+        for bad in (bmp()[:-1], bmp() + b'x', b'BM', bmp(127)):
+            with self.assertRaises(transport.Stop):
+                app.bmp_metadata(bad)
+        wrong = bmp()
+        wrong[28:30] = struct.pack('<H', 8)
+        with self.assertRaises(transport.Stop):
+            app.bmp_metadata(wrong)
+
+    def test_chunks_keep_zeros_and_reject_oversize(self):
+        self.assertEqual(transport._unchunk(b'3\r\n\x00ab\r\n0\r\n\r\n', 3), b'\x00ab')
+        for data in (b'4\r\nabcd\r\n0\r\n\r\n', b'3\r\na', b'x\r\na'):
+            with self.assertRaises(transport.Stop):
+                transport._unchunk(data, 3)
+
+    def test_marker_and_explicit_go(self):
+        run = control()['run']
+        self.assertEqual(listener.parse(('APP_USB1 %s 3 DOWNLOAD_READY' % run).encode(), run), (3, 'DOWNLOAD_READY'))
+        self.assertIsNone(listener.parse(('APP_USB1 %s 4 DOWNLOAD_READY' % run).encode(), run))
+        self.assertIsNone(listener.parse(('APP_USB1 %s 1 GO' % run).encode(), run))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'go.json'
+            check = lambda: listener.permit(path, run, 'v-test', 'a' * 64, 'b' * 64, 11_000_000_000)
+            self.assertFalse(check())
+            proof = go_proof()
+            path.write_text(json.dumps(proof))
+            self.assertTrue(check())
+            for key, value in [('usb_mode', 'USB_DATA_ABSENT'), ('usb_connected_verified', False),
+                               ('pico_identity_verified', False), ('firmware_verified', False),
+                               ('installed_files_verified', False), ('firmware_bin_sha256', 'c' * 64),
+                               ('root_preflight_sha256', 'c' * 64), ('firmware_version', 'v-other'),
+                               ('board_verified_monotonic_ns', 12_000_000_000),
+                               ('board_verified_monotonic_ns', -500_000_000_000)]:
+                bad = proof.copy()
+                bad[key] = value
+                path.write_text(json.dumps(bad))
+                self.assertFalse(check(), key)
+            path.write_text(json.dumps({'schema': 1, 'run': run, 'approved': True,
+                'usb_data_absent_verified': True, 'meter_startup_verified': True}))
+            self.assertFalse(check())
+
+    def test_actual_meter_schema_and_strict_health(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            meta = {'schema': 2, 'reader_sha256': listener.METER_READER_SHA,
+                    'allowed_commands': ['0x81', '0x82', '0x83'], 'usb_reset_used': False,
+                    'kernel_detach_used': False, 'serial_port_opened': False,
+                    'charging_or_voltage_commands_used': False}
+            (root / 'metadata.json').write_text(json.dumps(meta))
+            health = {'schema': 2, 'phase': 'recording', 'host_monotonic_ns': 10_000_000_000,
+                      'elapsed_host_s': 6, 'last_valid_measurement_age_s': .04,
+                      'recent_receipt_sample_rate_hz': 100, 'recording_samples': 600,
+                      'invalid_frames': 0, 'receipt_gap_count_over_200ms': 0,
+                      'clock_offset_jump_count': 0}
+            path = root / 'health.json'
+            path.write_text(json.dumps(health))
+            self.assertIsNotNone(listener.meter_ready(root, 11_000_000_000))
+            for key, value in [('phase', 'finished'), ('recording_samples', 499),
+                               ('elapsed_host_s', 4.99), ('host_monotonic_ns', 1),
+                               ('last_valid_measurement_age_s', 1.51),
+                               ('recent_receipt_sample_rate_hz', 105.01),
+                               ('invalid_frames', 1), ('receipt_gap_count_over_200ms', 1),
+                               ('clock_offset_jump_count', 1)]:
+                bad = health.copy()
+                bad[key] = value
+                path.write_text(json.dumps(bad))
+                self.assertIsNone(listener.meter_ready(root, 11_000_000_000), key)
+            path.write_text(json.dumps(health))
+            meta['reader_sha256'] = '0' * 64
+            (root / 'metadata.json').write_text(json.dumps(meta))
+            self.assertIsNone(listener.meter_ready(root, 11_000_000_000))
+
+    def test_three_cycles_four_downloads_terminal_no_rearm(self):
+        machine, fake_os = FakeMachine(), FakeOS()
+        events, downloads, refreshes, markers, connections = [], [], [], [], []
+        fake_time = types.SimpleNamespace(ticks_ms=lambda: 10, ticks_diff=lambda x, y: x - y,
+                                          sleep_ms=lambda ms: None)
+        def fetch(sta, cfg, nonce, index):
+            downloads.append(index)
+            return bmp(), False, {'timestamp_changed_vs_original_file': False}
+        with patch.dict(sys.modules, {'machine': machine, 'network': types.SimpleNamespace()}), \
+             patch.multiple(app, os=fake_os, time=fake_time, Deadline=lambda ms: None,
+                 read_json=lambda path: control() if path != app.WIFI else {'ssid': 'synthetic', 'password': 'synthetic'},
+                 app_config=lambda: {}, rtc_ms=lambda m: m.clock,
+                 connect=lambda *args: connections.append(1), fetch=fetch,
+                 radio_off=lambda n: None, refresh=lambda *args: refreshes.append(1),
+                 marker=lambda addr, run, i, kind, deadline, **kw: markers.append((i, kind)),
+                 terminal=lambda *args: fake_os.files.add(app.TERMINAL),
+                 event=lambda run, i, stage, **kw: events.append((i, stage, kw))):
+            for _ in range(3):
+                with self.assertRaises(Deep):
+                    app.run()
+            app.run()
+            self.assertEqual(machine.sleeps, [300000] * 3)
+            self.assertEqual(downloads, [0, 1, 2, 3])
+            self.assertEqual(len(refreshes), 3)
+            self.assertEqual(len(connections), 4)
+            self.assertEqual([m for m in markers if m[1] == 'DOWNLOAD_READY'],
+                             [(i, 'DOWNLOAD_READY') for i in range(4)])
+            self.assertEqual(events[-1][1], 'COMPLETE')
+            app.run()  # A late reset must not start another Wi-Fi/app attempt.
+            self.assertEqual(len(connections), 4)
+            self.assertEqual(len(machine.sleeps), 3)
+            self.assertEqual(events[-1][1], 'COMPLETE')
+
+    def test_cold_reset_after_consume_does_not_resume(self):
+        machine, fake_os = FakeMachine(), FakeOS()
+        fake_os.files = {app.CONSUMED}
+        calls = []
+        with patch.dict(sys.modules, {'machine': machine, 'network': types.SimpleNamespace()}), \
+             patch.multiple(app, os=fake_os, read_json=lambda p: control(),
+                 connect=lambda *args: calls.append('connect'),
+                 terminal=lambda *args: fake_os.files.add(app.TERMINAL),
+                 radio_off=lambda *args: calls.append('radio'), event=lambda *a, **k: None):
+            app.run()
+        self.assertEqual(calls, [])
+        self.assertEqual(machine.sleeps, [])
+
+
+if __name__ == '__main__':
+    unittest.main()
