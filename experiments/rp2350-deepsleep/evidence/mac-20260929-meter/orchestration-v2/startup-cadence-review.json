@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "reviewed_utc": "2026-09-29T16:15:17.119226+00:00",
+  "failed_sequence": "cmp300",
+  "failed_phase": "meter_startup",
+  "functional_test_started": false,
+  "firmware_switched": false,
+  "first_health_recording_samples": 100,
+  "first_health_receipt_rate_hz": 105.18508115421811,
+  "first_25_frames_receipt_span_s": 0.912676959,
+  "first_interframe_ms": [
+    0.991834,
+    31.364541
+  ],
+  "later_20_frames_receipt_rate_hz": 99.94553954399518,
+  "finding": "The first two host receipts are clustered; applying a cadence gate at 25 frames produces a biased short-window rate. Device versus USB delivery cause is not distinguished.",
+  "change": "Separate v2 supervisor waits for at least 500 recording samples and five seconds from collector launch before unchanged95..105Hz gate; freshness/liveness are still checked throughout. First eligible out-of-range reading still fails.",
+  "old_frozen_sources_modified": false,
+  "measurement_profiles_or_analysis_changed": false,
+  "failed_evidence_preserved": true,
+  "new_hardware_attempt_status": "NOT_STARTED"
+}

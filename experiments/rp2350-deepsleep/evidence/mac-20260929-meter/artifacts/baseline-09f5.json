@@ -1,0 +1,52 @@
+{
+  "native_build": "PASS",
+  "file_inspection": "PASS",
+  "hardware_validation": "NOT RUN",
+  "device_access": "NONE",
+  "created_utc": "2026-09-29T14:09:49.597789+00:00",
+  "variant": "baseline-09f5",
+  "source": "09f5bb447504a058376c62fe991b3613531837e6",
+  "runtime_version": "v1.30.0-preview.85.g09f5bb4475",
+  "board": "RPI_PICO2_W",
+  "board_variant": "",
+  "platform": "rp2350-arm-s",
+  "gcc": "14.3.1",
+  "build_type": "MinSizeRel",
+  "version_overrides": false,
+  "tinyusb_patch": false,
+  "tinyusb_patch_sha256": null,
+  "picotool_build_commit": "6f6458d792b93685a11423b244a585eaa99eafcf",
+  "picotool_version": "picotool v2.3.0 (Darwin, AppleClang-21.0.0.21000334, Release)\n\nThis version of picotool was compiled without USB support. Some commands are not available.",
+  "artifacts": {
+    "uf2": {
+      "bytes": 1777152,
+      "sha256": "71d10571198cef144c2139028903d1ea9d411a1697cdb045fc433f61511e7c6f",
+      "observed_file_sha256": "71d10571198cef144c2139028903d1ea9d411a1697cdb045fc433f61511e7c6f",
+      "observed_file_bytes": 1777152,
+      "matches_build_manifest": true
+    },
+    "bin": {
+      "bytes": 888120,
+      "sha256": "340360f9d49d8d5ec70c308af210c5b9dca84d23f3f55b07732ae01258349ae9",
+      "observed_file_sha256": "340360f9d49d8d5ec70c308af210c5b9dca84d23f3f55b07732ae01258349ae9",
+      "observed_file_bytes": 888120,
+      "matches_build_manifest": true
+    },
+    "elf": {
+      "bytes": 8797776,
+      "sha256": "06a089faa427b0ae6fd7518fb7815d7c7efb18abc51404bef038f427a5331e79",
+      "observed_file_sha256": "06a089faa427b0ae6fd7518fb7815d7c7efb18abc51404bef038f427a5331e79",
+      "observed_file_bytes": 8797776,
+      "matches_build_manifest": true
+    }
+  },
+  "dependencies": {
+    "lib/pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+    "lib/btstack": "77e752abd6a0992334047a48038a5a3960e5c6bc",
+    "lib/cyw43-driver": "055d64274b014dd7b1c2fc94d26e8a18face7124",
+    "lib/lwip": "77dcd25a72509eb83f72b033d219b1d40cd8eb95",
+    "lib/mbedtls": "0bebf8b8c7f07abe3571ded48a11aa907a1ffb20",
+    "lib/micropython-lib": "ee4bb8ff139e24c42b739935fbd8ec7c4d061e02",
+    "lib/tinyusb": "b549ac1d84cbbe550c9590951e2290098b3fb16c"
+  }
+}

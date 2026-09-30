@@ -1,0 +1,29 @@
+{
+  "result": "PASS",
+  "started": {
+    "host_utc": "2026-09-29T20:51:21.625767+00:00",
+    "host_monotonic": 536017.651477583
+  },
+  "target": "candidate-91e91",
+  "trigger": "USB absent after second baseline legacy sleep/reset; physical BOOTSEL confirmed by user",
+  "original_application_started": false,
+  "filesystem_writes": false,
+  "source_sha256": "b618bc2d687cb4596b85887f52dd795b2d2c08d823aa72401d39fe9a39e19a74",
+  "post_bootrom_reset_performed": true,
+  "own_fresh_backup_verified": true,
+  "candidate_load_independently_verified": true,
+  "entire_filesystem_unchanged_verified": true,
+  "firmware": "candidate-91e91",
+  "firmware_bin_sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b",
+  "guarded_files_verified": 33,
+  "original_directories_verified": 7,
+  "friendly_repl": true,
+  "serial_owner_closed": true,
+  "watchdog_enabled": false,
+  "rtc_restored_from_fresh_saved_plus_elapsed": true,
+  "rtc_continuity_result": "NOT_TESTED_ACROSS_USER_POWER_CYCLE; explicit fresh-snapshot RTC restore recorded separately",
+  "finished": {
+    "host_utc": "2026-09-29T20:52:11.378696+00:00",
+    "host_monotonic": 536067.404368125
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "result": "FAIL",
+  "board_alias": "test-board-2",
+  "provenance": {
+    "guard_proof_sha256": "ed5c798fbc19da70a31b5ba1be4bd69ef9aadc432cca6873f293895a001086dc",
+    "meter_metadata_sha256": "9d6b66e2953d261701f7e01cf04af12948258bba3e9c4e4e70dd483e461891fe",
+    "root_attestation_not_rechecked_via_serial": true,
+    "watcher_sha256": "23c20584d1df2db6b14ac3296b16212c752f14638531e628057f296b8d27b8ca",
+    "timing_logic_sha256": "94be9c900183020abe23a39575dbc45c27793cf225305d2cd19980a665fac041"
+  },
+  "started_utc": "2026-09-29T19:21:58.410361+00:00",
+  "serial_opened": false,
+  "usb_interface_opened": false,
+  "reset_performed": false,
+  "capture_started": false,
+  "deadline_s": 240.0,
+  "error_type": "ValueError",
+  "reason": "Meter must already be recording at least 100 samples",
+  "phase": "ABSENCE_OBSERVED",
+  "finished_utc": "2026-09-29T19:23:28.419089+00:00"
+}

@@ -1,0 +1,3750 @@
+{
+  "schema": 1,
+  "export_status": "EXPORTED_NOT_A_TEST_RESULT",
+  "created_utc": "2026-09-29T19:33:11.952968+00:00",
+  "board_alias": "test-board-2",
+  "payload_files": {
+    "setup.json": {
+      "bytes": 576,
+      "sha256": "7097ee66cdb0bb088891e518573d7d6013a47ac3df03dccd3224b07597aedfd0",
+      "private_sources": [
+        "setup-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "initial-read.json": {
+      "bytes": 485,
+      "sha256": "2eefcbc33550c9d259fb5fbeef20b46875e00327b6e687d8066637050cf707ad",
+      "private_sources": [
+        "initial-read-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "backup-verification.json": {
+      "bytes": 106,
+      "sha256": "fc6dac4df60c31140ffd84bba4652a1c819fd885395b1ec0f01849a2421bbf16",
+      "private_sources": [
+        "initial-full-backup/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "offline-guard-verification.json": {
+      "bytes": 329,
+      "sha256": "b5f05456b68201bac3a7e97f5ea410a5565e2559d92a3a933910cf5fe7a8a21c",
+      "private_sources": [
+        "offline-guard/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "watchdog-guard-reset.json": {
+      "bytes": 703,
+      "sha256": "54f59fe1668b302b7412882242f82205f8364f4fb11c36fa52559856f9c05fce",
+      "private_sources": [
+        "guard-reset-private.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "candidate-first-flash.json": {
+      "bytes": 442,
+      "sha256": "da66f9e0a6bc21898ccd99af09bdeea75d986c8ee843e79e23b6a7b3590fccae",
+      "private_sources": [
+        "candidate-first-flash/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "artifacts/candidate-91e91.json": {
+      "bytes": 2252,
+      "sha256": "2ddc738b1e03a89deb84ca050cf2592fa79c04c9f142a32c4694284502422f5a",
+      "private_sources": [
+        "artifacts/candidate-91e91/build-manifest.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "artifacts/baseline-09f5.json": {
+      "bytes": 2182,
+      "sha256": "aad614c73abfed59d81fdee11a453f3b6295d6ddcb346f304821d727b76ed1ff",
+      "private_sources": [
+        "artifacts/baseline-09f5/build-manifest.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "artifacts/baseline-09f5-usbq.json": {
+      "bytes": 2254,
+      "sha256": "22ed418c1193c9e2acbcd7fb2c6103e86d17dabb945a944bb44a28ca638956ea",
+      "private_sources": [
+        "artifacts/baseline-09f5-usbq/build-manifest.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-smoke3/config.json": {
+      "bytes": 206,
+      "sha256": "5124f3180720509224b9355bc5f4b887b2e664d41ed44af85faa1b2bfc8e7ed4",
+      "private_sources": [
+        "runs/candidate-smoke3/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-smoke3/result.json": {
+      "bytes": 1179,
+      "sha256": "dbe67f2dafc20ba3d4c43b7599c889c333e35366b16481f88669a88d1202f926",
+      "private_sources": [
+        "runs/candidate-smoke3/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-smoke3/progress.json": {
+      "bytes": 941,
+      "sha256": "7c0931b2337dc844c276cb4c66ce0609b896e625fcfde5c18d53be4d82dae966",
+      "private_sources": [
+        "runs/candidate-smoke3/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-smoke3/plan.json": {
+      "bytes": 524,
+      "sha256": "6cd23980bc26d2e32bdd9d32cf1cd8aeae5c427ab845c822668e40fb4210e1bb",
+      "private_sources": [
+        "runs/candidate-smoke3/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-smoke3/install-result.json": {
+      "bytes": 321,
+      "sha256": "3a136286c9b1cbe23a9a3ac0d93b1907b63a48736e8322dcadfcde08e6330a4a",
+      "private_sources": [
+        "runs/candidate-smoke3/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-smoke3/events.jsonl": {
+      "bytes": 10234,
+      "sha256": "38e572e6b9f0ec06e3d712f230545407ab589623438077107f82704005e38a8c",
+      "private_sources": [
+        "runs/candidate-smoke3/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "runs/candidate-cycles100/config.json": {
+      "bytes": 211,
+      "sha256": "7c1e2939b8f6cb00436f2946a3b3e4cec4e4d0a30472de2b08726fe12afe0d85",
+      "private_sources": [
+        "runs/candidate-cycles100/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-cycles100/result.json": {
+      "bytes": 1188,
+      "sha256": "9b286f94b5ed17e1dffec1a83deb59d6c85a8cf82455b133d826ad47b6265acc",
+      "private_sources": [
+        "runs/candidate-cycles100/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-cycles100/progress.json": {
+      "bytes": 947,
+      "sha256": "d65364c315edda87584d6b8ececcb252e0119136ce20f5726e2f85e597fdd109",
+      "private_sources": [
+        "runs/candidate-cycles100/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-cycles100/plan.json": {
+      "bytes": 525,
+      "sha256": "ddc2f078ab75d5f6d85d590c3bbc1d46450d0900c1c38e70cd6ec77137b84951",
+      "private_sources": [
+        "runs/candidate-cycles100/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-cycles100/install-result.json": {
+      "bytes": 321,
+      "sha256": "bea9500fe31551d60aece1e21b8882ef089187841e4cdb41ac87054a54a9f685",
+      "private_sources": [
+        "runs/candidate-cycles100/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-cycles100/events.jsonl": {
+      "bytes": 261720,
+      "sha256": "3de3fcd53349a51757a0eb01206e1f960dffd0b877d905f72d2d0c35720c0ff5",
+      "private_sources": [
+        "runs/candidate-cycles100/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "runs/candidate-long30/config.json": {
+      "bytes": 212,
+      "sha256": "adbdbd3703323aac46c6cef5b03b34213339a4ed5884336bba60d192af09849e",
+      "private_sources": [
+        "runs/candidate-long30/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long30/result.json": {
+      "bytes": 1179,
+      "sha256": "09f9c91abb6b2eb89ae3f08dd079dab038a5b6116d834283a2f0e35068b335d5",
+      "private_sources": [
+        "runs/candidate-long30/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long30/progress.json": {
+      "bytes": 940,
+      "sha256": "2688068097e8439c1ce0e00602b72ab71602e611d7b8a931476d1bcde0a0df83",
+      "private_sources": [
+        "runs/candidate-long30/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long30/plan.json": {
+      "bytes": 526,
+      "sha256": "0bcf125ef9056d6fb09a67d3655c23400d8e18ef9979b5cd7647cadb498b7226",
+      "private_sources": [
+        "runs/candidate-long30/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long30/install-result.json": {
+      "bytes": 321,
+      "sha256": "991cf62a96397b196bb84cb757c71229bda24e214c59f8b4ecfcdd07ec945bc2",
+      "private_sources": [
+        "runs/candidate-long30/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long30/events.jsonl": {
+      "bytes": 5074,
+      "sha256": "37416a8b816bedf881fd802bcba0cc6b25a9320accfc984f268b52284764abcd",
+      "private_sources": [
+        "runs/candidate-long30/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "runs/candidate-long75/config.json": {
+      "bytes": 212,
+      "sha256": "d5ab9f668aab0fb6c5db298d94443677cc10a78365d47b350c706555d988b3ce",
+      "private_sources": [
+        "runs/candidate-long75/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long75/result.json": {
+      "bytes": 1175,
+      "sha256": "0bb535862f8952dba5032835f214195559354e2cfd6a664cd896b41a886f0f2e",
+      "private_sources": [
+        "runs/candidate-long75/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long75/progress.json": {
+      "bytes": 940,
+      "sha256": "880092d2d9c9515ae42c573f4f0cd27ddf7eed19115e1ede891c21553dcfb558",
+      "private_sources": [
+        "runs/candidate-long75/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long75/plan.json": {
+      "bytes": 649,
+      "sha256": "231afc2ff6f03c96d2e9283bda53b742d606ff48b208af30bbfd8b017c00d19a",
+      "private_sources": [
+        "runs/candidate-long75/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long75/install-result.json": {
+      "bytes": 321,
+      "sha256": "71fc9306d5863546ef7be9c921b9d02129c791e31a133dd1f4ff3a3a5272c35b",
+      "private_sources": [
+        "runs/candidate-long75/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-long75/events.jsonl": {
+      "bytes": 5074,
+      "sha256": "5430cd90616dadd9f0e65fad7d03440dc19339affa9d3f1c323b4a5ad0cef8b0",
+      "private_sources": [
+        "runs/candidate-long75/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "meter-functional/metadata.json": {
+      "bytes": 1341,
+      "sha256": "2c93168eb9e6f70212018432cec6844db9a88483c6e31303eaf549e7c12c94f7",
+      "private_sources": [
+        "meter-functional/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "meter-functional/health.json": {
+      "bytes": 1547,
+      "sha256": "3007178848a5e794a610a3daaa3c3ff99595bee569f94d222e6f9c2a6ee606b4",
+      "private_sources": [
+        "meter-functional/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "meter-functional/summary.json": {
+      "bytes": 3509,
+      "sha256": "7bd0f8f3cda27efca6a5d1a2219ae917110904763a88724ae74f85674e1df3ea",
+      "private_sources": [
+        "meter-functional/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "meter-functional/private-raw-digests.json": {
+      "bytes": 658,
+      "sha256": "c2d60e43e630165ae31a3546826811f5f8754553b33f196b04272eaa7172c8e8",
+      "private_sources": [
+        "meter-functional/frames.jsonl",
+        "meter-functional/samples.jsonl",
+        "meter-functional/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "meter-functional/capture-status.json": {
+      "bytes": 729,
+      "sha256": "050298d17db45476fc8d9e130ed88e4c2e206d9cee3f0a19fd1c91fe27118100",
+      "private_sources": [
+        "meter-functional/metadata.json",
+        "meter-functional/health.json",
+        "meter-functional/summary.json",
+        "meter-functional/frames.jsonl",
+        "meter-functional/samples.jsonl",
+        "meter-functional/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "measurements/cmp300/result.json": {
+      "bytes": 1634,
+      "sha256": "7c30c23f260740ba192481fa2c3349012d55bc209b07a7d26727d848b896f9fd",
+      "private_sources": [
+        "measurements/cmp300/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300/progress.json": {
+      "bytes": 206,
+      "sha256": "f03e0fe0a44829eee1817d9f4c0502a0bb7854d80139f2f4b09b5894f2f77de0",
+      "private_sources": [
+        "measurements/cmp300/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300/01-a-sleep-reset/result.json": {
+      "bytes": 639,
+      "sha256": "4bc39bede4c00e1c5627777002847c881edf65caab9e64b8b7ea1d47d9e0d980",
+      "private_sources": [
+        "measurements/cmp300/01-a-sleep-reset/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "f272454d17586d5f62e46ad8fc0169ceae16789d8229a95fd5a1a01d724b1545",
+      "private_sources": [
+        "measurements/cmp300/01-a-sleep-reset/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/health.json": {
+      "bytes": 1523,
+      "sha256": "7784f8835b464ca48bd1b34ffda15537bc179d537aab591f64ac6d27eedb3274",
+      "private_sources": [
+        "measurements/cmp300/01-a-sleep-reset/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/summary.json": {
+      "bytes": 3359,
+      "sha256": "7f6683f60bb3eae9f6c57cc372ef3ed2eefc6bec48b139cd183fc119a153460e",
+      "private_sources": [
+        "measurements/cmp300/01-a-sleep-reset/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/private-raw-digests.json": {
+      "bytes": 648,
+      "sha256": "df3578c2ce73adcc7d2c2fc5aa08c0dfcfff21bfab079004e0626194e1f76af5",
+      "private_sources": [
+        "measurements/cmp300/01-a-sleep-reset/meter/frames.jsonl",
+        "measurements/cmp300/01-a-sleep-reset/meter/samples.jsonl",
+        "measurements/cmp300/01-a-sleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "7415f9cf1cb3fc53368479137d961d9c038bacd15e033dc0ec42e7789a3bfca9",
+      "private_sources": [
+        "measurements/cmp300/01-a-sleep-reset/meter/metadata.json",
+        "measurements/cmp300/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300/01-a-sleep-reset/meter/frames.jsonl",
+        "measurements/cmp300/01-a-sleep-reset/meter/samples.jsonl",
+        "measurements/cmp300/01-a-sleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "measurements/cmp300cont1/result.json": {
+      "bytes": 1642,
+      "sha256": "7682f8e38011cb5997fe4bb2c1e5ed9c48b9baa6216fcc8021642192b5024371",
+      "private_sources": [
+        "measurements/cmp300cont1/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont1/progress.json": {
+      "bytes": 206,
+      "sha256": "5a0da9a1c3261cabefef841644c08766b5e2d2fc5cd37911843c38685b793959",
+      "private_sources": [
+        "measurements/cmp300cont1/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/result.json": {
+      "bytes": 644,
+      "sha256": "3c9f737815c4f097b138be375e304b8608d9600575261db3190953f9e7aff5a7",
+      "private_sources": [
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "e6b063873fb77b84761a1eba1250e1c5dffcd1da7a64641b1d246f43637c9850",
+      "private_sources": [
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json": {
+      "bytes": 1520,
+      "sha256": "b2b93f7bd36e8233628fe855021332e8693e1a8c5bc105cdc62beff2c712122a",
+      "private_sources": [
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json": {
+      "bytes": 3468,
+      "sha256": "e0518d1dcc82c67ea92cccee0fc33c088610834b4f330e513f1b999ccc77c1c1",
+      "private_sources": [
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/private-raw-digests.json": {
+      "bytes": 649,
+      "sha256": "c97a16684bda8ee735be30e30cf44ab149a99dac1eb7e206eb90cd49e15847db",
+      "private_sources": [
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/frames.jsonl",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/samples.jsonl",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/capture-status.json": {
+      "bytes": 729,
+      "sha256": "3372d12c7bd91edb04f407e213b6b8a285acadcb77bb6e440f9f371cde61930d",
+      "private_sources": [
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/metadata.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/frames.jsonl",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/samples.jsonl",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "measurements/cmp300cont2/result.json": {
+      "bytes": 1692,
+      "sha256": "e22fe64c2f6e91e8f53e4c107a03130ba7015bd28a9901a463293d97c57deb12",
+      "private_sources": [
+        "measurements/cmp300cont2/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont2/progress.json": {
+      "bytes": 206,
+      "sha256": "0eedfb4aa40827b9636ad73e9e39b62dcc4604b964356f5a7b3198311af279b4",
+      "private_sources": [
+        "measurements/cmp300cont2/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/result.json": {
+      "bytes": 665,
+      "sha256": "f0dcb5f9d897c35a2c1a9e7509e83fb5c28a182f652383e8cdf028c8f7cef276",
+      "private_sources": [
+        "measurements/cmp300cont2/02-b-lightsleep-reset/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "18509df2d290601595f0371e8953410f28c4f3cde205cf64124dd349ed8e70af",
+      "private_sources": [
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json": {
+      "bytes": 1538,
+      "sha256": "15c394d4a32a808d867e0c07bb5af6171d7eb30264e6019a88d4e96d8af97653",
+      "private_sources": [
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json": {
+      "bytes": 3365,
+      "sha256": "cd79d949f3f10d25d006271eea93767158f6bf5a4f5a7dbd3c63cc9c823f57d0",
+      "private_sources": [
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/private-raw-digests.json": {
+      "bytes": 650,
+      "sha256": "f0a86aeec54bbae4ea4e45088133e3a946dc9674adbe4b7bf77d55dec823efe7",
+      "private_sources": [
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/frames.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/samples.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "dc0471dc65b1ebad44fad83fb6a4081627cb8fccd92c24695da988d59f4943bf",
+      "private_sources": [
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/metadata.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/frames.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/samples.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/config.json": {
+      "bytes": 232,
+      "sha256": "d6722995f4fd5029be2084a09bee5e4e7eee53c294a72905c41447f89cbf3dcf",
+      "private_sources": [
+        "runs/cmp300cont2-b-lightsleep-reset/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/result.json": {
+      "bytes": 1344,
+      "sha256": "f3b4339052424c050b06c7f163f8a73b91b9df5763f41744de03e92fc7e8c7b6",
+      "private_sources": [
+        "runs/cmp300cont2-b-lightsleep-reset/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/progress.json": {
+      "bytes": 1022,
+      "sha256": "34de474d5e8459fdab13891345bc592a7b2e35faeb38ff9164cb8ef5871cdf5d",
+      "private_sources": [
+        "runs/cmp300cont2-b-lightsleep-reset/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/plan.json": {
+      "bytes": 655,
+      "sha256": "eaa3d347ac366990e28c20dff7b51acfd56f13c1e44e2917ebe59acbfc21344d",
+      "private_sources": [
+        "runs/cmp300cont2-b-lightsleep-reset/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/install-result.json": {
+      "bytes": 320,
+      "sha256": "52c2941aeb8ae12e645839a09f194cb57987520db7574de2ddb6adaa11e95bff",
+      "private_sources": [
+        "runs/cmp300cont2-b-lightsleep-reset/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/events.jsonl": {
+      "bytes": 6552,
+      "sha256": "7f9c8cef1cd54d77db0c56e50ac9636a938c9e182e886e84e230a2b521ed72c0",
+      "private_sources": [
+        "runs/cmp300cont2-b-lightsleep-reset/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300deep/result.json": {
+      "bytes": 2895,
+      "sha256": "48b03f77ad17e17a91e21102c011b95520e9f263cdd24a38c6854fff300edf79",
+      "private_sources": [
+        "measurements/cmp300deep/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/progress.json": {
+      "bytes": 206,
+      "sha256": "bfd0c284c42a03670e475997f1ee7e1fe0e0ecbed313c4e21a86983b39b42585",
+      "private_sources": [
+        "measurements/cmp300deep/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/result.json": {
+      "bytes": 578,
+      "sha256": "4d3b9f0cd1425890658614617c04389e485a291ac5d46fe24879d698fdffd322",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/analysis.json": {
+      "bytes": 85719,
+      "sha256": "54afeca7dbbca29424d0b9bf19a9ac2fec5ead040f2a7db9723b21271bc8a93d",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/analysis/analysis.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/trace-bins.csv": {
+      "bytes": 78288,
+      "sha256": "180f0e57e5f6ae6da399e7fdfbdb86c7d95a189e4f565bf4f2adc5d497da0cb6",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/analysis/trace-bins.csv"
+      ],
+      "transformation": "Verified numeric-only exact CSV copy"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/current-trace.svg": {
+      "bytes": 111885,
+      "sha256": "4bb7f34812286d4365d8dd816514d96849aba571f7ae5fda6829f3dae4adc9ed",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/analysis/current-trace.svg"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/current-trace.png": {
+      "bytes": 107053,
+      "sha256": "154039bfd36c5798b8c06b4db3a06507c12b9927ad4d866a3375c2c2b7ae4f34",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/analysis/current-trace.png"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "28533528ac186d186fce61da290a489a7acad696d168691e6a43d288ffe77bab",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/health.json": {
+      "bytes": 1454,
+      "sha256": "318fd56231cf597ec1ee26fbb6c43f8b9da24f154fd818cf117ab0b6410ed9b5",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/summary.json": {
+      "bytes": 3376,
+      "sha256": "782a7b70fb2af512c658a5187c1b17ef31157486e5339bb4acdf3e923f21eeb4",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/private-raw-digests.json": {
+      "bytes": 656,
+      "sha256": "e09f73b5998ed930b26de8b42bb1c98e3b850b5895e7750b0b61dd8a7c3bde28",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/frames.jsonl",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/samples.jsonl",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "3e758971e94e1ed9d76f55527dd40a102ad67a49a1847ad0a07671943aa9a62a",
+      "private_sources": [
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/metadata.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/health.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/summary.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/frames.jsonl",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/samples.jsonl",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300deep-c-deepsleep-never/config.json": {
+      "bytes": 222,
+      "sha256": "4b9b8bd0ca876b2f7ec7fb143ab9729d29e65b2ab980c6ca13783acf846a6021",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-never/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-never/result.json": {
+      "bytes": 1202,
+      "sha256": "a1cdf823e1b77da99b6288b8528991cc636e380b7cb59bead86cdfe8f145cfbf",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-never/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-never/progress.json": {
+      "bytes": 952,
+      "sha256": "edc671185e6b2fd2bc4ae3bc651df22a8a8ff565d09592b3ce87737b65c90e4d",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-never/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-never/plan.json": {
+      "bytes": 655,
+      "sha256": "31f19e42e808ee1cad9d35422252d84cc883ec00bd86764d39cbdaca3f787276",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-never/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-never/install-result.json": {
+      "bytes": 320,
+      "sha256": "dfcadc26f7037172903253fab2b7ac6ca7a2180682b74984123795c7c3ab1b72",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-never/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-never/events.jsonl": {
+      "bytes": 15890,
+      "sha256": "74b6f8f38158e6ec0ade7034258e0202db231a9c2781a12f8158ed7db42afbce",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-never/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/result.json": {
+      "bytes": 574,
+      "sha256": "17094bad8d62922aa7f31c6052d060970c0d6839931a2f5ebfd85c4515491071",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/analysis.json": {
+      "bytes": 85715,
+      "sha256": "bfb80ce1d69913bb6bea33baba717aa24c0dab2aea3aadff157164c44c3bb9e3",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/analysis/analysis.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/trace-bins.csv": {
+      "bytes": 79079,
+      "sha256": "89df4a8ca446e04629c0b527680ec42e6d85b69244beb0039ed9cbfc3085e255",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/analysis/trace-bins.csv"
+      ],
+      "transformation": "Verified numeric-only exact CSV copy"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/current-trace.svg": {
+      "bytes": 107586,
+      "sha256": "ce662a79a9219043a37ce6fc04e958c5a35d834f54d0cdd2c2c97746898ed3c9",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/analysis/current-trace.svg"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/current-trace.png": {
+      "bytes": 100954,
+      "sha256": "2bd827148705a153024c01bdf73ae9873e72fa1859791633337a4926814832a9",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/analysis/current-trace.png"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "f8aa7942e4285a48a5fbda1ace3ba3541247209f8e84ed54ecb5fadc1b8d399b",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/health.json": {
+      "bytes": 1544,
+      "sha256": "01083acb13d1c84177144a71b3268f8005d480f28832fc9ddc17ec8ec62405ff",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/summary.json": {
+      "bytes": 3371,
+      "sha256": "711323a5419d629020414a2d025558516f5f36e2d3b979cfbb397189e80754da",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/private-raw-digests.json": {
+      "bytes": 656,
+      "sha256": "d5d1d78439bff01dc4c34ffb481230d034fde36c4bec076bb61a43b87003c9d5",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/frames.jsonl",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/samples.jsonl",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "622003789ba0f640f1338051ed15678a0a91635b239f43283f452e28d37f7bd9",
+      "private_sources": [
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/metadata.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/health.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/summary.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/frames.jsonl",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/samples.jsonl",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300deep-c-deepsleep-sta/config.json": {
+      "bytes": 218,
+      "sha256": "fa8396c2b42f32f1764fa7474ffab62b19674d03d1294d13c34ca9d60658ab86",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-sta/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-sta/result.json": {
+      "bytes": 1198,
+      "sha256": "6af21818ef4218c045e3e2759a45d4bbcd34cb8172c9b18a680a0952938a9acd",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-sta/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-sta/progress.json": {
+      "bytes": 950,
+      "sha256": "eab62db1e8777f3cda7ae9d68d90ad698ffe082533c68bbe9f480419da1f51c9",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-sta/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-sta/plan.json": {
+      "bytes": 654,
+      "sha256": "3344c4899028928b77616d4913374651bb1339c8b78c80187318896d17466faa",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-sta/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-sta/install-result.json": {
+      "bytes": 321,
+      "sha256": "a1526e0b57d687351bc6eed634177d10328a6836391d0b165de4b4101850ffb6",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-sta/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-deepsleep-sta/events.jsonl": {
+      "bytes": 16671,
+      "sha256": "ca40d508f93d78b3543702ded9b2747968e7a0eb88a2cd23f355734b0a498fa3",
+      "private_sources": [
+        "runs/cmp300deep-c-deepsleep-sta/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/result.json": {
+      "bytes": 578,
+      "sha256": "041f782977a387f0e30243d59848eeb507e88eb88925b428321ca73db9ab6214",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/analysis.json": {
+      "bytes": 85693,
+      "sha256": "4712469b8cad88a608e70c649e0a34dfd67039ede3481a16f33a60616f9e48f8",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/analysis/analysis.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/trace-bins.csv": {
+      "bytes": 79622,
+      "sha256": "82cc1ae2d075c09823ac52c51255518b84bdb82a1e0f574c39c80797cccb7791",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/analysis/trace-bins.csv"
+      ],
+      "transformation": "Verified numeric-only exact CSV copy"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/current-trace.svg": {
+      "bytes": 107580,
+      "sha256": "2f6adb8428902a590f941994e3a0b9ce3f559b0fc7f0f41ebbda403ae3c372d0",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/analysis/current-trace.svg"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/current-trace.png": {
+      "bytes": 100496,
+      "sha256": "2f4d5f73106cb89d327c85749a007db48a3d7be8c2a9a755e98b3504ca341fdd",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/analysis/current-trace.png"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "e16baf7561a4979e76e8c0d846e9bf21ce0fe27ad382066636400257bafde3ec",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/health.json": {
+      "bytes": 1534,
+      "sha256": "586251e461580ebfeea184418a611e80e2417c149033481f9ef3ac335eb773c1",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/summary.json": {
+      "bytes": 3369,
+      "sha256": "f281a718c3366f4921e7b21f6e75cc60cb3f4f744e5c28477d4e0eb482b90de8",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/private-raw-digests.json": {
+      "bytes": 656,
+      "sha256": "8c943bfeae0b3ecb245d13edd261d53669a190b80d0f4ffa80ff89f95573d196",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/meter/frames.jsonl",
+        "measurements/cmp300deep/05-c-helper-sta/meter/samples.jsonl",
+        "measurements/cmp300deep/05-c-helper-sta/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "dfb9e9d79c3aedb1846406d1122967c0bf029fab40ed8fd8a0d3e04ce97743ec",
+      "private_sources": [
+        "measurements/cmp300deep/05-c-helper-sta/meter/metadata.json",
+        "measurements/cmp300deep/05-c-helper-sta/meter/health.json",
+        "measurements/cmp300deep/05-c-helper-sta/meter/summary.json",
+        "measurements/cmp300deep/05-c-helper-sta/meter/frames.jsonl",
+        "measurements/cmp300deep/05-c-helper-sta/meter/samples.jsonl",
+        "measurements/cmp300deep/05-c-helper-sta/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300deep-c-helper-sta/config.json": {
+      "bytes": 215,
+      "sha256": "5bfbcd8ba8b495bd6c99daf06831fe61c5d9cebc8b568ec79c3759009d28a764",
+      "private_sources": [
+        "runs/cmp300deep-c-helper-sta/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-helper-sta/result.json": {
+      "bytes": 1192,
+      "sha256": "a07841062711a77e40b78a3d2bf7b26c189e3672585d5b50a5cc24209f9ad11c",
+      "private_sources": [
+        "runs/cmp300deep-c-helper-sta/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-helper-sta/progress.json": {
+      "bytes": 944,
+      "sha256": "6cabe409b6656ec00b2a9964f7fca5b3433ae2b2ac5f3bc69fc73ec7b2675a34",
+      "private_sources": [
+        "runs/cmp300deep-c-helper-sta/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-helper-sta/plan.json": {
+      "bytes": 654,
+      "sha256": "dfc91c9f09c2a5d19fb3b51a8d774603650f3a125a7fd975f8e250debb0d2318",
+      "private_sources": [
+        "runs/cmp300deep-c-helper-sta/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-helper-sta/install-result.json": {
+      "bytes": 318,
+      "sha256": "591831f2b8fa4bfe67ae3aa901bc493963b3d304588e3fe935502a7786090906",
+      "private_sources": [
+        "runs/cmp300deep-c-helper-sta/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300deep-c-helper-sta/events.jsonl": {
+      "bytes": 16620,
+      "sha256": "7a26ec0507b30062d781d3160c38bf94bfbc007633beeececb7f87e349844afc",
+      "private_sources": [
+        "runs/cmp300deep-c-helper-sta/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300refusbq/result.json": {
+      "bytes": 1432,
+      "sha256": "03290af288294271e5f713bd16b52ffd66c5985dc33c0dbc11713a49ae50c6c1",
+      "private_sources": [
+        "measurements/cmp300refusbq/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refusbq/progress.json": {
+      "bytes": 244,
+      "sha256": "95ee2abb98b52a9c9cdab28a53dec58ba2ceefb1bbbb3ace403e85c06d98bbb3",
+      "private_sources": [
+        "measurements/cmp300refusbq/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/result.json": {
+      "bytes": 682,
+      "sha256": "750876945e7294a03fefb17146e5aecfc5650c9060bb451eb1eb816628e48bd4",
+      "private_sources": [
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "136ac8e7f8ee9a668ad8174533b0615b8a24760d78ba0f223bdcc62d97f5987d",
+      "private_sources": [
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/health.json": {
+      "bytes": 1533,
+      "sha256": "89cd679d8156037acedd9cf64485d99db2c51a7c55cbd1860cf297303a6a5096",
+      "private_sources": [
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/summary.json": {
+      "bytes": 3367,
+      "sha256": "5c18aeac40d08e202dff5070516b6d3192db0e0a3ec753a5611e776fac7bf74f",
+      "private_sources": [
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/private-raw-digests.json": {
+      "bytes": 650,
+      "sha256": "e533143547b507abbeeccd4a0f5df8e011409aad888be49125556db9171a00ce",
+      "private_sources": [
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/frames.jsonl",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/samples.jsonl",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "a7a23deb7e984185d1563e8561f39a61dceab4cea45567ebb11588e7f8b5b872",
+      "private_sources": [
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/metadata.json",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/health.json",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/summary.json",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/frames.jsonl",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/samples.jsonl",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/config.json": {
+      "bytes": 226,
+      "sha256": "81ec76fb535bcf157d3aa97bb10e5a2580ddb633fb9eb0e05b98606a70e8bae2",
+      "private_sources": [
+        "runs/cmp300refusbq-b-upstream-usbfix/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/result.json": {
+      "bytes": 1346,
+      "sha256": "9b3fccd9cdb48e68ef839e674fee80abdfb1b1861b84739c1bb982aa971b1507",
+      "private_sources": [
+        "runs/cmp300refusbq-b-upstream-usbfix/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/progress.json": {
+      "bytes": 1023,
+      "sha256": "04360d877ad03bd8caa0a990ce386048e048881ebac1a0b78d1bf9dbe58d3524",
+      "private_sources": [
+        "runs/cmp300refusbq-b-upstream-usbfix/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/plan.json": {
+      "bytes": 655,
+      "sha256": "a94dc6e1d17bdd9a1a9d4a5453f5a85f7f720a565910406d94572cb48054309c",
+      "private_sources": [
+        "runs/cmp300refusbq-b-upstream-usbfix/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/install-result.json": {
+      "bytes": 318,
+      "sha256": "78e9cbfa10f01e7fd6b4d2ba931500a6a1d1e5f2e96950d8ee2653d498b5cc8b",
+      "private_sources": [
+        "runs/cmp300refusbq-b-upstream-usbfix/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/events.jsonl": {
+      "bytes": 6555,
+      "sha256": "16d0fe7a8557efe9aa0c0f53c4796a48cde8e140a8dfbb6e66d12c124031e2df",
+      "private_sources": [
+        "runs/cmp300refusbq-b-upstream-usbfix/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300refvanilla/result.json": {
+      "bytes": 1433,
+      "sha256": "f62ad64634bc4a56223b1dab5f5653615a973f807f415e1fe2da1d4d9c20a37a",
+      "private_sources": [
+        "measurements/cmp300refvanilla/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refvanilla/progress.json": {
+      "bytes": 244,
+      "sha256": "881bda089667beebeae6fbf63fb416d4b8f1278cddcdfe2481945996976e5b53",
+      "private_sources": [
+        "measurements/cmp300refvanilla/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/result.json": {
+      "bytes": 682,
+      "sha256": "804a3d45eac3948c00525ef5c15bc8debcf8a68154a4c3884d830ad07014d76b",
+      "private_sources": [
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "f9710199d14fe7dd87cf6fa2648b91046c49329337064d7db212c1a20582cfe6",
+      "private_sources": [
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/health.json": {
+      "bytes": 1531,
+      "sha256": "fa8aec59da9c08f742fc2f7d671b5f5423bf6d042fb8038c486c8ea79a50c2d7",
+      "private_sources": [
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/summary.json": {
+      "bytes": 3365,
+      "sha256": "9dd078b8a09c0ea16faebcac1497aa0f825eedcf3b831901336523cd39823b25",
+      "private_sources": [
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/private-raw-digests.json": {
+      "bytes": 650,
+      "sha256": "81b341a94652539aed125448829263bbe2cfd6e53ff9960fd3bc13b90ae296c4",
+      "private_sources": [
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/frames.jsonl",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/samples.jsonl",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "7ad06031b9d8e3ab96c028e261e0fd1b34bd2fad9a15244029bc30fe73fab6f7",
+      "private_sources": [
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/metadata.json",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/health.json",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/summary.json",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/frames.jsonl",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/samples.jsonl",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/config.json": {
+      "bytes": 230,
+      "sha256": "09001f60c7849a55db8bb38a83af36bc97728369cc03c536f28ebeb7c1371117",
+      "private_sources": [
+        "runs/cmp300refvanilla-b-upstream-vanilla/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/result.json": {
+      "bytes": 1352,
+      "sha256": "5a44b1739150076b6c77fc494999567b7f3f3a06ca269d3c28ac6af88a27f4ee",
+      "private_sources": [
+        "runs/cmp300refvanilla-b-upstream-vanilla/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/progress.json": {
+      "bytes": 1027,
+      "sha256": "55c9a2eb0c3e327fc8cf089c84f207dd73f618b8d4f5a027a2acabea7ac346e7",
+      "private_sources": [
+        "runs/cmp300refvanilla-b-upstream-vanilla/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/plan.json": {
+      "bytes": 646,
+      "sha256": "e71ac416187feaeb706bf00289c20eb638cbe329472ba65b0d9ab53014b110b9",
+      "private_sources": [
+        "runs/cmp300refvanilla-b-upstream-vanilla/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/install-result.json": {
+      "bytes": 321,
+      "sha256": "ddfcf275a881dbb466d61d55186a40b1290f3ddce7df0f7165298beadc4ff75d",
+      "private_sources": [
+        "runs/cmp300refvanilla-b-upstream-vanilla/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/events.jsonl": {
+      "bytes": 6577,
+      "sha256": "62f524860004c94562f5c3e271f9a25d60df9783b25a10e7e82a3022c73ae2ad",
+      "private_sources": [
+        "runs/cmp300refvanilla-b-upstream-vanilla/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300v2/result.json": {
+      "bytes": 2326,
+      "sha256": "484f81b432f74ff8703b720b9459f041603cd3ec20b434d8767234d1b581184c",
+      "private_sources": [
+        "measurements/cmp300v2/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/progress.json": {
+      "bytes": 206,
+      "sha256": "cbcc599f81159cfdddbbbe194cfb148f41e70d812e8d71c343301500193860b5",
+      "private_sources": [
+        "measurements/cmp300v2/progress.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/result.json": {
+      "bytes": 566,
+      "sha256": "67d0b23aaa498921965b2327b29ceb1641cea709734e302600b2d2758c49c2f8",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json": {
+      "bytes": 85548,
+      "sha256": "a681b4e27ac0e533e02c4aa0f78d8938f08bf901c73df8947df1706adc00e8f6",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/trace-bins.csv": {
+      "bytes": 82803,
+      "sha256": "aecce008d55ba8842822d370ff55d5907e40c047762ccd2e9e9bb57524009fc9",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/trace-bins.csv"
+      ],
+      "transformation": "Verified numeric-only exact CSV copy"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/current-trace.svg": {
+      "bytes": 127200,
+      "sha256": "badd291adc938b04f95f2cc652c4b7cec506691a872aafdd06597e8cafa70bac",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/current-trace.svg"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/current-trace.png": {
+      "bytes": 119899,
+      "sha256": "d28a416d02c5b3f84d32436582ec6a9dbbd9314d22f1b8a1071ee454ad2d7791",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/current-trace.png"
+      ],
+      "transformation": "Reviewed plot format; SVG private strings redacted if present"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "4b43edf2bb15fd930d613104dfded6ed95ebc9952101f4af1d230833f021a087",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/health.json": {
+      "bytes": 1532,
+      "sha256": "107b4ae373356be0d471f74917f4d7118c63d1c4fee41b5059efd271bdec5345",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json": {
+      "bytes": 3387,
+      "sha256": "fbaadf4609e2a0e9793373582b045fb42900f8f5c519599c99d0fdc1db01bc14",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/private-raw-digests.json": {
+      "bytes": 656,
+      "sha256": "817c6cbc3a74f3b2bf8a540f0b00a2a2912f79396a9a877bd4d71e7cc7f7f541",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/meter/frames.jsonl",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/samples.jsonl",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "8b9019e957f4d73a5aceef3ae4a8da4216bd710b0d59b8f462d47684b797020b",
+      "private_sources": [
+        "measurements/cmp300v2/01-a-sleep-reset/meter/metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/frames.jsonl",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/samples.jsonl",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300v2-a-sleep-reset/config.json": {
+      "bytes": 219,
+      "sha256": "fd2d3415ab3e09f0c568e76df5b8a0f2f51948742b0f76d27ac098661ea5365e",
+      "private_sources": [
+        "runs/cmp300v2-a-sleep-reset/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-a-sleep-reset/result.json": {
+      "bytes": 1190,
+      "sha256": "57187fea941ebe51ff6b4baaeda91f655cc978f679ce96c1831766b43768d090",
+      "private_sources": [
+        "runs/cmp300v2-a-sleep-reset/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-a-sleep-reset/progress.json": {
+      "bytes": 946,
+      "sha256": "b5d0d47ddbe4a62fcb396ba14927b494d4af443728bdff57809bcb5cee48cf7b",
+      "private_sources": [
+        "runs/cmp300v2-a-sleep-reset/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-a-sleep-reset/plan.json": {
+      "bytes": 655,
+      "sha256": "bc99cd5ae48b568ee8c7107ee6a9b30c06d746061cd2bed9ce600ec6a1f028f4",
+      "private_sources": [
+        "runs/cmp300v2-a-sleep-reset/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-a-sleep-reset/install-result.json": {
+      "bytes": 321,
+      "sha256": "8168da46f6e4c611b3f0ac11b815b93c7f7b8fb18fbf32f69be3992d8d602756",
+      "private_sources": [
+        "runs/cmp300v2-a-sleep-reset/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-a-sleep-reset/events.jsonl": {
+      "bytes": 15789,
+      "sha256": "10c17b582825ad72e16b4da6f6b2e5feb1aab89721d80edd08d79425371ad004",
+      "private_sources": [
+        "runs/cmp300v2-a-sleep-reset/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/result.json": {
+      "bytes": 662,
+      "sha256": "76903c7bdaf8cda730287370e6c427d87db4b4a0ece7d8bb111a829bce67168c",
+      "private_sources": [
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/metadata.json": {
+      "bytes": 1340,
+      "sha256": "a2c47ceff07c756b8f5b209f156ffc947564bc3c8d842f54ad62032a068bae50",
+      "private_sources": [
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json": {
+      "bytes": 1530,
+      "sha256": "321ff71f24e9a23041b2429dee3fda58a4ad47653983c01dcc4c6913f0c0c1b7",
+      "private_sources": [
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json": {
+      "bytes": 3372,
+      "sha256": "78d946efcd4786ea32df7041faf8c7048d63a1a002ff01caef4d92ed30ce4991",
+      "private_sources": [
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/private-raw-digests.json": {
+      "bytes": 650,
+      "sha256": "b3b21de468cbf1e840cb512df3dbc1efa2ad5da892ce0ed7f88e9379a0e4f11f",
+      "private_sources": [
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/frames.jsonl",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/samples.jsonl",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "db432f303b0d471f5f84014196cc5d4ee3dedeb6caf6e96736b9b846a498e036",
+      "private_sources": [
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/metadata.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/frames.jsonl",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/samples.jsonl",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "runs/cmp300v2-b-lightsleep-reset/config.json": {
+      "bytes": 229,
+      "sha256": "58f6858660d2843ba7b0b7f88c47e884b93c5f5ebbba6b718338b026c85a7584",
+      "private_sources": [
+        "runs/cmp300v2-b-lightsleep-reset/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-b-lightsleep-reset/result.json": {
+      "bytes": 1338,
+      "sha256": "84d5c50dda0eff3175d86c8b774eddd1b563176342d5ade7b9a72fa477fcafa8",
+      "private_sources": [
+        "runs/cmp300v2-b-lightsleep-reset/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-b-lightsleep-reset/progress.json": {
+      "bytes": 1018,
+      "sha256": "dda8b4bdb9f10997812b2229121ccf138f5fb6c5a05da4b21071fd513b03aa54",
+      "private_sources": [
+        "runs/cmp300v2-b-lightsleep-reset/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-b-lightsleep-reset/plan.json": {
+      "bytes": 655,
+      "sha256": "90fbff4b7854263b38a9fb00310125f6d096e8329031f040c752f2a2f2fe1e4b",
+      "private_sources": [
+        "runs/cmp300v2-b-lightsleep-reset/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-b-lightsleep-reset/install-result.json": {
+      "bytes": 321,
+      "sha256": "d08533b023d5c36f382e0b2a70d2d5e4e286d8645c02c7768843e56e7c26841b",
+      "private_sources": [
+        "runs/cmp300v2-b-lightsleep-reset/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/cmp300v2-b-lightsleep-reset/events.jsonl": {
+      "bytes": 6536,
+      "sha256": "2693b26cfce0279f8e0e7db0e28f5eb570e895c95f3ea66426110db6bcab740e",
+      "private_sources": [
+        "runs/cmp300v2-b-lightsleep-reset/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "combined/aggregate.json": {
+      "bytes": 283854,
+      "sha256": "a32ad141549b55d9cbbbd5867cdda7ad135b42a89b65b2372d2345313e278902",
+      "private_sources": [
+        "combined-final/aggregate.json",
+        "aggregate_measurements.py",
+        "aggregate_combined.py",
+        "combined_export_contract.py",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "runs/cmp300v2-a-sleep-reset/config.json",
+        "runs/cmp300v2-a-sleep-reset/result-public.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/result.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/analysis/analysis.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/meter/summary.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/measurement-metadata.json",
+        "runs/cmp300deep-c-deepsleep-never/config.json",
+        "runs/cmp300deep-c-deepsleep-never/result-public.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/result.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/analysis/analysis.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/meter/summary.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/measurement-metadata.json",
+        "runs/cmp300deep-c-deepsleep-sta/config.json",
+        "runs/cmp300deep-c-deepsleep-sta/result-public.json",
+        "measurements/cmp300deep/05-c-helper-sta/result.json",
+        "measurements/cmp300deep/05-c-helper-sta/analysis/analysis.json",
+        "measurements/cmp300deep/05-c-helper-sta/meter/summary.json",
+        "measurements/cmp300deep/05-c-helper-sta/measurement-metadata.json",
+        "runs/cmp300deep-c-helper-sta/config.json",
+        "runs/cmp300deep-c-helper-sta/result-public.json",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/result.json",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/summary.json",
+        "measurements/cmp300refvanilla/06-b-upstream-vanilla/measurement-metadata.json",
+        "runs/cmp300refvanilla-b-upstream-vanilla/config.json",
+        "runs/cmp300refvanilla-b-upstream-vanilla/result-public.json",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/result.json",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/summary.json",
+        "measurements/cmp300refusbq/07-b-upstream-usbfix/measurement-metadata.json",
+        "runs/cmp300refusbq-b-upstream-usbfix/config.json",
+        "runs/cmp300refusbq-b-upstream-usbfix/result-public.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/measurement-metadata.json",
+        "runs/cmp300v2-b-lightsleep-reset/config.json",
+        "runs/cmp300v2-b-lightsleep-reset/result-public.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/measurement-metadata.json",
+        "runs/cmp300cont2-b-lightsleep-reset/config.json",
+        "runs/cmp300cont2-b-lightsleep-reset/result-public.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300deep/result.json",
+        "measurements/cmp300refvanilla/result.json",
+        "measurements/cmp300refusbq/result.json"
+      ],
+      "transformation": "Fixed contextual schema, unchanged source maps and values; explicit publication gates added"
+    },
+    "combined/cycles.csv": {
+      "bytes": 4108,
+      "sha256": "836fd0bf1eeca1d7764afcaaeed67dbc45879cffde009db16c1a1e9ab8cb1710",
+      "private_sources": [
+        "combined-final/cycles.csv",
+        "combined-final/aggregate.json"
+      ],
+      "transformation": "Every header and cell verified against validated aggregate; private strings redacted"
+    },
+    "combined/profiles.csv": {
+      "bytes": 4987,
+      "sha256": "80d8b86cae47a37206e14f831852d4f8399262d130020e2cb4e7a0339b18887a",
+      "private_sources": [
+        "combined-final/profiles.csv",
+        "combined-final/aggregate.json"
+      ],
+      "transformation": "Every header and cell verified against validated aggregate; private strings redacted"
+    },
+    "combined/comparisons.csv": {
+      "bytes": 2444,
+      "sha256": "1653ba4ca7296be6c96b2e0e0b5ead2316e4d21cad921dc96c63da0df153f822",
+      "private_sources": [
+        "combined-final/comparisons.csv",
+        "combined-final/aggregate.json"
+      ],
+      "transformation": "Every header and cell verified against validated aggregate; private strings redacted"
+    },
+    "combined/excluded-B-attempts.csv": {
+      "bytes": 279,
+      "sha256": "434744e5e753cd2378e125c527ee6123afa270a82ccaa16394c65fcd961fefba",
+      "private_sources": [
+        "combined-final/excluded-B-attempts.csv",
+        "combined-final/aggregate.json"
+      ],
+      "transformation": "Every header and cell verified against validated aggregate; private strings redacted"
+    },
+    "combined/README.cs.md": {
+      "bytes": 4215,
+      "sha256": "7ebcd7c68b2bd0a01c58f69e69af3220446106ff5f36e1f5c573f4054c13fc0b",
+      "private_sources": [
+        "combined-final/README.cs.md"
+      ],
+      "transformation": "Reviewed generated report with redaction and explicit interpretation note"
+    },
+    "firmware-switches/cmp300deep-switch-vanilla/result.json": {
+      "bytes": 605,
+      "sha256": "1b1b8cec6d5d8337a1b92fd14f0dbb8952c8af44d09009f9c226c76367ded883",
+      "private_sources": [
+        "firmware-switches/cmp300deep-switch-vanilla/result-private.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "firmware-switches/cmp300ref-return-candidate/result.json": {
+      "bytes": 610,
+      "sha256": "8c3568beff66bfeb8a98e16cfa680ba2a86a584ae08880a87eef82ee3465ef90",
+      "private_sources": [
+        "firmware-switches/cmp300ref-return-candidate/result-private.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "firmware-switches/cmp300ref-switch-usbfix/result.json": {
+      "bytes": 610,
+      "sha256": "7b97718a97db99aa5eec5eef01c716ac286eca29e3c2ff34f723475f0a131225",
+      "private_sources": [
+        "firmware-switches/cmp300ref-switch-usbfix/result-private.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "restoration.json": {
+      "bytes": 1142,
+      "sha256": "030aff7f4793852903fc34f09a655db591e0188c12cc41cceb13222119d5ebe8",
+      "private_sources": [
+        "restoration/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "orchestration-v2/startup-cadence-review.json": {
+      "bytes": 1078,
+      "sha256": "3ccb9e0f1c7b5abf9e8796f43d6dbfaa36cc62b26b34a15decd6493f47c6ee15",
+      "private_sources": [
+        "startup-cadence-review.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "sources/measure_variants_v2.py.txt": {
+      "bytes": 2228,
+      "sha256": "c2850e74b5e0fd99ae1a61f3e8779e6c3b0a292e925a1abf087329c9040b47e5",
+      "private_sources": [
+        "measure_variants_v2.py",
+        "measurement-source-freeze-v2.json"
+      ],
+      "transformation": "Complete separately pinned v2 wrapper, with private strings/paths sanitized; not a standalone tool"
+    },
+    "orchestration-v2/provenance.json": {
+      "bytes": 4313,
+      "sha256": "860b319400ae8e9584b70408eb2a2e468eb9c0ad50ed453cc179c8b610223dbf",
+      "private_sources": [
+        "measurement-source-freeze.json",
+        "measurement-source-freeze-v2.json",
+        "startup-cadence-review.json",
+        "measure_variants_v2.py"
+      ],
+      "transformation": "Additive v1/v2 source provenance; neither rewrites previous results nor implies a retry"
+    },
+    "continuation/root-review.json": {
+      "bytes": 900,
+      "sha256": "82940aed0a6cfea121d603e75fb70a929a8eaeb07206336fe70063a28c13b58c",
+      "private_sources": [
+        "comparison-continuation-review.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "sources/continue_comparisons.py.txt": {
+      "bytes": 11553,
+      "sha256": "5e0702ce62a5406ef363d28e70010a0374e3b40657e8c8187f3fca183f9544f1",
+      "private_sources": [
+        "continue_comparisons.py",
+        "measurement-source-freeze-cont1.json"
+      ],
+      "transformation": "Complete separately pinned continuation wrapper, sanitized; prior proof file contents are not copied"
+    },
+    "continuation/provenance.json": {
+      "bytes": 5638,
+      "sha256": "b848bc8401db2c2786eb2a37cae1853f8871c572b23f0b2955196aedde396e8c",
+      "private_sources": [
+        "comparison-continuation-review.json",
+        "measurement-source-freeze-cont1.json",
+        "analyze_stream.py",
+        "common.py",
+        "comparison-continuation-review.json",
+        "continue_comparisons.py",
+        "firmware_switch.py",
+        "host_meter.py",
+        "lightsleep-return-probe/result-public.json",
+        "measure_variants.py",
+        "measure_variants_v2.py",
+        "measurement-plan.md",
+        "measurement-source-freeze-v2.json",
+        "measurement-source-freeze.json",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/plan.json",
+        "measurements/cmp300v2/preflight-provenance.json",
+        "measurements/cmp300v2/progress.json",
+        "measurements/cmp300v2/result.json",
+        "meter_reader.py",
+        "run_suite.py",
+        "safe-guarded-main.py",
+        "setup-public.json",
+        "staging/device-helper.py",
+        "staging/device-panelmeta.py",
+        "staging/panel_probe.py",
+        "staging/pico2w_vsys_lowpower.py",
+        "staging/pico_epaper29_lowpower.py",
+        "staging/provenance.json",
+        "staging/rp2350_epd_vendor.py"
+      ],
+      "transformation": "Explicit continuation source/proof chain; old failure remains a separate outcome"
+    },
+    "continuation-cont2/root-review.json": {
+      "bytes": 730,
+      "sha256": "169dadfe7f95d8e236681822ebe4198e60ac5e27ae6036c15e844460f8db6501",
+      "private_sources": [
+        "comparison-startup-cont2-review.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "sources/continue_comparisons2.py.txt": {
+      "bytes": 6953,
+      "sha256": "3051fff77a714be9d606072f119a49800d324530c5819bdf3bd9d0e738cbb32e",
+      "private_sources": [
+        "continue_comparisons2.py",
+        "measurement-source-freeze-cont2.json"
+      ],
+      "transformation": "Complete separately pinned continuation wrapper, sanitized"
+    },
+    "continuation-cont2/provenance.json": {
+      "bytes": 6847,
+      "sha256": "922857670eca3c84d439d94a96d0061cb5ba758a2f6a2da9f69689b491fd04b0",
+      "private_sources": [
+        "comparison-startup-cont2-review.json",
+        "measurement-source-freeze-cont2.json",
+        "analyze_stream.py",
+        "common.py",
+        "comparison-continuation-review.json",
+        "comparison-startup-cont2-review.json",
+        "continue_comparisons.py",
+        "continue_comparisons2.py",
+        "firmware_switch.py",
+        "host_meter.py",
+        "lightsleep-return-probe/result-public.json",
+        "measure_variants.py",
+        "measure_variants_v2.py",
+        "measurement-plan.md",
+        "measurement-source-freeze-cont1.json",
+        "measurement-source-freeze-v2.json",
+        "measurement-source-freeze.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont1/progress.json",
+        "measurements/cmp300cont1/result.json",
+        "measurements/cmp300cont1/supervision-events.jsonl",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/plan.json",
+        "measurements/cmp300v2/preflight-provenance.json",
+        "measurements/cmp300v2/progress.json",
+        "measurements/cmp300v2/result.json",
+        "meter_reader.py",
+        "run_suite.py",
+        "safe-guarded-main.py",
+        "setup-public.json",
+        "staging/device-helper.py",
+        "staging/device-panelmeta.py",
+        "staging/panel_probe.py",
+        "staging/pico2w_vsys_lowpower.py",
+        "staging/pico_epaper29_lowpower.py",
+        "staging/provenance.json",
+        "staging/rp2350_epd_vendor.py"
+      ],
+      "transformation": "Explicit fixed continuation proof chain; scientific results remain in their own sequence records"
+    },
+    "continuation-deep/root-review.json": {
+      "bytes": 1001,
+      "sha256": "303ad97f33cf63252fcb94be35a67f644588b0eced5e36eacacec69fd9efffe3",
+      "private_sources": [
+        "comparison-deep-continuation-review.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "sources/continue_deepsleep_comparisons.py.txt": {
+      "bytes": 7847,
+      "sha256": "bf25e741ab59fa4ca75a15445bda7b601b5fe6d05a22859e4f24336715b1846d",
+      "private_sources": [
+        "continue_deepsleep_comparisons.py",
+        "measurement-source-freeze-deep.json"
+      ],
+      "transformation": "Complete separately pinned continuation wrapper, sanitized"
+    },
+    "continuation-deep/provenance.json": {
+      "bytes": 8668,
+      "sha256": "d6f0c71a2d97bdb14a4299f2cb0574d7b2cb0d2880dad8ac9e9f7da7de213d79",
+      "private_sources": [
+        "comparison-deep-continuation-review.json",
+        "measurement-source-freeze-deep.json",
+        "analyze_stream.py",
+        "common.py",
+        "comparison-continuation-review.json",
+        "comparison-deep-continuation-review.json",
+        "comparison-startup-cont2-review.json",
+        "continue_comparisons.py",
+        "continue_comparisons2.py",
+        "continue_deepsleep_comparisons.py",
+        "firmware_switch.py",
+        "host_meter.py",
+        "lightsleep-return-probe/result-public.json",
+        "measure_variants.py",
+        "measure_variants_v2.py",
+        "measurement-plan.md",
+        "measurement-source-freeze-cont1.json",
+        "measurement-source-freeze-cont2.json",
+        "measurement-source-freeze-v2.json",
+        "measurement-source-freeze.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont1/progress.json",
+        "measurements/cmp300cont1/result.json",
+        "measurements/cmp300cont1/supervision-events.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont2/progress.json",
+        "measurements/cmp300cont2/result.json",
+        "measurements/cmp300cont2/supervision-events.jsonl",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/plan.json",
+        "measurements/cmp300v2/preflight-provenance.json",
+        "measurements/cmp300v2/progress.json",
+        "measurements/cmp300v2/result.json",
+        "meter_reader.py",
+        "run_suite.py",
+        "runs/cmp300cont2-b-lightsleep-reset/config.json",
+        "runs/cmp300cont2-b-lightsleep-reset/plan.json",
+        "runs/cmp300cont2-b-lightsleep-reset/result-public.json",
+        "safe-guarded-main.py",
+        "setup-public.json",
+        "staging/device-helper.py",
+        "staging/device-panelmeta.py",
+        "staging/panel_probe.py",
+        "staging/pico2w_vsys_lowpower.py",
+        "staging/pico_epaper29_lowpower.py",
+        "staging/provenance.json",
+        "staging/rp2350_epd_vendor.py"
+      ],
+      "transformation": "Explicit fixed continuation proof chain; scientific results remain in their own sequence records"
+    },
+    "reference-vanilla/root-review.json": {
+      "bytes": 1169,
+      "sha256": "0b5f9e04a783f03d634323c8bbdd26af90481f4495e7e32459e369bd77d4be39",
+      "private_sources": [
+        "reference-review-vanilla.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "reference-vanilla/guard-verification.json": {
+      "bytes": 1236,
+      "sha256": "e0b4c3389f7e374729081252f473a0f242c34551824acee302cf643a3aabe9c8",
+      "private_sources": [
+        "reference-guard-vanilla/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "reference-vanilla/provenance.json": {
+      "bytes": 8917,
+      "sha256": "024108b7bf11d422c56ec89e51a0db6079f0c9018f78f907a51301193ab0b0a4",
+      "private_sources": [
+        "measurement-source-freeze-refvanilla.json",
+        "analyze_stream.py",
+        "common.py",
+        "comparison-continuation-review.json",
+        "comparison-deep-continuation-review.json",
+        "comparison-startup-cont2-review.json",
+        "continue_comparisons.py",
+        "continue_comparisons2.py",
+        "continue_deepsleep_comparisons.py",
+        "firmware-switches/cmp300deep-switch-vanilla/result-private.json",
+        "firmware_switch.py",
+        "host_meter.py",
+        "lightsleep-return-probe/result-public.json",
+        "measure_variants.py",
+        "measure_variants_v2.py",
+        "measurement-plan.md",
+        "measurement-source-freeze-cont1.json",
+        "measurement-source-freeze-cont2.json",
+        "measurement-source-freeze-deep.json",
+        "measurement-source-freeze-v2.json",
+        "measurement-source-freeze.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont1/progress.json",
+        "measurements/cmp300cont1/result.json",
+        "measurements/cmp300cont1/supervision-events.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont2/progress.json",
+        "measurements/cmp300cont2/result.json",
+        "measurements/cmp300cont2/supervision-events.jsonl",
+        "measurements/cmp300deep/03-c-deepsleep-never/result.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/result.json",
+        "measurements/cmp300deep/05-c-helper-sta/result.json",
+        "measurements/cmp300deep/progress.json",
+        "measurements/cmp300deep/result.json",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/plan.json",
+        "measurements/cmp300v2/preflight-provenance.json",
+        "measurements/cmp300v2/progress.json",
+        "measurements/cmp300v2/result.json",
+        "meter_reader.py",
+        "reference-guard-vanilla/proof-private.json",
+        "reference-guard-vanilla/result-public.json",
+        "reference-review-vanilla.json",
+        "run_suite.py",
+        "runs/cmp300cont2-b-lightsleep-reset/config.json",
+        "runs/cmp300cont2-b-lightsleep-reset/plan.json",
+        "runs/cmp300cont2-b-lightsleep-reset/result-public.json",
+        "safe-guarded-main.py",
+        "setup-public.json",
+        "single_reference_profile.py",
+        "staging/device-helper.py",
+        "staging/device-panelmeta.py",
+        "staging/panel_probe.py",
+        "staging/pico2w_vsys_lowpower.py",
+        "staging/pico_epaper29_lowpower.py",
+        "staging/provenance.json",
+        "staging/rp2350_epd_vendor.py",
+        "verify_switched_guard.py"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "reference-usbq/root-review.json": {
+      "bytes": 897,
+      "sha256": "95ee37149230af6d051766461e04ed24732beec17c214deebd11a89e89af87a1",
+      "private_sources": [
+        "reference-review-usbq.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "reference-usbq/guard-verification.json": {
+      "bytes": 1245,
+      "sha256": "a3818731d69b4f0b2349e0f8d373d19a5134d0fb30107255d8238c2fb672c247",
+      "private_sources": [
+        "reference-guard-usbq/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "reference-usbq/provenance.json": {
+      "bytes": 8908,
+      "sha256": "949417385b06803ad472cdbed3e253d034949d157e07baff4cbd1e9331a7d804",
+      "private_sources": [
+        "measurement-source-freeze-refusbq.json",
+        "analyze_stream.py",
+        "common.py",
+        "comparison-continuation-review.json",
+        "comparison-deep-continuation-review.json",
+        "comparison-startup-cont2-review.json",
+        "continue_comparisons.py",
+        "continue_comparisons2.py",
+        "continue_deepsleep_comparisons.py",
+        "firmware-switches/cmp300ref-switch-usbfix/result-private.json",
+        "firmware_switch.py",
+        "host_meter.py",
+        "lightsleep-return-probe/result-public.json",
+        "measure_variants.py",
+        "measure_variants_v2.py",
+        "measurement-plan.md",
+        "measurement-source-freeze-cont1.json",
+        "measurement-source-freeze-cont2.json",
+        "measurement-source-freeze-deep.json",
+        "measurement-source-freeze-v2.json",
+        "measurement-source-freeze.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont1/progress.json",
+        "measurements/cmp300cont1/result.json",
+        "measurements/cmp300cont1/supervision-events.jsonl",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont2/progress.json",
+        "measurements/cmp300cont2/result.json",
+        "measurements/cmp300cont2/supervision-events.jsonl",
+        "measurements/cmp300deep/03-c-deepsleep-never/result.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/result.json",
+        "measurements/cmp300deep/05-c-helper-sta/result.json",
+        "measurements/cmp300deep/progress.json",
+        "measurements/cmp300deep/result.json",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/plan.json",
+        "measurements/cmp300v2/preflight-provenance.json",
+        "measurements/cmp300v2/progress.json",
+        "measurements/cmp300v2/result.json",
+        "meter_reader.py",
+        "reference-guard-usbq/proof-private.json",
+        "reference-guard-usbq/result-public.json",
+        "reference-review-usbq.json",
+        "run_suite.py",
+        "runs/cmp300cont2-b-lightsleep-reset/config.json",
+        "runs/cmp300cont2-b-lightsleep-reset/plan.json",
+        "runs/cmp300cont2-b-lightsleep-reset/result-public.json",
+        "safe-guarded-main.py",
+        "setup-public.json",
+        "single_reference_profile.py",
+        "staging/device-helper.py",
+        "staging/device-panelmeta.py",
+        "staging/panel_probe.py",
+        "staging/pico2w_vsys_lowpower.py",
+        "staging/pico_epaper29_lowpower.py",
+        "staging/provenance.json",
+        "staging/rp2350_epd_vendor.py",
+        "verify_switched_guard.py"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "sources/single_reference_profile.py.txt": {
+      "bytes": 18997,
+      "sha256": "7ac6bd27acfa11ef21fb5b8646f39b23672fd9724b4447e219892c9fa4d50e21",
+      "private_sources": [
+        "single_reference_profile.py"
+      ],
+      "transformation": "Complete reviewed reference fixture source with private strings/paths sanitized"
+    },
+    "sources/verify_switched_guard.py.txt": {
+      "bytes": 7560,
+      "sha256": "b251c168e782023cee2271eb842325c3d717d0c9da5528bb5a9eb8921e8bc7b5",
+      "private_sources": [
+        "verify_switched_guard.py"
+      ],
+      "transformation": "Complete reviewed reference fixture source with private strings/paths sanitized"
+    },
+    "runs/candidate-final-smoke/config.json": {
+      "bytes": 211,
+      "sha256": "cd3502c6fe6737a56b11918fb881d54d27b0b49a2928b036dc4c4602eba46b9f",
+      "private_sources": [
+        "runs/candidate-final-smoke/config.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-final-smoke/result.json": {
+      "bytes": 1188,
+      "sha256": "1c454d13288bb769fb304fe17578c533c4bb6efe41ea8ac3709b182c5acc6ffe",
+      "private_sources": [
+        "runs/candidate-final-smoke/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-final-smoke/progress.json": {
+      "bytes": 945,
+      "sha256": "a2fc2a27106eced48d7f685ce5e9c60f7472dfd542684ecdd2c6a78229e446fe",
+      "private_sources": [
+        "runs/candidate-final-smoke/progress-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-final-smoke/plan.json": {
+      "bytes": 646,
+      "sha256": "4c0642edfcce453cab8a8d336ec80e8dc0d5b6c4da63d349562b880d300c7b3e",
+      "private_sources": [
+        "runs/candidate-final-smoke/plan.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-final-smoke/install-result.json": {
+      "bytes": 318,
+      "sha256": "218fecc6cace7ca8b0a3107d2a975b5bbac355f57671ba5c6fd7f1cdc5872895",
+      "private_sources": [
+        "runs/candidate-final-smoke/install-result.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "runs/candidate-final-smoke/events.jsonl": {
+      "bytes": 5086,
+      "sha256": "478f569a952049eb116bd2145e95d9fc7411249417dc2afbee2aaecf79668b0e",
+      "private_sources": [
+        "runs/candidate-final-smoke/events-private.jsonl"
+      ],
+      "transformation": "UID aliases; allowed protocol/host fields; recognized markers parsed; other console omitted"
+    },
+    "diagnostics/lightsleep-matrix.json": {
+      "bytes": 1899,
+      "sha256": "6a880e1942e5369a008c6aea7aeebfabbbf8f27cda3e87fd4ebbb58b96eac707",
+      "private_sources": [
+        "lightsleep-matrix/runs/ls-matrix-1/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "diagnostics/lightsleep-provenance.json": {
+      "bytes": 1177,
+      "sha256": "2ca9a772e203a50089c9bcd6efa1a544b60ff82e07eaf644985f7168772e024d",
+      "private_sources": [
+        "lightsleep-matrix/runs/ls-matrix-1/provenance-private.json",
+        "lightsleep-matrix/host.py"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "final-display/result.json": {
+      "bytes": 1683,
+      "sha256": "ce709719848338627c653e1d597693c211d63fdae379aacf5601e2396b658831",
+      "private_sources": [
+        "final-display/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "final-display/visual-confirmation.json": {
+      "bytes": 410,
+      "sha256": "606bee1d5c068d3a686f0ae8571eb84f3e31a4eee7f8dc488753e025721229ba",
+      "private_sources": [
+        "final-display/visual-confirmation-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "final-display/source-hashes.json": {
+      "bytes": 190,
+      "sha256": "33ce42f1f1120cf8c39df273daa132aac1f2bfc83e8b5c4b659bacdf1f064119",
+      "private_sources": [
+        "final_prepare.py",
+        "final_display_render.py"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load/watcher.json": {
+      "bytes": 875,
+      "sha256": "53ff465848b69be83cc95175c9eaa4b19bd0691322b00ff74002dba155b2afe9",
+      "private_sources": [
+        "no-load-runs/final1/watcher/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load/late-physical-confirmation.json": {
+      "bytes": 466,
+      "sha256": "c9a476f169548dc24422f8f1df42c63c1aa301b10b762de07882e35fd1f06b8b",
+      "private_sources": [
+        "no-load-runs/final1/late-physical-confirmation-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load/meter/metadata.json": {
+      "bytes": 1339,
+      "sha256": "ed159e96420799746aaa499ed84c05116103a52eb57b601fd2ec9a4fcb4421c7",
+      "private_sources": [
+        "no-load-runs/final1/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load/meter/health.json": {
+      "bytes": 1542,
+      "sha256": "3dc22df238239256c013342b8dbb1030987dfafab6c357b662802c3d8ca841fc",
+      "private_sources": [
+        "no-load-runs/final1/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load/meter/summary.json": {
+      "bytes": 3383,
+      "sha256": "cb1b4d47265e4bfc5b1094e635df2c845eaa6f555bbda4cc9612508c4da29245",
+      "private_sources": [
+        "no-load-runs/final1/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load/meter/private-raw-digests.json": {
+      "bytes": 653,
+      "sha256": "13200f5f7769712881aa7b0e5eacd4b51562962c2bb45bbb0e9d76c80907690e",
+      "private_sources": [
+        "no-load-runs/final1/meter/frames.jsonl",
+        "no-load-runs/final1/meter/samples.jsonl",
+        "no-load-runs/final1/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "no-load/meter/capture-status.json": {
+      "bytes": 721,
+      "sha256": "07dc7ae919aeefa3841784d49a1a4b316852a8708561efa328a06b9908d8db63",
+      "private_sources": [
+        "no-load-runs/final1/meter/metadata.json",
+        "no-load-runs/final1/meter/health.json",
+        "no-load-runs/final1/meter/summary.json",
+        "no-load-runs/final1/meter/frames.jsonl",
+        "no-load-runs/final1/meter/samples.jsonl",
+        "no-load-runs/final1/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "no-load-final2/guard.json": {
+      "bytes": 611,
+      "sha256": "fcdd63052753af5de7d3d7791580d0fb30fe1084f31a9733ac7d53c4e5ccacef",
+      "private_sources": [
+        "no-load-runs/final2/guard/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/restoration.json": {
+      "bytes": 843,
+      "sha256": "5d0a634704b4c93c7ae5ac2c5874fceb0109882fac843d799b62976cd67e04b5",
+      "private_sources": [
+        "no-load-runs/final2/restoration/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/guard-source-hashes.json": {
+      "bytes": 93,
+      "sha256": "5596703fa606e43e463a86d7d938c0b272f7de35781a7a95813d6499b334bc9b",
+      "private_sources": [
+        "no_load_guard.py"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/watcher.json": {
+      "bytes": 883,
+      "sha256": "92e43464512726a42e4f195ecc3f11a6a381eb13e5ce13cd9fb0fd8a064e057b",
+      "private_sources": [
+        "no-load-runs/final2/watcher/result-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/physical-reply.json": {
+      "bytes": 394,
+      "sha256": "ae4f6863c3924a3baa6973d5259993e18e68ccd570915ef05bbd2c62068c0e50",
+      "private_sources": [
+        "no-load-runs/final2/physical-reply-public.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/meter/metadata.json": {
+      "bytes": 1339,
+      "sha256": "5fe846dc058535eb8900dde330641701dc02c0b1bbba18fd05071d22c82aad1a",
+      "private_sources": [
+        "no-load-runs/final2/meter/metadata.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/meter/health.json": {
+      "bytes": 1412,
+      "sha256": "2cae25e1790df389d83af37f73ac9ef428ff0a94844da97419f37822d6041b7b",
+      "private_sources": [
+        "no-load-runs/final2/meter/health.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/meter/summary.json": {
+      "bytes": 3409,
+      "sha256": "a766dbedebb9e005934661087048fdc807d400f0558625dee783527604040c31",
+      "private_sources": [
+        "no-load-runs/final2/meter/summary.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "no-load-final2/meter/private-raw-digests.json": {
+      "bytes": 653,
+      "sha256": "67aa69051b9241db2155012308ee8ac1d3f88365250261619074b10dfdd94198",
+      "private_sources": [
+        "no-load-runs/final2/meter/frames.jsonl",
+        "no-load-runs/final2/meter/samples.jsonl",
+        "no-load-runs/final2/meter/events.jsonl"
+      ],
+      "transformation": "Closed capture hashes only; active/incomplete raw streams are not read"
+    },
+    "no-load-final2/meter/capture-status.json": {
+      "bytes": 719,
+      "sha256": "5a331b62c1905f5cf0d09fd5e7c82ac8823a82b6ed1f16b4708965ee78f4224f",
+      "private_sources": [
+        "no-load-runs/final2/meter/metadata.json",
+        "no-load-runs/final2/meter/health.json",
+        "no-load-runs/final2/meter/summary.json",
+        "no-load-runs/final2/meter/frames.jsonl",
+        "no-load-runs/final2/meter/samples.jsonl",
+        "no-load-runs/final2/meter/events.jsonl"
+      ],
+      "transformation": "Capture lifecycle evidence derived from pinned schema2 control files"
+    },
+    "no-load-final2/posthoc-diagnostic.json": {
+      "bytes": 12102,
+      "sha256": "931bc8f0b8d574533c4566078ff3c01554e32eba66051a5c5d5c7140f14d2914",
+      "private_sources": [
+        "no-load-runs/final2/post-hoc-diagnostic/analysis.json",
+        "final2_diagnostic.py",
+        "no-load-runs/final2/guard/guard-proof-private.json",
+        "no-load-runs/final2/meter/events.jsonl",
+        "no-load-runs/final2/meter/frames.jsonl",
+        "no-load-runs/final2/meter/health.json",
+        "no-load-runs/final2/meter/metadata.json",
+        "no-load-runs/final2/meter/samples.jsonl",
+        "no-load-runs/final2/meter/summary.json",
+        "no-load-runs/final2/watcher/observations-private.jsonl",
+        "no-load-runs/final2/watcher/result-public.json"
+      ],
+      "transformation": "Reviewed post-hoc interior-window diagnostic; failed whole trial is never promoted"
+    },
+    "no-load-final2/posthoc-diagnostic/trace-bins.csv": {
+      "bytes": 10207,
+      "sha256": "2fbf50afb3041a31fca7962706db247e412d77a45b6ca592989fd73752df749f",
+      "private_sources": [
+        "no-load-runs/final2/post-hoc-diagnostic/trace-bins.csv"
+      ],
+      "transformation": "Verified numeric-only exact CSV copy"
+    },
+    "sources/device-panelmeta.py.txt": {
+      "bytes": 17177,
+      "sha256": "cdadbbd07bc7ecd7b6c26a97641bc736bd15b19f9016f92ae1bfc8fe865d903d",
+      "private_sources": [
+        "staging/device-panelmeta.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/device-helper.py.txt": {
+      "bytes": 17674,
+      "sha256": "665a106b32e7635170f3aee65522ba7090100a656f457b4ce495fd9b6cf6363b",
+      "private_sources": [
+        "staging/device-helper.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/panel_probe.py.txt": {
+      "bytes": 3476,
+      "sha256": "bcd062c365b12d66207740d18fea949f07e99e2ee926517f0d3254049da511f3",
+      "private_sources": [
+        "staging/panel_probe.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/rp2350_epd_vendor.py.txt": {
+      "bytes": 24651,
+      "sha256": "93ed904c879b9fe44503c8c198f97036b0c1266b82285c964089543f1572d254",
+      "private_sources": [
+        "staging/rp2350_epd_vendor.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/pico_epaper29_lowpower.py.txt": {
+      "bytes": 1840,
+      "sha256": "52d992cb94ab9fe8ebb0b6cc80a0cde7155bbc1879f81d3ee6746d57a3ff0dd0",
+      "private_sources": [
+        "staging/pico_epaper29_lowpower.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/pico2w_vsys_lowpower.py.txt": {
+      "bytes": 3789,
+      "sha256": "07f9a63cdc3f969c5eea7ee5c9a98821082313134457ddd759e5824172df1ecf",
+      "private_sources": [
+        "staging/pico2w_vsys_lowpower.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/safe-guarded-main.py.txt": {
+      "bytes": 532,
+      "sha256": "6a87053a2e980a5aecb8c4fb757163fd3bc2e5319a571cab7215170c29921be3",
+      "private_sources": [
+        "safe-guarded-main.py"
+      ],
+      "transformation": "Exact reviewed fixture text apart from private string/path redaction"
+    },
+    "sources/host_meter.py.excerpts.txt": {
+      "bytes": 11205,
+      "sha256": "6977b5a2f11a788cb9c0c85d29156b9986ddaee85c7d8c17c7748951ea624e33",
+      "private_sources": [
+        "host_meter.py"
+      ],
+      "transformation": "Selected named AST definitions; not a standalone executable; private paths redacted"
+    },
+    "sources/meter_reader.py.excerpts.txt": {
+      "bytes": 9898,
+      "sha256": "5b179ac0fe1720b11fd772afb488c1220705664129ad96c0a52a4817963dcfb5",
+      "private_sources": [
+        "meter_reader.py"
+      ],
+      "transformation": "Selected named AST definitions; not a standalone executable; private paths redacted"
+    },
+    "sources/analyze_stream.py.excerpts.txt": {
+      "bytes": 28818,
+      "sha256": "9842fc0e2b27962a4efd2ee8833d4fd4b771f39b22ecaf515f1cd6ebf26c7bc3",
+      "private_sources": [
+        "analyze_stream.py"
+      ],
+      "transformation": "Selected named AST definitions; not a standalone executable; private paths redacted"
+    },
+    "sources/run_suite.py.excerpts.txt": {
+      "bytes": 5960,
+      "sha256": "b973cdb49a8ce421fbfeed0b3420241e137a7a0e3d11ce59e68a93e21b2afc8b",
+      "private_sources": [
+        "run_suite.py"
+      ],
+      "transformation": "Selected named AST definitions; not a standalone executable; private paths redacted"
+    },
+    "tool-hashes.json": {
+      "bytes": 35720,
+      "sha256": "b39d2f7372ce57150e762c7e180055557428aa09148f8e8a2326c54e0aa7cfba",
+      "private_sources": [
+        "measurement-source-freeze.json",
+        "combined_export_contract.py",
+        "analyze_stream.py",
+        "common.py",
+        "firmware_switch.py",
+        "host_meter.py",
+        "measure_variants.py",
+        "measurement-plan.md",
+        "meter_reader.py",
+        "run_suite.py",
+        "safe-guarded-main.py",
+        "setup-public.json",
+        "staging/device-helper.py",
+        "staging/device-panelmeta.py",
+        "staging/panel_probe.py",
+        "staging/pico2w_vsys_lowpower.py",
+        "staging/pico_epaper29_lowpower.py",
+        "staging/provenance.json",
+        "staging/rp2350_epd_vendor.py",
+        "measurement-source-freeze-v2.json",
+        "measure_variants_v2.py",
+        "measurement-source-freeze-cont1.json",
+        "comparison-continuation-review.json",
+        "continue_comparisons.py",
+        "lightsleep-return-probe/result-public.json",
+        "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json",
+        "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/health.json",
+        "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json",
+        "measurements/cmp300v2/01-a-sleep-reset/result.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300v2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300v2/plan.json",
+        "measurements/cmp300v2/preflight-provenance.json",
+        "measurements/cmp300v2/progress.json",
+        "measurements/cmp300v2/result.json",
+        "measurement-source-freeze-cont2.json",
+        "comparison-startup-cont2-review.json",
+        "continue_comparisons2.py",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont1/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont1/progress.json",
+        "measurements/cmp300cont1/result.json",
+        "measurements/cmp300cont1/supervision-events.jsonl",
+        "measurement-source-freeze-deep.json",
+        "comparison-deep-continuation-review.json",
+        "continue_deepsleep_comparisons.py",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/measurement-metadata.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json",
+        "measurements/cmp300cont2/02-b-lightsleep-reset/result.json",
+        "measurements/cmp300cont2/progress.json",
+        "measurements/cmp300cont2/result.json",
+        "measurements/cmp300cont2/supervision-events.jsonl",
+        "runs/cmp300cont2-b-lightsleep-reset/config.json",
+        "runs/cmp300cont2-b-lightsleep-reset/plan.json",
+        "runs/cmp300cont2-b-lightsleep-reset/result-public.json",
+        "measurement-source-freeze-refvanilla.json",
+        "firmware-switches/cmp300deep-switch-vanilla/result-private.json",
+        "measurements/cmp300deep/03-c-deepsleep-never/result.json",
+        "measurements/cmp300deep/04-c-deepsleep-sta/result.json",
+        "measurements/cmp300deep/05-c-helper-sta/result.json",
+        "measurements/cmp300deep/progress.json",
+        "measurements/cmp300deep/result.json",
+        "reference-guard-vanilla/proof-private.json",
+        "reference-guard-vanilla/result-public.json",
+        "reference-review-vanilla.json",
+        "single_reference_profile.py",
+        "verify_switched_guard.py",
+        "measurement-source-freeze-refusbq.json",
+        "firmware-switches/cmp300ref-switch-usbfix/result-private.json",
+        "reference-guard-usbq/proof-private.json",
+        "reference-guard-usbq/result-public.json",
+        "reference-review-usbq.json"
+      ],
+      "transformation": "allowlist projection"
+    },
+    "status.json": {
+      "bytes": 32029,
+      "sha256": "c9cd6a0941c4299c3d12e3364605d1e25a42724a20f838d52345f9e79ac28134",
+      "private_sources": [],
+      "transformation": "allowlist projection"
+    },
+    "README.md": {
+      "bytes": 1303,
+      "sha256": "a782d274f8a2b7ff8e1c5729dc2fe0b47e8c91fa215acb0e6f4801616e528c2f",
+      "private_sources": [],
+      "transformation": "allowlist projection"
+    }
+  },
+  "private_source_files": {
+    "initial-state-private.json": {
+      "sha256": "609fdb2a729e3a80312b1064c09119360c4ee8f8af8406c7657390eb24ece268",
+      "bytes": 933
+    },
+    "usb-enumeration-private.json": {
+      "sha256": "6a8dbe076da21b1cbca1cb09d363be402767583e26288e20280298dcbdf7cc95",
+      "bytes": 1107
+    },
+    "measurement-source-freeze.json": {
+      "sha256": "1732aae4c7e1a36481645935d561c3db18e6afae771da016e256bc760fd0dbb9",
+      "bytes": 2006
+    },
+    "measure_variants.py": {
+      "sha256": "9de9cb0413d08931d1f2e9107179ef1397d3cdbfefeeafac3d5ff4e5ceff8e8f",
+      "bytes": 32176
+    },
+    "meter_reader.py": {
+      "sha256": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+      "bytes": 31369
+    },
+    "run_suite.py": {
+      "sha256": "f5a1e7d0b8d75ebce175ff043b24a41a95c3cd3b45e69ab3a93b3a617725cf09",
+      "bytes": 8223
+    },
+    "host_meter.py": {
+      "sha256": "20026a8f23e5855ed5863260ce7b4dd348fd720324c1517c48b69703763f2111",
+      "bytes": 21214
+    },
+    "analyze_stream.py": {
+      "sha256": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+      "bytes": 35467
+    },
+    "firmware_switch.py": {
+      "sha256": "8e1eb2b9876bb82b2173ce454f903787e295b11bc9280465121bd6d9839e05c2",
+      "bytes": 18739
+    },
+    "common.py": {
+      "sha256": "e7173259f25ed3e9a41bee17474174095aefd9b58c8045603a958e2f4a577093",
+      "bytes": 2411
+    },
+    "safe-guarded-main.py": {
+      "sha256": "6a87053a2e980a5aecb8c4fb757163fd3bc2e5319a571cab7215170c29921be3",
+      "bytes": 532
+    },
+    "measurement-plan.md": {
+      "sha256": "4622aee4ff982c736232c06bb6aa6b713e03ac5ca6bb75a826d65969069687ba",
+      "bytes": 9975
+    },
+    "setup-public.json": {
+      "sha256": "1b75038df09e7ca19444e5cd5b98367e98f253cf7cb63df87f067d44f5259ac9",
+      "bytes": 631
+    },
+    "staging/provenance.json": {
+      "sha256": "21556efd0509803e89de45dca7b455f1672606e19a672b667ebf7b730f06f6c4",
+      "bytes": 1813
+    },
+    "staging/device-panelmeta.py": {
+      "sha256": "cdadbbd07bc7ecd7b6c26a97641bc736bd15b19f9016f92ae1bfc8fe865d903d",
+      "bytes": 17177
+    },
+    "staging/device-helper.py": {
+      "sha256": "665a106b32e7635170f3aee65522ba7090100a656f457b4ce495fd9b6cf6363b",
+      "bytes": 17674
+    },
+    "staging/panel_probe.py": {
+      "sha256": "bcd062c365b12d66207740d18fea949f07e99e2ee926517f0d3254049da511f3",
+      "bytes": 3476
+    },
+    "staging/rp2350_epd_vendor.py": {
+      "sha256": "93ed904c879b9fe44503c8c198f97036b0c1266b82285c964089543f1572d254",
+      "bytes": 24651
+    },
+    "staging/pico_epaper29_lowpower.py": {
+      "sha256": "52d992cb94ab9fe8ebb0b6cc80a0cde7155bbc1879f81d3ee6746d57a3ff0dd0",
+      "bytes": 1840
+    },
+    "staging/pico2w_vsys_lowpower.py": {
+      "sha256": "07f9a63cdc3f969c5eea7ee5c9a98821082313134457ddd759e5824172df1ecf",
+      "bytes": 3789
+    },
+    "measurement-source-freeze-v2.json": {
+      "sha256": "b23114902430372578dcca766e8c8dd70a807efcb613b8f332710ea891f059fa",
+      "bytes": 2282
+    },
+    "measure_variants_v2.py": {
+      "sha256": "c2850e74b5e0fd99ae1a61f3e8779e6c3b0a292e925a1abf087329c9040b47e5",
+      "bytes": 2228
+    },
+    "measurement-source-freeze-cont1.json": {
+      "sha256": "81d92317dc5c71e438b03220fa478623d98f9959a6f915d3b4dc22b7eafa7d64",
+      "bytes": 9155
+    },
+    "continue_comparisons.py": {
+      "sha256": "5e0702ce62a5406ef363d28e70010a0374e3b40657e8c8187f3fca183f9544f1",
+      "bytes": 11553
+    },
+    "comparison-continuation-review.json": {
+      "sha256": "82940aed0a6cfea121d603e75fb70a929a8eaeb07206336fe70063a28c13b58c",
+      "bytes": 900
+    },
+    "lightsleep-return-probe/result-public.json": {
+      "sha256": "df0730436220828aa9a1cfd1a5b5c80b4abfcbd55e57df728a70b7fad815bd42",
+      "bytes": 723
+    },
+    "measurements/cmp300v2/plan.json": {
+      "sha256": "8adf156b3d1835bcd95c1ee192e9500b977b38a4884420877c372fb963a040c6",
+      "bytes": 15754
+    },
+    "measurements/cmp300v2/preflight-provenance.json": {
+      "sha256": "7a7e5d638a49a9a6b4dbfd2bcee23bd0bc5072b6d1e089f9b7ad081ef275980d",
+      "bytes": 3590
+    },
+    "measurements/cmp300v2/result.json": {
+      "sha256": "484f81b432f74ff8703b720b9459f041603cd3ec20b434d8767234d1b581184c",
+      "bytes": 2326
+    },
+    "measurements/cmp300v2/progress.json": {
+      "sha256": "02d155b808e6222e656d90f83d8d38276a23758f0a3a44e69d71a8b997859b02",
+      "bytes": 293
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/result.json": {
+      "sha256": "67d0b23aaa498921965b2327b29ceb1641cea709734e302600b2d2758c49c2f8",
+      "bytes": 566
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/measurement-metadata.json": {
+      "sha256": "e58f51b3a75896b0ef52bd3fd84fabe6feb246771098be8c724d92641d464d08",
+      "bytes": 4558
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/analysis.json": {
+      "sha256": "a681b4e27ac0e533e02c4aa0f78d8938f08bf901c73df8947df1706adc00e8f6",
+      "bytes": 85548
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/summary.json": {
+      "sha256": "fbaadf4609e2a0e9793373582b045fb42900f8f5c519599c99d0fdc1db01bc14",
+      "bytes": 3387
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/health.json": {
+      "sha256": "13567da67e5c888e4e4970cab2388d58e8b561c3e3cc33dc1f428e3dcc36c27c",
+      "bytes": 1215
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/result.json": {
+      "sha256": "76903c7bdaf8cda730287370e6c427d87db4b4a0ece7d8bb111a829bce67168c",
+      "bytes": 662
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/summary.json": {
+      "sha256": "78d946efcd4786ea32df7041faf8c7048d63a1a002ff01caef4d92ed30ce4991",
+      "bytes": 3372
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/health.json": {
+      "sha256": "cb39e030a7b9e0bef6a8b9680cfb72112c3a61116c02c5443e5875fe37be3915",
+      "bytes": 1213
+    },
+    "measurement-source-freeze-cont2.json": {
+      "sha256": "8b551a3a04de74288aa4fea5a9ac8b66f4dc05e1ee6c99bce9824c9d2c9745d4",
+      "bytes": 11529
+    },
+    "comparison-startup-cont2-review.json": {
+      "sha256": "169dadfe7f95d8e236681822ebe4198e60ac5e27ae6036c15e844460f8db6501",
+      "bytes": 730
+    },
+    "measurements/cmp300cont1/result.json": {
+      "sha256": "7682f8e38011cb5997fe4bb2c1e5ed9c48b9baa6216fcc8021642192b5024371",
+      "bytes": 1642
+    },
+    "measurements/cmp300cont1/progress.json": {
+      "sha256": "653dca3fc44a357c8603ebe849aabffd0c3cba373078148aed4e5d0a83ed9b6d",
+      "bytes": 261
+    },
+    "measurements/cmp300cont1/supervision-events.jsonl": {
+      "sha256": "c5d389b20ebeb89e89de019a513a763aabcc9447db1cf08b2f505970d91cb001",
+      "bytes": 1064
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/result.json": {
+      "sha256": "3c9f737815c4f097b138be375e304b8608d9600575261db3190953f9e7aff5a7",
+      "bytes": 644
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/measurement-metadata.json": {
+      "sha256": "5447d14c165e183ac18ffa4bd7707a6cb2f06a61613bf9cf564fb34c23365df7",
+      "bytes": 6707
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/summary.json": {
+      "sha256": "e0518d1dcc82c67ea92cccee0fc33c088610834b4f330e513f1b999ccc77c1c1",
+      "bytes": 3468
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/health.json": {
+      "sha256": "bad5de3aa62574140e732bffe4a709f9e8ffc07ef7ec19e652ec643d513fa7ae",
+      "bytes": 1203
+    },
+    "continue_comparisons2.py": {
+      "sha256": "3051fff77a714be9d606072f119a49800d324530c5819bdf3bd9d0e738cbb32e",
+      "bytes": 6953
+    },
+    "measurement-source-freeze-deep.json": {
+      "sha256": "b857b4da6a290e3b569d04864884da55da14af4f861a694b239569798ad52098",
+      "bytes": 14993
+    },
+    "comparison-deep-continuation-review.json": {
+      "sha256": "303ad97f33cf63252fcb94be35a67f644588b0eced5e36eacacec69fd9efffe3",
+      "bytes": 1001
+    },
+    "measurements/cmp300cont2/result.json": {
+      "sha256": "e22fe64c2f6e91e8f53e4c107a03130ba7015bd28a9901a463293d97c57deb12",
+      "bytes": 1692
+    },
+    "measurements/cmp300cont2/progress.json": {
+      "sha256": "88f03f0bfc1dc827028015f257c5512da0ebbf16861680ec2429b897d114a78c",
+      "bytes": 261
+    },
+    "measurements/cmp300cont2/supervision-events.jsonl": {
+      "sha256": "c6fd45ec8cfc853948e609abcc4706b9386d57346c2458bdcf7b3955d73e8476",
+      "bytes": 2303
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/result.json": {
+      "sha256": "f0dcb5f9d897c35a2c1a9e7509e83fb5c28a182f652383e8cdf028c8f7cef276",
+      "bytes": 665
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/measurement-metadata.json": {
+      "sha256": "fed9319299dfecf9fb20296f38f8741cf7137db4713c5f72b018aec13ca4c771",
+      "bytes": 7945
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/summary.json": {
+      "sha256": "cd79d949f3f10d25d006271eea93767158f6bf5a4f5a7dbd3c63cc9c823f57d0",
+      "bytes": 3365
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/health.json": {
+      "sha256": "884fe49963d6a1c8e87970e707c08580113823b5680e63c08c8a4e26e9534238",
+      "bytes": 1221
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/result-public.json": {
+      "sha256": "f3b4339052424c050b06c7f163f8a73b91b9df5763f41744de03e92fc7e8c7b6",
+      "bytes": 1344
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/config.json": {
+      "sha256": "d6722995f4fd5029be2084a09bee5e4e7eee53c294a72905c41447f89cbf3dcf",
+      "bytes": 232
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/plan.json": {
+      "sha256": "eaa3d347ac366990e28c20dff7b51acfd56f13c1e44e2917ebe59acbfc21344d",
+      "bytes": 655
+    },
+    "continue_deepsleep_comparisons.py": {
+      "sha256": "bf25e741ab59fa4ca75a15445bda7b601b5fe6d05a22859e4f24336715b1846d",
+      "bytes": 7847
+    },
+    "measurement-source-freeze-refvanilla.json": {
+      "sha256": "7d4431e5f1d993295c54bb2fe8a12924b0401327c08082cb3f3dcb6d5cebebee",
+      "bytes": 8413
+    },
+    "single_reference_profile.py": {
+      "sha256": "7ac6bd27acfa11ef21fb5b8646f39b23672fd9724b4447e219892c9fa4d50e21",
+      "bytes": 18997
+    },
+    "verify_switched_guard.py": {
+      "sha256": "b251c168e782023cee2271eb842325c3d717d0c9da5528bb5a9eb8921e8bc7b5",
+      "bytes": 7560
+    },
+    "reference-review-vanilla.json": {
+      "sha256": "0b5f9e04a783f03d634323c8bbdd26af90481f4495e7e32459e369bd77d4be39",
+      "bytes": 1169
+    },
+    "reference-guard-vanilla/result-public.json": {
+      "sha256": "e0b4c3389f7e374729081252f473a0f242c34551824acee302cf643a3aabe9c8",
+      "bytes": 1236
+    },
+    "reference-guard-vanilla/proof-private.json": {
+      "sha256": "06f1d68ecd986ee6a4614e7a49ef6e1554a868a4717b817eb15c93ce589d8704",
+      "bytes": 7253
+    },
+    "firmware-switches/cmp300deep-switch-vanilla/result-private.json": {
+      "sha256": "1b1b8cec6d5d8337a1b92fd14f0dbb8952c8af44d09009f9c226c76367ded883",
+      "bytes": 605
+    },
+    "measurements/cmp300deep/result.json": {
+      "sha256": "48b03f77ad17e17a91e21102c011b95520e9f263cdd24a38c6854fff300edf79",
+      "bytes": 2895
+    },
+    "measurements/cmp300deep/progress.json": {
+      "sha256": "c9b5df4cbf53217a6939f173f504e0ad7eea31ff8660bd578872692fd065bd38",
+      "bytes": 364
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/result.json": {
+      "sha256": "4d3b9f0cd1425890658614617c04389e485a291ac5d46fe24879d698fdffd322",
+      "bytes": 578
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/result.json": {
+      "sha256": "17094bad8d62922aa7f31c6052d060970c0d6839931a2f5ebfd85c4515491071",
+      "bytes": 574
+    },
+    "measurements/cmp300deep/05-c-helper-sta/result.json": {
+      "sha256": "041f782977a387f0e30243d59848eeb507e88eb88925b428321ca73db9ab6214",
+      "bytes": 578
+    },
+    "measurement-source-freeze-refusbq.json": {
+      "sha256": "9baca0f2628d938ea48d9bbbad9ed436bd9c541faff1235299c719fc06424ff9",
+      "bytes": 8407
+    },
+    "reference-review-usbq.json": {
+      "sha256": "ed12cdc737bcb1283db4a6f1430927cab9fc2262640d2c332387cd54ad96255c",
+      "bytes": 1000
+    },
+    "reference-guard-usbq/result-public.json": {
+      "sha256": "a3818731d69b4f0b2349e0f8d373d19a5134d0fb30107255d8238c2fb672c247",
+      "bytes": 1245
+    },
+    "reference-guard-usbq/proof-private.json": {
+      "sha256": "18f009d27d71052064450c542c2b223810b648fec98cb46743b0570588da50d7",
+      "bytes": 7308
+    },
+    "firmware-switches/cmp300ref-switch-usbfix/result-private.json": {
+      "sha256": "7b97718a97db99aa5eec5eef01c716ac286eca29e3c2ff34f723475f0a131225",
+      "bytes": 610
+    },
+    "initial-read-public.json": {
+      "sha256": "2eefcbc33550c9d259fb5fbeef20b46875e00327b6e687d8066637050cf707ad",
+      "bytes": 485
+    },
+    "initial-full-backup/result.json": {
+      "sha256": "bd66bf56f8a5ec0b79c70c893b8ae23e08ba497e47981e8ca4c7f7e1e993b9fd",
+      "bytes": 377
+    },
+    "offline-guard/result.json": {
+      "sha256": "ee21361bc49c28a3c41c1e4778e747f2301da79739973abcdb7f6292e20c1c71",
+      "bytes": 984
+    },
+    "guard-reset-private.json": {
+      "sha256": "63db2d91255c1661ff81fe8316a6846598f23e92e3740fd289f016e3ac2b792c",
+      "bytes": 1423
+    },
+    "candidate-first-flash/result.json": {
+      "sha256": "311b3ba33c9b27427f5db0a3ac106acc3db317b5d4f9c2471900a127781502d5",
+      "bytes": 491
+    },
+    "artifacts/candidate-91e91/build-manifest.json": {
+      "sha256": "02c2eff112d1ea6956eb6e1aed15477b46c1ae22e8df0eabfcd2a76988170b03",
+      "bytes": 7578
+    },
+    "artifacts/candidate-91e91/firmware.uf2": {
+      "sha256": "d7e6172b40c65eb84bc58d08646b80dc184a03b08785a1f5fb7fe1e9db3838e1",
+      "bytes": 1780224
+    },
+    "artifacts/candidate-91e91/firmware.bin": {
+      "sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b",
+      "bytes": 889824
+    },
+    "artifacts/candidate-91e91/firmware.elf": {
+      "sha256": "b9c2058e193a0c8648fc2f6ab8e09bb2e956aae88617cd76862455a47dc80fc5",
+      "bytes": 8821116
+    },
+    "artifacts/baseline-09f5/build-manifest.json": {
+      "sha256": "5b6409addc366309b228c24a925bb9ca427a796bd6070e841e74c589cca4d900",
+      "bytes": 7280
+    },
+    "artifacts/baseline-09f5/firmware.uf2": {
+      "sha256": "71d10571198cef144c2139028903d1ea9d411a1697cdb045fc433f61511e7c6f",
+      "bytes": 1777152
+    },
+    "artifacts/baseline-09f5/firmware.bin": {
+      "sha256": "340360f9d49d8d5ec70c308af210c5b9dca84d23f3f55b07732ae01258349ae9",
+      "bytes": 888120
+    },
+    "artifacts/baseline-09f5/firmware.elf": {
+      "sha256": "06a089faa427b0ae6fd7518fb7815d7c7efb18abc51404bef038f427a5331e79",
+      "bytes": 8797776
+    },
+    "artifacts/baseline-09f5-usbq/build-manifest.json": {
+      "sha256": "263c83055e25a7067690b10d84c4d835817e071e12124d43e08b0abdac934b26",
+      "bytes": 7610
+    },
+    "artifacts/baseline-09f5-usbq/firmware.uf2": {
+      "sha256": "10873c94cbcf7fd08c52fcbd320e67a209d7ed42a761b3360be44ed581a9cdaa",
+      "bytes": 1777152
+    },
+    "artifacts/baseline-09f5-usbq/firmware.bin": {
+      "sha256": "c893e0c19802b6098365ad3d917b4ffd306914d69acb0f3316a05130bd8d1e49",
+      "bytes": 888176
+    },
+    "artifacts/baseline-09f5-usbq/firmware.elf": {
+      "sha256": "77eab5c06447d2b1090e78ee712cfb1bf3345b05c8beff9047bd17cb19f43d9c",
+      "bytes": 8810480
+    },
+    "runs/candidate-smoke3/config.json": {
+      "sha256": "5124f3180720509224b9355bc5f4b887b2e664d41ed44af85faa1b2bfc8e7ed4",
+      "bytes": 206
+    },
+    "runs/candidate-smoke3/result-public.json": {
+      "sha256": "dbe67f2dafc20ba3d4c43b7599c889c333e35366b16481f88669a88d1202f926",
+      "bytes": 1179
+    },
+    "runs/candidate-smoke3/progress-public.json": {
+      "sha256": "7c0931b2337dc844c276cb4c66ce0609b896e625fcfde5c18d53be4d82dae966",
+      "bytes": 941
+    },
+    "runs/candidate-smoke3/plan.json": {
+      "sha256": "6cd23980bc26d2e32bdd9d32cf1cd8aeae5c427ab845c822668e40fb4210e1bb",
+      "bytes": 524
+    },
+    "runs/candidate-smoke3/install-result.json": {
+      "sha256": "3a136286c9b1cbe23a9a3ac0d93b1907b63a48736e8322dcadfcde08e6330a4a",
+      "bytes": 321
+    },
+    "runs/candidate-smoke3/events-private.jsonl": {
+      "sha256": "4d01a5488076b3f985a9e1ea7f5f509154ca82203feb1de30732dd6a88dc1e13",
+      "bytes": 10300
+    },
+    "runs/candidate-cycles100/config.json": {
+      "sha256": "7c1e2939b8f6cb00436f2946a3b3e4cec4e4d0a30472de2b08726fe12afe0d85",
+      "bytes": 211
+    },
+    "runs/candidate-cycles100/result-public.json": {
+      "sha256": "9b286f94b5ed17e1dffec1a83deb59d6c85a8cf82455b133d826ad47b6265acc",
+      "bytes": 1188
+    },
+    "runs/candidate-cycles100/progress-public.json": {
+      "sha256": "d65364c315edda87584d6b8ececcb252e0119136ce20f5726e2f85e597fdd109",
+      "bytes": 947
+    },
+    "runs/candidate-cycles100/plan.json": {
+      "sha256": "ddc2f078ab75d5f6d85d590c3bbc1d46450d0900c1c38e70cd6ec77137b84951",
+      "bytes": 525
+    },
+    "runs/candidate-cycles100/install-result.json": {
+      "sha256": "bea9500fe31551d60aece1e21b8882ef089187841e4cdb41ac87054a54a9f685",
+      "bytes": 321
+    },
+    "runs/candidate-cycles100/events-private.jsonl": {
+      "sha256": "88927178836ac1312196b4386a72c3a02370971bc5a7e988d8141ae86cf74299",
+      "bytes": 262562
+    },
+    "runs/candidate-long30/config.json": {
+      "sha256": "adbdbd3703323aac46c6cef5b03b34213339a4ed5884336bba60d192af09849e",
+      "bytes": 212
+    },
+    "runs/candidate-long30/result-public.json": {
+      "sha256": "09f9c91abb6b2eb89ae3f08dd079dab038a5b6116d834283a2f0e35068b335d5",
+      "bytes": 1179
+    },
+    "runs/candidate-long30/progress-public.json": {
+      "sha256": "2688068097e8439c1ce0e00602b72ab71602e611d7b8a931476d1bcde0a0df83",
+      "bytes": 940
+    },
+    "runs/candidate-long30/plan.json": {
+      "sha256": "0bcf125ef9056d6fb09a67d3655c23400d8e18ef9979b5cd7647cadb498b7226",
+      "bytes": 526
+    },
+    "runs/candidate-long30/install-result.json": {
+      "sha256": "991cf62a96397b196bb84cb757c71229bda24e214c59f8b4ecfcdd07ec945bc2",
+      "bytes": 321
+    },
+    "runs/candidate-long30/events-private.jsonl": {
+      "sha256": "2a979697028712b6238e366a24fd856ce9fd2fe2b4fa3c0927b4e9a142ae663e",
+      "bytes": 5124
+    },
+    "runs/candidate-long75/config.json": {
+      "sha256": "d5ab9f668aab0fb6c5db298d94443677cc10a78365d47b350c706555d988b3ce",
+      "bytes": 212
+    },
+    "runs/candidate-long75/result-public.json": {
+      "sha256": "0bb535862f8952dba5032835f214195559354e2cfd6a664cd896b41a886f0f2e",
+      "bytes": 1175
+    },
+    "runs/candidate-long75/progress-public.json": {
+      "sha256": "880092d2d9c9515ae42c573f4f0cd27ddf7eed19115e1ede891c21553dcfb558",
+      "bytes": 940
+    },
+    "runs/candidate-long75/plan.json": {
+      "sha256": "231afc2ff6f03c96d2e9283bda53b742d606ff48b208af30bbfd8b017c00d19a",
+      "bytes": 649
+    },
+    "runs/candidate-long75/install-result.json": {
+      "sha256": "71fc9306d5863546ef7be9c921b9d02129c791e31a133dd1f4ff3a3a5272c35b",
+      "bytes": 321
+    },
+    "runs/candidate-long75/events-private.jsonl": {
+      "sha256": "9bdf0b43e6a4d3200ef91e8f226f630d8c915c6b6de9a14b557bb95a35e5109b",
+      "bytes": 5124
+    },
+    "meter-functional/metadata.json": {
+      "sha256": "dfa8916594ca6354b8e3fe2fca316a2498728fd9ded7acc60ed54da208bfeacf",
+      "bytes": 1385
+    },
+    "meter-functional/health.json": {
+      "sha256": "817e0c5e821f2c562f848600472039f9bf427eb7d4ff099fe823449f729987d0",
+      "bytes": 1230
+    },
+    "meter-functional/summary.json": {
+      "sha256": "7bd0f8f3cda27efca6a5d1a2219ae917110904763a88724ae74f85674e1df3ea",
+      "bytes": 3509
+    },
+    "meter-functional/frames.jsonl": {
+      "sha256": "a09ac965f8451faaa29882bc1acb5d13d75842a5bad6455efbb60f18bb4e46ef",
+      "bytes": 80222449
+    },
+    "meter-functional/samples.jsonl": {
+      "sha256": "239945260aa56a2b37467f7b9a432f79ed257636bda363f93694b07c190e87df",
+      "bytes": 310718657
+    },
+    "meter-functional/events.jsonl": {
+      "sha256": "80ef37be10a639118c5a7af8891508a688aca43f46a295391fc32c63ecffd6fd",
+      "bytes": 10430859
+    },
+    "measurements/cmp300/result.json": {
+      "sha256": "7c30c23f260740ba192481fa2c3349012d55bc209b07a7d26727d848b896f9fd",
+      "bytes": 1634
+    },
+    "measurements/cmp300/progress.json": {
+      "sha256": "7de52e919d5331a76718c9b7b89edf9f545ed33ca810a0147688b54dbcb2c556",
+      "bytes": 261
+    },
+    "measurements/cmp300/01-a-sleep-reset/result.json": {
+      "sha256": "4bc39bede4c00e1c5627777002847c881edf65caab9e64b8b7ea1d47d9e0d980",
+      "bytes": 639
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/metadata.json": {
+      "sha256": "3848b192216fd42ec6b40e46a61f81d92002f43680efe4c26e171b5d5640daec",
+      "bytes": 1384
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/health.json": {
+      "sha256": "ab758e7f8fb7713af8c56b6b142ee107ac04fe4bf29f5f7110bfa0f1c458fea4",
+      "bytes": 1206
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/summary.json": {
+      "sha256": "7f6683f60bb3eae9f6c57cc372ef3ed2eefc6bec48b139cd183fc119a153460e",
+      "bytes": 3359
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/frames.jsonl": {
+      "sha256": "77c3cd2b4d201972906babdcd13deadba0f28c30361aa0bcc3dbf4cfbf57de46",
+      "bytes": 29398
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/samples.jsonl": {
+      "sha256": "27c4a43e7e24ca6dd8effb62cc49fd07d65ecf6e1b6ecb886cac584525d405c9",
+      "bytes": 112410
+    },
+    "measurements/cmp300/01-a-sleep-reset/meter/events.jsonl": {
+      "sha256": "86f1e30b560afebabc18bb45f48984403202b545c91272ae3aca120c3bcadfc7",
+      "bytes": 4306
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/metadata.json": {
+      "sha256": "aa78fa56562c60e7c0b5a018cbefc7f480db59c7e97367c0233fad4355857f10",
+      "bytes": 1384
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/frames.jsonl": {
+      "sha256": "ca0cd06ffa4eb99001095c65b56fc0cb0e871d0ea8a63e4eda0eaeb0df9ea5bd",
+      "bytes": 65046
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/samples.jsonl": {
+      "sha256": "365f5fc52adc2b5b45a9ec50d80e05347e62281ea7d4d2ec47099049c87506b9",
+      "bytes": 250960
+    },
+    "measurements/cmp300cont1/02-b-lightsleep-reset/meter/events.jsonl": {
+      "sha256": "d81d126d456edc7a67467cf280f49239f538ed87bb665c6a525038d7770313bf",
+      "bytes": 10226
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/metadata.json": {
+      "sha256": "6c2178ab09623c8edce9c1f1606a313b0c85be95c563616f9e4af09b9257adc5",
+      "bytes": 1384
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/frames.jsonl": {
+      "sha256": "9e835494c5083275fa10d82a16b92d32796d40bfdfe0d56d730b6a5fc68c013a",
+      "bytes": 219041
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/samples.jsonl": {
+      "sha256": "11c56f7e884591351ea5c6b57c2f76f395f7747279ef968d21b3419d60c83695",
+      "bytes": 851421
+    },
+    "measurements/cmp300cont2/02-b-lightsleep-reset/meter/events.jsonl": {
+      "sha256": "7670c8390c9ed06bf5a193eb5dd6c39906ce39b390a9cad608eaea80b01ef741",
+      "bytes": 28614
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/progress-public.json": {
+      "sha256": "34de474d5e8459fdab13891345bc592a7b2e35faeb38ff9164cb8ef5871cdf5d",
+      "bytes": 1022
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/install-result.json": {
+      "sha256": "52c2941aeb8ae12e645839a09f194cb57987520db7574de2ddb6adaa11e95bff",
+      "bytes": 320
+    },
+    "runs/cmp300cont2-b-lightsleep-reset/events-private.jsonl": {
+      "sha256": "6a64a74caf1fd112e9f4e33f58da299fce9c4c7f69b6afa1dcd9511bacb002f1",
+      "bytes": 8729
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/analysis.json": {
+      "sha256": "54afeca7dbbca29424d0b9bf19a9ac2fec5ead040f2a7db9723b21271bc8a93d",
+      "bytes": 85719
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/trace-bins.csv": {
+      "sha256": "180f0e57e5f6ae6da399e7fdfbdb86c7d95a189e4f565bf4f2adc5d497da0cb6",
+      "bytes": 78288
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/current-trace.svg": {
+      "sha256": "4bb7f34812286d4365d8dd816514d96849aba571f7ae5fda6829f3dae4adc9ed",
+      "bytes": 111885
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/analysis/current-trace.png": {
+      "sha256": "154039bfd36c5798b8c06b4db3a06507c12b9927ad4d866a3375c2c2b7ae4f34",
+      "bytes": 107053
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/metadata.json": {
+      "sha256": "5069f9704ec53e741f321a8fe9011412d19a7ab4ee7f891e35b7616cd96f50d8",
+      "bytes": 1384
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/health.json": {
+      "sha256": "cf5525a453fb1287bdeee1c5e1b7215b72597fda0d9f084be314cc7ea2e537cd",
+      "bytes": 1137
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/summary.json": {
+      "sha256": "782a7b70fb2af512c658a5187c1b17ef31157486e5339bb4acdf3e923f21eeb4",
+      "bytes": 3376
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/frames.jsonl": {
+      "sha256": "1e96bb26a3b6c3c980ede805bd84c3143087262c9f41d319e0e9daaebc05c778",
+      "bytes": 10694769
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/samples.jsonl": {
+      "sha256": "61e0ef611dfc47b22b9f0eabf2457f669f60fc79bdd20895dd1127eb33790bd3",
+      "bytes": 41344856
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/meter/events.jsonl": {
+      "sha256": "50dfb06f01ba1d270ae225fa66f9df48dd6ff174412604f426a17270e5d0b010",
+      "bytes": 1391507
+    },
+    "runs/cmp300deep-c-deepsleep-never/config.json": {
+      "sha256": "4b9b8bd0ca876b2f7ec7fb143ab9729d29e65b2ab980c6ca13783acf846a6021",
+      "bytes": 222
+    },
+    "runs/cmp300deep-c-deepsleep-never/result-public.json": {
+      "sha256": "a1cdf823e1b77da99b6288b8528991cc636e380b7cb59bead86cdfe8f145cfbf",
+      "bytes": 1202
+    },
+    "runs/cmp300deep-c-deepsleep-never/progress-public.json": {
+      "sha256": "edc671185e6b2fd2bc4ae3bc651df22a8a8ff565d09592b3ce87737b65c90e4d",
+      "bytes": 952
+    },
+    "runs/cmp300deep-c-deepsleep-never/plan.json": {
+      "sha256": "31f19e42e808ee1cad9d35422252d84cc883ec00bd86764d39cbdaca3f787276",
+      "bytes": 655
+    },
+    "runs/cmp300deep-c-deepsleep-never/install-result.json": {
+      "sha256": "dfcadc26f7037172903253fab2b7ac6ca7a2180682b74984123795c7c3ab1b72",
+      "bytes": 320
+    },
+    "runs/cmp300deep-c-deepsleep-never/events-private.jsonl": {
+      "sha256": "8e1551a5e2393e1cffa700bd289484dd65eadc233a1cbb6f41d5940ba46db91a",
+      "bytes": 20801
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/analysis.json": {
+      "sha256": "bfb80ce1d69913bb6bea33baba717aa24c0dab2aea3aadff157164c44c3bb9e3",
+      "bytes": 85715
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/trace-bins.csv": {
+      "sha256": "89df4a8ca446e04629c0b527680ec42e6d85b69244beb0039ed9cbfc3085e255",
+      "bytes": 79079
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/current-trace.svg": {
+      "sha256": "ce662a79a9219043a37ce6fc04e958c5a35d834f54d0cdd2c2c97746898ed3c9",
+      "bytes": 107586
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/analysis/current-trace.png": {
+      "sha256": "2bd827148705a153024c01bdf73ae9873e72fa1859791633337a4926814832a9",
+      "bytes": 100954
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/metadata.json": {
+      "sha256": "b3f22c471d80ce140664e24dbeba3821c051729b911646758e87f6de9e7795f5",
+      "bytes": 1384
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/health.json": {
+      "sha256": "d486e01683d1bdeb6690f918fed4ec5ebdc7d13e43b63dba2dcb6dc10149088a",
+      "bytes": 1227
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/summary.json": {
+      "sha256": "711323a5419d629020414a2d025558516f5f36e2d3b979cfbb397189e80754da",
+      "bytes": 3371
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/frames.jsonl": {
+      "sha256": "457afe7df006d749a02a809896cea006e6d8a9c50e96b6fdb9fff7fd0190b37f",
+      "bytes": 10744417
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/samples.jsonl": {
+      "sha256": "479eac3fe74de55ecf68cca8eed0771182877a885be53753385e4e8dadd03b16",
+      "bytes": 41537444
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/meter/events.jsonl": {
+      "sha256": "5a5e5a5bd328c7c3c3d6addf3beedd9aa48c35fa53f23afc3428aaca3dd76f66",
+      "bytes": 1395726
+    },
+    "runs/cmp300deep-c-deepsleep-sta/config.json": {
+      "sha256": "fa8396c2b42f32f1764fa7474ffab62b19674d03d1294d13c34ca9d60658ab86",
+      "bytes": 218
+    },
+    "runs/cmp300deep-c-deepsleep-sta/result-public.json": {
+      "sha256": "6af21818ef4218c045e3e2759a45d4bbcd34cb8172c9b18a680a0952938a9acd",
+      "bytes": 1198
+    },
+    "runs/cmp300deep-c-deepsleep-sta/progress-public.json": {
+      "sha256": "eab62db1e8777f3cda7ae9d68d90ad698ffe082533c68bbe9f480419da1f51c9",
+      "bytes": 950
+    },
+    "runs/cmp300deep-c-deepsleep-sta/plan.json": {
+      "sha256": "3344c4899028928b77616d4913374651bb1339c8b78c80187318896d17466faa",
+      "bytes": 654
+    },
+    "runs/cmp300deep-c-deepsleep-sta/install-result.json": {
+      "sha256": "a1526e0b57d687351bc6eed634177d10328a6836391d0b165de4b4101850ffb6",
+      "bytes": 321
+    },
+    "runs/cmp300deep-c-deepsleep-sta/events-private.jsonl": {
+      "sha256": "b0716f276caf118e822601c862d82c02da75e5f7e9a8be0d91cb5047ba218ec1",
+      "bytes": 21582
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/analysis.json": {
+      "sha256": "4712469b8cad88a608e70c649e0a34dfd67039ede3481a16f33a60616f9e48f8",
+      "bytes": 85693
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/trace-bins.csv": {
+      "sha256": "82cc1ae2d075c09823ac52c51255518b84bdb82a1e0f574c39c80797cccb7791",
+      "bytes": 79622
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/current-trace.svg": {
+      "sha256": "2f6adb8428902a590f941994e3a0b9ce3f559b0fc7f0f41ebbda403ae3c372d0",
+      "bytes": 107580
+    },
+    "measurements/cmp300deep/05-c-helper-sta/analysis/current-trace.png": {
+      "sha256": "2f4d5f73106cb89d327c85749a007db48a3d7be8c2a9a755e98b3504ca341fdd",
+      "bytes": 100496
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/metadata.json": {
+      "sha256": "21e7e150e2edb15cd17eb5da7a8891a1e217ee6e16853c255f73a3b08b67c405",
+      "bytes": 1384
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/health.json": {
+      "sha256": "272be44fe71f144e6e6ed46bdec857cd190823ceb47fa7fcd6bead0877b3ba6f",
+      "bytes": 1217
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/summary.json": {
+      "sha256": "f281a718c3366f4921e7b21f6e75cc60cb3f4f744e5c28477d4e0eb482b90de8",
+      "bytes": 3369
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/frames.jsonl": {
+      "sha256": "b5f6a6f3d0989d0a1b33fc2a9bc34a106668ad4076a3aecd63d83fa754a9e595",
+      "bytes": 10778076
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/samples.jsonl": {
+      "sha256": "dceb418d0746dd5b8d8b1562360dceab590d390ba4ed305dfa98ca606aeb6999",
+      "bytes": 41663179
+    },
+    "measurements/cmp300deep/05-c-helper-sta/meter/events.jsonl": {
+      "sha256": "62f0f1056be0979f7ea94340e6fe32e7d6dec0664ebfcb12a427db9fca613e9f",
+      "bytes": 1402427
+    },
+    "runs/cmp300deep-c-helper-sta/config.json": {
+      "sha256": "5bfbcd8ba8b495bd6c99daf06831fe61c5d9cebc8b568ec79c3759009d28a764",
+      "bytes": 215
+    },
+    "runs/cmp300deep-c-helper-sta/result-public.json": {
+      "sha256": "a07841062711a77e40b78a3d2bf7b26c189e3672585d5b50a5cc24209f9ad11c",
+      "bytes": 1192
+    },
+    "runs/cmp300deep-c-helper-sta/progress-public.json": {
+      "sha256": "6cabe409b6656ec00b2a9964f7fca5b3433ae2b2ac5f3bc69fc73ec7b2675a34",
+      "bytes": 944
+    },
+    "runs/cmp300deep-c-helper-sta/plan.json": {
+      "sha256": "dfc91c9f09c2a5d19fb3b51a8d774603650f3a125a7fd975f8e250debb0d2318",
+      "bytes": 654
+    },
+    "runs/cmp300deep-c-helper-sta/install-result.json": {
+      "sha256": "591831f2b8fa4bfe67ae3aa901bc493963b3d304588e3fe935502a7786090906",
+      "bytes": 318
+    },
+    "runs/cmp300deep-c-helper-sta/events-private.jsonl": {
+      "sha256": "3a58e901da948ae9432d42b43db2f200374d5f0ff4893a0885de38de9c9d0e9b",
+      "bytes": 21531
+    },
+    "measurements/cmp300refusbq/result.json": {
+      "sha256": "03290af288294271e5f713bd16b52ffd66c5985dc33c0dbc11713a49ae50c6c1",
+      "bytes": 1432
+    },
+    "measurements/cmp300refusbq/progress.json": {
+      "sha256": "cd8d54d7334aac1d42189e8eaa7b4dd63ee2afd5d9f9c753b055b5e463cbdaea",
+      "bytes": 299
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/result.json": {
+      "sha256": "750876945e7294a03fefb17146e5aecfc5650c9060bb451eb1eb816628e48bd4",
+      "bytes": 682
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/metadata.json": {
+      "sha256": "44d55c18059846c209a6fb6d8e8408753622a64f026a3b201a59c01993839118",
+      "bytes": 1384
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/health.json": {
+      "sha256": "b8c1e519cc237e3e97c0271339cbad9a0851d72586d0d714838379a6ba136d5d",
+      "bytes": 1216
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/summary.json": {
+      "sha256": "5c18aeac40d08e202dff5070516b6d3192db0e0a3ec753a5611e776fac7bf74f",
+      "bytes": 3367
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/frames.jsonl": {
+      "sha256": "29eb7ecac5921e5485080d094fd6a0a2e00e50f68f8598b52555dce8db7bf49c",
+      "bytes": 183472
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/samples.jsonl": {
+      "sha256": "ce26eeefeb576f16d4160b8bae3339b62775b0ed530eb1e06346cc0f69d739e6",
+      "bytes": 712751
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/meter/events.jsonl": {
+      "sha256": "253a6a2d13b43e845b3709c33ff3c38cc5e0af552ade43ac6bb32c10de61ffa9",
+      "bytes": 24045
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/config.json": {
+      "sha256": "81ec76fb535bcf157d3aa97bb10e5a2580ddb633fb9eb0e05b98606a70e8bae2",
+      "bytes": 226
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/result-public.json": {
+      "sha256": "9b3fccd9cdb48e68ef839e674fee80abdfb1b1861b84739c1bb982aa971b1507",
+      "bytes": 1346
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/progress-public.json": {
+      "sha256": "04360d877ad03bd8caa0a990ce386048e048881ebac1a0b78d1bf9dbe58d3524",
+      "bytes": 1023
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/plan.json": {
+      "sha256": "a94dc6e1d17bdd9a1a9d4a5453f5a85f7f720a565910406d94572cb48054309c",
+      "bytes": 655
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/install-result.json": {
+      "sha256": "78e9cbfa10f01e7fd6b4d2ba931500a6a1d1e5f2e96950d8ee2653d498b5cc8b",
+      "bytes": 318
+    },
+    "runs/cmp300refusbq-b-upstream-usbfix/events-private.jsonl": {
+      "sha256": "f5ae4730140716d2eaf5dd7e98f1535f28bd9cd86f7f254547a4744543d3052e",
+      "bytes": 8732
+    },
+    "measurements/cmp300refvanilla/result.json": {
+      "sha256": "f62ad64634bc4a56223b1dab5f5653615a973f807f415e1fe2da1d4d9c20a37a",
+      "bytes": 1433
+    },
+    "measurements/cmp300refvanilla/progress.json": {
+      "sha256": "5be19b75152afe8ec91b1db82523485cd424690af2a76d9da7e1dd0196a5dbd6",
+      "bytes": 299
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/result.json": {
+      "sha256": "804a3d45eac3948c00525ef5c15bc8debcf8a68154a4c3884d830ad07014d76b",
+      "bytes": 682
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/metadata.json": {
+      "sha256": "b4ee91891a7a53ee5621ae0c4f8506955958552b1a45514a639e722cb5d63428",
+      "bytes": 1384
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/health.json": {
+      "sha256": "090dae1269e1297a901b48182e277618c7e354a8dc2ebfe5c2183ad749fce355",
+      "bytes": 1214
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/summary.json": {
+      "sha256": "9dd078b8a09c0ea16faebcac1497aa0f825eedcf3b831901336523cd39823b25",
+      "bytes": 3365
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/frames.jsonl": {
+      "sha256": "1f9485659727408fd343d66091830e5f48e227e0ee462e10b9116946b909fa8f",
+      "bytes": 183491
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/samples.jsonl": {
+      "sha256": "e88db226e1d3dbcd68be94c403f918d46385814bef268c29d48f71c937123a25",
+      "bytes": 713040
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/meter/events.jsonl": {
+      "sha256": "95e88d2165074eef17d4ecdb9413e0db2bfbd08657c000d5724d2110e973b5b3",
+      "bytes": 25251
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/config.json": {
+      "sha256": "09001f60c7849a55db8bb38a83af36bc97728369cc03c536f28ebeb7c1371117",
+      "bytes": 230
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/result-public.json": {
+      "sha256": "5a44b1739150076b6c77fc494999567b7f3f3a06ca269d3c28ac6af88a27f4ee",
+      "bytes": 1352
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/progress-public.json": {
+      "sha256": "55c9a2eb0c3e327fc8cf089c84f207dd73f618b8d4f5a027a2acabea7ac346e7",
+      "bytes": 1027
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/plan.json": {
+      "sha256": "e71ac416187feaeb706bf00289c20eb638cbe329472ba65b0d9ab53014b110b9",
+      "bytes": 646
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/install-result.json": {
+      "sha256": "ddfcf275a881dbb466d61d55186a40b1290f3ddce7df0f7165298beadc4ff75d",
+      "bytes": 321
+    },
+    "runs/cmp300refvanilla-b-upstream-vanilla/events-private.jsonl": {
+      "sha256": "26b4ee2e586d410b5ef1afd28c4f7e465f159a5d832b84929179008cee9da7ee",
+      "bytes": 8754
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/trace-bins.csv": {
+      "sha256": "aecce008d55ba8842822d370ff55d5907e40c047762ccd2e9e9bb57524009fc9",
+      "bytes": 82803
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/current-trace.svg": {
+      "sha256": "badd291adc938b04f95f2cc652c4b7cec506691a872aafdd06597e8cafa70bac",
+      "bytes": 127200
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/analysis/current-trace.png": {
+      "sha256": "d28a416d02c5b3f84d32436582ec6a9dbbd9314d22f1b8a1071ee454ad2d7791",
+      "bytes": 119899
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/metadata.json": {
+      "sha256": "bd2dd358b52e1eb27c41ced032419f509cc2466e32db2f07ccd61bd2a02d8a53",
+      "bytes": 1384
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/frames.jsonl": {
+      "sha256": "5e7e443df6b03e0f6fd88c67ae10ba26b9301e7b812bab392fccbd7131b9705a",
+      "bytes": 10634058
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/samples.jsonl": {
+      "sha256": "643eee4da494fff4a6dc886206f50db957b2daac40179d1cecf8fe789e4a7816",
+      "bytes": 41602747
+    },
+    "measurements/cmp300v2/01-a-sleep-reset/meter/events.jsonl": {
+      "sha256": "d02c15bed23569c9b9eb17b2e1bc18d17d0bafbbcca48db6b1cf4d7a9b7daeab",
+      "bytes": 1380999
+    },
+    "runs/cmp300v2-a-sleep-reset/config.json": {
+      "sha256": "fd2d3415ab3e09f0c568e76df5b8a0f2f51948742b0f76d27ac098661ea5365e",
+      "bytes": 219
+    },
+    "runs/cmp300v2-a-sleep-reset/result-public.json": {
+      "sha256": "57187fea941ebe51ff6b4baaeda91f655cc978f679ce96c1831766b43768d090",
+      "bytes": 1190
+    },
+    "runs/cmp300v2-a-sleep-reset/progress-public.json": {
+      "sha256": "b5d0d47ddbe4a62fcb396ba14927b494d4af443728bdff57809bcb5cee48cf7b",
+      "bytes": 946
+    },
+    "runs/cmp300v2-a-sleep-reset/plan.json": {
+      "sha256": "bc99cd5ae48b568ee8c7107ee6a9b30c06d746061cd2bed9ce600ec6a1f028f4",
+      "bytes": 655
+    },
+    "runs/cmp300v2-a-sleep-reset/install-result.json": {
+      "sha256": "8168da46f6e4c611b3f0ac11b815b93c7f7b8fb18fbf32f69be3992d8d602756",
+      "bytes": 321
+    },
+    "runs/cmp300v2-a-sleep-reset/events-private.jsonl": {
+      "sha256": "755c5443f93c0863d212b000e0eca4e2a2d9f65501d866a3535b27b54f58d29d",
+      "bytes": 20700
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/metadata.json": {
+      "sha256": "96c0e3e124843c86b7085580528666a55a12b0e876c85a9139ad40d40634bb96",
+      "bytes": 1384
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/frames.jsonl": {
+      "sha256": "6c53ba8a7090e1a592ea60571b3146fedb170673018761b7c6849d7cefc23e33",
+      "bytes": 207215
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/samples.jsonl": {
+      "sha256": "8e3554d65782067e05b2e21ade197c6f28d565dc637428ce0bd4959ef4b6dea8",
+      "bytes": 805498
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/meter/events.jsonl": {
+      "sha256": "a9f660e59ca3cc23d61ae91c9fd12eb6b04325bf53371db6a9713d7e2fb2d332",
+      "bytes": 28308
+    },
+    "runs/cmp300v2-b-lightsleep-reset/config.json": {
+      "sha256": "58f6858660d2843ba7b0b7f88c47e884b93c5f5ebbba6b718338b026c85a7584",
+      "bytes": 229
+    },
+    "runs/cmp300v2-b-lightsleep-reset/result-public.json": {
+      "sha256": "84d5c50dda0eff3175d86c8b774eddd1b563176342d5ade7b9a72fa477fcafa8",
+      "bytes": 1338
+    },
+    "runs/cmp300v2-b-lightsleep-reset/progress-public.json": {
+      "sha256": "dda8b4bdb9f10997812b2229121ccf138f5fb6c5a05da4b21071fd513b03aa54",
+      "bytes": 1018
+    },
+    "runs/cmp300v2-b-lightsleep-reset/plan.json": {
+      "sha256": "90fbff4b7854263b38a9fb00310125f6d096e8329031f040c752f2a2f2fe1e4b",
+      "bytes": 655
+    },
+    "runs/cmp300v2-b-lightsleep-reset/install-result.json": {
+      "sha256": "d08533b023d5c36f382e0b2a70d2d5e4e286d8645c02c7768843e56e7c26841b",
+      "bytes": 321
+    },
+    "runs/cmp300v2-b-lightsleep-reset/events-private.jsonl": {
+      "sha256": "2f9531751c631650a338a2fdaf47309e46547770bd09526d4f50fe62dfddf028",
+      "bytes": 8713
+    },
+    "aggregate_measurements.py": {
+      "sha256": "e8354c2262e773fa7d91c31be7032d2fae0e4250531a9083290a5b948a8d86f0",
+      "bytes": 24210
+    },
+    "aggregate_combined.py": {
+      "sha256": "7642e82be70a5c31db33980f190a8d9c719410bf28aa8d92d3d0ad63291b9cf1",
+      "bytes": 19020
+    },
+    "combined-final/aggregate.json": {
+      "sha256": "2d4ea2d5c6ea2cce00850715af55250d7107cbf513322b20fae147013b9750e1",
+      "bytes": 281381
+    },
+    "measurements/cmp300deep/03-c-deepsleep-never/measurement-metadata.json": {
+      "sha256": "2f526584eb25d58ffb76c9fbeb14bccb838f8ecba404d5b832cd97c1cae95f1c",
+      "bytes": 9518
+    },
+    "measurements/cmp300deep/04-c-deepsleep-sta/measurement-metadata.json": {
+      "sha256": "2192fe5b9bdd28d699defba60b5494383492adb39eb219b18cb8f4cf4f72247d",
+      "bytes": 9494
+    },
+    "measurements/cmp300deep/05-c-helper-sta/measurement-metadata.json": {
+      "sha256": "524480b5e3c471a51610bbc7c579c190efce013e8697c2b76f4b277d1c325d86",
+      "bytes": 9491
+    },
+    "measurements/cmp300refvanilla/06-b-upstream-vanilla/measurement-metadata.json": {
+      "sha256": "921337a79f524a2a41aa03c336457af5df5d97611227100ce29009ee86ea5ab7",
+      "bytes": 10962
+    },
+    "measurements/cmp300refusbq/07-b-upstream-usbfix/measurement-metadata.json": {
+      "sha256": "197bb77559d88da1994dae2d0f869fd5dde018c705cb3c11291c0b38069fd978",
+      "bytes": 10933
+    },
+    "measurements/cmp300v2/02-b-lightsleep-reset/measurement-metadata.json": {
+      "sha256": "1d0f0240547eec5c89a94d3c990520cc6b6c834c0ac3dd8eb011c4bcee3a9e7d",
+      "bytes": 4616
+    },
+    "combined_export_contract.py": {
+      "sha256": "916152aa82d523ecc696fcf679d29c2694eb0e2e93ebbf786d657d1b11d272f6",
+      "bytes": 37537
+    },
+    "combined-final/cycles.csv": {
+      "sha256": "836fd0bf1eeca1d7764afcaaeed67dbc45879cffde009db16c1a1e9ab8cb1710",
+      "bytes": 4108
+    },
+    "combined-final/profiles.csv": {
+      "sha256": "80d8b86cae47a37206e14f831852d4f8399262d130020e2cb4e7a0339b18887a",
+      "bytes": 4987
+    },
+    "combined-final/comparisons.csv": {
+      "sha256": "1653ba4ca7296be6c96b2e0e0b5ead2316e4d21cad921dc96c63da0df153f822",
+      "bytes": 2444
+    },
+    "combined-final/excluded-B-attempts.csv": {
+      "sha256": "434744e5e753cd2378e125c527ee6123afa270a82ccaa16394c65fcd961fefba",
+      "bytes": 279
+    },
+    "combined-final/README.cs.md": {
+      "sha256": "671ebcf21a62c871e71bcc7307b348fd2b64a5d9580a0e8fc1c789776a432505",
+      "bytes": 3974
+    },
+    "firmware-switches/cmp300ref-return-candidate/result-private.json": {
+      "sha256": "8c3568beff66bfeb8a98e16cfa680ba2a86a584ae08880a87eef82ee3465ef90",
+      "bytes": 610
+    },
+    "restoration/result-public.json": {
+      "sha256": "030aff7f4793852903fc34f09a655db591e0188c12cc41cceb13222119d5ebe8",
+      "bytes": 1142
+    },
+    "startup-cadence-review.json": {
+      "sha256": "3ccb9e0f1c7b5abf9e8796f43d6dbfaa36cc62b26b34a15decd6493f47c6ee15",
+      "bytes": 1078
+    },
+    "runs/candidate-final-smoke/config.json": {
+      "sha256": "cd3502c6fe6737a56b11918fb881d54d27b0b49a2928b036dc4c4602eba46b9f",
+      "bytes": 211
+    },
+    "runs/candidate-final-smoke/result-public.json": {
+      "sha256": "1c454d13288bb769fb304fe17578c533c4bb6efe41ea8ac3709b182c5acc6ffe",
+      "bytes": 1188
+    },
+    "runs/candidate-final-smoke/progress-public.json": {
+      "sha256": "a2fc2a27106eced48d7f685ce5e9c60f7472dfd542684ecdd2c6a78229e446fe",
+      "bytes": 945
+    },
+    "runs/candidate-final-smoke/plan.json": {
+      "sha256": "4c0642edfcce453cab8a8d336ec80e8dc0d5b6c4da63d349562b880d300c7b3e",
+      "bytes": 646
+    },
+    "runs/candidate-final-smoke/install-result.json": {
+      "sha256": "218fecc6cace7ca8b0a3107d2a975b5bbac355f57671ba5c6fd7f1cdc5872895",
+      "bytes": 318
+    },
+    "runs/candidate-final-smoke/events-private.jsonl": {
+      "sha256": "ee3d16ad3706d61bacdd53938795bad7ae0719c84e00086ccb1d33b2523f4ce7",
+      "bytes": 5136
+    },
+    "lightsleep-matrix/runs/ls-matrix-1/result-public.json": {
+      "sha256": "6a880e1942e5369a008c6aea7aeebfabbbf8f27cda3e87fd4ebbb58b96eac707",
+      "bytes": 1899
+    },
+    "lightsleep-matrix/runs/ls-matrix-1/provenance-private.json": {
+      "sha256": "a4b6a2d263acb98653b21bffeae332db461d13e80777244e35c3ceb0d52876bd",
+      "bytes": 1241
+    },
+    "lightsleep-matrix/host.py": {
+      "sha256": "3ac725389729646a34bc081df520c5981cd968bc2ceccc884721289bc4ac5f74",
+      "bytes": 31163
+    },
+    "final-display/result-public.json": {
+      "sha256": "ce709719848338627c653e1d597693c211d63fdae379aacf5601e2396b658831",
+      "bytes": 1683
+    },
+    "final-display/visual-confirmation-public.json": {
+      "sha256": "606bee1d5c068d3a686f0ae8571eb84f3e31a4eee7f8dc488753e025721229ba",
+      "bytes": 410
+    },
+    "final_prepare.py": {
+      "sha256": "7ef09219cddf248a347e5c9de7414d3b9e8511475e5484b16ef582941e4a8e2f",
+      "bytes": 13201
+    },
+    "final_display_render.py": {
+      "sha256": "02fff0cd54415e51763c3c280c51a6c04e8658064e8eea7ddcf30e56e877fff4",
+      "bytes": 3002
+    },
+    "no-load-runs/final1/watcher/result-public.json": {
+      "sha256": "53ff465848b69be83cc95175c9eaa4b19bd0691322b00ff74002dba155b2afe9",
+      "bytes": 875
+    },
+    "no-load-runs/final1/late-physical-confirmation-public.json": {
+      "sha256": "c9a476f169548dc24422f8f1df42c63c1aa301b10b762de07882e35fd1f06b8b",
+      "bytes": 466
+    },
+    "no-load-runs/final1/meter/metadata.json": {
+      "sha256": "2e09c1afd70d92483fd21e0a47f63eae716f144c92b038bf85dbaa2391c3ac6b",
+      "bytes": 1383
+    },
+    "no-load-runs/final1/meter/health.json": {
+      "sha256": "913d93c26b08156cc3fe2e4ff92f7020781d17dcdab0ca61c884cb0e957c7fc9",
+      "bytes": 1225
+    },
+    "no-load-runs/final1/meter/summary.json": {
+      "sha256": "cb1b4d47265e4bfc5b1094e635df2c845eaa6f555bbda4cc9612508c4da29245",
+      "bytes": 3383
+    },
+    "no-load-runs/final1/meter/frames.jsonl": {
+      "sha256": "a66b8ea7f20756c255e9b5b0daaf388253f6969c832916f37d5a88b2a55b2935",
+      "bytes": 2509982
+    },
+    "no-load-runs/final1/meter/samples.jsonl": {
+      "sha256": "6e3a371c10a45574615f558a3bd66e4d9acb9c448db6ae4fbfc349f127859ffc",
+      "bytes": 9789248
+    },
+    "no-load-runs/final1/meter/events.jsonl": {
+      "sha256": "b483951550ac7c48c2ac3cd37cb0549bc40949d6dc1165fe15a81947b7bc24d1",
+      "bytes": 326277
+    },
+    "no-load-runs/final2/guard/result-public.json": {
+      "sha256": "fcdd63052753af5de7d3d7791580d0fb30fe1084f31a9733ac7d53c4e5ccacef",
+      "bytes": 611
+    },
+    "no-load-runs/final2/restoration/result-public.json": {
+      "sha256": "5d0a634704b4c93c7ae5ac2c5874fceb0109882fac843d799b62976cd67e04b5",
+      "bytes": 843
+    },
+    "no_load_guard.py": {
+      "sha256": "69adf7b735563c1557d16d32fe9987ff0ba082f17ca63e5b56442b365f502266",
+      "bytes": 13362
+    },
+    "no-load-runs/final2/watcher/result-public.json": {
+      "sha256": "92e43464512726a42e4f195ecc3f11a6a381eb13e5ce13cd9fb0fd8a064e057b",
+      "bytes": 883
+    },
+    "no-load-runs/final2/physical-reply-public.json": {
+      "sha256": "ae4f6863c3924a3baa6973d5259993e18e68ccd570915ef05bbd2c62068c0e50",
+      "bytes": 394
+    },
+    "no-load-runs/final2/meter/metadata.json": {
+      "sha256": "9d6b66e2953d261701f7e01cf04af12948258bba3e9c4e4e70dd483e461891fe",
+      "bytes": 1383
+    },
+    "no-load-runs/final2/meter/health.json": {
+      "sha256": "f0ff2fec7c772297519c83c78e0fcf30da14b93fc6ae4834e24beca9c77c003d",
+      "bytes": 1095
+    },
+    "no-load-runs/final2/meter/summary.json": {
+      "sha256": "a766dbedebb9e005934661087048fdc807d400f0558625dee783527604040c31",
+      "bytes": 3409
+    },
+    "no-load-runs/final2/meter/frames.jsonl": {
+      "sha256": "35d148e76c377b334ade50c0325fb43275fd4136cbb88c8c0feea3bbf6b4c680",
+      "bytes": 1238355
+    },
+    "no-load-runs/final2/meter/samples.jsonl": {
+      "sha256": "9e6b028dafb8b786a5b4fe83ba5e8aef9a3feb423447edbee65f0405916a8b73",
+      "bytes": 4789224
+    },
+    "no-load-runs/final2/meter/events.jsonl": {
+      "sha256": "8075ca398173259d952c3db9ad11288634e50765fb0dd538d8d224cde44c7dd1",
+      "bytes": 163270
+    },
+    "no-load-runs/final2/post-hoc-diagnostic/analysis.json": {
+      "sha256": "931bc8f0b8d574533c4566078ff3c01554e32eba66051a5c5d5c7140f14d2914",
+      "bytes": 12102
+    },
+    "final2_diagnostic.py": {
+      "sha256": "c1b660372589672e15100e938756355476afba071bf294ffef0d7d1fd9cc1b5d",
+      "bytes": 13297
+    },
+    "no-load-runs/final2/watcher/observations-private.jsonl": {
+      "sha256": "53389c89663feb28f140d63e3d55858b298375b9ee82dc721f4efefb6d7ba2f9",
+      "bytes": 96036
+    },
+    "no-load-runs/final2/guard/guard-proof-private.json": {
+      "sha256": "ed5c798fbc19da70a31b5ba1be4bd69ef9aadc432cca6873f293895a001086dc",
+      "bytes": 635
+    },
+    "no-load-reference/watch_no_load.py": {
+      "sha256": "23c20584d1df2db6b14ac3296b16212c752f14638531e628057f296b8d27b8ca",
+      "bytes": 11683
+    },
+    "no-load-reference/no_load_common.py": {
+      "sha256": "94be9c900183020abe23a39575dbc45c27793cf225305d2cd19980a665fac041",
+      "bytes": 6638
+    },
+    "no-load-runs/final2/post-hoc-diagnostic/trace-bins.csv": {
+      "sha256": "2fbf50afb3041a31fca7962706db247e412d77a45b6ca592989fd73752df749f",
+      "bytes": 10207
+    }
+  },
+  "anonymization": {
+    "unknown_console_lines_omitted": 20,
+    "nonallowlisted_json_fields_omitted": 179,
+    "unexpected_identity_alias_count": 0
+  },
+  "hash_scope": "All payload files; manifest hash is in SHA256SUMS; SHA256SUMS excludes itself",
+  "frozen_sources_modified": false,
+  "hardware_access": false
+}

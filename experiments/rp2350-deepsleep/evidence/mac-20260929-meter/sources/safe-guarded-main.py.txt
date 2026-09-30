@@ -1,0 +1,15 @@
+# Private temporary startup guard. Original application is parked, never imported.
+# Returning from main.py leaves the normal REPL available. No network, pin,
+# timer, watchdog, RTC, backup-word or filesystem writes occur here.
+import machine
+import json
+import os
+
+print("RP2350_METER_GUARD " + json.dumps({
+    "state": "GUARDED_REPL",
+    "reset_cause": machine.reset_cause(),
+    "machine": os.uname().machine,
+    "release": os.uname().release,
+    "version": os.uname().version,
+    "original_application_started": False,
+}))

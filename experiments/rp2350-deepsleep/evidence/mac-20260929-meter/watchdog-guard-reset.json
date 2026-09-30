@@ -1,0 +1,24 @@
+{
+  "before": {
+    "build": "RPI_PICO2_W",
+    "version": "v1.30.0-preview.104.g91e91d58de.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+    "wdt_ctrl": 1073741824,
+    "wdt_reason": 1,
+    "chip_reset": 33554432,
+    "last_swcore_pwrup": 64,
+    "reset_cause": 3
+  },
+  "after": {
+    "build": "RPI_PICO2_W",
+    "version": "v1.30.0-preview.104.g91e91d58de.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+    "wdt_ctrl": 0,
+    "wdt_reason": 2,
+    "chip_reset": 33554432,
+    "last_swcore_pwrup": 64,
+    "reset_cause": 3
+  },
+  "method": "ordinary machine.reset into verified startup guard",
+  "result": "PASS",
+  "host_utc": "2026-09-29T14:13:40.286025+00:00",
+  "host_monotonic": 512156.305877541
+}

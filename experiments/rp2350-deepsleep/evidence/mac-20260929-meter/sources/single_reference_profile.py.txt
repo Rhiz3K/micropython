@@ -1,0 +1,304 @@
+#!/usr/bin/env python3
+"""One explicitly reviewed reference profile; never switch firmware or retry.
+
+The original V2 run_profile, collector, analyzer and cleanup methods are inherited.
+Only its outer run loop is reduced to one already-installed artifact. A launch
+guard rechecks the supplemental physical proof immediately before the suite.
+"""
+import argparse
+from datetime import datetime, timezone
+import fcntl
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import time
+
+import measure_variants_v2 as v2
+
+base = v2.base
+ROOT = Path(__file__).resolve().parent
+PARENT = 'measurement-source-freeze-deep.json'
+PARENT_SHA = 'b857b4da6a290e3b569d04864884da55da14af4f861a694b239569798ad52098'
+GUARD_SHA = '6a87053a2e980a5aecb8c4fb757163fd3bc2e5319a571cab7215170c29921be3'
+SELF = 'single_reference_profile.py'
+ROWS = {'baseline-09f5': (6, 'vanilla', 'cmp300refvanilla'),
+        'baseline-09f5-usbq': (7, 'usbq', 'cmp300refusbq')}
+GUARD_MAX_AGE_S = 600
+DEEP = 'measurements/cmp300deep'
+
+
+def paths(artifact):
+    index, suffix, prefix = ROWS[artifact]
+    return index, prefix, 'reference-guard-' + suffix, 'reference-review-' + suffix + '.json', \
+        'measurement-source-freeze-ref' + suffix + '.json'
+
+
+def plan(root, artifact):
+    index, prefix, guard, review, freeze = paths(artifact)
+    original = base.plan(root, prefix)
+    return {**original, 'profiles': [original['profiles'][index - 1]], 'switches': [],
+            'single_reference': {'artifact': artifact, 'canonical_index': index,
+                'guard_directory': guard, 'root_review': review, 'source_freeze': freeze,
+                'automatic_switches': False, 'automatic_retry': False,
+                'rtc_continuity_failure_accepted_only_for_fresh_fixture': True,
+                'measurement_timing_gates_unchanged': True,
+                'note': 'Previous switch/sequence FAIL is retained. Fresh physical guard proof '
+                        'authorizes fixture preparation only; original per-cycle timing gates apply.'}}
+
+
+def utc(value):
+    return datetime.fromisoformat(value.replace('Z', '+00:00')).timestamp()
+
+
+def verify_guard(root, artifact, now_ns=None, now_wall=None):
+    _, _, directory, review_name, _ = paths(artifact)
+    proof = base.read_json(root / directory / 'result-public.json')
+    review = base.read_json(root / review_name)
+    expected = base.validate_expected(root, artifact)
+    base.require(proof.get('schema') == 1 and proof.get('result') == 'GUARD_VERIFIED_FOR_FRESH_FIXTURE',
+                 'Fresh physical guard proof missing')
+    base.require(proof.get('artifact') == artifact and proof.get('bin_sha256') == base.BINS[artifact]
+                 and proof.get('runtime_prefix') == expected['substring']
+                 and proof.get('main_sha256') == GUARD_SHA, 'Guard firmware/main identity mismatch')
+    for key in ('runtime_flash_bytes_verified', 'guarded_inventory_unchanged', 'powman_backup_unchanged',
+                'friendly_repl_verified', 'serial_owner_closed'):
+        base.require(proof.get(key) is True, 'Guard verification missing: ' + key)
+    for key in ('watchdog_enabled', 'rtc_written', 'reset_performed', 'original_application_started'):
+        base.require(proof.get(key) is False, 'Unexpected guard operation/state: ' + key)
+    base.require(proof.get('original_files_verified') == 29 and proof.get('reset_cause') == 3,
+                 'Guard file/reset scope differs')
+    base.require(proof.get('host_source_sha256') == base.sha(root / 'verify_switched_guard.py')
+                 and proof.get('private_proof_sha256') == base.sha(root / directory / 'proof-private.json'),
+                 'Guard source/private evidence hash differs')
+    label = proof.get('switch_label')
+    base.valid_prefix(label)
+    switch_name = 'firmware-switches/' + label + '/result-private.json'
+    switched = base.read_json(root / switch_name)
+    base.require(switched.get('artifact') == artifact and switched.get('result') == proof.get('switch_result'),
+                 'Guard does not refer to the selected switch result')
+    if proof.get('switch_result') == 'FAIL':
+        base.require(proof.get('rtc_continuity') == 'FAIL'
+                     and proof.get('rtc_continuity_failure_accepted_only_for_fresh_fixture') is True
+                     and switched.get('phase') == 'ordinary-reset'
+                     and switched.get('reason') == 'RTC continuity differs from host elapsed time by more than 5 seconds'
+                     and switched.get('expected_firmware_updated') is True,
+                     'Only reviewed RTC-continuity FAIL is eligible')
+    else:
+        base.require(proof.get('switch_result') == 'PASS' and proof.get('rtc_continuity') == 'PASS'
+                     and switched.get('guarded_repl') is True,
+                     'Previous switch must be PASS or the exact RTC failure')
+    base.require(review.get('schema') == 1 and review.get('artifact') == artifact
+                 and review.get('explicit_root_review_completed') is True
+                 and review.get('single_profile_only') is True
+                 and review.get('automatic_switches') is False and review.get('automatic_retry') is False
+                 and review.get('measurement_timing_gates_unchanged') is True,
+                 'Explicit single-profile root review missing')
+    for key in ('switch_label', 'switch_result', 'rtc_continuity'):
+        base.require(review.get(key) == proof.get(key), 'Root review switch scope differs: ' + key)
+    if proof['rtc_continuity'] == 'FAIL':
+        base.require(review.get('rtc_continuity_failure_accepted_only_for_fresh_fixture') is True,
+                     'RTC discontinuity was not explicitly accepted for fresh fixture only')
+    base.require(review.get('guard_public_sha256') == base.sha(root / directory / 'result-public.json')
+                 and utc(review['created_utc']) >= utc(proof['observed_utc']),
+                 'Root review predates or differs from guard evidence')
+    ns = time.monotonic_ns() if now_ns is None else now_ns
+    wall = time.time() if now_wall is None else now_wall
+    stamp = proof.get('observed_host_monotonic_ns')
+    base.require(type(stamp) is int and 0 <= (ns - stamp) / 1e9 <= GUARD_MAX_AGE_S
+                 and -1 <= wall - utc(proof['observed_utc']) <= GUARD_MAX_AGE_S,
+                 'Physical guard proof is older than 10 minutes or clock identity differs')
+    return proof, switch_name
+
+
+def verify_deep_closed(root):
+    result = base.read_json(root / DEEP / 'result.json')
+    progress = base.read_json(root / DEEP / 'progress.json')
+    base.require(result.get('result') == 'FAIL' and result.get('failed_phase') == 'firmware_switch'
+                 and result.get('candidate_restored') is False and result.get('cleanup_errors') == []
+                 and progress.get('result') == 'FAIL' and progress.get('phase') == 'finished',
+                 'Original deep sequence must remain cleanly closed firmware-switch FAIL')
+    profile_names = []
+    rows = base.plan(root, 'cmp300deep')['profiles'][2:5]
+    profiles = []
+    for row in rows:
+        name = str(Path(row['directory']).relative_to(root) / 'result.json')
+        value = base.read_json(root / name)
+        base.require(value.get('result') == 'PASS' and value.get('run_label') == row['run_label']
+                     and value.get('complete_cycle_energy_model_valid') is True
+                     and value.get('cleanup_errors') == []
+                     and all(value.get(k) == 'PASS' for k in ('functional_result', 'capture_result', 'energy_result')),
+                     'One of the three preceding C profiles is not closed PASS')
+        profiles.append(value); profile_names.append(name)
+    base.require(result.get('profiles') == profiles
+                 and progress.get('completed_profiles') == [r['run_label'] for r in rows],
+                 'Deep sequence must contain exactly the three retained C profiles')
+    return profile_names
+
+
+def source_snapshot(root, artifact):
+    base.require(base.sha(root / PARENT) == PARENT_SHA, 'Frozen parent58 manifest changed')
+    original = base.read_json(root / PARENT)['source_sha256']
+    base.require(len(original) == 58, 'Parent must contain exactly 58 immutable inputs')
+    base.verify_sources(root, original)
+    _, switch_name = verify_guard(root, artifact)
+    prior = verify_deep_closed(root)
+    _, _, directory, review, _ = paths(artifact)
+    added = [PARENT, SELF, 'verify_switched_guard.py', review,
+             directory + '/result-public.json', directory + '/proof-private.json',
+             switch_name, DEEP + '/result.json', DEEP + '/progress.json', *prior]
+    base.require(not set(added).intersection(original), 'New proof unexpectedly overlaps parent58')
+    return {**original, **{name: base.sha(root / name) for name in added}}
+
+
+def freeze_document(root, artifact):
+    """Pure file validation/return; caller must save exclusively after root review."""
+    return {'schema': 1, 'result': 'SOURCE_FROZEN', 'artifact': artifact,
+            'parent_manifest': PARENT, 'parent_manifest_sha256': PARENT_SHA,
+            'source_sha256': source_snapshot(root, artifact), **base.stamp()}
+
+
+def preflight(root, artifact):
+    """No hardware. Original functional/fixture gates with explicit current artifact."""
+    base.require(os.path.samefile(sys.executable, base.PY), 'Use the pinned rp2350 Python venv')
+    prepared = plan(root, artifact)
+    base.require(not Path(prepared['output_directory']).exists(), 'Output already exists; no retry/resume')
+    row = prepared['profiles'][0]
+    base.require(not (root / 'runs' / row['run_label']).exists(), 'Run label already exists')
+    for progress in (root / 'runs').glob('*/progress-public.json'):
+        base.require(not base.read_json(progress).get('running'), 'Another suite is running')
+    for progress in (root / 'measurements').glob('*/progress.json'):
+        base.require(base.read_json(progress).get('result') != 'RUNNING', 'Another measurement is running')
+    gate = base.read_json(root / 'functional-sequence-public.json')
+    base.require(gate.get('result') == 'PASS' and gate.get('phase') == 'functional-complete'
+                 and gate.get('completed') == [v[0] for v in base.FUNCTIONAL], 'Functional gate differs')
+    functional_evidence = {}
+    for label, cycles, duration in base.FUNCTIONAL:
+        directory = root / 'runs' / label
+        cfg = base.read_json(directory / 'config.json')
+        result = base.read_json(directory / 'result-public.json')
+        firmware = base.read_json(directory / 'plan.json').get('firmware', {})
+        base.require(result.get('result') == 'PASS' and result.get('observed', {}).get('status') == 'PASS'
+                     and result['observed'].get('completed') == cycles
+                     and cfg.get('cycles') == cycles and cfg.get('sleep_ms') == duration
+                     and cfg.get('radio') == 'never' and cfg.get('mode') == 'deepsleep'
+                     and cfg.get('expect_deep_cause') is True
+                     and firmware.get('artifact') == base.CANDIDATE
+                     and firmware.get('bin_sha256') == base.BINS[base.CANDIDATE], 'Functional provenance differs')
+        functional_evidence[label] = {'result_sha256': base.sha(directory / 'result-public.json'),
+                                      'config_sha256': base.sha(directory / 'config.json')}
+    meter = root / 'meter-functional'
+    capture = base.verify_capture_closed(meter, root)
+    with (root / '.meter-reader.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB); fcntl.flock(lock, fcntl.LOCK_UN)
+    setup = base.read_json(root / 'setup-public.json')
+    base.require(setup.get('confirmed_by_user') and setup.get('other_power') is False
+                 and setup.get('debugger') is False, 'Fixture confirmation missing')
+    for name, digest in base.BINS.items():
+        inspection = base.read_json(root / 'artifacts' / name / 'flash-inspection.json')
+        base.require(inspection.get('result') == 'PASS' and inspection.get('board') == 'RPI_PICO2_W'
+                     and inspection.get('platform') == 'rp2350-arm-s'
+                     and base.sha(root / 'artifacts' / name / 'firmware.bin') == digest,
+                     'Pinned comparison artifact mismatch')
+    expected = base.validate_expected(root, artifact)
+    snapshot = source_snapshot(root, artifact)
+    freeze_name = paths(artifact)[4]
+    freeze = base.read_json(root / freeze_name)
+    base.require(freeze.get('schema') == 1 and freeze.get('result') == 'SOURCE_FROZEN'
+                 and freeze.get('artifact') == artifact and freeze.get('parent_manifest') == PARENT
+                 and freeze.get('parent_manifest_sha256') == PARENT_SHA
+                 and freeze.get('source_sha256') == snapshot, 'New reviewed manifest does not match exact proof set')
+    return prepared, {'source_sha256': snapshot, 'source_freeze_sha256': base.sha(root / freeze_name),
+        'initial_expected_firmware': expected, 'functional_evidence': functional_evidence,
+        'functional_meter_directory': str(meter), 'functional_meter_summary_sha256': base.sha(meter / 'summary.json'),
+        'functional_meter_result': capture.get('result'), 'functional_meter_data_quality': capture.get('data_quality'),
+        'setup_reference': {'path': str(root / 'setup-public.json'), 'sha256': base.sha(root / 'setup-public.json'),
+                            'note': 'Owner-confirmed unchanged fixture; fresh guard proof is separate.'},
+        'single_reference': prepared['single_reference'], 'preflight': base.stamp()}
+
+
+class SingleProfileSupervisor(v2.StartupWindowSupervisor):
+    def launch(self, name, command, log_path):
+        if name == 'runner':
+            base.verify_sources(self.root, self.evidence['source_sha256'])
+            verify_guard(self.root, self.plan['single_reference']['artifact'])
+            self.emit('fresh_guard_verified_before_suite', maximum_age_s=GUARD_MAX_AGE_S)
+        return super().launch(name, command, log_path)
+
+    def run(self):
+        artifact = self.plan['single_reference']['artifact']
+        final = {'result': 'INCOMPLETE', 'started': base.stamp(), 'candidate_restored': False,
+                 'current_artifact_retained': False, 'root_recovery_required': False}
+        old = {}
+        def interrupted(number, _frame):
+            for sig in (signal.SIGINT, signal.SIGTERM): signal.signal(sig, signal.SIG_IGN)
+            raise KeyboardInterrupt('Supervisor received signal ' + str(number))
+        try:
+            base.require(self.plan['switches'] == [] and len(self.plan['profiles']) == 1,
+                         'Only one profile without switches is permitted')
+            for sig in (signal.SIGINT, signal.SIGTERM): old[sig] = signal.signal(sig, interrupted)
+            self.caffeine = subprocess.Popen(['/usr/bin/caffeinate', '-i', '-w', str(os.getpid())],
+                                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.emit('full_supervision_caffeinate_started', pid=self.caffeine.pid, supervisor_pid=os.getpid())
+            self.run_profile(self.plan['profiles'][0])
+            final.update(result='PASS', current_artifact_retained=True,
+                         expected_firmware=base.validate_expected(self.root, artifact))
+        except BaseException as exc:
+            final.update(result='FAIL', error_type=type(exc).__name__, reason=str(exc), failed_phase=self.phase,
+                         root_recovery_required=True, note='No automatic retry, switch, rollback or reset; root owns recovery.')
+        finally:
+            for name in list(self.active):
+                try: self.terminate(name, grace=15 if name == 'runner' else 5)
+                except BaseException as exc: self.cleanup_errors.append({'stage': name, 'error': str(exc)})
+            if self.caffeine is not None:
+                try:
+                    if self.caffeine.poll() is None:
+                        self.caffeine.terminate()
+                        try: self.caffeine.wait(timeout=3)
+                        except subprocess.TimeoutExpired: self.caffeine.kill(); self.caffeine.wait(timeout=3)
+                except Exception as exc: self.cleanup_errors.append({'stage': 'full_caffeinate', 'error': str(exc)})
+            for sig, handler in old.items(): signal.signal(sig, handler)
+            if self.cleanup_errors: final.update(result='FAIL', root_recovery_required=True)
+            final.update(finished=base.stamp(), elapsed_s=time.monotonic() - self.started, profiles=self.results,
+                         cleanup_errors=self.cleanup_errors, firmware_switches=[])
+            base.exclusive_json(self.out / 'result.json', final)
+            base.atomic_json(self.out / 'progress.json', {'schema': 1, 'result': final['result'], 'phase': 'finished',
+                'supervisor_pid': os.getpid(), 'candidate_restored': False,
+                'current_artifact_retained': final['current_artifact_retained'],
+                'root_recovery_required': final['root_recovery_required'],
+                'completed_profiles': [r['run_label'] for r in self.results if r['result'] == 'PASS'], **base.stamp()})
+            self.emit('finished', result=final['result']); self.log.close()
+        return final
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--artifact', choices=tuple(ROWS), required=True)
+    group = parser.add_mutually_exclusive_group(required=True)
+    for option in ('plan', 'check-only', 'execute'): group.add_argument('--' + option, action='store_true')
+    args = parser.parse_args(argv)
+    os.umask(0o077)
+    base.require(not sys.flags.optimize, 'Optimized Python is not supported')
+    v2.configure()
+    if args.plan: print(json.dumps(plan(ROOT, args.artifact), indent=2)); return 0
+    with (ROOT / '.measure-variants.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        prepared, evidence = preflight(ROOT, args.artifact)
+        if args.check_only:
+            print(json.dumps({'result': 'LOCAL_PREFLIGHT_PASS', 'hardware_opened': False, 'profiles': 1,
+                'artifact': args.artifact, 'source_count': len(evidence['source_sha256']),
+                'source_freeze_sha256': evidence['source_freeze_sha256']})); return 0
+        result = SingleProfileSupervisor(ROOT, prepared, evidence).run()
+        print(json.dumps({k: result[k] for k in ('result', 'candidate_restored', 'current_artifact_retained',
+                                                'root_recovery_required')}))
+        return 0 if result['result'] == 'PASS' else 1
+
+
+if __name__ == '__main__':
+    try: sys.exit(main())
+    except Exception as exc:
+        print(json.dumps({'result': 'ERROR_BEFORE_OR_OUTSIDE_SUPERVISED_RUN',
+                          'error_type': type(exc).__name__, 'reason': str(exc)}), file=sys.stderr)
+        sys.exit(1)

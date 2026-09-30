@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "result": "FAIL",
+  "phase": "finished",
+  "candidate_restored": false,
+  "root_recovery_required": true,
+  "utc": "2026-09-29T16:46:59.282717+00:00",
+  "monotonic_ns": 521355298201583
+}

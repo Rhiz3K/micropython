@@ -1,0 +1,57 @@
+{
+  "result": "FAIL",
+  "label": "cmp300refusbq-b-upstream-usbfix",
+  "phase": "observe",
+  "error": "Observer failed; full log retained",
+  "exception_type": "RuntimeError",
+  "observed": {
+    "status": "FAIL",
+    "run": "meter-20260929-cmp300refusbq-b-upstream-usbfix",
+    "boot": 2,
+    "completed": 0,
+    "host_elapsed_s": 5.890064625069499,
+    "rtc_elapsed_s": 2,
+    "error": "AssertionError('RTC duration',)",
+    "panel_prep": {
+      "radio_pins_touched": false,
+      "status": "PREPARED",
+      "refreshed": false,
+      "vendor_sleep_completed": true,
+      "fixture": "Waveshare Pico-ePaper-2.9 B/W V2",
+      "park_registers_verified": true,
+      "elapsed_ms": 2119,
+      "busy_waits": [
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        },
+        {
+          "initial": 1,
+          "final": 0,
+          "elapsed_ms": 11
+        },
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        },
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        },
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        }
+      ]
+    }
+  },
+  "elapsed_host_s": 10.022700374945998,
+  "finished": {
+    "host_utc": "2026-09-29T18:16:58.345402+00:00",
+    "host_monotonic": 526754.364504083
+  }
+}

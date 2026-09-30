@@ -1,0 +1,46 @@
+{
+  "result": "FAIL",
+  "profile": "usbq-legacy",
+  "cycles_requested": 2,
+  "sleep_ms": 300000,
+  "quiet_ms": 200,
+  "firmware_artifact": "baseline-09f5-usbq",
+  "firmware_bin_sha256": "c893e0c19802b6098365ad3d917b4ffd306914d69acb0f3316a05130bd8d1e49",
+  "measurement_duration_eligible": false,
+  "rtc_continuity_result": "OBSERVATION_ONLY_NO_SETTER",
+  "no_device_files_written": true,
+  "no_radio_activation": true,
+  "source_sha256": {
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+    "wake-rtc-20260929/guard.py": "9a1bc1461c874fde35d682d7a0f32e9d7cd0ee119ea41994f6f06d8ee9963195",
+    "wake-rtc-20260929/compare_ram.py": "85a29c43eeeeae06e336eaa24f7086e7e0985370f6746b9e4ef80f2bbbba83e9",
+    "wake-rtc-20260929/analyze_compare_ram.py": "50e56b42dbd08883e70c4c26e841fa15d9b0720ba97eb5173b6368e91906da49"
+  },
+  "exception_type": "TimeoutError",
+  "files_backup_friendly_verified": false,
+  "cycles": [
+    {
+      "cycle": 1,
+      "ready_start_monotonic_ns": 534960515105750,
+      "ready_end_monotonic_ns": 535264360783583,
+      "sleep_ack_flush_monotonic_ns": 534960526753625,
+      "first_wake_monotonic_ns": 535261546764458,
+      "host_ack_to_first_wake_s": 301.020010833,
+      "duration_eligible": true,
+      "wake_observation": "WITHIN_DECLARED_HOST_WINDOW",
+      "rtc_at_start_ready_ms": 1790714201219,
+      "rtc_first_state_after_wake_ms": 1790714502330,
+      "cause": 3
+    }
+  ],
+  "meter_failure": null,
+  "capture_result": "PASS",
+  "capture_data_quality": "PASS",
+  "analysis_result": "NOT_RUN",
+  "finished": {
+    "utc": "2026-09-29T20:44:51.553767+00:00",
+    "monotonic_ns": 535627579165000
+  }
+}

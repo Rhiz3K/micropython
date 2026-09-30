@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "confirmed_by_user": true,
+  "pico_only_disconnected_confirmed": true,
+  "meter_remained_connected_confirmed": true,
+  "normal_reconnection_confirmed": true,
+  "observation_result": "FAIL",
+  "measurement_window_verified": false,
+  "reason": "Physical reply received. Capture ended in HID read error before watcher could prove return; no complete-reference PASS inferred."
+}

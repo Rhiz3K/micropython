@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""One explicit replacement meter start; all V2 runtime operations unchanged."""
+import argparse
+import fcntl
+import json
+import os
+from pathlib import Path
+import sys
+import continue_comparisons as c
+
+base, ROOT = c.base, c.ROOT
+PREFIX = 'cmp300cont2'
+PRIOR = 'measurements/cmp300cont1'
+B = PRIOR + '/02-b-lightsleep-reset'
+FREEZE = 'measurement-source-freeze-cont1.json'
+FREEZE_SHA = '81d92317dc5c71e438b03220fa478623d98f9959a6f915d3b4dc22b7eafa7d64'
+REVIEW = 'comparison-startup-cont2-review.json'
+REVIEW_SHA = '169dadfe7f95d8e236681822ebe4198e60ac5e27ae6036c15e844460f8db6501'
+PROOFS = (FREEZE, REVIEW, PRIOR + '/result.json', PRIOR + '/progress.json',
+          PRIOR + '/supervision-events.jsonl', B + '/result.json',
+          B + '/measurement-metadata.json', B + '/meter/summary.json',
+          B + '/meter/health.json')
+
+
+def plan(root, prepared=None):
+    original = base.plan(root, PREFIX)
+    base.require(prepared is None or prepared == original, 'Unexpected base plan')
+    return {**original, 'profiles': original['profiles'][1:], 'continuation': {
+        'retained_A_directory': c.A, 'previous_B_FAIL': c.B,
+        'previous_startup_FAIL': B, 'root_review': REVIEW,
+        'root_review_sha256': REVIEW_SHA, 'profiles': 6,
+        'canonical_directory_indices': [2, 3, 4, 5, 6, 7],
+        'note': 'Cont1 never started the Pico suite. One explicit replacement start; '
+                'unchanged V2 runtime and gates. No automatic retry on any failure.'}}
+
+
+def verify_startup_failure(root):
+    base.require(base.sha(root / FREEZE) == FREEZE_SHA, 'Cont1 freeze changed')
+    source = base.read_json(root / FREEZE)['source_sha256']
+    base.require(len(source) == 35, 'Unexpected cont1 source/proof snapshot')
+    base.verify_sources(root, source)
+    base.require(base.sha(root / REVIEW) == REVIEW_SHA, 'Explicit cont2 root review changed')
+    review = base.read_json(root / REVIEW)
+    base.require(review.get('explicit_root_review_completed') is True
+                 and review.get('prior_sequence') == 'cmp300cont1'
+                 and review.get('failure_phase') == 'meter_startup'
+                 and all(review.get(k) is False for k in
+                         ('functional_test_started', 'firmware_changed', 'new_B_attempt_consumed'))
+                 and review.get('old_failure_preserved') is True, 'Cont2 root review is missing')
+    result = base.read_json(root / PRIOR / 'result.json')
+    progress = base.read_json(root / PRIOR / 'progress.json')
+    profile = base.read_json(root / B / 'result.json')
+    base.require(result.get('result') == 'FAIL' and result.get('failed_phase') == 'meter_startup'
+                 and result.get('cleanup_errors') == [] and result.get('profiles') == [profile]
+                 and progress.get('result') == 'FAIL' and progress.get('phase') == 'finished'
+                 and progress.get('completed_profiles') == [], 'Cont1 is not closed startup FAIL')
+    base.require(profile.get('result') == 'FAIL' and profile.get('failed_phase') == 'meter_startup'
+                 and profile.get('functional_result') == 'NOT_RUN'
+                 and profile.get('energy_result') == 'NOT_RUN' and profile.get('cleanup_errors') == []
+                 and profile.get('run_label') == 'cmp300cont1-b-lightsleep-reset',
+                 'Cont1 entered a functional test or did not cleanly stop')
+    base.require(not (root / 'runs/cmp300cont1-b-lightsleep-reset').exists(),
+                 'Cont1 Pico run directory exists')
+    with (root / PRIOR / 'supervision-events.jsonl').open() as stream:
+        launches = [e.get('name') for line in stream if (e := json.loads(line)).get('event') == 'process_started']
+    base.require(launches == ['collector'], 'Cont1 launched more than the meter collector')
+    base.require(base.read_json(root / B / 'measurement-metadata.json').get('source_sha256') == source,
+                 'Cont1 metadata source snapshot mismatch')
+    capture = base.verify_capture_closed(root / B / 'meter', root)
+    base.require(capture.get('result') == 'DEGRADED' and capture.get('data_quality') == 'DEGRADED',
+                 'Cont1 capture is not the documented closed DEGRADED result')
+    base.require(c.utc(result['finished']['utc']) <= c.utc(review['created_utc']),
+                 'Cont2 review predates closed cont1')
+    return {**source, **{name: base.sha(root / name) for name in PROOFS}}
+
+
+def preflight(root, functional_meter):
+    c.verify_precedents(root)
+    proofs = verify_startup_failure(root)
+    prepared, evidence = base.preflight(root, PREFIX, functional_meter)
+    prepared = plan(root, prepared)
+    base.require(all(proofs.get(k) == v for k, v in evidence['source_sha256'].items()),
+                 'Original V2 sources changed')
+    evidence['source_sha256'] = {**proofs, 'continue_comparisons2.py': base.sha(root / 'continue_comparisons2.py')}
+    evidence['continuation'] = prepared['continuation']
+    prepared['continuation']['source_and_proof_sha256'] = evidence['source_sha256']
+    base.verify_sources(root, evidence['source_sha256'])
+    return prepared, evidence
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--label-prefix', default=PREFIX, choices=[PREFIX])
+    parser.add_argument('--functional-meter-dir', type=Path, default=ROOT / 'meter-functional')
+    group = parser.add_mutually_exclusive_group(required=True)
+    for option in ('plan', 'check-only', 'execute'):
+        group.add_argument('--' + option, action='store_true')
+    args = parser.parse_args(argv)
+    os.umask(0o077)
+    base.require(not sys.flags.optimize, 'Optimized Python is not supported')
+    c.configure()
+    if args.plan:
+        print(json.dumps(plan(ROOT), indent=2)); return 0
+    with (ROOT / '.measure-variants.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        prepared, evidence = preflight(ROOT, args.functional_meter_dir.resolve())
+        if args.check_only:
+            print(json.dumps({'result': 'LOCAL_PREFLIGHT_PASS', 'hardware_opened': False,
+                'profiles': len(prepared['profiles']), 'retained_A': c.A,
+                'previous_startup_FAIL': B, 'source_sha256': evidence['source_sha256']})); return 0
+        result = base.Supervisor(ROOT, prepared, evidence).run()
+        print(json.dumps({'result': result['result'],
+            'profiles_PASS': sum(r['result'] == 'PASS' for r in result['profiles']),
+            'retained_A': c.A, 'candidate_restored': result['candidate_restored'],
+            'root_recovery_required': result['root_recovery_required']}))
+        return 0 if result['result'] == 'PASS' else 1
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception as exc:
+        print(json.dumps({'result': 'ERROR_BEFORE_OR_OUTSIDE_SUPERVISED_RUN',
+              'error_type': type(exc).__name__, 'reason': str(exc)}), file=sys.stderr)
+        sys.exit(1)

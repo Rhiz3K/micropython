@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "run_label": "cmp300deep-c-deepsleep-sta",
+  "profile": "C-STA",
+  "artifact": "candidate-91e91",
+  "functional_result": "PASS",
+  "capture_result": "PASS",
+  "energy_result": "PASS",
+  "started": {
+    "utc": "2026-09-29T17:17:33.764583+00:00",
+    "monotonic_ns": 523189781496625
+  },
+  "analysis_sha256": "bfb80ce1d69913bb6bea33baba717aa24c0dab2aea3aadff157164c44c3bb9e3",
+  "complete_cycle_energy_model_valid": true,
+  "finished": {
+    "utc": "2026-09-29T17:33:18.053117+00:00",
+    "monotonic_ns": 524134070883125
+  },
+  "cleanup_errors": []
+}

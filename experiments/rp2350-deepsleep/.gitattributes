@@ -10,5 +10,14 @@ evidence/mac-20260927*/** -text
 evidence/mac-20260927*/*.csv whitespace=cr-at-eol
 # Keep generated SVG path formatting intact.
 evidence/mac-20260927*/*.svg -whitespace
+# Preserve the two September 29 evidence bundles, including nested exports.
+evidence/mac-20260929-meter/** -text
+evidence/mac-20260929-wake-rtc/** -text
+evidence/mac-20260929-meter/**/*.csv whitespace=cr-at-eol
+evidence/mac-20260929-wake-rtc/**/*.csv whitespace=cr-at-eol
+evidence/mac-20260929-meter/**/*.svg -whitespace
+evidence/mac-20260929-wake-rtc/**/*.svg -whitespace
+# Retain the captured vendor source verbatim, including its formatting.
+evidence/mac-20260929-meter/sources/rp2350_epd_vendor.py.txt -whitespace
 # Preserve the byte-identical Linux REPL transcript (CRLF from the device).
 evidence/linux-20260929/regressions.txt -text whitespace=cr-at-eol

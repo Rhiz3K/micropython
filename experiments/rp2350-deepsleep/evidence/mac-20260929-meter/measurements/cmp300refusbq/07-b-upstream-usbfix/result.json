@@ -1,0 +1,23 @@
+{
+  "result": "FAIL",
+  "run_label": "cmp300refusbq-b-upstream-usbfix",
+  "profile": "B-upstream-usbfix",
+  "artifact": "baseline-09f5-usbq",
+  "functional_result": "FAIL",
+  "capture_result": "PASS",
+  "energy_result": "NOT_RUN",
+  "started": {
+    "utc": "2026-09-29T18:16:43.078830+00:00",
+    "monotonic_ns": 526739097897250
+  },
+  "error_type": "RuntimeError",
+  "reason": "Hardware suite failed; no next profile and no automatic recovery",
+  "complete_cycle_energy_model_valid": false,
+  "root_recovery_required": true,
+  "failed_phase": "suite",
+  "finished": {
+    "utc": "2026-09-29T18:17:01.948843+00:00",
+    "monotonic_ns": 526757967943666
+  },
+  "cleanup_errors": []
+}

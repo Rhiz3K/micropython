@@ -1,0 +1,101 @@
+{
+  "result": "PASS",
+  "profile": "candidate-deep",
+  "cycles_requested": 2,
+  "sleep_ms": 300000,
+  "quiet_ms": 200,
+  "firmware_artifact": "candidate-91e91",
+  "firmware_bin_sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b",
+  "measurement_duration_eligible": true,
+  "rtc_continuity_result": "OBSERVATION_ONLY_NO_SETTER",
+  "no_device_files_written": true,
+  "no_radio_activation": true,
+  "source_sha256": {
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+    "wake-rtc-20260929/guard_deep2.py": "0136ea63241d973fb595a66b2c7305e31da91ad90a0f71d23c9344e4073d4a9a",
+    "wake-rtc-20260929/compare_ram_deep_retention.py": "2e0e7a0337d196c2c2338d7e284be41e8386884ead673635e415cca3e396aa79",
+    "wake-rtc-20260929/analyze_compare_deep_retention.py": "83e352a3cbd343e0770aaf85b08961e372d067aa3b569e2814f1ad1ac5e7b047"
+  },
+  "retention_policy": {
+    "required_equal_regions": [
+      2
+    ],
+    "observed_regions": [
+      0,
+      1,
+      2
+    ],
+    "nonretained_regions": [
+      0,
+      1
+    ],
+    "comparison": "entry_snapshot",
+    "final_restoration": "separate_root_owned_all_three_regions"
+  },
+  "files_backup_friendly_verification_scope": "Guarded inventory33/directories7; required POWMAN region2 equality; friendly REPL. Watchdog regions0/1 equality is not required; final all-three restoration is separate.",
+  "files_backup_friendly_verified": true,
+  "cycles": [
+    {
+      "cycle": 1,
+      "ready_start_monotonic_ns": 537599316328500,
+      "ready_end_monotonic_ns": 537905428185166,
+      "sleep_ack_flush_monotonic_ns": 537599330158750,
+      "first_wake_monotonic_ns": 537902609464583,
+      "host_ack_to_first_wake_s": 303.279305833,
+      "duration_eligible": true,
+      "wake_observation": "WITHIN_DECLARED_HOST_WINDOW",
+      "rtc_at_start_ready_ms": 1790716658431,
+      "rtc_first_state_after_wake_ms": 1790716959474,
+      "cause": 4
+    },
+    {
+      "cycle": 2,
+      "ready_start_monotonic_ns": 537905428185166,
+      "ready_end_monotonic_ns": 538211578091458,
+      "sleep_ack_flush_monotonic_ns": 537905439728083,
+      "first_wake_monotonic_ns": 538208747862833,
+      "host_ack_to_first_wake_s": 303.30813475,
+      "duration_eligible": true,
+      "wake_observation": "WITHIN_DECLARED_HOST_WINDOW",
+      "rtc_at_start_ready_ms": 1790716962214,
+      "rtc_first_state_after_wake_ms": 1790717263119,
+      "cause": 4
+    }
+  ],
+  "meter_failure": null,
+  "backup_retention_observations": [
+    {
+      "stage": "ready_0",
+      "region_0_changed": false,
+      "region_1_changed": false,
+      "region_2_equal": true
+    },
+    {
+      "stage": "ready_1",
+      "region_0_changed": false,
+      "region_1_changed": false,
+      "region_2_equal": true
+    },
+    {
+      "stage": "ready_2",
+      "region_0_changed": false,
+      "region_1_changed": false,
+      "region_2_equal": true
+    },
+    {
+      "stage": "final",
+      "region_0_changed": false,
+      "region_1_changed": false,
+      "region_2_equal": true
+    }
+  ],
+  "capture_result": "PASS",
+  "capture_data_quality": "PASS",
+  "analysis_result": "PASS",
+  "finished": {
+    "utc": "2026-09-29T21:28:00.166321+00:00",
+    "monotonic_ns": 538216192561875
+  }
+}

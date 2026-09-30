@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "hardware_access": false,
+  "device_flash_written": false,
+  "fs_offset": 1572864,
+  "fs_bytes": 2621440,
+  "verified_original_files": 29,
+  "verified_output_files": 30,
+  "prefix_program_bytes_unchanged": true,
+  "remount_verified": true,
+  "format_called": false,
+  "backup_words_rtc_untouched": true
+}

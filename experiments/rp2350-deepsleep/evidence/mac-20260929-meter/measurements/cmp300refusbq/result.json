@@ -1,0 +1,46 @@
+{
+  "result": "FAIL",
+  "started": {
+    "utc": "2026-09-29T18:16:43.076680+00:00",
+    "monotonic_ns": 526739095747416
+  },
+  "candidate_restored": false,
+  "current_artifact_retained": false,
+  "root_recovery_required": true,
+  "error_type": "RuntimeError",
+  "reason": "Hardware suite failed; no next profile and no automatic recovery",
+  "failed_phase": "suite",
+  "note": "No automatic retry, switch, rollback or reset; root owns recovery.",
+  "finished": {
+    "utc": "2026-09-29T18:17:01.953467+00:00",
+    "monotonic_ns": 526757972564666
+  },
+  "elapsed_s": 18.87684387504123,
+  "profiles": [
+    {
+      "result": "FAIL",
+      "run_label": "cmp300refusbq-b-upstream-usbfix",
+      "profile": "B-upstream-usbfix",
+      "artifact": "baseline-09f5-usbq",
+      "functional_result": "FAIL",
+      "capture_result": "PASS",
+      "energy_result": "NOT_RUN",
+      "started": {
+        "utc": "2026-09-29T18:16:43.078830+00:00",
+        "monotonic_ns": 526739097897250
+      },
+      "error_type": "RuntimeError",
+      "reason": "Hardware suite failed; no next profile and no automatic recovery",
+      "complete_cycle_energy_model_valid": false,
+      "root_recovery_required": true,
+      "failed_phase": "suite",
+      "finished": {
+        "utc": "2026-09-29T18:17:01.948843+00:00",
+        "monotonic_ns": 526757967943666
+      },
+      "cleanup_errors": []
+    }
+  ],
+  "cleanup_errors": [],
+  "firmware_switches": []
+}

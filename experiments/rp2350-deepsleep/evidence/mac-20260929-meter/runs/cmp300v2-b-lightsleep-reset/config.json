@@ -1,0 +1,10 @@
+{
+  "run": "meter-20260929-cmp300v2-b-lightsleep-reset",
+  "cycles": 3,
+  "sleep_ms": 300000,
+  "radio": "never",
+  "mode": "lightsleep_reset",
+  "expect_deep_cause": false,
+  "rtc_tolerance_s": 10.0,
+  "host_tolerance_s": 3.0
+}

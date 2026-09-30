@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "scope": "Separate wake/RTC phase; all earlier failures remain unchanged.",
+  "raw_meter_data": "NOT_READ_OR_EXPORTED",
+  "raw_hash_scope": "Analyzer-declared hashes are preserved; this export verifies closed controls and does not replay or hash raw capture.",
+  "repeat": {
+    "ls-repeat-1": "COMPLETE"
+  },
+  "irq": {
+    "irq-lsdiag1-1": "COMPLETE",
+    "irq-poll200-1": "COMPLETE"
+  },
+  "rtc": {
+    "bootsel-same-30s": "COMPLETE",
+    "bootsel-same-5s": "COMPLETE",
+    "idle-before": "COMPLETE",
+    "reset-1": "COMPLETE",
+    "reset-2": "COMPLETE",
+    "reset-3": "COMPLETE",
+    "return-candidate": "COMPLETE",
+    "to-lsdiag1": "COMPLETE",
+    "to-usbq-for-compare": "COMPLETE"
+  },
+  "comparisons": {
+    "quiet200-deep-1": {
+      "result": "FAIL",
+      "analysis": "NOT_RUN",
+      "capture": "PASS"
+    },
+    "quiet200-deep-retention-1": {
+      "result": "FAIL",
+      "analysis": "NOT_RUN",
+      "capture": "PASS"
+    },
+    "quiet200-deep-retention-2": {
+      "result": "PASS",
+      "analysis": "PASS",
+      "capture": "PASS"
+    },
+    "quiet200-ls-1": {
+      "result": "FAIL",
+      "analysis": "NOT_RUN",
+      "capture": "PASS"
+    },
+    "quiet200-ls-2": {
+      "result": "PASS",
+      "analysis": "PASS",
+      "capture": "PASS"
+    },
+    "quiet200-usbq-1": {
+      "result": "FAIL",
+      "analysis": "NOT_RUN",
+      "capture": "PASS"
+    }
+  },
+  "restoration": "PASS",
+  "recovery_bootsel": "PASS",
+  "previous_restoration": "PASS",
+  "deep_retention_guard": "PASS",
+  "current_restoration_scope": "restoration-deep2 only",
+  "diagnostics": {
+    "meter_stability_20s": {
+      "result": "PASS",
+      "scope": "Standalone meter stream health only; not a sleep or power-comparison result.",
+      "capture": "PASS",
+      "data_quality": "PASS"
+    }
+  }
+}

@@ -1,0 +1,236 @@
+# Excerpts from host_meter.py; complete private source SHA256 20026a8f23e5855ed5863260ce7b4dd348fd720324c1517c48b69703763f2111
+
+def acknowledgement(record):
+    if record.get("protocol") == 2:
+        return "GO {} {} {}\n".format(record["run"], record["boot"], record["status"])
+    return "GO " + record["run"] + "\n"
+
+class RunProgress:
+    """Validate the full observed sequence, not just the final device counter."""
+
+    def __init__(self, config):
+        self.config = config
+        self.ready = None
+        self.sleep_started = None
+
+    def check(self, record, now):
+        if self.config is None:
+            return
+        if record.get("protocol") != 2:
+            raise ValueError("configured run requires protocol 2; reinstall current device.py")
+        current = (record["boot"], record["completed"])
+        status = record["status"]
+        watchdog = self.config.get("watchdog", False)
+        if status == "READY":
+            if self.ready is None:
+                if current[1] != 0 or record.get("phase") != 0:
+                    raise ValueError("missing initial READY; cannot verify a partial run")
+            elif current == self.ready:
+                if self.sleep_started is not None:
+                    raise ValueError("READY after SLEEP on the same boot")
+                return
+            else:
+                if (
+                    watchdog
+                    or self.sleep_started is None
+                    or current != (self.ready[0] + 1, self.ready[1] + 1)
+                    or record.get("phase") != 1
+                ):
+                    raise ValueError("wake does not match the acknowledged sleep")
+                elapsed = now - self.sleep_started
+                target = self.config["sleep_ms"] / 1000
+                tolerance = self.config.get("host_tolerance_s", max(0.25, target * 0.1))
+                record["host_cycle_elapsed_s"] = elapsed
+                if elapsed < max(0, target - tolerance):
+                    raise ValueError("wake arrived before the host duration lower bound")
+                self.sleep_started = None
+            self.ready = current
+        elif status == "SLEEP":
+            if (
+                watchdog
+                or current != self.ready
+                or current[1] >= self.config.get("cycles", 100)
+                or record.get("sleep_ms") != self.config["sleep_ms"]
+            ):
+                raise ValueError("SLEEP does not match READY/configuration")
+        elif status == "PASS":
+            expected = 0 if watchdog else self.config.get("cycles", 100)
+            if (
+                self.ready is None
+                or self.sleep_started is not None
+                or self.ready[1] != expected
+                or current != (self.ready[0] + 1, expected)
+                or record.get("phase") != (4 if watchdog else 5)
+            ):
+                raise ValueError("PASS lacks a complete observed run and final reset")
+
+    def acknowledged(self, record, now):
+        if self.config is not None and record["status"] == "SLEEP" and self.sleep_started is None:
+            self.sleep_started = now
+
+def observe(args, manifest):
+    import serial
+
+    if not args.allow_run:
+        raise ValueError("sleep/reset execution requires --allow-run")
+    expected = None
+    if args.config is not None:
+        expected = json.loads(args.config.read_text())
+        if (
+            not expected.get("run")
+            or type(expected.get("cycles", 100)) is not int
+            or expected.get("cycles", 100) < 1
+        ):
+            raise ValueError("expected config requires a run name and positive cycle count")
+        validate_radio_config(expected)
+        if (
+            type(expected.get("sleep_ms")) is not int
+            or not 0 <= expected["sleep_ms"] <= 2147483647
+        ):
+            raise ValueError("expected config requires sleep_ms in 0..2147483647")
+        tolerance = expected.get("host_tolerance_s", 0)
+        if not isinstance(tolerance, (int, float)) or not 0 <= tolerance < float("inf"):
+            raise ValueError("host_tolerance_s must be finite and nonnegative")
+    progress = RunProgress(expected)
+    seen = set()
+    started_ns = time.monotonic_ns()
+    started = started_ns / 1e9
+    last_progress = started
+    connection = None
+    buffer = b""
+    with args.log.open("x", buffering=1) as log:
+        wall_before_ns = time.monotonic_ns()
+        wall_s = time.time()
+        wall_after_ns = time.monotonic_ns()
+        log.write(json.dumps({
+            "host_start": wall_s,
+            "usb_serial": manifest["usb_serial"],
+            "host_start_monotonic_ns": started_ns,
+            "host_wall_read_before_monotonic_ns": wall_before_ns,
+            "host_wall_read_after_monotonic_ns": wall_after_ns,
+            "instrumentation_schema": 1,
+            "public_host_sha256": PUBLIC_HOST_SHA256,
+        }) + "\n")
+
+        def timed_ack(record):
+            # ACK text and write/flush ordering are exactly those of public host.py.
+            before_ns = time.monotonic_ns()
+            connection.write(acknowledgement(record).encode())
+            after_write_ns = time.monotonic_ns()
+            connection.flush()
+            after_flush_ns = time.monotonic_ns()
+            return before_ns, after_write_ns, after_flush_ns
+
+        def log_ack(record, stamps):
+            log.write(json.dumps({
+                "host_event": "ack_timing",
+                "run": record["run"], "boot": record["boot"],
+                "completed": record["completed"], "ack_status": record["status"],
+                "host_elapsed_s": (stamps[2] - started_ns) / 1e9,
+                "ack_write_before_monotonic_ns": stamps[0],
+                "ack_write_after_monotonic_ns": stamps[1],
+                "ack_flush_after_monotonic_ns": stamps[2],
+            }) + "\n")
+
+        def log_non_test(line):
+            log.write(json.dumps({
+                "host_event": "non_test_line",
+                "host_elapsed_s": time.monotonic() - started,
+                "line_hex": line.hex(),
+                "line_text": line.decode("utf-8", errors="backslashreplace"),
+            }) + "\n")
+        try:
+            while time.monotonic() - last_progress < args.timeout:
+                try:
+                    if connection is None:
+                        port = port_for(manifest)
+                        if port is None:
+                            time.sleep(0.2)
+                            continue
+                        connection = serial.Serial(port, 115200, timeout=0.2, exclusive=True)
+                        buffer = b""
+                        # Establish host presence after DTR/enumeration. This
+                        # also terminates a partial line from an earlier client.
+                        connection.write(b"\nHELLO\n")
+                        connection.flush()
+                    buffer += connection.read(connection.in_waiting or 1)
+                    while b"\n" in buffer:
+                        line, buffer = buffer.split(b"\n", 1)
+                        index = line.find(PREFIX)
+                        if index < 0:
+                            log_non_test(line)
+                            continue
+                        if line[:index].strip():
+                            log_non_test(line[:index])
+                        try:
+                            record = parse_record(line)
+                        except (ValueError, UnicodeError):
+                            # A disconnect may truncate JSON or split a UTF-8
+                            # character. Never acknowledge it or extend timeout.
+                            log.write(
+                                json.dumps(
+                                    {
+                                        "host_event": "malformed_record",
+                                        "line_hex": line.hex(),
+                                        "line_text": line.decode("utf-8", errors="backslashreplace"),
+                                        "line_bytes": len(line),
+                                        "host_elapsed_s": time.monotonic() - started,
+                                    }
+                                )
+                                + "\n"
+                            )
+                            continue
+                        record["host_elapsed_s"] = time.monotonic() - started
+                        try:
+                            validate_expected_record(record, expected)
+                        except ValueError:
+                            log.write(json.dumps(record) + "\n")
+                            raise
+                        status = record.get("status")
+                        if status in ("FAIL", "STOPPED"):
+                            log.write(json.dumps(record) + "\n")
+                            raise RuntimeError(str(record))
+                        if (status != "SLEEP" or record.get("protocol") == 2) and (
+                            record.get("uid", "").lower() != manifest["unique_id"].lower()
+                        ):
+                            raise ValueError("reconnected target identity mismatch")
+                        try:
+                            progress.check(record, time.monotonic() - started)
+                        except ValueError:
+                            log.write(json.dumps(record) + "\n")
+                            raise
+                        if status == "SLEEP":
+                            log.write(json.dumps(record) + "\n")
+                            if record.get("protocol") == 2:
+                                ack_stamps = timed_ack(record)
+                                progress.acknowledged(record, time.monotonic() - started)
+                                log_ack(record, ack_stamps)
+                            continue
+                        key = (record["run"], record["boot"])
+                        if key not in seen:
+                            seen.add(key)
+                            last_progress = time.monotonic()
+                            log.write(json.dumps(record) + "\n")
+                            print(json.dumps(record), flush=True)
+                        ack_stamps = timed_ack(record)
+                        log_ack(record, ack_stamps)
+                        if status == "PASS":
+                            return
+                    if len(buffer) > 65536:
+                        raise RuntimeError("unbounded non-test serial output")
+                    if port_for(manifest) is None:
+                        log_fragment(log, buffer, started)
+                        connection.close()
+                        connection = None
+                        buffer = b""
+                except (OSError, serial.SerialException):
+                    log_fragment(log, buffer, started)
+                    buffer = b""
+                    if connection is not None:
+                        connection.close()
+                        connection = None
+                    time.sleep(0.2)
+            raise TimeoutError("No boot progress within timeout; log is incomplete, not PASS")
+        finally:
+            if connection is not None:
+                connection.close()

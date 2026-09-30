@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "created_utc": "2026-09-29T16:40:31.902731+00:00",
+  "prior_sequence": "cmp300v2",
+  "prior_A_result": "PASS",
+  "prior_B_LS_result": "FAIL",
+  "B_failure": "RTC duration: observed2s after request300000ms, completed0, nextbootcause3",
+  "short_RAM_probe": "Three lightsleep2500 calls returned2500..2501ms; no reset/filesystem writes, backup unchanged, friendlyREPL verified",
+  "cause": "UNRESOLVED; short probe success does not explain early return in original timed harness",
+  "scope": "One new unchanged B-LS3x300s attempt, then remaining five profiles only if it passes all original gates. Keep prior failure and valid A. Stop on any new failure.",
+  "firmware_or_sleep_harness_changed": false,
+  "explicit_root_review_completed": true,
+  "state_after_probe": "Candidate firmware in controlled friendlyREPL; original app remains parked; prior harness main remains on flash"
+}

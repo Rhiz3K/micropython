@@ -1,0 +1,18 @@
+{
+  "result": "FAIL",
+  "artifact": "baseline-09f5-usbq",
+  "label": "cmp300ref-switch-usbfix",
+  "started": {
+    "host_utc": "2026-09-29T18:14:09.863939+00:00",
+    "host_monotonic": 526585.883316125
+  },
+  "phase": "ordinary-reset",
+  "error_type": "RuntimeError",
+  "reason": "RTC continuity differs from host elapsed time by more than 5 seconds",
+  "expected_firmware_updated": true,
+  "note": "No automatic rollback, retry, app launch or additional reset. Guard/full backup are preserved.",
+  "finished": {
+    "host_utc": "2026-09-29T18:15:01.209547+00:00",
+    "host_monotonic": 526637.228584458
+  }
+}

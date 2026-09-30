@@ -1,0 +1,23 @@
+{
+  "result": "FAIL",
+  "run_label": "cmp300v2-b-lightsleep-reset",
+  "profile": "B-LS",
+  "artifact": "candidate-91e91",
+  "functional_result": "FAIL",
+  "capture_result": "PASS",
+  "energy_result": "NOT_RUN",
+  "started": {
+    "utc": "2026-09-29T16:32:44.284195+00:00",
+    "monotonic_ns": 520500300042416
+  },
+  "error_type": "RuntimeError",
+  "reason": "Hardware suite failed; no next profile and no automatic recovery",
+  "complete_cycle_energy_model_valid": false,
+  "root_recovery_required": true,
+  "failed_phase": "suite",
+  "finished": {
+    "utc": "2026-09-29T16:33:05.433417+00:00",
+    "monotonic_ns": 520521449276541
+  },
+  "cleanup_errors": []
+}

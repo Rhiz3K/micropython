@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "pico_only_disconnected_confirmed": true,
+  "meter_and_hub_remained_connected_confirmed": true,
+  "normal_reconnection_confirmed": true,
+  "currently_connected_and_no_further_disconnect_confirmed": true,
+  "recorded_utc": "2026-09-29T19:08:41.821970+00:00",
+  "measurement_window_verified": false,
+  "reason": "Reply received after capture closed; prior watcher timed out without observed absence. No no-load window or current result inferred."
+}

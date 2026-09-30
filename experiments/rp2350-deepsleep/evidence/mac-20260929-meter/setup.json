@@ -1,0 +1,24 @@
+{
+  "confirmed_by_user": true,
+  "board": "Pico 2 W ARM",
+  "display": "Waveshare Pico-ePaper-2.9 B/W V2",
+  "display_pixels": [
+    296,
+    128
+  ],
+  "power_path": [
+    "USB hub",
+    "JT-UM120 IN",
+    "JT-UM120 OUT",
+    "Pico USB"
+  ],
+  "meter_pc_port": "same USB hub",
+  "debugger": false,
+  "other_power": false,
+  "host_os": "macOS 27.2 build 26B5091g arm64",
+  "source": "91e91d58de8513fbf3f3e2829e49bf22843fac86",
+  "historical_results_are_new": false,
+  "backup_verified": true,
+  "original_file_count": 29,
+  "created_utc": "2026-09-29T14:07:11.538254+00:00"
+}

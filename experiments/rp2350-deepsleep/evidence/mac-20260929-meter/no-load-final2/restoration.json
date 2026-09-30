@@ -1,0 +1,22 @@
+{
+  "result": "PASS",
+  "firmware_artifact": "candidate-91e91",
+  "firmware_bin_sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b",
+  "runtime_flash_bytes_verified": true,
+  "original_files_verified": 29,
+  "original_directories_verified_including_root": 7,
+  "original_main_restored_last": true,
+  "all_three_backup_regions_restored": true,
+  "rtc_restored_from_fresh_saved_plus_elapsed": true,
+  "rtc_quantization_s": 1,
+  "fresh_rtc_read_bracket_s": 0.037742957938462496,
+  "radio_and_ble_inactive": true,
+  "panel_registers_verified_parked": true,
+  "panel_reprepared_without_refresh": true,
+  "original_application_started": false,
+  "friendly_repl_verified": true,
+  "serial_owner_closed": true,
+  "reset_performed": false,
+  "host_utc": "2026-09-29T19:24:45.235838+00:00",
+  "host_monotonic": 530821.26036375
+}

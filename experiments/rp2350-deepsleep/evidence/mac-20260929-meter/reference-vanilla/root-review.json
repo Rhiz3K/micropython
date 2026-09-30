@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "artifact": "baseline-09f5",
+  "explicit_root_review_completed": true,
+  "single_profile_only": true,
+  "automatic_switches": false,
+  "automatic_retry": false,
+  "measurement_timing_gates_unchanged": true,
+  "rtc_continuity_failure_accepted_only_for_fresh_fixture": true,
+  "guard_public_sha256": "e0b4c3389f7e374729081252f473a0f242c34551824acee302cf643a3aabe9c8",
+  "created_utc": "2026-09-29T18:02:11.855258+00:00",
+  "decision": "Run only the originally declared upstream-vanilla 3x300s profile from the freshly verified guard. Retain original switch and sequence FAIL. RTC is seeded by the unchanged fixture before every measured interval; original user RTC will be restored from initial state plus host elapsed at the end. No current or energy result exists yet for this reference.",
+  "limitations": [
+    "Cause of the switch RTC discontinuity is unresolved.",
+    "Supplemental guard verification does not repair or establish continuity across BOOTSEL.",
+    "Fresh idle rate check is separate from the original failed switch gate."
+  ],
+  "switch_label": "cmp300deep-switch-vanilla",
+  "switch_result": "FAIL",
+  "rtc_continuity": "FAIL"
+}

@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "original_files_verified": 29,
+  "original_directories_verified": 7,
+  "actual_candidate_flash_verified": true,
+  "fresh_original_main_backup_verified": true,
+  "all_three_backup_regions_unchanged": true,
+  "guard_main_verified": true,
+  "panel_dependency_files_added": 3,
+  "friendly_repl_verified": true,
+  "serial_owner_closed": true,
+  "reset_performed": false,
+  "original_application_started": false,
+  "host_source_sha256": "9a1bc1461c874fde35d682d7a0f32e9d7cd0ee119ea41994f6f06d8ee9963195",
+  "source_proof_sha256": "a17cd978c35fa7fd7c3eb3f09f8a6fd05e0a10316c19651709644b96f02ba73b",
+  "fresh_snapshot_sha256": {
+    "before-private.json": "955a915aa89f24d278caa64434a7cbbc4aedfa99a82fb1c196ca49d5127d82aa",
+    "after-private.json": "14480c9ff5e52cdbef5fe6a6d1c1f24b4b4e8da371d7249062576c18a9a01636",
+    "original-main-readback.py": "dd5d46130dd872b5849c4328e17ce06363067d72356778542fb7deaf50b3d6b9",
+    "guard-proof-private.json": "bb05927c3359904f82063fc18f18d5114859543586c8e432931bb8056c45a311"
+  },
+  "host_utc": "2026-09-29T20:02:04.657438+00:00",
+  "host_monotonic": 533060.68254575
+}

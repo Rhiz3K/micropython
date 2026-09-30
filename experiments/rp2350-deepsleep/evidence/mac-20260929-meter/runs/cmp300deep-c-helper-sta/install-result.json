@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "main_source": "device-helper.py",
+  "main_sha256": "665a106b32e7635170f3aee65522ba7090100a656f457b4ce495fd9b6cf6363b",
+  "original_files_unchanged_except_guarded_main": true,
+  "readback_verified": true,
+  "host_utc": "2026-09-29T17:33:30.179293+00:00",
+  "host_monotonic": 524146.197073416
+}

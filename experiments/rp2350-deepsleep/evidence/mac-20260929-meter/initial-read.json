@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "os": "macOS 27.2 arm64",
+  "build": "RPI_PICO2_W",
+  "board": "Raspberry Pi Pico 2 W with RP2350",
+  "firmware_version": "v1.30.0-preview.88.g764de396cf.dirty.usbq1 on 2026-09-28 (GNU 14.3.1 MinSizeRel)",
+  "files_backed_up": 29,
+  "backup_verified_by_sha256": true,
+  "wdt_enabled": false,
+  "reset_cause": 4,
+  "board_reset_performed": false,
+  "device_file_writes": false,
+  "stopped_friendly_repl": true,
+  "host_utc": "2026-09-29T14:00:10.594395+00:00"
+}

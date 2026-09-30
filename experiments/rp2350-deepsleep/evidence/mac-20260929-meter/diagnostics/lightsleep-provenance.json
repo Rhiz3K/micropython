@@ -1,0 +1,20 @@
+{
+  "candidate_runtime": "v1.30.0-preview.104.g91e91d58de.dirty",
+  "candidate_bin_sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b",
+  "bin_hash_scope": "Expected local artifact; no fresh flash readback in this diagnostic.",
+  "port_selection_scope": "CDC serial ports only; not an IOKit/complete USB topology proof.",
+  "host_sha256": "3ac725389729646a34bc081df520c5981cd968bc2ceccc884721289bc4ac5f74",
+  "payload_sha256": "d74f619ce8dec8b2e7a1f2f41d0fe5d74f46316e8de195447e545e3bdd45c3a6",
+  "created": {
+    "utc": "2026-09-29T18:22:26.010952+00:00",
+    "monotonic_ns": 527082030273708
+  },
+  "source_sha256": {
+    "sdk/addressmap.h": "1cbb8830274b7db50e8da2780b67def9e3347135fc46ff1fb1784fa7941eecbb",
+    "sdk/powman.h": "aa425904c4613047406e7c1bc778d77d07e61cf725b3f3fa439e5ba661c1a450",
+    "sdk/m33.h": "68700a41c76d2bad0ecb23c869e4938e4e7ec9be4c817c6ae7c745fd9c7495b7",
+    "sdk/intctrl.h": "2262653a2bd30d93e340e35b85a13c44f3f46fc7a14ebdd1125e3c45257a803d",
+    "sdk/watchdog.h": "23e76009dcac96a73169f13f50e48a5b04943d0c33f60e14a82c31eb740ae6a6",
+    "device.py": "2dfabddd920d7b97b79e8c28084dcfbd945da20420a0171d3be276753feac96e"
+  }
+}

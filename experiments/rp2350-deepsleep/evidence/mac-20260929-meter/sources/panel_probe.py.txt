@@ -1,0 +1,87 @@
+"""Private B/W V2 test fixture; no refresh, wireless import, or radio GPIO access.
+
+The vendor reset/controller/LUT and sleep commands are unchanged. Only the
+constructor's explicit pins and bounded BUSY waits replace vendor defaults.
+Fully reconstruct on every boot; parked input buffers must not be reused.
+"""
+import framebuf
+import machine
+import os
+import time
+
+import rp2350_epd_vendor as vendor
+import pico_epaper29_lowpower
+
+BUSY_TIMEOUT_MS = 30000
+PHASE_TIMEOUT_MS = 45000
+
+
+class BoundedEPD(vendor.EPD_2in9_Landscape):
+    def __init__(self):
+        self.started = time.ticks_ms()
+        self.busy_waits = []
+        self.reset_pin = machine.Pin(12, machine.Pin.OUT, value=0)
+        self.cs_pin = machine.Pin(9, machine.Pin.OUT, value=1)
+        self.dc_pin = machine.Pin(8, machine.Pin.OUT, value=0)
+        self.busy_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_UP)
+        self.width, self.height = vendor.EPD_WIDTH, vendor.EPD_HEIGHT
+        self.partial_lut = vendor.WF_PARTIAL_2IN9
+        self.full_lut = vendor.WS_20_30
+        self.spi = machine.SPI(1, baudrate=4000000, polarity=0, phase=0,
+                               sck=machine.Pin(10), mosi=machine.Pin(11), miso=None)
+        self.buffer = bytearray(self.height * self.width // 8)
+        super(vendor.EPD_2in9_Landscape, self).__init__(
+            self.buffer, 296, 128, framebuf.MONO_VLSB)
+        try:
+            self.init()
+        except BaseException:
+            self.force_stop()
+            raise
+
+    def ReadBusy(self):
+        started = time.ticks_ms()
+        initial = self.busy_pin.value()
+        while True:
+            now = time.ticks_ms()
+            if time.ticks_diff(now, self.started) >= PHASE_TIMEOUT_MS:
+                raise RuntimeError("EPD phase exceeded 45000 ms")
+            busy = self.busy_pin.value()
+            if busy == 0:
+                self.busy_waits.append({"initial": initial, "final": busy,
+                                        "elapsed_ms": time.ticks_diff(now, started)})
+                return
+            if time.ticks_diff(now, started) >= BUSY_TIMEOUT_MS:
+                raise RuntimeError("EPD BUSY stayed high for 30000 ms")
+            time.sleep_ms(10)
+
+    def force_stop(self):
+        self.reset_pin.value(0)
+        self.cs_pin.value(1)
+        self.spi.deinit()
+
+
+def prepare():
+    if os.uname().machine != "Raspberry Pi Pico 2 W with RP2350":
+        raise OSError("Pico 2 W / RP2350 fixture required")
+    started = time.ticks_ms()
+    epd = None
+    try:
+        epd = BoundedEPD()
+        epd.sleep()  # Vendor 0x10/0x01, 2000 ms, RST low; no display refresh.
+        if epd.reset_pin.value() != 0:
+            raise OSError("Panel reset did not finish low")
+        epd.force_stop()  # Must precede parking, because this sets CS output high.
+        waits = epd.busy_waits
+        pico_epaper29_lowpower.park_after_sleep()
+        # Do not inspect GPIO values or BUSY after the public helper disables IE.
+        return {"fixture": "Waveshare Pico-ePaper-2.9 B/W V2",
+                "status": "PREPARED", "elapsed_ms": time.ticks_diff(time.ticks_ms(), started),
+                "busy_waits": waits, "refreshed": False,
+                "vendor_sleep_completed": True, "park_registers_verified": True,
+                "radio_pins_touched": False}
+    except BaseException:
+        if epd is not None:
+            epd.force_stop()
+        else:
+            machine.Pin(12, machine.Pin.OUT, value=0)
+        raise

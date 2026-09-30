@@ -1,0 +1,46 @@
+{
+  "result": "FAIL",
+  "started": {
+    "utc": "2026-09-29T18:02:44.645039+00:00",
+    "monotonic_ns": 525900663430500
+  },
+  "candidate_restored": false,
+  "current_artifact_retained": false,
+  "root_recovery_required": true,
+  "error_type": "RuntimeError",
+  "reason": "Hardware suite failed; no next profile and no automatic recovery",
+  "failed_phase": "suite",
+  "note": "No automatic retry, switch, rollback or reset; root owns recovery.",
+  "finished": {
+    "utc": "2026-09-29T18:03:03.752183+00:00",
+    "monotonic_ns": 525919770582500
+  },
+  "elapsed_s": 19.107179459067993,
+  "profiles": [
+    {
+      "result": "FAIL",
+      "run_label": "cmp300refvanilla-b-upstream-vanilla",
+      "profile": "B-upstream-vanilla",
+      "artifact": "baseline-09f5",
+      "functional_result": "FAIL",
+      "capture_result": "PASS",
+      "energy_result": "NOT_RUN",
+      "started": {
+        "utc": "2026-09-29T18:02:44.647839+00:00",
+        "monotonic_ns": 525900666230916
+      },
+      "error_type": "RuntimeError",
+      "reason": "Hardware suite failed; no next profile and no automatic recovery",
+      "complete_cycle_energy_model_valid": false,
+      "root_recovery_required": true,
+      "failed_phase": "suite",
+      "finished": {
+        "utc": "2026-09-29T18:03:03.750422+00:00",
+        "monotonic_ns": 525919768827416
+      },
+      "cleanup_errors": []
+    }
+  ],
+  "cleanup_errors": [],
+  "firmware_switches": []
+}

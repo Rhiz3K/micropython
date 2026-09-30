@@ -1,0 +1,78 @@
+{
+  "result": "FAIL",
+  "started": {
+    "utc": "2026-09-29T16:17:09.496413+00:00",
+    "monotonic_ns": 519565513121083
+  },
+  "candidate_restored": false,
+  "root_recovery_required": true,
+  "error_type": "RuntimeError",
+  "reason": "Hardware suite failed; no next profile and no automatic recovery",
+  "failed_phase": "suite",
+  "note": "No automatic retry/rollback/reset after failure; preserve logs and let root assess live state.",
+  "finished": {
+    "utc": "2026-09-29T16:33:05.441023+00:00",
+    "monotonic_ns": 520521456877291
+  },
+  "elapsed_s": 955.9437875829753,
+  "profiles": [
+    {
+      "result": "PASS",
+      "run_label": "cmp300v2-a-sleep-reset",
+      "profile": "A",
+      "artifact": "candidate-91e91",
+      "functional_result": "PASS",
+      "capture_result": "PASS",
+      "energy_result": "PASS",
+      "started": {
+        "utc": "2026-09-29T16:17:09.499278+00:00",
+        "monotonic_ns": 519565515985000
+      },
+      "analysis_sha256": "a681b4e27ac0e533e02c4aa0f78d8938f08bf901c73df8947df1706adc00e8f6",
+      "complete_cycle_energy_model_valid": true,
+      "finished": {
+        "utc": "2026-09-29T16:32:44.282527+00:00",
+        "monotonic_ns": 520500298372708
+      },
+      "cleanup_errors": []
+    },
+    {
+      "result": "FAIL",
+      "run_label": "cmp300v2-b-lightsleep-reset",
+      "profile": "B-LS",
+      "artifact": "candidate-91e91",
+      "functional_result": "FAIL",
+      "capture_result": "PASS",
+      "energy_result": "NOT_RUN",
+      "started": {
+        "utc": "2026-09-29T16:32:44.284195+00:00",
+        "monotonic_ns": 520500300042416
+      },
+      "error_type": "RuntimeError",
+      "reason": "Hardware suite failed; no next profile and no automatic recovery",
+      "complete_cycle_energy_model_valid": false,
+      "root_recovery_required": true,
+      "failed_phase": "suite",
+      "finished": {
+        "utc": "2026-09-29T16:33:05.433417+00:00",
+        "monotonic_ns": 520521449276541
+      },
+      "cleanup_errors": []
+    }
+  ],
+  "cleanup_errors": [],
+  "firmware_switches": [
+    {
+      "artifact": "baseline-09f5",
+      "label": "cmp300v2-switch-vanilla"
+    },
+    {
+      "artifact": "baseline-09f5-usbq",
+      "label": "cmp300v2-switch-usbfix"
+    },
+    {
+      "artifact": "candidate-91e91",
+      "label": "cmp300v2-return-candidate"
+    }
+  ]
+}

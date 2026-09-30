@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""Separate reviewed startup-window correction; v1 files and failed run stay intact.
+
+The original 95..105 Hz gate is applied after at least 500 recording samples
+and five seconds since collector launch. Liveness/freshness remain checked
+during this wait. CRC/gap limits, analyzer, suite, firmware and all profiles are
+unchanged. This is not an automatic retry or a relaxed cadence limit.
+"""
+import json
+import sys
+
+import measure_variants as base
+
+MINIMUM_STARTUP_SAMPLES = 500
+MINIMUM_STARTUP_ELAPSED_S = 5
+
+
+class StartupWindowSupervisor(base.Supervisor):
+    def check_live_meter(self, directory, start_ns, startup=False):
+        if startup:
+            health_path = directory / 'health.json'
+            if health_path.exists():
+                health = base.read_json(health_path)
+                if health.get('phase') == 'recording':
+                    # Use the unchanged live gate before considering warm-up.
+                    # It checks ownership, collector/caffeinate liveness, clock
+                    # provenance, freshness and age of valid measurements.
+                    super().check_live_meter(directory, start_ns, startup=False)
+                    if (health.get('recording_samples', 0) < MINIMUM_STARTUP_SAMPLES
+                            or (base.time.monotonic_ns() - start_ns) / 1e9
+                            < MINIMUM_STARTUP_ELAPSED_S):
+                        return None
+        return super().check_live_meter(directory, start_ns, startup=startup)
+
+
+def configure():
+    if 'measure_variants_v2.py' not in base.SOURCE_NAMES:
+        base.SOURCE_NAMES = (*base.SOURCE_NAMES, 'measure_variants_v2.py')
+    base.LIMITS = {**base.LIMITS,
+                   'meter_startup_minimum_recording_samples': MINIMUM_STARTUP_SAMPLES,
+                   'meter_startup_minimum_elapsed_s': MINIMUM_STARTUP_ELAPSED_S}
+    base.Supervisor = StartupWindowSupervisor
+
+
+if __name__ == '__main__':
+    try:
+        configure()
+        sys.exit(base.main())
+    except Exception as exc:
+        print(json.dumps({'result': 'ERROR_BEFORE_OR_OUTSIDE_SUPERVISED_RUN',
+                          'error_type': type(exc).__name__, 'reason': str(exc)}), file=sys.stderr)
+        sys.exit(1)

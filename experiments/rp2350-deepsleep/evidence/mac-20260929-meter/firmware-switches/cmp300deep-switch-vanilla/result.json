@@ -1,0 +1,18 @@
+{
+  "result": "FAIL",
+  "artifact": "baseline-09f5",
+  "label": "cmp300deep-switch-vanilla",
+  "started": {
+    "host_utc": "2026-09-29T17:49:05.754505+00:00",
+    "host_monotonic": 525081.7730435
+  },
+  "phase": "ordinary-reset",
+  "error_type": "RuntimeError",
+  "reason": "RTC continuity differs from host elapsed time by more than 5 seconds",
+  "expected_firmware_updated": true,
+  "note": "No automatic rollback, retry, app launch or additional reset. Guard/full backup are preserved.",
+  "finished": {
+    "host_utc": "2026-09-29T17:49:58.724038+00:00",
+    "host_monotonic": 525134.742173291
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "action": "switch",
+  "label": "to-usbq-for-compare",
+  "result": "COMPLETE",
+  "started": {
+    "host_utc": "2026-09-29T20:32:01.094490+00:00",
+    "host_monotonic": 534857.119258833
+  },
+  "bootsel_host_residence_s": 48.96936975000426,
+  "transition": {
+    "aon_elapsed_s": 102.089,
+    "host_elapsed_lower_s": 51.4269077910576,
+    "host_elapsed_upper_s": 51.53102687501814,
+    "aon_minus_host_midpoint_s": 50.61003266696213,
+    "within_transport_bracket_plus_20ms": false,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "post_bootrom_reset": {
+    "aon_elapsed_s": 0.88,
+    "host_elapsed_lower_s": 0.8309387920890003,
+    "host_elapsed_upper_s": 0.9322687909007072,
+    "aon_minus_host_midpoint_s": -0.0016037914948537901,
+    "within_transport_bracket_plus_20ms": true,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "steady_rate": {
+    "aon_elapsed_s": 5.056,
+    "host_elapsed_lower_s": 5.003659917041659,
+    "host_elapsed_upper_s": 5.104841333930381,
+    "aon_minus_host_midpoint_s": 0.001749374513980051,
+    "within_transport_bracket_plus_20ms": true,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "hardware_result": "OBSERVATION_ONLY",
+  "files_unchanged": true,
+  "powman_backup_unchanged": true,
+  "firmware": "baseline-09f5-usbq",
+  "friendly_repl": true,
+  "rtc_written": false,
+  "original_application_started": false,
+  "finished": {
+    "host_utc": "2026-09-29T20:33:00.849407+00:00",
+    "host_monotonic": 534916.874050916
+  },
+  "source_sha256": "6c44689d29088f05fbe50ac9e7141995fc610b3d14637598f2695d14ea192730"
+}

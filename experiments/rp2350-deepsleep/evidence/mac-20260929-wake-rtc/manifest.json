@@ -1,0 +1,735 @@
+{
+  "schema": 1,
+  "exporter_sha256": "c437302e2d4b0181411a971f556945303dbeff5716fd6343b702b14129ef458a",
+  "parent_exporter_sha256": "e5af4e0e7912917caad9a9e7b9af7958317b8091fcac99380c587a2f4bce6c8f",
+  "recovery_source_sha256": "b618bc2d687cb4596b85887f52dd795b2d2c08d823aa72401d39fe9a39e19a74",
+  "previous_exporter_sha256": "b377f0e6a3a7808846f0970a5378810a198530f4afc499430482f530c0aea7da",
+  "v3_exporter_sha256": "38bc7ab8f24739073071f2b7e7a996ef3429fa404777dad1f6a3d2f332c595d3",
+  "v2_exporter_sha256": "ad8152497ed46cfb5b3a58249d098ca1d3d917ee3de94c020deff621fd82ef06",
+  "corrected_retention_labels": [
+    "quiet200-deep-retention-1",
+    "quiet200-deep-retention-2"
+  ],
+  "controlled_followup_scope": "One explicitly authorized second attempt after a separate closed 20-second meter check; first failure remains unchanged. No automatic retry.",
+  "counter_fix_reason": "V2 safely rejected the closed analysis counter opened_identity_verified. V3 adds the two exact event names emitted by the pinned reader: opened_identity_verified and wall_vs_monotonic_clock_offset_jump; no counters or failed results are discarded.",
+  "corrected_retention_policy": {
+    "required_equal_regions": [
+      2
+    ],
+    "observed_regions": [
+      0,
+      1,
+      2
+    ],
+    "nonretained_regions": [
+      0,
+      1
+    ],
+    "comparison": "entry_snapshot",
+    "final_restoration": "separate_root_owned_all_three_regions"
+  },
+  "corrected_retention_source_sha256": {
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+    "wake-rtc-20260929/guard_deep2.py": "0136ea63241d973fb595a66b2c7305e31da91ad90a0f71d23c9344e4073d4a9a",
+    "wake-rtc-20260929/compare_ram_deep_retention.py": "2e0e7a0337d196c2c2338d7e284be41e8386884ead673635e415cca3e396aa79",
+    "wake-rtc-20260929/analyze_compare_deep_retention.py": "83e352a3cbd343e0770aaf85b08961e372d067aa3b569e2814f1ad1ac5e7b047"
+  },
+  "inputs": {
+    "wake-rtc-20260929/export_wake_public.py": {
+      "sha256": "e5af4e0e7912917caad9a9e7b9af7958317b8091fcac99380c587a2f4bce6c8f",
+      "bytes": 25711
+    },
+    "wake-rtc-20260929/export_wake_public_v2.py": {
+      "sha256": "ad8152497ed46cfb5b3a58249d098ca1d3d917ee3de94c020deff621fd82ef06",
+      "bytes": 28655
+    },
+    "wake-rtc-20260929/export_wake_public_v3.py": {
+      "sha256": "38bc7ab8f24739073071f2b7e7a996ef3429fa404777dad1f6a3d2f332c595d3",
+      "bytes": 29328
+    },
+    "wake-rtc-20260929/export_wake_public_v4.py": {
+      "sha256": "b377f0e6a3a7808846f0970a5378810a198530f4afc499430482f530c0aea7da",
+      "bytes": 34766
+    },
+    "meter_reader.py": {
+      "sha256": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+      "bytes": 31369
+    },
+    "analyze_stream.py": {
+      "sha256": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+      "bytes": 35467
+    },
+    "lightsleep-repeat/host.py": {
+      "sha256": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+      "bytes": 35745
+    },
+    "wake-rtc-20260929/guard_deep2.py": {
+      "sha256": "0136ea63241d973fb595a66b2c7305e31da91ad90a0f71d23c9344e4073d4a9a",
+      "bytes": 20753
+    },
+    "wake-rtc-20260929/compare_ram_deep_retention.py": {
+      "sha256": "2e0e7a0337d196c2c2338d7e284be41e8386884ead673635e415cca3e396aa79",
+      "bytes": 24961
+    },
+    "wake-rtc-20260929/analyze_compare_deep_retention.py": {
+      "sha256": "83e352a3cbd343e0770aaf85b08961e372d067aa3b569e2814f1ad1ac5e7b047",
+      "bytes": 15725
+    },
+    "wake-rtc-20260929/recover_bootsel.py": {
+      "sha256": "b618bc2d687cb4596b85887f52dd795b2d2c08d823aa72401d39fe9a39e19a74",
+      "bytes": 12629
+    },
+    "wake-rtc-20260929/entry-public.json": {
+      "sha256": "c35e50897355451b5c3f603a68fe34100a4ea4af6d7ae06ee47dfb64d70f2f6a",
+      "bytes": 383
+    },
+    "wake-rtc-20260929/guard/result-public.json": {
+      "sha256": "554b6aaa69fa711d759c412b05ced712ebe8640cb070c1f1c17b84806e7d1375",
+      "bytes": 1127
+    },
+    "lightsleep-repeat/runs/ls-repeat-1/result-public.json": {
+      "sha256": "2fdc679b2fc87aacb2b078fa6663f6a72b4b0f8b24be5651701590945ab86bfd",
+      "bytes": 10380
+    },
+    "wake-rtc-20260929/irq-runs/irq-lsdiag1-1/result-public.json": {
+      "sha256": "fca9f5daafdafd0209adf6af2a1dd53c66d835451d8b0947bd11a565ad9291e3",
+      "bytes": 40046
+    },
+    "wake-rtc-20260929/irq-runs/irq-poll200-1/result-public.json": {
+      "sha256": "ffcf1eb16946f121407cf94eaf12706d5d37befb92a8d70363603f29e66f3e21",
+      "bytes": 40304
+    },
+    "wake-rtc-20260929/rtc-runs/bootsel-same-30s/result-public.json": {
+      "sha256": "1a878d913d6287b65399c9ed0e6046dcb8cf8c8e43a4e4f54e63dc95a4ef9660",
+      "bytes": 2299
+    },
+    "wake-rtc-20260929/rtc-runs/bootsel-same-5s/result-public.json": {
+      "sha256": "b7b4df26724736e6314b36f168b41126da1a24a25dbd03cdf92ab8729ffdafb1",
+      "bytes": 2300
+    },
+    "wake-rtc-20260929/rtc-runs/idle-before/result-public.json": {
+      "sha256": "7704f4b0b8f79e3accf124f8c5fd97f4e0513d1ef9d79a423e49725f86baa184",
+      "bytes": 1694
+    },
+    "wake-rtc-20260929/rtc-runs/reset-1/result-public.json": {
+      "sha256": "16fbac5beac3176e798c1a9ceee7309e45d1efb168da51a611c8334dab1037a1",
+      "bytes": 1691
+    },
+    "wake-rtc-20260929/rtc-runs/reset-2/result-public.json": {
+      "sha256": "fe42beb2d2c3abe297d18fa19d9198fddf740f6bbcd355fa1ebbbbe5d63d486e",
+      "bytes": 1692
+    },
+    "wake-rtc-20260929/rtc-runs/reset-3/result-public.json": {
+      "sha256": "8ff15b2319aa4e73def047c0e15496f4d550b720b46672a1b31cd996d5cdf534",
+      "bytes": 1690
+    },
+    "wake-rtc-20260929/rtc-runs/return-candidate/result-public.json": {
+      "sha256": "b71108b988291f124b97bafa60109a788a0515f7878c5252463374dcee997d87",
+      "bytes": 2296
+    },
+    "wake-rtc-20260929/rtc-runs/to-lsdiag1/result-public.json": {
+      "sha256": "46cb8c2b38f9d6747c0fc3704df14b1d5c9fb1b6d11320a14e65bc722d840629",
+      "bytes": 2297
+    },
+    "wake-rtc-20260929/rtc-runs/to-usbq-for-compare/result-public.json": {
+      "sha256": "92dba014675dde6ae8c484dfa0ab687eba83bf7cca9501af6af755c6f226fcce",
+      "bytes": 2302
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-1/result-public.json": {
+      "sha256": "4a5dc6b3907c253abfd999509a1d15e75fb38bc1be7def33b4714fd1c6c1cc4f",
+      "bytes": 1375
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-1/meter/health.json": {
+      "sha256": "ed0ce95a68820b299e2c7a1162dc70348ce4e40c6654f8bb7efeb8b4cac93cc9",
+      "bytes": 1224
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-1/meter/summary.json": {
+      "sha256": "01019e6c6d53d84c4a8d4a8afafd4e2dbaeed20bc9810f8ccb14eb45217c84c2",
+      "bytes": 3370
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-1/meter/metadata.json": {
+      "sha256": "32e62ba103b7e8afab0bb9c4040a699e871d52c7cf8cc8844d1f39fc5dfa355a",
+      "bytes": 1384
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/result-public.json": {
+      "sha256": "af15d2d15a05af665d13bfd81c658c1dd5bd772c224b59a32baab2e8a66e0d05",
+      "bytes": 2161
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/meter/health.json": {
+      "sha256": "da25b7e05871abded7312e5d95e5b9bd5d8889474721301d0872408b7eae0595",
+      "bytes": 1217
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/meter/summary.json": {
+      "sha256": "4dbfae49acc48e350eecadfc48805fd30fc063222194cac9c87caed4cf084738",
+      "bytes": 3469
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/meter/metadata.json": {
+      "sha256": "48710cc4aa35e9b3bfb05b34de1b3264b91d5fbf92ab9e3f765dfbd9edb011b3",
+      "bytes": 1384
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/result-public.json": {
+      "sha256": "18a92305014bcccf189f96be584778e8686dfc073247019dba1dca7815012b03",
+      "bytes": 3433
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/meter/health.json": {
+      "sha256": "a59fa237e9a8add89ddcecdccb9c0b89d3ecf6bbe242d3290634fe099a06a5c2",
+      "bytes": 1227
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/meter/summary.json": {
+      "sha256": "16e375f078e1a3318dde0b425e7bd059a17a9174f48e48d978f9d4cb283f2233",
+      "bytes": 3375
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/meter/metadata.json": {
+      "sha256": "9dd62ae2f0df569256eabf979c7e06c892ca2b759791d46afe69125e47800481",
+      "bytes": 1384
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis/analysis.json": {
+      "sha256": "48ad9e28611feb5f7d54c4daa673d084b194da3331105b4645c2dd76b6f38129",
+      "bytes": 59187
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis/SHA256SUMS": {
+      "sha256": "465e970f37db0c3f9554f32740e82f0c2c73bef5b6e9f94d4dc559e2a0c2c940",
+      "bytes": 161
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis-input.json": {
+      "sha256": "e73a8d1629dd448b1ab9f1c8c4a4f02baaa02ab6440a74ecfd8106f7c577b14b",
+      "bytes": 2923
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis/trace-bins.csv": {
+      "sha256": "c0af518d7347bdafb3467ba4ee4a406267d1c6154e19533447fdcded52832c28",
+      "bytes": 52433
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-1/result-public.json": {
+      "sha256": "0b213f61dc23f4c4294b7f563ec11dcffe688126b0ab87553cafae744c94e4dd",
+      "bytes": 1446
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-1/meter/health.json": {
+      "sha256": "7e089ab1e6de8138e80bff2739053c73ec9c83c7b038dafe50b381ff103010d1",
+      "bytes": 1204
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-1/meter/summary.json": {
+      "sha256": "5228da46f5dd073b15a84c7b5f32d13115876bf825b81d567dc0ac6c0c010388",
+      "bytes": 3463
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-1/meter/metadata.json": {
+      "sha256": "0028bbb2382657ca1b75e5cb57a5b7c46d50750650407c78e234975f67937b67",
+      "bytes": 1384
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/result-public.json": {
+      "sha256": "37dc323513a581dbcff09998a72355f721f7ed8b56405dacefe65ce441076031",
+      "bytes": 2317
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/meter/health.json": {
+      "sha256": "bc07ab9b7743d2c2a74c279933892a9572cddbf5dff7857fbb21e2426b6c0f0c",
+      "bytes": 1226
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/meter/summary.json": {
+      "sha256": "8bdc3205b19e522d465bc93ffa9e66405bd60bb4d2de1e17e7069e203a4d74a0",
+      "bytes": 3383
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/meter/metadata.json": {
+      "sha256": "39578a97499c01da8bc668315d3613dfd59bfb7a8bf83c13bda2ad256fb1b4f0",
+      "bytes": 1384
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis/analysis.json": {
+      "sha256": "3c7282332eacb5d6322131b473a489da95ad11968394aab4a917fce6c0569f1f",
+      "bytes": 57953
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis/SHA256SUMS": {
+      "sha256": "709a2f4baad7122b03e3637172220391ac1ca7fe9cbbef291d74b794f2a8c49c",
+      "bytes": 161
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis-input.json": {
+      "sha256": "007a8cdfe0a25fa3406e0662feefa4dc515f1a8d3c233ec5c8bf6cb4a696468a",
+      "bytes": 1862
+    },
+    "wake-rtc-20260929/guard.py": {
+      "sha256": "9a1bc1461c874fde35d682d7a0f32e9d7cd0ee119ea41994f6f06d8ee9963195",
+      "bytes": 19932
+    },
+    "wake-rtc-20260929/compare_ram.py": {
+      "sha256": "85a29c43eeeeae06e336eaa24f7086e7e0985370f6746b9e4ef80f2bbbba83e9",
+      "bytes": 23080
+    },
+    "wake-rtc-20260929/analyze_compare_ram.py": {
+      "sha256": "50e56b42dbd08883e70c4c26e841fa15d9b0720ba97eb5173b6368e91906da49",
+      "bytes": 13918
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis/trace-bins.csv": {
+      "sha256": "f8775e8291dcede56f189bef256466d7fb83eadebe67d2520c0a4c302b7f31e7",
+      "bytes": 51525
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-usbq-1/result-public.json": {
+      "sha256": "9d1aee1f2a39c22332287616f816a30afd31a6e8ffba470160a7448b6b998cc6",
+      "bytes": 1868
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-usbq-1/meter/health.json": {
+      "sha256": "a43ea90b14124826ce8dfa8320c599e290f32346bff9e10d8d2b7b121170edee",
+      "bytes": 1192
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-usbq-1/meter/summary.json": {
+      "sha256": "79bd4fc312c7f3279726ef45057db7ccbaa71ac533cda1a3be7fbda726646062",
+      "bytes": 3383
+    },
+    "wake-rtc-20260929/compare-runs/quiet200-usbq-1/meter/metadata.json": {
+      "sha256": "58a61a96caa1eebba6dcc1cd1cf6b89d429a5e0dbdc072e71c15dcd4839347c8",
+      "bytes": 1384
+    },
+    "wake-rtc-20260929/restoration/result-public.json": {
+      "sha256": "3275f462a2be22b70375bcc888d8e0acdf5bc0a06511629000bdc34ee9da4c48",
+      "bytes": 1027
+    },
+    "wake-rtc-20260929/guard-deep2/result-public.json": {
+      "sha256": "eece1167ea111bfa646b5aa544e139e5c1544f72d2c612013a713b0152cda0d0",
+      "bytes": 1128
+    },
+    "wake-rtc-20260929/restoration-deep2/result-public.json": {
+      "sha256": "c2d09839a47afbbf39d620549421d26de5de027841772577c3aa104cd51e0ead",
+      "bytes": 1028
+    },
+    "wake-rtc-20260929/recovery-bootsel/result-public.json": {
+      "sha256": "e2e416a1740e593143bc4eb91fac465f66c0ead47436fe5813121b89004105fe",
+      "bytes": 1170
+    },
+    "wake-rtc-20260929/meter-stability-1/health.json": {
+      "sha256": "fad126bc1f69c9e496f554f55fe262bf80a23998dc2205bec30b9b677f329a7e",
+      "bytes": 1217
+    },
+    "wake-rtc-20260929/meter-stability-1/summary.json": {
+      "sha256": "b412bd2c8677951e9586b1126c41504046fdb74a74e8c93aefa84a995f28fc7f",
+      "bytes": 3366
+    },
+    "wake-rtc-20260929/meter-stability-1/metadata.json": {
+      "sha256": "1df9b6ac63fe54ab7957b5374e1c892c6322dbba2ae475408d44d6997116e6d5",
+      "bytes": 1382
+    },
+    "artifacts/candidate-91e91-lsdiag1/build-manifest.json": {
+      "sha256": "b5d859d21755dc40fc727ac10ab43415b1d03ccf93a4f9dd11075e64e7018e45",
+      "bytes": 7135
+    },
+    "wake-rtc-20260929/diagnostic-ls-v1/diagnostic.patch": {
+      "sha256": "96c7f9166548b7313ae37abef9ddddd46ba8b46c99177f382cbbe2ff5271da9e",
+      "bytes": 10205
+    },
+    "wake-rtc-20260929/rtc_probe.py": {
+      "sha256": "6c44689d29088f05fbe50ac9e7141995fc610b3d14637598f2695d14ea192730",
+      "bytes": 9828
+    },
+    "wake-rtc-20260929/switch_diagnostic.py": {
+      "sha256": "b52d332b22c142b8f1a8bbeebeefc1b5204fbee1fa8d9ee5c093aa411f45574e",
+      "bytes": 3646
+    },
+    "wake-rtc-20260929/irq_host.py": {
+      "sha256": "4993f47714e61cd513759a584d5bbe636c6ff1b4fc3525585aa2f6094b949f68",
+      "bytes": 16160
+    },
+    "wake-rtc-20260929/irq_poll200_host.py": {
+      "sha256": "35ee94795a94c7951b9da6b85cceec3ff43075c66e12716ea9b9c6a43f356659",
+      "bytes": 17019
+    },
+    "wake-rtc-20260929/export_wake_public_v5.py": {
+      "sha256": "c437302e2d4b0181411a971f556945303dbeff5716fd6343b702b14129ef458a",
+      "bytes": 35822
+    }
+  },
+  "outputs": {
+    "entry.json": {
+      "sha256": "c35e50897355451b5c3f603a68fe34100a4ea4af6d7ae06ee47dfb64d70f2f6a",
+      "bytes": 383,
+      "sources": [
+        "wake-rtc-20260929/entry-public.json"
+      ]
+    },
+    "guard.json": {
+      "sha256": "554b6aaa69fa711d759c412b05ced712ebe8640cb070c1f1c17b84806e7d1375",
+      "bytes": 1127,
+      "sources": [
+        "wake-rtc-20260929/guard/result-public.json"
+      ]
+    },
+    "repeat/ls-repeat-1.json": {
+      "sha256": "2fdc679b2fc87aacb2b078fa6663f6a72b4b0f8b24be5651701590945ab86bfd",
+      "bytes": 10380,
+      "sources": [
+        "lightsleep-repeat/runs/ls-repeat-1/result-public.json"
+      ]
+    },
+    "irq/irq-lsdiag1-1.json": {
+      "sha256": "fca9f5daafdafd0209adf6af2a1dd53c66d835451d8b0947bd11a565ad9291e3",
+      "bytes": 40046,
+      "sources": [
+        "wake-rtc-20260929/irq-runs/irq-lsdiag1-1/result-public.json"
+      ]
+    },
+    "irq/irq-poll200-1.json": {
+      "sha256": "ffcf1eb16946f121407cf94eaf12706d5d37befb92a8d70363603f29e66f3e21",
+      "bytes": 40304,
+      "sources": [
+        "wake-rtc-20260929/irq-runs/irq-poll200-1/result-public.json"
+      ]
+    },
+    "rtc/bootsel-same-30s.json": {
+      "sha256": "1a878d913d6287b65399c9ed0e6046dcb8cf8c8e43a4e4f54e63dc95a4ef9660",
+      "bytes": 2299,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/bootsel-same-30s/result-public.json"
+      ]
+    },
+    "rtc/bootsel-same-5s.json": {
+      "sha256": "b7b4df26724736e6314b36f168b41126da1a24a25dbd03cdf92ab8729ffdafb1",
+      "bytes": 2300,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/bootsel-same-5s/result-public.json"
+      ]
+    },
+    "rtc/idle-before.json": {
+      "sha256": "7704f4b0b8f79e3accf124f8c5fd97f4e0513d1ef9d79a423e49725f86baa184",
+      "bytes": 1694,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/idle-before/result-public.json"
+      ]
+    },
+    "rtc/reset-1.json": {
+      "sha256": "16fbac5beac3176e798c1a9ceee7309e45d1efb168da51a611c8334dab1037a1",
+      "bytes": 1691,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/reset-1/result-public.json"
+      ]
+    },
+    "rtc/reset-2.json": {
+      "sha256": "fe42beb2d2c3abe297d18fa19d9198fddf740f6bbcd355fa1ebbbbe5d63d486e",
+      "bytes": 1692,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/reset-2/result-public.json"
+      ]
+    },
+    "rtc/reset-3.json": {
+      "sha256": "8ff15b2319aa4e73def047c0e15496f4d550b720b46672a1b31cd996d5cdf534",
+      "bytes": 1690,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/reset-3/result-public.json"
+      ]
+    },
+    "rtc/return-candidate.json": {
+      "sha256": "b71108b988291f124b97bafa60109a788a0515f7878c5252463374dcee997d87",
+      "bytes": 2296,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/return-candidate/result-public.json"
+      ]
+    },
+    "rtc/to-lsdiag1.json": {
+      "sha256": "46cb8c2b38f9d6747c0fc3704df14b1d5c9fb1b6d11320a14e65bc722d840629",
+      "bytes": 2297,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/to-lsdiag1/result-public.json"
+      ]
+    },
+    "rtc/to-usbq-for-compare.json": {
+      "sha256": "92dba014675dde6ae8c484dfa0ab687eba83bf7cca9501af6af755c6f226fcce",
+      "bytes": 2302,
+      "sources": [
+        "wake-rtc-20260929/rtc-runs/to-usbq-for-compare/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-deep-1/result.json": {
+      "sha256": "4a5dc6b3907c253abfd999509a1d15e75fb38bc1be7def33b4714fd1c6c1cc4f",
+      "bytes": 1375,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-1/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-deep-1/meter/health.json": {
+      "sha256": "e4e7227f47676606b38030cb2623ba51a515942225b9141c2764f32267880225",
+      "bytes": 1541,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-1/meter/health.json"
+      ]
+    },
+    "comparisons/quiet200-deep-1/meter/summary.json": {
+      "sha256": "01019e6c6d53d84c4a8d4a8afafd4e2dbaeed20bc9810f8ccb14eb45217c84c2",
+      "bytes": 3370,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-1/meter/summary.json"
+      ]
+    },
+    "comparisons/quiet200-deep-1/meter/metadata.json": {
+      "sha256": "2b87cbf6460a0f69ea229d984efac0c9769ed127d1f82180dfa11407a147434a",
+      "bytes": 1242,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-1/meter/metadata.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-1/result.json": {
+      "sha256": "af15d2d15a05af665d13bfd81c658c1dd5bd772c224b59a32baab2e8a66e0d05",
+      "bytes": 2161,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-1/meter/health.json": {
+      "sha256": "aad3477b7b13d6caf0a96b6eb2f76068bae476f27557464afc671e390f71c456",
+      "bytes": 1534,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/meter/health.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-1/meter/summary.json": {
+      "sha256": "4dbfae49acc48e350eecadfc48805fd30fc063222194cac9c87caed4cf084738",
+      "bytes": 3469,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/meter/summary.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-1/meter/metadata.json": {
+      "sha256": "930a09688fc2afaf464cba1d0f0dd8286abee021cb34ef5a3245825dced1a184",
+      "bytes": 1242,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-1/meter/metadata.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-2/result.json": {
+      "sha256": "18a92305014bcccf189f96be584778e8686dfc073247019dba1dca7815012b03",
+      "bytes": 3433,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-2/meter/health.json": {
+      "sha256": "97e2f9bafc57f811245ab311b03adf8eb54ee0ce9522d7f7aa9cd0be4b26fdb7",
+      "bytes": 1544,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/meter/health.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-2/meter/summary.json": {
+      "sha256": "16e375f078e1a3318dde0b425e7bd059a17a9174f48e48d978f9d4cb283f2233",
+      "bytes": 3375,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/meter/summary.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-2/meter/metadata.json": {
+      "sha256": "74e5f3228d72462d3dfca860739092f032f7f26f4137c5bba706030140699b55",
+      "bytes": 1242,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/meter/metadata.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-2/analysis.json": {
+      "sha256": "48ad9e28611feb5f7d54c4daa673d084b194da3331105b4645c2dd76b6f38129",
+      "bytes": 59187,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis/analysis.json",
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis-input.json"
+      ]
+    },
+    "comparisons/quiet200-deep-retention-2/trace-bins.csv": {
+      "sha256": "c0af518d7347bdafb3467ba4ee4a406267d1c6154e19533447fdcded52832c28",
+      "bytes": 52433,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis/trace-bins.csv",
+        "wake-rtc-20260929/compare-runs/quiet200-deep-retention-2/analysis/SHA256SUMS"
+      ]
+    },
+    "comparisons/quiet200-ls-1/result.json": {
+      "sha256": "0b213f61dc23f4c4294b7f563ec11dcffe688126b0ab87553cafae744c94e4dd",
+      "bytes": 1446,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-1/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-ls-1/meter/health.json": {
+      "sha256": "45c1497809dd5e370e08671b5c426bdee3cea028230a6758c553c6a1a64e3404",
+      "bytes": 1521,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-1/meter/health.json"
+      ]
+    },
+    "comparisons/quiet200-ls-1/meter/summary.json": {
+      "sha256": "5228da46f5dd073b15a84c7b5f32d13115876bf825b81d567dc0ac6c0c010388",
+      "bytes": 3463,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-1/meter/summary.json"
+      ]
+    },
+    "comparisons/quiet200-ls-1/meter/metadata.json": {
+      "sha256": "b139b4863526ce442c432e42264f9d44c243a4054eca66b9ab213740caa6b4c6",
+      "bytes": 1242,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-1/meter/metadata.json"
+      ]
+    },
+    "comparisons/quiet200-ls-2/result.json": {
+      "sha256": "37dc323513a581dbcff09998a72355f721f7ed8b56405dacefe65ce441076031",
+      "bytes": 2317,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-ls-2/meter/health.json": {
+      "sha256": "11159e3584eeb8c065882a3f9d488e6eb9c4da381454aea35685e125d89440a1",
+      "bytes": 1543,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/meter/health.json"
+      ]
+    },
+    "comparisons/quiet200-ls-2/meter/summary.json": {
+      "sha256": "8bdc3205b19e522d465bc93ffa9e66405bd60bb4d2de1e17e7069e203a4d74a0",
+      "bytes": 3383,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/meter/summary.json"
+      ]
+    },
+    "comparisons/quiet200-ls-2/meter/metadata.json": {
+      "sha256": "45227ef509a8fa8c12709bc36fce1d0dfb41ed0cfbf5b749b48c24606a390b3d",
+      "bytes": 1242,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/meter/metadata.json"
+      ]
+    },
+    "comparisons/quiet200-ls-2/analysis.json": {
+      "sha256": "3c7282332eacb5d6322131b473a489da95ad11968394aab4a917fce6c0569f1f",
+      "bytes": 57953,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis/analysis.json",
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis-input.json"
+      ]
+    },
+    "comparisons/quiet200-ls-2/trace-bins.csv": {
+      "sha256": "f8775e8291dcede56f189bef256466d7fb83eadebe67d2520c0a4c302b7f31e7",
+      "bytes": 51525,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis/trace-bins.csv",
+        "wake-rtc-20260929/compare-runs/quiet200-ls-2/analysis/SHA256SUMS"
+      ]
+    },
+    "comparisons/quiet200-usbq-1/result.json": {
+      "sha256": "9d1aee1f2a39c22332287616f816a30afd31a6e8ffba470160a7448b6b998cc6",
+      "bytes": 1868,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-usbq-1/result-public.json"
+      ]
+    },
+    "comparisons/quiet200-usbq-1/meter/health.json": {
+      "sha256": "842a823943a764349af2e2b8b032bb55a1c397fef1e4f0efcc54f5730c966ab7",
+      "bytes": 1509,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-usbq-1/meter/health.json"
+      ]
+    },
+    "comparisons/quiet200-usbq-1/meter/summary.json": {
+      "sha256": "79bd4fc312c7f3279726ef45057db7ccbaa71ac533cda1a3be7fbda726646062",
+      "bytes": 3383,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-usbq-1/meter/summary.json"
+      ]
+    },
+    "comparisons/quiet200-usbq-1/meter/metadata.json": {
+      "sha256": "999b04828f002ffece5fc5a59fe0b173841ee37d8968bc8250e724cd76009e5a",
+      "bytes": 1242,
+      "sources": [
+        "wake-rtc-20260929/compare-runs/quiet200-usbq-1/meter/metadata.json"
+      ]
+    },
+    "restoration.json": {
+      "sha256": "3275f462a2be22b70375bcc888d8e0acdf5bc0a06511629000bdc34ee9da4c48",
+      "bytes": 1027,
+      "sources": [
+        "wake-rtc-20260929/restoration/result-public.json"
+      ]
+    },
+    "guard-deep2.json": {
+      "sha256": "eece1167ea111bfa646b5aa544e139e5c1544f72d2c612013a713b0152cda0d0",
+      "bytes": 1128,
+      "sources": [
+        "wake-rtc-20260929/guard-deep2/result-public.json",
+        "wake-rtc-20260929/guard_deep2.py"
+      ]
+    },
+    "restoration-deep2.json": {
+      "sha256": "c2d09839a47afbbf39d620549421d26de5de027841772577c3aa104cd51e0ead",
+      "bytes": 1028,
+      "sources": [
+        "wake-rtc-20260929/restoration-deep2/result-public.json",
+        "wake-rtc-20260929/guard_deep2.py"
+      ]
+    },
+    "recovery-bootsel.json": {
+      "sha256": "e2e416a1740e593143bc4eb91fac465f66c0ead47436fe5813121b89004105fe",
+      "bytes": 1170,
+      "sources": [
+        "wake-rtc-20260929/recovery-bootsel/result-public.json",
+        "wake-rtc-20260929/recover_bootsel.py"
+      ]
+    },
+    "diagnostics/meter-stability-1/health.json": {
+      "sha256": "5147337bb346d3597460108f6f83028955c76c20694583fbba86b7348d73c021",
+      "bytes": 1534,
+      "sources": [
+        "wake-rtc-20260929/meter-stability-1/health.json"
+      ]
+    },
+    "diagnostics/meter-stability-1/summary.json": {
+      "sha256": "b412bd2c8677951e9586b1126c41504046fdb74a74e8c93aefa84a995f28fc7f",
+      "bytes": 3366,
+      "sources": [
+        "wake-rtc-20260929/meter-stability-1/summary.json"
+      ]
+    },
+    "diagnostics/meter-stability-1/metadata.json": {
+      "sha256": "77d8be5557d486a6d59fe8a01b2833983ed90eaa19399d9682bc99e0e84c9178",
+      "bytes": 1240,
+      "sources": [
+        "wake-rtc-20260929/meter-stability-1/metadata.json"
+      ]
+    },
+    "diagnostic-build/manifest.json": {
+      "sha256": "e751ab1f0f1ad761b52edd6a6bb6adc13d5308e7bbf803d8046e2191da684a2e",
+      "bytes": 3782,
+      "sources": [
+        "artifacts/candidate-91e91-lsdiag1/build-manifest.json"
+      ]
+    },
+    "diagnostic-build/diagnostic.patch": {
+      "sha256": "96c7f9166548b7313ae37abef9ddddd46ba8b46c99177f382cbbe2ff5271da9e",
+      "bytes": 10205,
+      "sources": [
+        "wake-rtc-20260929/diagnostic-ls-v1/diagnostic.patch"
+      ]
+    },
+    "host-source-sha256.json": {
+      "sha256": "c10da57c4613884b83ef85659c5f139dd61187557e802c4026a9e8360ecc6315",
+      "bytes": 2071,
+      "sources": [
+        "lightsleep-repeat/host.py",
+        "wake-rtc-20260929/guard.py",
+        "wake-rtc-20260929/rtc_probe.py",
+        "wake-rtc-20260929/switch_diagnostic.py",
+        "wake-rtc-20260929/irq_host.py",
+        "wake-rtc-20260929/irq_poll200_host.py",
+        "wake-rtc-20260929/compare_ram.py",
+        "wake-rtc-20260929/analyze_compare_ram.py",
+        "wake-rtc-20260929/export_wake_public.py",
+        "wake-rtc-20260929/export_wake_public_v2.py",
+        "wake-rtc-20260929/export_wake_public_v3.py",
+        "wake-rtc-20260929/recover_bootsel.py",
+        "wake-rtc-20260929/export_wake_public_v4.py",
+        "wake-rtc-20260929/guard_deep2.py",
+        "wake-rtc-20260929/export_wake_public_v5.py",
+        "wake-rtc-20260929/compare_ram_deep_retention.py",
+        "wake-rtc-20260929/analyze_compare_deep_retention.py",
+        "meter_reader.py",
+        "analyze_stream.py"
+      ]
+    },
+    "status.json": {
+      "sha256": "989eea220955d5b85fc156b75f9acce53235d30101348608e3573be87ce6c62e",
+      "bytes": 1813,
+      "sources": []
+    }
+  },
+  "privacy": "Strict public fields; local paths scrubbed; UID/serial/credential-marker scan passed.",
+  "scope": "No private source text, firmware image, original application, credentials or raw capture exported."
+}

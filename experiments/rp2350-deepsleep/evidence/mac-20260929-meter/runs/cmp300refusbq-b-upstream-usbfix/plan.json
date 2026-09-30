@@ -1,0 +1,18 @@
+{
+  "helper": false,
+  "timeout_per_boot_s": 420.0,
+  "overall_observer_deadline_s": 1200.0,
+  "install_deadline_s": 120,
+  "firmware": {
+    "substring": "v1.30.0-preview.85.g09f5bb4475.dirty",
+    "artifact": "baseline-09f5-usbq",
+    "bin_sha256": "c893e0c19802b6098365ad3d917b4ffd306914d69acb0f3316a05130bd8d1e49"
+  },
+  "host_source_sha256": "20026a8f23e5855ed5863260ce7b4dd348fd720324c1517c48b69703763f2111",
+  "host_observer": "host_meter.py",
+  "runner_source_sha256": "f5a1e7d0b8d75ebce175ff043b24a41a95c3cd3b45e69ab3a93b3a617725cf09",
+  "created": {
+    "host_utc": "2026-09-29T18:16:48.322409+00:00",
+    "host_monotonic": 526744.3415985
+  }
+}

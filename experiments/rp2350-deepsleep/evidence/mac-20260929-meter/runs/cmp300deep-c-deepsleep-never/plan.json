@@ -1,0 +1,18 @@
+{
+  "helper": false,
+  "timeout_per_boot_s": 420.0,
+  "overall_observer_deadline_s": 1200.0,
+  "install_deadline_s": 120,
+  "firmware": {
+    "substring": "v1.30.0-preview.104.g91e91d58de.dirty",
+    "artifact": "candidate-91e91",
+    "bin_sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b"
+  },
+  "host_source_sha256": "20026a8f23e5855ed5863260ce7b4dd348fd720324c1517c48b69703763f2111",
+  "host_observer": "host_meter.py",
+  "runner_source_sha256": "f5a1e7d0b8d75ebce175ff043b24a41a95c3cd3b45e69ab3a93b3a617725cf09",
+  "created": {
+    "host_utc": "2026-09-29T17:01:58.357434+00:00",
+    "host_monotonic": 522254.374364875
+  }
+}

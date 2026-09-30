@@ -1,0 +1,97 @@
+{
+  "schema": 2,
+  "result": "ERROR",
+  "capture_result": "ERROR",
+  "data_quality": "PASS",
+  "error": {
+    "type": "OSError",
+    "message": "read error"
+  },
+  "stop_reason": "error",
+  "requested_seconds": 300.0,
+  "requested_duration_completed": false,
+  "started_utc": "2026-09-29T19:21:39.572795+00:00",
+  "finished_utc": "2026-09-29T19:23:28.157669+00:00",
+  "elapsed_host_s": 108.585003791,
+  "empty_timed_reads": 0,
+  "clock_offset_jump_count": 0,
+  "log_bytes_written": 6190849,
+  "frames_total": 2713,
+  "valid_frames": 2713,
+  "invalid_frames": 0,
+  "measurement_frames": 2712,
+  "other_valid_frames": 1,
+  "samples_total": 10848,
+  "recording_measurement_frames": 2712,
+  "recording_samples": 10848,
+  "drain_measurement_frames": 0,
+  "invalid_reasons": {},
+  "valid_frame_type_counts": {
+    "0x03": 1,
+    "0x04": 2712
+  },
+  "first_measurement_receipt_monotonic_ns": 530635684880666,
+  "last_measurement_receipt_monotonic_ns": 530744115945416,
+  "recording_receipt_span_s": 108.43106475,
+  "observed_nominal_sample_rate_hz": 100.00824048903384,
+  "receipt_gap_count_over_200ms": 0,
+  "receipt_gaps_over_200ms_first20": [],
+  "maximum_interframe_receipt_gap_s": 0.1142645,
+  "samples_exactly_zero_current": 26,
+  "dropped_frames": null,
+  "dropped_samples": null,
+  "drop_accounting": "No known device sequence counter; exact missing counts unknown. All detected gaps logged in events.jsonl.",
+  "voltage_V": {
+    "count": 10848,
+    "mean": 5.076152315634207,
+    "min": 5.06126,
+    "max": 5.08627,
+    "population_stddev": 0.005026935798341493,
+    "median": null,
+    "p05": null,
+    "p95": null,
+    "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+  },
+  "current_A": {
+    "count": 10848,
+    "mean": 0.00992387536873158,
+    "min": 0.0,
+    "max": 0.01645,
+    "population_stddev": 0.00795032305724462,
+    "median": null,
+    "p05": null,
+    "p95": null,
+    "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+  },
+  "power_W_calculated": {
+    "count": 10848,
+    "mean": 0.050335354345528965,
+    "min": 0.0,
+    "max": 0.083436374,
+    "population_stddev": 0.040324555369983014,
+    "median": null,
+    "p05": null,
+    "p95": null,
+    "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+  },
+  "integral_estimates": {
+    "nominal_10ms_per_received_sample": {
+      "recorded_nominal_duration_s": 108.48,
+      "charge_As": 1.076542,
+      "energy_J": 5.460379239403,
+      "energy_Wh": 0.0015167720109452779,
+      "assumption": "Exactly100Hz nominal device cadence; only received valid samples counted. Missing samples not invented; calibration/cadence error not bounded."
+    },
+    "host_receipt_frame_mean_trapezoid": {
+      "covered_host_s": 108.43106475000009,
+      "segments": 1,
+      "charge_As": 1.0762076256893962,
+      "energy_J": 5.458683064096842,
+      "energy_Wh": 0.0015163008511380118,
+      "assumption": "Trapezoid of frame-mean current/power at host receipt times; split at invalid frames or gaps>0.2s. No gap interpolation. Host buffering/timing may bias results."
+    },
+    "precision_claim": "Approximate model estimates, not exact physical energy. No offset subtraction or missing-data compensation."
+  },
+  "statistics_scope": "All valid recording samples, no zero/outlier filtering; drain excluded.",
+  "stopped_by_signal": null
+}

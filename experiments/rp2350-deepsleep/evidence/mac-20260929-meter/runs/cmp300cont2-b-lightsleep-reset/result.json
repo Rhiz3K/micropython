@@ -1,0 +1,57 @@
+{
+  "result": "FAIL",
+  "label": "cmp300cont2-b-lightsleep-reset",
+  "phase": "observe",
+  "error": "Observer failed; full log retained",
+  "exception_type": "RuntimeError",
+  "observed": {
+    "status": "FAIL",
+    "run": "meter-20260929-cmp300cont2-b-lightsleep-reset",
+    "boot": 2,
+    "completed": 0,
+    "host_elapsed_s": 5.790695499978028,
+    "rtc_elapsed_s": 2,
+    "error": "AssertionError('RTC duration',)",
+    "panel_prep": {
+      "radio_pins_touched": false,
+      "status": "PREPARED",
+      "refreshed": false,
+      "vendor_sleep_completed": true,
+      "fixture": "Waveshare Pico-ePaper-2.9 B/W V2",
+      "park_registers_verified": true,
+      "elapsed_ms": 2118,
+      "busy_waits": [
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        },
+        {
+          "initial": 1,
+          "final": 0,
+          "elapsed_ms": 10
+        },
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        },
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        },
+        {
+          "initial": 0,
+          "final": 0,
+          "elapsed_ms": 0
+        }
+      ]
+    }
+  },
+  "elapsed_host_s": 12.161166791978758,
+  "finished": {
+    "host_utc": "2026-09-29T16:55:34.106037+00:00",
+    "host_monotonic": 521870.121302875
+  }
+}

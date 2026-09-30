@@ -1,0 +1,31 @@
+{
+  "schema": 2,
+  "started_utc": "2026-09-29T16:46:50.476529+00:00",
+  "requested_seconds": 1500.0,
+  "reader_sha256": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+  "vendor_id": 11836,
+  "product_id": 21848,
+  "identity_snapshot_sha256": "6a8dbe076da21b1cbca1cb09d363be402767583e26288e20280298dcbdf7cc95",
+  "hidapi_version": "0.15.0",
+  "protocol_source_commit": "c4c58c5efe8a05ef2bca8e0bc67ed8a6ed2a8ece",
+  "vendor_exe_sha256": "9f06a8ccd3d26c874a331986d805464d0cdb62403136866af0d8bab28cba0ae3",
+  "allowed_commands": [
+    "0x81",
+    "0x82",
+    "0x83"
+  ],
+  "usb_reset_used": false,
+  "kernel_detach_used": false,
+  "serial_port_opened": false,
+  "charging_or_voltage_commands_used": false,
+  "sample_timing": "Four ordered samples per frame, sharing actual host receipt UTC and monotonic_ns. No inferred device timestamps.",
+  "current_unit": "A",
+  "voltage_unit": "V",
+  "power_unit": "W",
+  "current_raw_unit": "10uA",
+  "voltage_raw_unit": "10uV",
+  "maximum_log_bytes": 2147483648,
+  "min_free_disk_bytes": 536870912,
+  "output_limit_note": "Stops after first complete frame+samples group reaching byte budget; permits one bounded group overrun plus final metadata.",
+  "online_memory_model": "Constant-size accumulators; last250frame receipts; first20gap examples. Full raw records stream to disk."
+}

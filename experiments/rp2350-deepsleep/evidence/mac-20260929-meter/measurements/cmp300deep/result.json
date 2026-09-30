@@ -1,0 +1,95 @@
+{
+  "result": "FAIL",
+  "started": {
+    "utc": "2026-09-29T17:01:53.114637+00:00",
+    "monotonic_ns": 522249131450458
+  },
+  "candidate_restored": false,
+  "root_recovery_required": true,
+  "error_type": "RuntimeError",
+  "reason": "Firmware switch failed; root recovery required",
+  "failed_phase": "firmware_switch",
+  "note": "No automatic retry/rollback/reset after failure; preserve logs and let root assess live state.",
+  "finished": {
+    "utc": "2026-09-29T17:49:59.123038+00:00",
+    "monotonic_ns": 525135141173666
+  },
+  "elapsed_s": 2886.009752834041,
+  "profiles": [
+    {
+      "result": "PASS",
+      "run_label": "cmp300deep-c-deepsleep-never",
+      "profile": "C-never",
+      "artifact": "candidate-91e91",
+      "functional_result": "PASS",
+      "capture_result": "PASS",
+      "energy_result": "PASS",
+      "started": {
+        "utc": "2026-09-29T17:01:53.116330+00:00",
+        "monotonic_ns": 522249133143708
+      },
+      "analysis_sha256": "54afeca7dbbca29424d0b9bf19a9ac2fec5ead040f2a7db9723b21271bc8a93d",
+      "complete_cycle_energy_model_valid": true,
+      "finished": {
+        "utc": "2026-09-29T17:17:33.763403+00:00",
+        "monotonic_ns": 523189780315833
+      },
+      "cleanup_errors": []
+    },
+    {
+      "result": "PASS",
+      "run_label": "cmp300deep-c-deepsleep-sta",
+      "profile": "C-STA",
+      "artifact": "candidate-91e91",
+      "functional_result": "PASS",
+      "capture_result": "PASS",
+      "energy_result": "PASS",
+      "started": {
+        "utc": "2026-09-29T17:17:33.764583+00:00",
+        "monotonic_ns": 523189781496625
+      },
+      "analysis_sha256": "bfb80ce1d69913bb6bea33baba717aa24c0dab2aea3aadff157164c44c3bb9e3",
+      "complete_cycle_energy_model_valid": true,
+      "finished": {
+        "utc": "2026-09-29T17:33:18.053117+00:00",
+        "monotonic_ns": 524134070883125
+      },
+      "cleanup_errors": []
+    },
+    {
+      "result": "PASS",
+      "run_label": "cmp300deep-c-helper-sta",
+      "profile": "C+helper-STA",
+      "artifact": "candidate-91e91",
+      "functional_result": "PASS",
+      "capture_result": "PASS",
+      "energy_result": "PASS",
+      "started": {
+        "utc": "2026-09-29T17:33:18.053578+00:00",
+        "monotonic_ns": 524134071344291
+      },
+      "analysis_sha256": "4712469b8cad88a608e70c649e0a34dfd67039ede3481a16f33a60616f9e48f8",
+      "complete_cycle_energy_model_valid": true,
+      "finished": {
+        "utc": "2026-09-29T17:49:05.670020+00:00",
+        "monotonic_ns": 525081688126625
+      },
+      "cleanup_errors": []
+    }
+  ],
+  "cleanup_errors": [],
+  "firmware_switches": [
+    {
+      "artifact": "baseline-09f5",
+      "label": "cmp300deep-switch-vanilla"
+    },
+    {
+      "artifact": "baseline-09f5-usbq",
+      "label": "cmp300deep-switch-usbfix"
+    },
+    {
+      "artifact": "candidate-91e91",
+      "label": "cmp300deep-return-candidate"
+    }
+  ]
+}

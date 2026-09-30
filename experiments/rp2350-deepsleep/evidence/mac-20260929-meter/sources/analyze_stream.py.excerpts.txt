@@ -1,0 +1,441 @@
+# Excerpts from analyze_stream.py; complete private source SHA256 60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630
+
+def epoch_ns(iso):
+    value = dt.datetime.fromisoformat(iso)
+    require(value.tzinfo is not None, 'UTC receipt lacks timezone')
+    delta = value - dt.datetime(1970, 1, 1, tzinfo=dt.timezone.utc)
+    return (delta.days * 86400 + delta.seconds) * NS + delta.microseconds * 1000
+
+def load_host(path, first_meter, expected_cycles, expected_sleep_ms, window_start, window_end):
+    log = JsonLines(path)
+    header = None
+    records, acks = [], {}
+    event_counts = collections.Counter()
+    panel_counts = collections.Counter()
+    last_elapsed = -1.0
+    for value in log:
+        if 'host_start' in value:
+            require(header is None and not records, 'Duplicate/late host header')
+            header = value
+            continue
+        require(header is not None, 'Missing initial host header')
+        elapsed = value.get('host_elapsed_s')
+        require(finite(elapsed) and elapsed >= 0, 'Invalid host elapsed time')
+        require(elapsed >= last_elapsed - 1e-9, 'Host elapsed time moved backwards')
+        last_elapsed = elapsed
+        event = value.get('host_event')
+        if event:
+            event_counts[event] += 1
+            if event == 'ack_timing':
+                key = (value['boot'], value['ack_status'])
+                require(len(acks)<20_000 or key in acks, 'Bounded ACK key limit exceeded')
+                acks.setdefault(key, value)
+            if event == 'non_test_line':
+                for marker in ('PANEL_PREP', 'METER_HELPER'):
+                    if marker in value.get('line_text', ''):
+                        panel_counts[marker] += 1
+            continue
+        require(len(records) < 10_000, 'Host record limit exceeded')
+        require(value.get('protocol') == 2, 'Require protocol 2')
+        require(value.get('status') in ('READY', 'SLEEP', 'PASS'), 'Host records contain failure/unknown status')
+        require(type(value.get('boot')) is int and type(value.get('completed')) is int, 'Bad host counters')
+        records.append(value)
+    require(header and records, 'Empty host log')
+    require(finite(header.get('host_start')), 'Missing host wall anchor')
+    identities = {record.get('uid') for record in records}
+    require(len(identities)==1 and None not in identities, 'Mixed/missing private target identity in protocol records')
+    runs = {record.get('run') for record in records}
+    require(len(runs) == 1 and None not in runs, 'Mixed/missing host run names')
+    base_ns = header.get('host_start_monotonic_ns')
+    direct = type(base_ns) is int
+    if not direct:
+        first_offset = epoch_ns(first_meter['host_receipt_utc']) - first_meter['host_receipt_monotonic_ns']
+        base_ns = round(header['host_start'] * NS) - first_offset
+    mapping = {
+        'method': 'shared_host_monotonic_clock' if direct else 'public_host_wall_anchor_minus_first_meter_UTC_offset',
+        'quality': 'DIRECT_HOST_CLOCK' if direct else 'APPROXIMATE_UNBOUNDED_START_OFFSET',
+        'host_elapsed_origin_monotonic_ns': base_ns,
+        'clock_domain_requirement': 'Both processes on same continuously awake Mac boot; no device timestamps.',
+        'anchor_uncertainty_s': 1e-6 if direct else None,
+        'uncertainty_note': ('1 us numerical timestamp allowance only; not a bound on USB buffering or physical event time.' if direct else
+            'Public host_start wall read follows monotonic origin and file open; that unlogged delay has no measured bound. Mapping is approximate.'),
+    }
+    def stamp(record):
+        return base_ns + round(record['host_elapsed_s'] * NS)
+    ready, sleep = {}, {}
+    passed = []
+    for record in records:
+        key = record['boot']
+        if record['status'] == 'READY':
+            require(key not in ready, 'Duplicate logged READY')
+            ready[key] = record
+        elif record['status'] == 'SLEEP':
+            if key in sleep:
+                require(record['completed'] == sleep[key]['completed'], 'Changed repeated SLEEP counter')
+            sleep.setdefault(key, record)
+        else:
+            passed.append(record)
+    require(len(ready) == expected_cycles + 1, 'Expected cycles+1 READY boundaries')
+    require(len(sleep) == expected_cycles, 'Expected one SLEEP boot per configured cycle')
+    require(len(passed) == 1, 'Exactly one terminal PASS required')
+    ready_values = list(ready.values())
+    first_boot = ready_values[0]['boot']
+    require(ready_values[0]['phase'] == 0, 'Initial READY phase is not 0')
+    require(passed[0] is records[-1], 'PASS must be final device record')
+    require(passed[0]['boot'] == first_boot + expected_cycles + 1 and
+            passed[0]['completed'] == expected_cycles and passed[0].get('phase') == 5,
+            'PASS final reset/counter mismatch')
+    require(stamp(passed[0]) > stamp(ready_values[-1]), 'PASS before final READY')
+    if direct:
+        before = header.get('host_wall_read_before_monotonic_ns')
+        after = header.get('host_wall_read_after_monotonic_ns')
+        if type(before) is int and type(after) is int:
+            require(base_ns <= before <= after, 'Invalid direct wall/monotonic anchor order')
+            mapping['host_wall_anchor_read_bracket_s'] = (after - before) / NS
+            mapping['host_wall_offset_bracket_ns'] = [round(header['host_start']*NS) - after,
+                                                       round(header['host_start']*NS) - before]
+            meter_offset = epoch_ns(first_meter['host_receipt_utc'])-first_meter['host_receipt_monotonic_ns']
+            mapping['host_minus_first_meter_wall_offset_s'] = (sum(mapping['host_wall_offset_bracket_ns'])/2-meter_offset)/NS
+    def ack_info(record, next_ready=None):
+        row = acks.get((record['boot'], record['status']))
+        if row:
+            points = [row.get(key) for key in ('ack_write_before_monotonic_ns', 'ack_write_after_monotonic_ns', 'ack_flush_after_monotonic_ns')]
+            require(all(type(t) is int for t in points) and points == sorted(points), 'Invalid ACK timing')
+            require(direct, 'Direct ACK timing requires direct host clock anchor')
+            require(abs((points[2]-base_ns)/NS-row['host_elapsed_s'])<=1e-6, 'ACK elapsed/monotonic time mismatch')
+            require(points[0] >= stamp(record) - 1000, 'ACK predates marker receipt')
+            require(row.get('completed') == record['completed'] and row.get('run') == record['run'], 'ACK identity/counter mismatch')
+            return {'method': 'observed_host_write_and_flush', 'flush_monotonic_ns': points[2],
+                    'marker_to_write_s': (points[0] - stamp(record))/NS,
+                    'write_call_s': (points[1]-points[0])/NS,
+                    'flush_call_s': (points[2]-points[1])/NS,
+                    'marker_to_flush_s': (points[2]-stamp(record))/NS,
+                    'device_ack_received_time_known': False}
+        require(not direct, 'Instrumented log missing ACK timing')
+        if next_ready:
+            elapsed = next_ready.get('host_cycle_elapsed_s')
+            require(finite(elapsed) and elapsed > 0, 'Public fallback lacks host_cycle_elapsed_s')
+            inferred = stamp(next_ready) - round(elapsed * NS)
+            require(inferred >= stamp(record) - 10_000_000, 'Inferred ACK precedes SLEEP marker excessively')
+            return {'method': 'inferred_from_next_READY_minus_host_cycle_elapsed',
+                    'flush_monotonic_ns': inferred, 'marker_to_flush_s': (inferred-stamp(record))/NS,
+                    'uncertainty_s': None,
+                    'note': 'Progress-check timestamp is later than recorded READY receipt; inference may precede actual ACK by their unlogged difference.',
+                    'device_ack_received_time_known': False}
+        return {'method': 'not_logged', 'flush_monotonic_ns': None}
+    cycles = []
+    for index in range(expected_cycles):
+        start, end = ready_values[index:index+2]
+        boot = first_boot + index
+        require(start['boot'] == boot and end['boot'] == boot+1, 'Nonconsecutive READY boots')
+        require(start['completed'] == index and end['completed'] == index+1 and end.get('phase') == 1, 'READY counter/phase mismatch')
+        require(boot in sleep, 'READY boot lacks SLEEP')
+        sleeping = sleep[boot]
+        require(sleeping['completed'] == index and sleeping.get('sleep_ms') == expected_sleep_ms, 'SLEEP target/counter mismatch')
+        r0, ss, r1 = stamp(start), stamp(sleeping), stamp(end)
+        require(r0 < ss < r1, 'Wrong READY/SLEEP/READY ordering')
+        sa = ack_info(sleeping, end)
+        ra = ack_info(start)
+        ack_ns = sa['flush_monotonic_ns']
+        require(ss - 10_000_000 <= ack_ns < r1, 'SLEEP ACK is outside cycle')
+        lo = ack_ns + round(window_start * NS)
+        hi = ack_ns + round(window_end * NS)
+        require(r0 <= lo < hi < r1, 'Comparison window not inside cycle before next READY')
+        cycles.append({'cycle': index+1, 'boot': boot,
+            'ready_start_monotonic_ns': r0, 'ready_end_monotonic_ns': r1,
+            'sleep_marker_monotonic_ns': ss,
+            'ready_to_ready_s': (r1-r0)/NS,
+            'ready_to_sleep_marker_s': (ss-r0)/NS,
+            'sleep_marker_to_next_ready_s': (r1-ss)/NS,
+            'sleep_ACK_flush_to_next_ready_s': (r1-ack_ns)/NS,
+            'public_host_cycle_elapsed_s': end.get('host_cycle_elapsed_s'),
+            'ready_ACK': ra, 'sleep_ACK': sa,
+            'comparison_start_monotonic_ns': lo, 'comparison_end_monotonic_ns': hi,
+            'next_ready_cause': end.get('cause'), 'next_ready_rtc_elapsed_s': end.get('rtc_elapsed_s'),
+            'next_ready_powman_last_swcore_pwrup': end.get('powman_last_swcore_pwrup'),
+            'next_ready_watchdog_scratch_retained': end.get('watchdog_scratch_retained')})
+    return {'run': next(iter(runs)), 'cycle_count': expected_cycles, 'mapping': mapping,
+            'host_final_status': 'PASS', 'source': log.evidence(),
+            'host_event_counts': dict(event_counts), 'panel_helper_marker_counts': dict(panel_counts),
+            'cycles': cycles,
+            'full_cycle_definition': 'Initial READY receipt inclusive to next READY receipt exclusive; includes READY/SLEEP host ACK holding, sleep, next boot, panel/radio preparation performed before next READY. Excludes final ordinary reset after last READY.',
+            'comparison_window_definition': f'Host SLEEP ACK flush completion +{window_start:g} to +{window_end:g} seconds; actual physical sleep entry and device sampling timestamps unknown.'}
+
+class Window:
+    def __init__(self, name, start_ns, end_ns, min_fraction=.99):
+        self.name, self.lo, self.hi = name, start_ns, end_ns
+        self.min_fraction = min_fraction
+        self.metrics = {key: RunningStats() for key in METRICS}
+        self.first10, self.last10 = RunningStats(), RunningStats()
+        self.first_ns = self.last_ns = None
+        self.invalid = self.frames = self.zeros = 0
+        self.max_gap_ns = self.gaps = 0
+        self.nom_i_raw = self.nom_p_raw = 0
+        self.covered_ns = self.segments = 0
+        self.charge_As = self.energy_J = 0.0
+        self.max_abs_frame_slope_A_per_s = 0.0
+    def invalid_frame(self, t):
+        if self.lo <= t < self.hi:
+            self.invalid += 1
+    def frame(self, t, samples):
+        if not self.lo <= t < self.hi:
+            return
+        self.frames += 1
+        if self.first_ns is None:
+            self.first_ns = t
+        self.last_ns = t
+        for row in samples:
+            for key in METRICS:
+                self.metrics[key].add(row[key])
+            self.zeros += row['current_raw'] == 0
+            self.nom_i_raw += row['current_raw']
+            self.nom_p_raw += row['voltage_raw'] * row['current_raw']
+            if t < self.lo + 10*NS:
+                self.first10.add(row['current_A'])
+            if t >= self.hi - 10*NS:
+                self.last10.add(row['current_A'])
+    def segment(self, previous, current, connected):
+        t0, i0, p0 = previous
+        t1, i1, p1 = current
+        a, b = max(t0, self.lo), min(t1, self.hi)
+        if b <= a:
+            return
+        gap = t1 - t0
+        self.max_gap_ns = max(self.max_gap_ns, gap)
+        if gap > MAX_GAP_NS:
+            self.gaps += 1
+        if not connected or gap > MAX_GAP_NS:
+            return
+        f0, f1 = (a-t0)/gap, (b-t0)/gap
+        ia, ib = i0+(i1-i0)*f0, i0+(i1-i0)*f1
+        pa, pb = p0+(p1-p0)*f0, p0+(p1-p0)*f1
+        seconds = (b-a)/NS
+        self.charge_As += (ia+ib)*.5*seconds
+        self.energy_J += (pa+pb)*.5*seconds
+        self.covered_ns += b-a
+        self.segments += 1
+        self.max_abs_frame_slope_A_per_s = max(self.max_abs_frame_slope_A_per_s, abs(i1-i0)/(gap/NS))
+    def result(self):
+        duration = (self.hi-self.lo)/NS
+        count = self.metrics['current_A'].n
+        reasons = []
+        if self.first_ns is None or self.first_ns-self.lo > EDGE_NS:
+            reasons.append('first receipt is missing or more than 0.1 s after start')
+        if self.last_ns is None or self.hi-self.last_ns > EDGE_NS:
+            reasons.append('last receipt is missing or more than 0.1 s before end')
+        if self.invalid:
+            reasons.append('invalid raw frame received inside window')
+        if self.gaps:
+            reasons.append('intermeasurement host receipt gap exceeds 0.2 s')
+        minimum = max(0, math.ceil(duration*100*self.min_fraction)-4)
+        if count < minimum:
+            reasons.append('valid sample count below declared nominal-density threshold')
+        if self.covered_ns != self.hi-self.lo:
+            reasons.append('host trapezoid model does not cover entire window without gaps')
+        a, b = self.first10.snapshot(), self.last10.snapshot()
+        return {'name': self.name, 'result': 'PASS' if not reasons else 'FAIL', 'reasons': reasons,
+            'start_host_monotonic_ns': self.lo, 'end_host_monotonic_ns': self.hi,
+            'duration_host_s': duration, 'samples': count, 'measurement_frames': self.frames,
+            'minimum_samples': minimum, 'expected_nominal_samples': duration*100,
+            'sample_density_hz': count/duration, 'density_boundary_allowance_samples':4,
+            'first_receipt_after_start_s': (self.first_ns-self.lo)/NS if self.first_ns is not None else None,
+            'last_receipt_before_end_s': (self.hi-self.last_ns)/NS if self.last_ns is not None else None,
+            'invalid_frames': self.invalid, 'receipt_gaps_over_200ms': self.gaps,
+            'maximum_intermeasurement_gap_overlapping_window_s': self.max_gap_ns/NS,
+            'samples_exactly_zero_current': self.zeros,
+            **{key: value.snapshot() for key, value in self.metrics.items()},
+            'first_10s_current_A': a, 'last_10s_current_A': b,
+            'last_minus_first_10s_mean_current_A': b['mean']-a['mean'] if a['count'] and b['count'] else None,
+            'stability_classification': 'Not automatically classified; inspect trace and first/last 10 s trend.',
+            'integral_estimates': {
+                'nominal_10ms_per_in_window_received_sample': {
+                    'duration_nominal_s': count/100, 'charge_As': self.nom_i_raw/1e7,
+                    'energy_J': self.nom_p_raw/1e12, 'energy_Wh': self.nom_p_raw/3.6e15,
+                    'boundary_rule': 'Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps.'},
+                'host_receipt_frame_mean_trapezoid': {
+                    'covered_host_s': self.covered_ns/NS, 'segments': self.segments,
+                    'charge_As': self.charge_As, 'energy_J': self.energy_J,
+                    'energy_Wh': self.energy_J/3600,
+                    'mean_current_A_over_covered_time': self.charge_As/(self.covered_ns/NS) if self.covered_ns else None,
+                    'mean_power_W_over_covered_time': self.energy_J/(self.covered_ns/NS) if self.covered_ns else None,
+                    'boundary_rule': 'Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times.'},
+                'model_energy_difference_J': self.nom_p_raw/1e12-self.energy_J,
+                'uncertainty': 'Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction.'}}
+
+class Group:
+    """Nonoverlapping ordered windows; at most two active per frame/segment."""
+    def __init__(self, windows):
+        self.windows = windows
+        self.index = 0
+    def visit(self, lo, hi, fn):
+        while self.index < len(self.windows) and self.windows[self.index].hi <= lo:
+            self.index += 1
+        index = self.index
+        while index < len(self.windows) and self.windows[index].lo <= hi:
+            fn(self.windows[index])
+            index += 1
+
+def prove_samples(frames, samples, groups, bins, summary):
+    ledger = StreamAccounting()
+    sample_stream = iter(samples)
+    sample_index = 0
+    expected_frame = 0
+    last_receipt = None
+    previous = None
+    connected = True
+    offsets = RunningStats()
+    first_offset = None
+    saw_drain = False
+    for stored in frames:
+        require(stored.get('frame_index') == expected_frame, 'Frame index discontinuity')
+        expected_frame += 1
+        t = stored.get('host_receipt_monotonic_ns')
+        require(type(t) is int and (last_receipt is None or t >= last_receipt), 'Nonmonotonic frame receipt')
+        require(finite(stored.get('host_receipt_monotonic_s')) and abs(stored['host_receipt_monotonic_s']-t/NS) < 1e-6,
+                'Stored ns/seconds receipt mismatch')
+        last_receipt = t
+        offset = epoch_ns(stored['host_receipt_utc'])-t
+        first_offset = offset if first_offset is None else first_offset
+        offsets.add((offset-first_offset)/NS)
+        parsed = parse_frame(bytes.fromhex(stored['raw_hex']))
+        for key, value in parsed.items():
+            if key != 'samples':
+                require(stored.get(key) == value, f'Raw frame/decoded field mismatch: {key}')
+        phase = stored.get('phase')
+        require(phase in ('recording','drain'), 'Unknown frame phase')
+        saw_drain = saw_drain or phase == 'drain'
+        require(not (saw_drain and phase == 'recording'), 'Recording resumed after drain')
+        for row in parsed['samples']:
+            received = next(sample_stream, None)
+            require(received is not None, 'Missing decoded sample row')
+            expected = {**row, **{key: stored[key] for key in ('phase','frame_index','host_receipt_utc','host_receipt_monotonic_ns','host_receipt_monotonic_s')}, 'sample_index':sample_index}
+            require(received == expected, 'Raw frame/sample JSONL mismatch')
+            sample_index += 1
+        ledger.add(parsed, phase, t, stored['frame_index'])
+        if phase != 'recording':
+            continue
+        bins.add(t, parsed['samples'], parsed['valid'])
+        if not parsed['valid']:
+            connected = False
+            for group in groups:
+                group.visit(t,t,lambda window: window.invalid_frame(t))
+            continue
+        if not parsed['samples']:
+            continue
+        current = (t, sum(r['current_A'] for r in parsed['samples'])/4,
+                   sum(r['power_W_calculated'] for r in parsed['samples'])/4)
+        for group in groups:
+            if previous is not None:
+                group.visit(previous[0],t,lambda window: window.segment(previous,current,connected))
+            group.visit(t,t,lambda window: window.frame(t,parsed['samples']))
+        previous, connected = current, True
+    require(next(sample_stream,None) is None, 'Extra sample rows not represented by raw frames')
+    calculated = ledger.snapshot()
+    for key in ('frames_total','valid_frames','invalid_frames','measurement_frames','other_valid_frames','samples_total','recording_measurement_frames','recording_samples','drain_measurement_frames','samples_exactly_zero_current','receipt_gap_count_over_200ms'):
+        require(summary.get(key) == calculated[key], 'Capture summary count mismatch: '+key)
+    for key in METRICS:
+        require(summary.get(key,{}).get('count') == calculated[key]['count'], 'Summary metric count mismatch')
+        a, b = summary.get(key,{}).get('mean'), calculated[key]['mean']
+        require(a == b or finite(a) and finite(b) and math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-12), 'Summary metric mean mismatch')
+    for key in ('first_measurement_receipt_monotonic_ns','last_measurement_receipt_monotonic_ns','recording_receipt_span_s'):
+        require(summary.get(key)==calculated[key], 'Summary receipt boundary mismatch: '+key)
+    calculated['raw_to_samples_proof'] = 'Every raw read reparsed with CRC; every decoded sample, zero, index, and timestamp matches JSONL exactly. Invalid raw frames produce no samples.'
+    calculated['meter_UTC_minus_monotonic_offset_change_s'] = offsets.snapshot()
+    return calculated
+
+def repeated_summary(windows):
+    result = {}
+    for key in METRICS:
+        values = [window[key]['mean'] for window in windows if window[key]['mean'] is not None]
+        result[key] = {'repeats':len(values), 'unweighted_mean_of_repeat_means':sum(values)/len(values) if values else None,
+            'minimum_repeat_mean':min(values) if values else None,'maximum_repeat_mean':max(values) if values else None}
+    energies = [window['integral_estimates']['host_receipt_frame_mean_trapezoid']['energy_J'] for window in windows]
+    result['host_model_energy_J'] = {'repeats':len(energies), 'unweighted_mean':sum(energies)/len(energies) if energies else None,
+        'minimum':min(energies) if energies else None,'maximum':max(energies) if energies else None}
+    result['all_repeats_coverage_pass'] = all(window['result']=='PASS' for window in windows)
+    return result
+
+def analyze(args):
+    require(args.expected_cycles >= 1 and args.expected_cycles <= 1000, 'Cycles must be 1..1000')
+    require(0 <= args.window_start < args.window_end < args.expected_sleep_ms/1000, 'Comparison offsets must be within sleep target')
+    require(.9 <= args.minimum_sample_fraction <= 1, 'Minimum density fraction must be .9..1')
+    summary_path = args.meter_dir/'summary.json'
+    summary = json.loads(summary_path.read_text())
+    require(summary.get('schema') == 2, 'Require schema2 meter logs')
+    require(summary.get('capture_result') == 'PASS', 'Capture incomplete/interrupted/error')
+    require(summary.get('stop_reason') in ('duration','stop_file'), 'Unknown completion reason')
+    frames = JsonLines(args.meter_dir/'frames.jsonl')
+    iterator = iter(frames)
+    first = next(iterator,None)
+    require(first is not None, 'No raw frames')
+    host = load_host(args.host_log, first, args.expected_cycles, args.expected_sleep_ms, args.window_start, args.window_end)
+    full = [Window(f"cycle_{c['cycle']}_READY_to_READY",c['ready_start_monotonic_ns'],c['ready_end_monotonic_ns'],args.minimum_sample_fraction) for c in host['cycles']]
+    comparison = [Window(f"cycle_{c['cycle']}_sleep_comparison",c['comparison_start_monotonic_ns'],c['comparison_end_monotonic_ns'],args.minimum_sample_fraction) for c in host['cycles']]
+    drift_offsets = [60,120,180,240,280] if (args.window_start,args.window_end)==(60,280) else [args.window_start+(args.window_end-args.window_start)*i/4 for i in range(5)]
+    drift = [Window(f"cycle_{c['cycle']}_ACK_plus_{a:g}_to_{b:g}s", c['sleep_ACK']['flush_monotonic_ns']+round(a*NS), c['sleep_ACK']['flush_monotonic_ns']+round(b*NS), args.minimum_sample_fraction) for c in host['cycles'] for a,b in zip(drift_offsets,drift_offsets[1:])]
+    os.umask(0o077)
+    args.output_dir.mkdir(mode=0o700,parents=False,exist_ok=False)
+    span = summary.get('recording_receipt_span_s')
+    require(finite(span) and 0 < span <= 86410, 'Capture span outside supported 24h bound')
+    width = max(1,math.ceil(span/6000))
+    bins = Bins(args.output_dir/'trace-bins.csv',host['mapping']['host_elapsed_origin_monotonic_ns'],width)
+    samples = JsonLines(args.meter_dir/'samples.jsonl')
+    try:
+        proof = prove_samples(itertools.chain([first],iterator),samples,[Group(full),Group(comparison),Group(drift)],bins,summary)
+    finally:
+        bins.close()
+    events = JsonLines(args.meter_dir/'events.jsonl')
+    event_counts = collections.Counter()
+    commands = collections.Counter()
+    for event in events:
+        event_counts[event.get('event')] += 1
+        if event.get('event') == 'command_sent':
+            command = int(event['command'],16)
+            require(event['report_hex'] == command_report(command).hex() and event['bytes_reported'] == 65, 'Unapproved/invalid/incomplete meter command')
+            commands[event['command']] += 1
+    require(commands['0x81'] == 1 and commands['0x82'] == 2 and commands['0x83'] > 0, 'Measurement handshake event proof missing')
+    full_results = [window.result() for window in full]
+    comparison_results = [window.result() for window in comparison]
+    drift_results = [window.result() for window in drift]
+    reasons = []
+    if any(w['result']!='PASS' for w in full_results+comparison_results+drift_results):
+        reasons.append('One or more cycle/comparison windows fail coverage/CRC/density checks')
+    if summary.get('data_quality') != 'PASS' or proof['invalid_frames'] or proof['receipt_gap_count_over_200ms']:
+        reasons.append('Entire capture has data-quality issues, including outside analysis windows')
+    if abs(host['mapping'].get('host_minus_first_meter_wall_offset_s',0))>.1:
+        reasons.append('Direct host and first meter UTC/monotonic offsets differ by more than 0.1 s; verify same awake host boot and wall-clock history')
+    if host['mapping']['quality'] != 'DIRECT_HOST_CLOCK':
+        reasons.append('Public observer provides approximate wall-clock alignment only')
+    offset = proof['meter_UTC_minus_monotonic_offset_change_s']
+    if offset['max']-offset['min'] > .1:
+        reasons.append('UTC/monotonic offset range exceeds 0.1 s; wall anchor unsafe')
+    analysis = {'schema':1,'result':'PASS' if not reasons else 'DEGRADED','reasons':reasons,
+        'host':host, 'meter_raw_proof':proof, 'full_cycles':full_results, 'sleep_comparison_windows':comparison_results,
+        'drift_subwindows':drift_results,'drift_offsets_from_ACK_s':drift_offsets,
+        'full_cycle_repeats':repeated_summary(full_results),'sleep_comparison_repeats':repeated_summary(comparison_results),
+        'checks':{'maximum_gap_s':.2,'edge_receipt_tolerance_s':.1,
+                  'minimum_nominal_sample_fraction':args.minimum_sample_fraction,'nominal_sample_rate_hz':100,
+                  'sample_count_boundary_quantization_allowance':4,
+                  'full_host_model_window_coverage_required':True},
+        'source_evidence':[host['source'],frames.evidence(),samples.evidence(),events.evidence(),
+                           {'name':'summary.json','sha256':hashlib.sha256(summary_path.read_bytes()).hexdigest()}],
+        'meter_event_counts':dict(event_counts),'meter_commands':dict(commands),
+        'trace_bins':{'file':'trace-bins.csv','bin_width_s':width,'rows':bins.rows,
+                      'rule':'Unfiltered raw samples grouped by actual frame host receipt; means/min/max, no invented device clock.'},
+        'analyzer_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'limitations':[
+            'USB-input current/power of entire connected assembly; not RP2350 core current.',
+            '10 uA current resolution is not a verified calibration or absolute accuracy.',
+            'Four ordered samples per CRC frame share one actual receipt; individual device timestamps and sequence counter unknown.',
+            'Receipt gaps show host-visible delivery interruptions; cannot determine exact missing frames/samples or bound USB buffering delay.',
+            'All zero and high/low observations retained. No offset subtraction, clipping, smoothing, or energy compensation for missing data.',
+            'READY-to-READY includes variable host ACK delays. ACK flush completion does not prove instant device consumption.',
+            'Energy models are approximate; no exact physical energy or automatically steady current claim.',
+            'No median/percentiles accumulated: bounded memory moments only. Full raw evidence permits separate exact quantile analysis.',
+        ]}
+    with (args.output_dir/'analysis.json').open('x') as stream:
+        json.dump(analysis,stream,ensure_ascii=False,indent=2,allow_nan=False)
+        stream.write('\n')
+    if args.plot:
+        plot_trace(args.output_dir,analysis)
+    return analysis

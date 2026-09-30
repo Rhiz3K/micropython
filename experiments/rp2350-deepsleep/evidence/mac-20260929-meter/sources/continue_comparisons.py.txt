@@ -1,0 +1,199 @@
+#!/usr/bin/env python3
+"""One explicit continuation after reviewed B-LS failure; no automatic retry.
+
+Offline --plan/--check-only; only --execute invokes the unchanged V2 Supervisor.
+Retain A externally; run the original canonical rows 02..07 exactly once.
+"""
+from __future__ import annotations
+import argparse
+import datetime as dt
+import fcntl
+import json
+import os
+from pathlib import Path
+import sys
+import measure_variants_v2 as v2
+
+base = v2.base
+ROOT = Path(__file__).resolve().parent
+PREFIX = 'cmp300cont1'
+PRIOR = 'measurements/cmp300v2'
+A = PRIOR + '/01-a-sleep-reset'
+B = PRIOR + '/02-b-lightsleep-reset'
+FREEZE = 'measurement-source-freeze-v2.json'
+FREEZE_SHA = 'b23114902430372578dcca766e8c8dd70a807efcb613b8f332710ea891f059fa'
+REVIEW = 'comparison-continuation-review.json'
+REVIEW_SHA = '82940aed0a6cfea121d603e75fb70a929a8eaeb07206336fe70063a28c13b58c'
+PROBE = 'lightsleep-return-probe/result-public.json'
+PROOFS = (FREEZE, 'measurement-source-freeze.json', REVIEW, PROBE,
+          PRIOR + '/plan.json', PRIOR + '/preflight-provenance.json',
+          PRIOR + '/result.json', PRIOR + '/progress.json',
+          A + '/result.json', A + '/measurement-metadata.json',
+          A + '/analysis/analysis.json', A + '/meter/summary.json', A + '/meter/health.json',
+          B + '/result.json', B + '/meter/summary.json', B + '/meter/health.json')
+
+
+def configure():
+    # This configures only the imported V2 module, never changes its source.
+    v2.configure()
+
+
+def continuation_plan(root, prefix=PREFIX, prepared=None):
+    base.require(prefix == PREFIX, 'This reviewed continuation has exactly one new prefix')
+    original = base.plan(root, prefix) if prepared is None else prepared
+    base.require(original == base.plan(root, prefix), 'Prepared base plan differs from V2 plan')
+    base.require(len(original['profiles']) == 7 and original['profiles'][0]['label'] == 'A'
+                 and original['profiles'][1]['label'] == 'B-LS', 'Unexpected V2 profile order')
+    result = {**original, 'profiles': original['profiles'][1:]}
+    result['continuation'] = {
+        'prior_sequence': PRIOR, 'retained_A_directory': A,
+        'retained_A_result': 'PASS', 'previous_B_directory': B, 'previous_B_result': 'FAIL',
+        'root_review': REVIEW, 'root_review_sha256': REVIEW_SHA,
+        'probe_result': PROBE, 'new_profiles': len(result['profiles']),
+        'canonical_directory_indices': [2, 3, 4, 5, 6, 7],
+        'note': 'One explicitly reviewed unchanged B-LS attempt; old FAIL remains unexplained. '
+                'A is retained, not copied or rerun. Original gates stop all subsequent work on any new failure.'}
+    return result
+
+
+def utc(value):
+    parsed = dt.datetime.fromisoformat(value)
+    base.require(parsed.tzinfo is not None, 'Precedent timestamp lacks timezone')
+    return parsed
+
+
+def verify_precedents(root):
+    """All local files; no hardware imports, subprocesses, source edits or writes."""
+    base.require(base.sha(root / FREEZE) == FREEZE_SHA, 'V2 freeze changed')
+    freeze = base.read_json(root / FREEZE)
+    pinned = freeze['source_sha256']
+    base.require(set(pinned) == set(base.SOURCE_NAMES) and len(pinned) == 18,
+                 'Expected original 17 sources plus V2')
+    base.require(base.sha(root / 'measurement-source-freeze.json') == freeze['parent_freeze_sha256'],
+                 'Original source freeze changed')
+    original = base.read_json(root / 'measurement-source-freeze.json')['source_sha256']
+    base.require(len(original) == 17 and all(pinned.get(k) == v for k, v in original.items()),
+                 'V2 does not retain all original 17 pins')
+    base.verify_sources(root, pinned)
+    base.require(base.sha(root / REVIEW) == REVIEW_SHA, 'Explicit root review changed')
+    review = base.read_json(root / REVIEW)
+    base.require(review.get('explicit_root_review_completed') is True
+                 and review.get('firmware_or_sleep_harness_changed') is False
+                 and review.get('prior_sequence') == 'cmp300v2'
+                 and review.get('prior_A_result') == 'PASS'
+                 and review.get('prior_B_LS_result') == 'FAIL', 'Explicit root review is missing')
+    prior = base.read_json(root / PRIOR / 'result.json')
+    progress = base.read_json(root / PRIOR / 'progress.json')
+    a = base.read_json(root / A / 'result.json')
+    b = base.read_json(root / B / 'result.json')
+    base.require(prior.get('result') == 'FAIL' and prior.get('failed_phase') == 'suite'
+                 and prior.get('finished') and prior.get('cleanup_errors') == []
+                 and progress.get('result') == 'FAIL' and progress.get('phase') == 'finished'
+                 and progress.get('completed_profiles') == ['cmp300v2-a-sleep-reset'],
+                 'Prior V2 sequence is not cleanly finished FAIL after A')
+    base.require(prior.get('profiles') == [a, b], 'Prior sequence profile results disagree')
+    base.require(all(a.get(k) == 'PASS' for k in
+                     ('result', 'functional_result', 'capture_result', 'energy_result'))
+                 and a.get('run_label') == 'cmp300v2-a-sleep-reset'
+                 and a.get('complete_cycle_energy_model_valid') is True
+                 and a.get('cleanup_errors') == [], 'Retained A is not complete PASS')
+    base.require(b.get('result') == 'FAIL' and b.get('functional_result') == 'FAIL'
+                 and b.get('run_label') == 'cmp300v2-b-lightsleep-reset'
+                 and b.get('energy_result') == 'NOT_RUN' and b.get('failed_phase') == 'suite'
+                 and b.get('complete_cycle_energy_model_valid') is False
+                 and b.get('cleanup_errors') == [], 'Previous B is not the documented functional FAIL')
+    prior_plan = base.read_json(root / PRIOR / 'plan.json')
+    base.require(prior_plan == base.plan(root, 'cmp300v2'), 'Prior V2 plan differs from pinned plan')
+    provenance = base.read_json(root / PRIOR / 'preflight-provenance.json')
+    metadata = base.read_json(root / A / 'measurement-metadata.json')
+    base.require(provenance.get('source_sha256') == pinned and metadata.get('source_sha256') == pinned,
+                 'Prior V2 source provenance mismatch')
+    base.require(metadata.get('firmware', {}).get('bin_sha256') == base.BINS[base.CANDIDATE]
+                 and metadata.get('profile') == prior_plan['profiles'][0], 'Retained A firmware/profile mismatch')
+    analysis_path = root / A / 'analysis/analysis.json'
+    analysis = base.read_json(analysis_path)
+    base.require(a.get('analysis_sha256') == base.sha(analysis_path)
+                 and analysis.get('result') == 'PASS'
+                 and analysis.get('analyzer_sha256') == pinned['analyze_stream.py']
+                 and analysis.get('full_cycle_repeats', {}).get('all_repeats_coverage_pass') is True
+                 and analysis.get('sleep_comparison_repeats', {}).get('all_repeats_coverage_pass') is True,
+                 'Retained A analysis/proof is not PASS')
+    base.verify_capture_closed(root / A / 'meter', root, strict=True)
+    base.verify_capture_closed(root / B / 'meter', root)
+    probe = base.read_json(root / PROBE)
+    base.require(probe.get('result') == 'PASS' and probe.get('backup_unchanged') is True
+                 and probe.get('friendly_repl_verified') is True
+                 and probe.get('reset_performed') is False and probe.get('device_file_writes') is False,
+                 'Fresh RAM-only probe is not complete PASS')
+    trials = probe.get('trials', [])
+    base.require(len(trials) == 3 and [r.get('quiet_ms') for r in trials] == [0, 200, 200]
+                 and all(r.get('requested_ms') == 2500 and r.get('elapsed_ticks_ms') in (2500, 2501)
+                         and r.get('elapsed_rtc_s') in (2, 3) for r in trials),
+                 'Probe trial durations do not match the reviewed three actual trials')
+    base.require(utc(prior['finished']['utc']) < utc(probe['host_utc'])
+                 < utc(probe['finished']['host_utc']) <= utc(review['created_utc']),
+                 'Probe/review are not fresh after previous failure')
+    base.require(prior['finished']['monotonic_ns'] / 1e9 < probe['host_monotonic']
+                 < probe['finished']['host_monotonic'] <= base.time.monotonic(),
+                 'Probe monotonic chronology is invalid')
+    base.validate_expected(root, base.CANDIDATE)
+    return {'source_sha256': pinned,
+            'proof_sha256': {name: base.sha(root / name) for name in PROOFS},
+            'root_review_provided_by': 'parent/root, not created by this wrapper',
+            'previous_failure_cause': 'UNRESOLVED', 'retained_A': A, 'previous_B_FAIL': B}
+
+
+def preflight(root, functional_meter):
+    precedents = verify_precedents(root)
+    prepared, evidence = base.preflight(root, PREFIX, functional_meter)
+    prepared = continuation_plan(root, prepared=prepared)
+    base.require(evidence['source_sha256'] == precedents['source_sha256'], 'Source snapshot changed during preflight')
+    # Include own source and immutable proofs in the existing guard. The exact
+    # unchanged Supervisor verifies every member before profiles and switches.
+    evidence['source_sha256'] = {**evidence['source_sha256'],
+        'continue_comparisons.py': base.sha(root / 'continue_comparisons.py'),
+        **precedents['proof_sha256']}
+    evidence['continuation'] = precedents
+    prepared['continuation']['source_and_proof_sha256'] = evidence['source_sha256']
+    base.verify_sources(root, evidence['source_sha256'])
+    return prepared, evidence
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--label-prefix', default=PREFIX, choices=[PREFIX])
+    parser.add_argument('--functional-meter-dir', type=Path, default=ROOT / 'meter-functional')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--plan', action='store_true')
+    group.add_argument('--check-only', action='store_true')
+    group.add_argument('--execute', action='store_true')
+    args = parser.parse_args(argv)
+    os.umask(0o077)
+    base.require(not sys.flags.optimize, 'Optimized Python is not supported')
+    configure()
+    if args.plan:
+        print(json.dumps(continuation_plan(ROOT), indent=2)); return 0
+    with (ROOT / '.measure-variants.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        prepared, evidence = preflight(ROOT, args.functional_meter_dir.resolve())
+        if args.check_only:
+            print(json.dumps({'result': 'LOCAL_PREFLIGHT_PASS', 'hardware_opened': False,
+                'profiles': len(prepared['profiles']), 'canonical_directory_indices': [2, 3, 4, 5, 6, 7],
+                'retained_A': A, 'previous_B_FAIL': B,
+                'functional_meter_result': evidence['functional_meter_result'],
+                'source_sha256': evidence['source_sha256']})); return 0
+        result = base.Supervisor(ROOT, prepared, evidence).run()
+        print(json.dumps({'result': result['result'],
+            'profiles_PASS': sum(row['result'] == 'PASS' for row in result['profiles']),
+            'retained_A': A, 'candidate_restored': result['candidate_restored'],
+            'root_recovery_required': result['root_recovery_required']}))
+        return 0 if result['result'] == 'PASS' else 1
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception as exc:
+        print(json.dumps({'result': 'ERROR_BEFORE_OR_OUTSIDE_SUPERVISED_RUN',
+              'error_type': type(exc).__name__, 'reason': str(exc)}), file=sys.stderr)
+        sys.exit(1)

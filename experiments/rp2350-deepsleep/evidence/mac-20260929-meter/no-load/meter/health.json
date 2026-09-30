@@ -1,0 +1,52 @@
+{
+  "schema": 2,
+  "phase": "finished",
+  "updated_utc": "2026-09-29T18:39:26.106149+00:00",
+  "host_monotonic_ns": 528102126819291,
+  "elapsed_host_s": 221.804468458,
+  "last_valid_measurement_age_s": 3.005570416,
+  "frames_total": 5497,
+  "recording_samples": 21880,
+  "invalid_frames": 0,
+  "receipt_gap_count_over_200ms": 0,
+  "clock_offset_jump_count": 0,
+  "log_bytes_written": 12624279,
+  "free_disk_bytes": 63891415040,
+  "empty_timed_reads": 19,
+  "recent_receipt_sample_rate_hz": 100.0032368015526,
+  "since_last_health": {
+    "voltage_V": {
+      "count": 88,
+      "mean": 5.0711018181818215,
+      "min": 5.07094,
+      "max": 5.07126,
+      "population_stddev": 9.703028410311602e-05,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    },
+    "current_A": {
+      "count": 88,
+      "mean": 0.01657693181818182,
+      "min": 0.01654,
+      "max": 0.01663,
+      "population_stddev": 3.216993071407745e-05,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    },
+    "power_W_calculated": {
+      "count": 88,
+      "mean": 0.08406330655681817,
+      "min": 0.0838779788,
+      "max": 0.0843317278,
+      "population_stddev": 0.00016183681879365422,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    }
+  }
+}

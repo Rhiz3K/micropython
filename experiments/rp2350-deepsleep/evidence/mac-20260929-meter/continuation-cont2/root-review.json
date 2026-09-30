@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "created_utc": "2026-09-29T16:48:50.714254+00:00",
+  "prior_sequence": "cmp300cont1",
+  "failure_phase": "meter_startup",
+  "functional_test_started": false,
+  "firmware_changed": false,
+  "new_B_attempt_consumed": false,
+  "capture": "Closed DEGRADED; CRC0; one0.646572167s gap betweenframes4and5;524recording samples",
+  "action": "One explicit new start as cmp300cont2 with identical six profiles02..07 and unchanged collector/startup limits/quality gates; do not retry automatically after another failure.",
+  "old_failure_preserved": true,
+  "explicit_root_review_completed": true,
+  "explanation": "A meter startup quality failure occurred before the sole authorized unchanged B-LS repeat could start."
+}

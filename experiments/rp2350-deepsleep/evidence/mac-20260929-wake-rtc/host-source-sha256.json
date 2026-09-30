@@ -1,0 +1,21 @@
+{
+  "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+  "wake-rtc-20260929/guard.py": "9a1bc1461c874fde35d682d7a0f32e9d7cd0ee119ea41994f6f06d8ee9963195",
+  "wake-rtc-20260929/rtc_probe.py": "6c44689d29088f05fbe50ac9e7141995fc610b3d14637598f2695d14ea192730",
+  "wake-rtc-20260929/switch_diagnostic.py": "b52d332b22c142b8f1a8bbeebeefc1b5204fbee1fa8d9ee5c093aa411f45574e",
+  "wake-rtc-20260929/irq_host.py": "4993f47714e61cd513759a584d5bbe636c6ff1b4fc3525585aa2f6094b949f68",
+  "wake-rtc-20260929/irq_poll200_host.py": "35ee94795a94c7951b9da6b85cceec3ff43075c66e12716ea9b9c6a43f356659",
+  "wake-rtc-20260929/compare_ram.py": "85a29c43eeeeae06e336eaa24f7086e7e0985370f6746b9e4ef80f2bbbba83e9",
+  "wake-rtc-20260929/analyze_compare_ram.py": "50e56b42dbd08883e70c4c26e841fa15d9b0720ba97eb5173b6368e91906da49",
+  "wake-rtc-20260929/export_wake_public.py": "e5af4e0e7912917caad9a9e7b9af7958317b8091fcac99380c587a2f4bce6c8f",
+  "wake-rtc-20260929/export_wake_public_v2.py": "ad8152497ed46cfb5b3a58249d098ca1d3d917ee3de94c020deff621fd82ef06",
+  "wake-rtc-20260929/export_wake_public_v3.py": "38bc7ab8f24739073071f2b7e7a996ef3429fa404777dad1f6a3d2f332c595d3",
+  "wake-rtc-20260929/recover_bootsel.py": "b618bc2d687cb4596b85887f52dd795b2d2c08d823aa72401d39fe9a39e19a74",
+  "wake-rtc-20260929/export_wake_public_v4.py": "b377f0e6a3a7808846f0970a5378810a198530f4afc499430482f530c0aea7da",
+  "wake-rtc-20260929/guard_deep2.py": "0136ea63241d973fb595a66b2c7305e31da91ad90a0f71d23c9344e4073d4a9a",
+  "wake-rtc-20260929/export_wake_public_v5.py": "c437302e2d4b0181411a971f556945303dbeff5716fd6343b702b14129ef458a",
+  "wake-rtc-20260929/compare_ram_deep_retention.py": "2e0e7a0337d196c2c2338d7e284be41e8386884ead673635e415cca3e396aa79",
+  "wake-rtc-20260929/analyze_compare_deep_retention.py": "83e352a3cbd343e0770aaf85b08961e372d067aa3b569e2814f1ad1ac5e7b047",
+  "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+  "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630"
+}

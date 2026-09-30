@@ -1,0 +1,10 @@
+{
+  "run": "meter-20260929-candidate-long30",
+  "cycles": 1,
+  "sleep_ms": 1800000,
+  "radio": "never",
+  "mode": "deepsleep",
+  "expect_deep_cause": true,
+  "rtc_tolerance_s": 60.0,
+  "host_tolerance_s": 60.0
+}

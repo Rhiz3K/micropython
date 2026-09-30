@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "firmware_bin_sha256": "0c8c1b0439fa050e1bf30c7f586f5deeb5e53b202b91877e30840411148ad12b",
+  "version": "v1.30.0-preview.104.g91e91d58de.dirty on 2026-09-29 (GNU 14.3.1 MinSizeRel)",
+  "flash_bytes_verified": true,
+  "guarded_filesystem_verified": true,
+  "file_count": 30,
+  "usb_returned": true,
+  "wdt_enabled": true,
+  "wdt_time_remaining": 0,
+  "wdt_reason": 1,
+  "host_utc": "2026-09-29T14:11:20.019892+00:00"
+}

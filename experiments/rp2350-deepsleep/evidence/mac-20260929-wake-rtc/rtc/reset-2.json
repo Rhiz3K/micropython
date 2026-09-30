@@ -1,0 +1,63 @@
+{
+  "action": "reset",
+  "label": "reset-2",
+  "result": "COMPLETE",
+  "started": {
+    "host_utc": "2026-09-29T20:03:23.561298+00:00",
+    "host_monotonic": 533139.586567458
+  },
+  "transition": {
+    "aon_elapsed_s": 1.119,
+    "host_elapsed_lower_s": 1.0640452910447493,
+    "host_elapsed_upper_s": 1.1804126249626279,
+    "aon_minus_host_midpoint_s": -0.003228958003688609,
+    "within_transport_bracket_plus_20ms": true,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "steady_rate": {
+    "aon_elapsed_s": 5.061,
+    "host_elapsed_lower_s": 5.001380958012305,
+    "host_elapsed_upper_s": 5.1183764999732375,
+    "aon_minus_host_midpoint_s": 0.0011212710072285859,
+    "within_transport_bracket_plus_20ms": true,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "hardware_result": "OBSERVATION_ONLY",
+  "files_unchanged": true,
+  "powman_backup_unchanged": true,
+  "firmware": "candidate-91e91",
+  "friendly_repl": true,
+  "rtc_written": false,
+  "original_application_started": false,
+  "finished": {
+    "host_utc": "2026-09-29T20:03:32.075090+00:00",
+    "host_monotonic": 533148.100277666
+  },
+  "source_sha256": "6c44689d29088f05fbe50ac9e7141995fc610b3d14637598f2695d14ea192730"
+}

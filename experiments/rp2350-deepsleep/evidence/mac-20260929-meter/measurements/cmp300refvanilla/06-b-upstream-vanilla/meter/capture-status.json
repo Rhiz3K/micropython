@@ -1,0 +1,17 @@
+{
+  "capture_state": "FINALIZED",
+  "snapshot_utc": "2026-09-29T19:33:11.747293+00:00",
+  "final_summary_present": true,
+  "finished_health_present": true,
+  "reader_matches_frozen_source": true,
+  "started_time_consistent": true,
+  "terminal_time_order_verified": true,
+  "reported_result": "PASS",
+  "capture_result": "PASS",
+  "data_quality": "PASS",
+  "stop_reason": "stop_file",
+  "raw_file_hash_count": 3,
+  "all_three_raw_file_hashes_present": true,
+  "raw_replay_performed_by_exporter": false,
+  "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+}

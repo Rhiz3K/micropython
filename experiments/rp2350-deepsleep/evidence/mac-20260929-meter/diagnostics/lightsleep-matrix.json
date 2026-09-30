@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "execution_result": "COMPLETE",
+  "hardware_result": "OBSERVATION_ONLY",
+  "board_alias": "test-board-2",
+  "requested_ms": 2500,
+  "trial_count": 4,
+  "identity_scope": "Exact runtime and CDC identity; CDC enumeration is not a full USB topology proof.",
+  "firmware_hash_scope": "Expected artifact provenance; this probe performs no new flash readback.",
+  "reset_requested": false,
+  "device_file_writes": false,
+  "radio_calls": false,
+  "rtc_restored": true,
+  "friendly_repl_verified": true,
+  "backup_unchanged": true,
+  "inventory_unchanged": true,
+  "nonce_survived": true,
+  "trials": [
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380922,
+      "elapsed_rtc_s": 0,
+      "trial": 1,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 40,
+      "rtc_before_s": 1790380922
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 2,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 40,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 3,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 4,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    }
+  ],
+  "scope": "Does not explain or replace the two previous 300-second B-LS failures.",
+  "entry_state": "exact_harness_STOPPED",
+  "rtc_restore_quantization_s": 1,
+  "rtc_anchor_transport_bracket_s": 0.05515466700308025,
+  "rtc_restore_transport_bracket_s": 0.03602787503041327,
+  "finished": {
+    "utc": "2026-09-29T18:22:32.847970+00:00",
+    "monotonic_ns": 527088867212083
+  }
+}

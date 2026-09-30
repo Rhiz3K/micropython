@@ -1,0 +1,1463 @@
+{
+  "schema": 1,
+  "fixture": "ram_compare_quiet200_no_refresh",
+  "hardware_access": false,
+  "result": "PASS",
+  "reasons": [],
+  "valid_full_cycle_energy": true,
+  "valid_sleep_current": true,
+  "published_cycles": [
+    {
+      "cycle": 1,
+      "valid_current_and_energy": true,
+      "sleep_mean_current_mA": 7.534590983457545,
+      "sleep_mean_voltage_V": 5.074796361116149,
+      "full_cycle_energy_J": 11.812399002290189,
+      "full_cycle_host_s": 303.824585167,
+      "sleep_ACK_to_first_wake_host_s": 301.007689709
+    },
+    {
+      "cycle": 2,
+      "valid_current_and_energy": true,
+      "sleep_mean_current_mA": 7.58077349572808,
+      "sleep_mean_voltage_V": 5.074892135066377,
+      "full_cycle_energy_J": 11.88941236561006,
+      "full_cycle_host_s": 303.812733,
+      "sleep_ACK_to_first_wake_host_s": 300.994796667
+    }
+  ],
+  "equal_cycle_aggregates": {
+    "sleep_mean_current_mA": {
+      "cycles": 2,
+      "mean": 7.557682239592813,
+      "min": 7.534590983457545,
+      "max": 7.58077349572808,
+      "weighting": "Equal weight per cycle; range is not a confidence interval."
+    },
+    "sleep_mean_voltage_V": {
+      "cycles": 2,
+      "mean": 5.074844248091263,
+      "min": 5.074796361116149,
+      "max": 5.074892135066377,
+      "weighting": "Equal weight per cycle; range is not a confidence interval."
+    },
+    "full_cycle_energy_J": {
+      "cycles": 2,
+      "mean": 11.850905683950124,
+      "min": 11.812399002290189,
+      "max": 11.88941236561006,
+      "weighting": "Equal weight per cycle; range is not a confidence interval."
+    }
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "ready_start_monotonic_ns": 534197367802708,
+      "ready_end_monotonic_ns": 534501192387875,
+      "sleep_ack_flush_monotonic_ns": 534197380237041,
+      "first_wake_monotonic_ns": 534498387926750,
+      "host_ack_to_first_wake_s": 301.007689709,
+      "duration_eligible": true,
+      "wake_observation": "WITHIN_DECLARED_HOST_WINDOW",
+      "rtc_at_start_ready_ms": 1790713387462,
+      "rtc_first_state_after_wake_ms": 1790713688562,
+      "cause": 3
+    },
+    {
+      "cycle": 2,
+      "ready_start_monotonic_ns": 534501192387875,
+      "ready_end_monotonic_ns": 534805005120875,
+      "sleep_ack_flush_monotonic_ns": 534501204149166,
+      "first_wake_monotonic_ns": 534802198945833,
+      "host_ack_to_first_wake_s": 300.994796667,
+      "duration_eligible": true,
+      "wake_observation": "WITHIN_DECLARED_HOST_WINDOW",
+      "rtc_at_start_ready_ms": 1790713691286,
+      "rtc_first_state_after_wake_ms": 1790713992368,
+      "cause": 3
+    }
+  ],
+  "host_clock_mapping": {
+    "quality": "DIRECT_HOST_MONOTONIC",
+    "host_anchor_bracket_s": 8.75e-07,
+    "meter_offset_distance_outside_host_anchor_s": 0.0,
+    "host_wall_minus_monotonic_lower_ns": 1790179063975625792,
+    "host_wall_minus_monotonic_upper_ns": 1790179063975626667,
+    "first_meter_wall_minus_monotonic_ns": 1790179063975626084
+  },
+  "full_cycles": [
+    {
+      "name": "cycle_1_READY_to_READY",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534197367802708,
+      "end_host_monotonic_ns": 534501192387875,
+      "duration_host_s": 303.824585167,
+      "samples": 30384,
+      "measurement_frames": 7596,
+      "minimum_samples": 30075,
+      "expected_nominal_samples": 30382.4585167,
+      "sample_density_hz": 100.00507359632911,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.021519833,
+      "last_receipt_before_end_s": 0.014633209,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.057535084,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 30384,
+        "mean": 0.00766149058715115,
+        "min": 0.00546,
+        "max": 0.02062,
+        "population_stddev": 0.0011100163935135108,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 30384,
+        "mean": 5.074785095774082,
+        "min": 5.05501,
+        "max": 5.09252,
+        "population_stddev": 0.0018993971678263465,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 30384,
+        "mean": 0.03887971276282912,
+        "min": 0.0276769038,
+        "max": 0.104640314,
+        "population_stddev": 0.0056217883575170125,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.008272129999999999,
+        "min": 0.00546,
+        "max": 0.01822,
+        "population_stddev": 0.0023328290042564205,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.010658060000000013,
+        "min": 0.00745,
+        "max": 0.02062,
+        "population_stddev": 0.004706312636916503,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": 0.0023859300000000135,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 303.84,
+          "charge_As": 2.3278673,
+          "energy_J": 11.813211925858,
+          "energy_Wh": 0.0032814477571827777,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 303.824585167,
+          "segments": 7597,
+          "charge_As": 2.3277069504330337,
+          "energy_J": 11.812399002290189,
+          "energy_Wh": 0.003281221945080608,
+          "mean_current_A_over_covered_time": 0.00766135153004023,
+          "mean_power_W_over_covered_time": 0.03887900972792374,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 0.0008129235678122626,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_2_READY_to_READY",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534501192387875,
+      "end_host_monotonic_ns": 534805005120875,
+      "duration_host_s": 303.812733,
+      "samples": 30384,
+      "measurement_frames": 7596,
+      "minimum_samples": 30074,
+      "expected_nominal_samples": 30381.273299999997,
+      "sample_density_hz": 100.00897493654422,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.025485583,
+      "last_receipt_before_end_s": 0.0067385,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.051576084,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 30384,
+        "mean": 0.00771170517377566,
+        "min": 0.00571,
+        "max": 0.04672,
+        "population_stddev": 0.0011344799943822685,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 30384,
+        "mean": 5.074881684768277,
+        "min": 5.05251,
+        "max": 5.09127,
+        "population_stddev": 0.0020486589203819513,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 30384,
+        "mean": 0.03913533157751089,
+        "min": 0.0289454746,
+        "max": 0.236837696,
+        "population_stddev": 0.005746729236229115,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.008352889999999986,
+        "min": 0.00571,
+        "max": 0.01839,
+        "population_stddev": 0.002386619104067508,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.01078864000000001,
+        "min": 0.00755,
+        "max": 0.04672,
+        "population_stddev": 0.004793211694719939,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": 0.0024357500000000247,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 303.84,
+          "charge_As": 2.3431245,
+          "energy_J": 11.890879146511,
+          "energy_Wh": 0.0033030219851419443,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 303.812733,
+          "segments": 7597,
+          "charge_As": 2.3428352435364346,
+          "energy_J": 11.88941236561006,
+          "energy_Wh": 0.0033026145460027943,
+          "mean_current_A_over_covered_time": 0.007711445206400993,
+          "mean_power_W_over_covered_time": 0.03913401603747155,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 0.0014667809009409893,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    }
+  ],
+  "sleep_comparison_windows": [
+    {
+      "name": "cycle_1_ACK_plus_60_to_280s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534257380237041,
+      "end_host_monotonic_ns": 534477380237041,
+      "duration_host_s": 220.0,
+      "samples": 22004,
+      "measurement_frames": 5501,
+      "minimum_samples": 21776,
+      "expected_nominal_samples": 22000.0,
+      "sample_density_hz": 100.01818181818182,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.008298542,
+      "last_receipt_before_end_s": 0.002025333,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.054621167,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 22004,
+        "mean": 0.007534590983457545,
+        "min": 0.00739,
+        "max": 0.00763,
+        "population_stddev": 3.313774722821974e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 22004,
+        "mean": 5.074796361116149,
+        "min": 5.05751,
+        "max": 5.09252,
+        "population_stddev": 0.0017823962546492968,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 22004,
+        "mean": 0.038236514770246234,
+        "min": 0.0375022547,
+        "max": 0.0387764274,
+        "population_stddev": 0.00016867432070384388,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007553099999999999,
+        "min": 0.00743,
+        "max": 0.00762,
+        "population_stddev": 3.9716369421183806e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007513160000000004,
+        "min": 0.00744,
+        "max": 0.00759,
+        "population_stddev": 3.775730922615974e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -3.993999999999526e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 220.04,
+          "charge_As": 1.6579114,
+          "energy_J": 8.413562710045,
+          "energy_Wh": 0.002337100752790278,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 220.0,
+          "segments": 5502,
+          "charge_As": 1.657610157319323,
+          "energy_J": 8.41203429482064,
+          "energy_Wh": 0.002336676193005733,
+          "mean_current_A_over_covered_time": 0.007534591624178741,
+          "mean_power_W_over_covered_time": 0.038236519521911996,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 0.0015284152243602023,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_2_ACK_plus_60_to_280s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534561204149166,
+      "end_host_monotonic_ns": 534781204149166,
+      "duration_host_s": 220.0,
+      "samples": 22004,
+      "measurement_frames": 5501,
+      "minimum_samples": 21776,
+      "expected_nominal_samples": 22000.0,
+      "sample_density_hz": 100.01818181818182,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.005062959,
+      "last_receipt_before_end_s": 0.004744833,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.050270167,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 22004,
+        "mean": 0.00758077349572808,
+        "min": 0.0074,
+        "max": 0.00775,
+        "population_stddev": 5.0878232854353736e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 22004,
+        "mean": 5.074892135066377,
+        "min": 5.05251,
+        "max": 5.09002,
+        "population_stddev": 0.0019341854592967941,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 22004,
+        "mean": 0.038471608049890964,
+        "min": 0.03755389,
+        "max": 0.0393580548,
+        "population_stddev": 0.0002586553925088547,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.00760766,
+        "min": 0.00748,
+        "max": 0.00774,
+        "population_stddev": 5.368355800428993e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.00757132,
+        "min": 0.00742,
+        "max": 0.00767,
+        "population_stddev": 5.322647461555189e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -3.633999999999929e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 220.04,
+          "charge_As": 1.6680734,
+          "energy_J": 8.465292635298,
+          "energy_Wh": 0.0023514701764716667,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 220.0,
+          "segments": 5502,
+          "charge_As": 1.66777086166594,
+          "energy_J": 8.46375749054662,
+          "energy_Wh": 0.002351043747374061,
+          "mean_current_A_over_covered_time": 0.00758077664393609,
+          "mean_power_W_over_covered_time": 0.03847162495703009,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 0.0015351447513811678,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    }
+  ],
+  "drift_subwindows": [
+    {
+      "name": "cycle_1_ACK_plus_60_to_120s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534257380237041,
+      "end_host_monotonic_ns": 534317380237041,
+      "duration_host_s": 60.0,
+      "samples": 6004,
+      "measurement_frames": 1501,
+      "minimum_samples": 5936,
+      "expected_nominal_samples": 6000.0,
+      "sample_density_hz": 100.06666666666666,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.008298542,
+      "last_receipt_before_end_s": 0.00024325,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.054621167,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 6004,
+        "mean": 0.007535099933377752,
+        "min": 0.00739,
+        "max": 0.00762,
+        "population_stddev": 3.5738240845855e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 6004,
+        "mean": 5.0749638974017355,
+        "min": 5.05751,
+        "max": 5.09252,
+        "population_stddev": 0.0018097463392030473,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 6004,
+        "mean": 0.038240360352465065,
+        "min": 0.0375022547,
+        "max": 0.0387764274,
+        "population_stddev": 0.00018193222235369955,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007553099999999999,
+        "min": 0.00743,
+        "max": 0.00762,
+        "population_stddev": 3.9716369421183806e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1004,
+        "mean": 0.007533705179282877,
+        "min": 0.00744,
+        "max": 0.0076,
+        "population_stddev": 3.598108086684205e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -1.939482071712257e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 60.04,
+          "charge_As": 0.4524074,
+          "energy_J": 2.295951235562,
+          "energy_Wh": 0.0006377642321005555,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 60.0,
+          "segments": 1502,
+          "charge_As": 0.45210505873096585,
+          "energy_J": 2.2944172621459695,
+          "energy_Wh": 0.0006373381283738804,
+          "mean_current_A_over_covered_time": 0.007535084312182764,
+          "mean_power_W_over_covered_time": 0.038240287702432825,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 0.0015339734160306762,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_1_ACK_plus_120_to_180s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534317380237041,
+      "end_host_monotonic_ns": 534377380237041,
+      "duration_host_s": 60.0,
+      "samples": 6000,
+      "measurement_frames": 1500,
+      "minimum_samples": 5936,
+      "expected_nominal_samples": 6000.0,
+      "sample_density_hz": 100.0,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.039597959,
+      "last_receipt_before_end_s": 0.000815333,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.05232725,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 6000,
+        "mean": 0.007537713333333322,
+        "min": 0.00744,
+        "max": 0.00761,
+        "population_stddev": 3.5269030166545135e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 6000,
+        "mean": 5.0747723083333085,
+        "min": 5.05751,
+        "max": 5.09002,
+        "population_stddev": 0.001721119574074689,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 6000,
+        "mean": 0.038252177908433146,
+        "min": 0.0376743744,
+        "max": 0.0387065147,
+        "population_stddev": 0.00017924515412584105,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007550340000000002,
+        "min": 0.00747,
+        "max": 0.00761,
+        "population_stddev": 2.8984209494135095e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007521239999999991,
+        "min": 0.00745,
+        "max": 0.00758,
+        "population_stddev": 3.584497733295221e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -2.910000000001106e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 60.0,
+          "charge_As": 0.4522628,
+          "energy_J": 2.295130674506,
+          "energy_Wh": 0.0006375362984738889,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 60.0,
+          "segments": 1501,
+          "charge_As": 0.452262602627196,
+          "energy_J": 2.2951296519367212,
+          "energy_Wh": 0.000637536014426867,
+          "mean_current_A_over_covered_time": 0.0075377100437866,
+          "mean_power_W_over_covered_time": 0.03825216086561202,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 1.0225692785859053e-06,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_1_ACK_plus_180_to_240s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534377380237041,
+      "end_host_monotonic_ns": 534437380237041,
+      "duration_host_s": 60.0,
+      "samples": 6000,
+      "measurement_frames": 1500,
+      "minimum_samples": 5936,
+      "expected_nominal_samples": 6000.0,
+      "sample_density_hz": 100.0,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.039094167,
+      "last_receipt_before_end_s": 0.0016845,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.043786125,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 6000,
+        "mean": 0.007531076666666666,
+        "min": 0.00746,
+        "max": 0.00761,
+        "population_stddev": 2.677201503228586e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 6000,
+        "mean": 5.074722188333334,
+        "min": 5.05751,
+        "max": 5.09002,
+        "population_stddev": 0.0017892215610509677,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 6000,
+        "mean": 0.03821812272171655,
+        "min": 0.0378169497,
+        "max": 0.038615423,
+        "population_stddev": 0.00013676713185333816,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007547600000000004,
+        "min": 0.00751,
+        "max": 0.00761,
+        "population_stddev": 2.4377038376308723e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007532100000000002,
+        "min": 0.00749,
+        "max": 0.00758,
+        "population_stddev": 2.219436865513476e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -1.550000000000249e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 60.0,
+          "charge_As": 0.4518646,
+          "energy_J": 2.293087363303,
+          "energy_Wh": 0.0006369687120286111,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 60.0,
+          "segments": 1501,
+          "charge_As": 0.45186571328761704,
+          "energy_J": 2.293092968489861,
+          "energy_Wh": 0.0006369702690249613,
+          "mean_current_A_over_covered_time": 0.007531095221460284,
+          "mean_power_W_over_covered_time": 0.03821821614149768,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": -5.605186860879741e-06,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_1_ACK_plus_240_to_280s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534437380237041,
+      "end_host_monotonic_ns": 534477380237041,
+      "duration_host_s": 40.0,
+      "samples": 4000,
+      "measurement_frames": 1000,
+      "minimum_samples": 3956,
+      "expected_nominal_samples": 4000.0,
+      "sample_density_hz": 100.0,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.038402959,
+      "last_receipt_before_end_s": 0.002025333,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.0413615,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 4000,
+        "mean": 0.007534415000000003,
+        "min": 0.00744,
+        "max": 0.00763,
+        "population_stddev": 3.389775471915453e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 4000,
+        "mean": 5.07469222750001,
+        "min": 5.05876,
+        "max": 5.08877,
+        "population_stddev": 0.0018035617575349707,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 4000,
+        "mean": 0.03823483591685005,
+        "min": 0.0376650744,
+        "max": 0.0387196558,
+        "population_stddev": 0.0001722656912823967,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007552640000000002,
+        "min": 0.00751,
+        "max": 0.00763,
+        "population_stddev": 2.865362804253668e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007513160000000004,
+        "min": 0.00744,
+        "max": 0.00759,
+        "population_stddev": 3.775730922615974e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -3.947999999999799e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 40.0,
+          "charge_As": 0.3013766,
+          "energy_J": 1.529393436674,
+          "energy_Wh": 0.00042483151018722225,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 40.0,
+          "segments": 1001,
+          "charge_As": 0.30137678267354784,
+          "energy_J": 1.5293944122480894,
+          "energy_Wh": 0.0004248317811800248,
+          "mean_current_A_over_covered_time": 0.007534419566838696,
+          "mean_power_W_over_covered_time": 0.03823486030620223,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": -9.755740892902764e-07,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_2_ACK_plus_60_to_120s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534561204149166,
+      "end_host_monotonic_ns": 534621204149166,
+      "duration_host_s": 60.0,
+      "samples": 6000,
+      "measurement_frames": 1500,
+      "minimum_samples": 5936,
+      "expected_nominal_samples": 6000.0,
+      "sample_density_hz": 100.0,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.005062959,
+      "last_receipt_before_end_s": 0.035688875,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.047658458,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 6000,
+        "mean": 0.007581226666666673,
+        "min": 0.00745,
+        "max": 0.00775,
+        "population_stddev": 5.062438762318386e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 6000,
+        "mean": 5.0749215650000155,
+        "min": 5.05751,
+        "max": 5.08752,
+        "population_stddev": 0.0019879014565049604,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 6000,
+        "mean": 0.03847413072033343,
+        "min": 0.037806515,
+        "max": 0.0393580548,
+        "population_stddev": 0.00025735580574129055,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.00760766,
+        "min": 0.00748,
+        "max": 0.00774,
+        "population_stddev": 5.368355800428993e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007564439999999999,
+        "min": 0.00746,
+        "max": 0.00767,
+        "population_stddev": 3.8975458945341344e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -4.322000000000093e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 60.0,
+          "charge_As": 0.4548736,
+          "energy_J": 2.30844784322,
+          "energy_Wh": 0.0006412355120055556,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 60.0,
+          "segments": 1501,
+          "charge_As": 0.4548741925610927,
+          "energy_J": 2.3084508430049646,
+          "energy_Wh": 0.0006412363452791568,
+          "mean_current_A_over_covered_time": 0.007581236542684878,
+          "mean_power_W_over_covered_time": 0.038474180716749413,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": -2.9997849644303187e-06,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_2_ACK_plus_120_to_180s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534621204149166,
+      "end_host_monotonic_ns": 534681204149166,
+      "duration_host_s": 60.0,
+      "samples": 6000,
+      "measurement_frames": 1500,
+      "minimum_samples": 5936,
+      "expected_nominal_samples": 6000.0,
+      "sample_density_hz": 100.0,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.004333875,
+      "last_receipt_before_end_s": 0.035564375,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.044865709,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 6000,
+        "mean": 0.007587840000000014,
+        "min": 0.00746,
+        "max": 0.00771,
+        "population_stddev": 4.3682960827612304e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 6000,
+        "mean": 5.074857639999984,
+        "min": 5.05876,
+        "max": 5.09002,
+        "population_stddev": 0.0018643544004289412,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 6000,
+        "mean": 0.03850720723459983,
+        "min": 0.0378356247,
+        "max": 0.0391280187,
+        "population_stddev": 0.00022203863821988217,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007592519999999995,
+        "min": 0.00749,
+        "max": 0.00771,
+        "population_stddev": 4.8576224637160866e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007571639999999998,
+        "min": 0.00747,
+        "max": 0.00765,
+        "population_stddev": 3.792242608272829e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -2.087999999999656e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 60.0,
+          "charge_As": 0.4552704,
+          "energy_J": 2.310432434076,
+          "energy_Wh": 0.0006417867872433333,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 60.0,
+          "segments": 1501,
+          "charge_As": 0.45526989118384736,
+          "energy_J": 2.310429902987443,
+          "energy_Wh": 0.0006417860841631787,
+          "mean_current_A_over_covered_time": 0.007587831519730789,
+          "mean_power_W_over_covered_time": 0.038507165049790716,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 2.5310885569673758e-06,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_2_ACK_plus_180_to_240s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534681204149166,
+      "end_host_monotonic_ns": 534741204149166,
+      "duration_host_s": 60.0,
+      "samples": 6004,
+      "measurement_frames": 1501,
+      "minimum_samples": 5936,
+      "expected_nominal_samples": 6000.0,
+      "sample_density_hz": 100.06666666666666,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.003758542,
+      "last_receipt_before_end_s": 0.004608916,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.04812575,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 6004,
+        "mean": 0.007580896069287153,
+        "min": 0.0074,
+        "max": 0.00774,
+        "population_stddev": 5.564200304509762e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 6004,
+        "mean": 5.074878535976031,
+        "min": 5.05251,
+        "max": 5.09002,
+        "population_stddev": 0.00191326673836414,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 6004,
+        "mean": 0.03847212958052967,
+        "min": 0.03755389,
+        "max": 0.0392802678,
+        "population_stddev": 0.00028313432237772536,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007590520000000004,
+        "min": 0.00748,
+        "max": 0.00768,
+        "population_stddev": 4.0744687997333164e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007568900000000006,
+        "min": 0.00748,
+        "max": 0.00765,
+        "population_stddev": 3.746718564290557e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": -2.1619999999998238e-05,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 60.04,
+          "charge_As": 0.455157,
+          "energy_J": 2.309866660015,
+          "energy_Wh": 0.0006416296277819445,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 60.0,
+          "segments": 1502,
+          "charge_As": 0.45485512490030794,
+          "energy_J": 2.308334689134083,
+          "energy_Wh": 0.0006412040803150231,
+          "mean_current_A_over_covered_time": 0.007580918748338466,
+          "mean_power_W_over_covered_time": 0.03847224481890139,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 0.0015319708809169441,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    },
+    {
+      "name": "cycle_2_ACK_plus_240_to_280s",
+      "result": "PASS",
+      "reasons": [],
+      "start_host_monotonic_ns": 534741204149166,
+      "end_host_monotonic_ns": 534781204149166,
+      "duration_host_s": 40.0,
+      "samples": 4000,
+      "measurement_frames": 1000,
+      "minimum_samples": 3956,
+      "expected_nominal_samples": 4000.0,
+      "sample_density_hz": 100.0,
+      "density_boundary_allowance_samples": 4,
+      "first_receipt_after_start_s": 0.03509275,
+      "last_receipt_before_end_s": 0.004744833,
+      "invalid_frames": 0,
+      "receipt_gaps_over_200ms": 0,
+      "maximum_intermeasurement_gap_overlapping_window_s": 0.050270167,
+      "samples_exactly_zero_current": 0,
+      "current_A": {
+        "count": 4000,
+        "mean": 0.0075693099999999975,
+        "min": 0.00742,
+        "max": 0.0077,
+        "population_stddev": 5.176411788101859e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "voltage_V": {
+        "count": 4000,
+        "mean": 5.074920145000005,
+        "min": 5.05751,
+        "max": 5.09002,
+        "population_stddev": 0.0019848423687978656,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "power_W_calculated": {
+        "count": 4000,
+        "mean": 0.03841364244967504,
+        "min": 0.0376574646,
+        "max": 0.039078501,
+        "population_stddev": 0.00026293129900375556,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "first_10s_current_A": {
+        "count": 1000,
+        "mean": 0.007566600000000005,
+        "min": 0.00749,
+        "max": 0.00768,
+        "population_stddev": 3.967921370188655e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_10s_current_A": {
+        "count": 1000,
+        "mean": 0.00757132,
+        "min": 0.00742,
+        "max": 0.00767,
+        "population_stddev": 5.322647461555189e-05,
+        "median": null,
+        "p05": null,
+        "p95": null,
+        "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+      },
+      "last_minus_first_10s_mean_current_A": 4.719999999995388e-06,
+      "stability_classification": "Not automatically classified; inspect trace and first/last 10 s trend.",
+      "integral_estimates": {
+        "nominal_10ms_per_in_window_received_sample": {
+          "duration_nominal_s": 40.0,
+          "charge_As": 0.3027724,
+          "energy_J": 1.536545697987,
+          "energy_Wh": 0.0004268182494408333,
+          "boundary_rule": "Whole four-sample groups selected by actual frame receipt in [start,end); no fictional individual timestamps."
+        },
+        "host_receipt_frame_mean_trapezoid": {
+          "covered_host_s": 40.0,
+          "segments": 1001,
+          "charge_As": 0.3027716530206891,
+          "energy_J": 1.5365420554200928,
+          "energy_Wh": 0.00042681723761669245,
+          "mean_current_A_over_covered_time": 0.0075692913255172274,
+          "mean_power_W_over_covered_time": 0.03841355138550232,
+          "boundary_rule": "Linear interpolation of adjacent frame means at window boundaries; no bridging invalid frames or >0.2 s gaps. Receipts remain actual host times."
+        },
+        "model_energy_difference_J": 3.6425669072137623e-06,
+        "uncertainty": "Model estimates, not traceable physical energy. Difference between models is sensitivity, not confidence interval. Unknown meter cadence/calibration/USB buffering and unresolved brief peaks remain. No zero or offset subtraction."
+      }
+    }
+  ],
+  "diagnostic_integral_scope": "Raw window estimates are diagnostic unless valid_full_cycle_energy is true.",
+  "meter_capture_result": "PASS",
+  "meter_data_quality": "PASS",
+  "meter_raw_proof": {
+    "frames_total": 15431,
+    "valid_frames": 15431,
+    "invalid_frames": 0,
+    "measurement_frames": 15430,
+    "other_valid_frames": 1,
+    "samples_total": 61720,
+    "recording_measurement_frames": 15400,
+    "recording_samples": 61600,
+    "drain_measurement_frames": 30,
+    "invalid_reasons": {},
+    "valid_frame_type_counts": {
+      "0x03": 1,
+      "0x04": 15430
+    },
+    "first_measurement_receipt_monotonic_ns": 534189609768083,
+    "last_measurement_receipt_monotonic_ns": 534805518250583,
+    "recording_receipt_span_s": 615.9084825,
+    "observed_nominal_sample_rate_hz": 100.00836447320727,
+    "receipt_gap_count_over_200ms": 0,
+    "receipt_gaps_over_200ms_first20": [],
+    "maximum_interframe_receipt_gap_s": 0.057535084,
+    "samples_exactly_zero_current": 0,
+    "dropped_frames": null,
+    "dropped_samples": null,
+    "drop_accounting": "No known device sequence counter; exact missing counts unknown. All detected gaps logged in events.jsonl.",
+    "voltage_V": {
+      "count": 61600,
+      "mean": 5.074744177435007,
+      "min": 5.05251,
+      "max": 5.09252,
+      "population_stddev": 0.002110219582657924,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    },
+    "current_A": {
+      "count": 61600,
+      "mean": 0.007835408766233792,
+      "min": 0.00546,
+      "max": 0.04672,
+      "population_stddev": 0.0016917884350249554,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    },
+    "power_W_calculated": {
+      "count": 61600,
+      "mean": 0.039761051675694666,
+      "min": 0.0276769038,
+      "max": 0.236837696,
+      "population_stddev": 0.008567686115209434,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    },
+    "integral_estimates": {
+      "nominal_10ms_per_received_sample": {
+        "recorded_nominal_duration_s": 616.0,
+        "charge_As": 4.8266118,
+        "energy_J": 24.492807832228,
+        "energy_Wh": 0.006803557731174445,
+        "assumption": "Exactly100Hz nominal device cadence; only received valid samples counted. Missing samples not invented; calibration/cadence error not bounded."
+      },
+      "host_receipt_frame_mean_trapezoid": {
+        "covered_host_s": 615.9084825000008,
+        "segments": 1,
+        "charge_As": 4.8252963201699135,
+        "energy_J": 24.486138353492404,
+        "energy_Wh": 0.006801705098192334,
+        "assumption": "Trapezoid of frame-mean current/power at host receipt times; split at invalid frames or gaps>0.2s. No gap interpolation. Host buffering/timing may bias results."
+      },
+      "precision_claim": "Approximate model estimates, not exact physical energy. No offset subtraction or missing-data compensation."
+    },
+    "raw_to_samples_proof": "Every raw read reparsed with CRC; every decoded sample, zero, index, and timestamp matches JSONL exactly. Invalid raw frames produce no samples.",
+    "meter_UTC_minus_monotonic_offset_change_s": {
+      "count": 15431,
+      "mean": -8.752579651351184e-05,
+      "min": -0.000200584,
+      "max": 0.000633583,
+      "population_stddev": 6.071551815974282e-05,
+      "median": null,
+      "p05": null,
+      "p95": null,
+      "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."
+    }
+  },
+  "meter_event_counts": {
+    "opened_identity_verified": 1,
+    "command_sent": 595,
+    "recording_started": 1,
+    "health": 603,
+    "recording_finished": 1,
+    "draining_started": 1,
+    "closed": 1
+  },
+  "meter_commands": {
+    "0x81": 1,
+    "0x82": 2,
+    "0x83": 592
+  },
+  "source_evidence": [
+    {
+      "name": "frames.jsonl",
+      "sha256": "ba2c0b7692a90726f4a1a27fe897fe09ffbda5cc62316b863044b8130418e272",
+      "lines": 15431
+    },
+    {
+      "name": "samples.jsonl",
+      "sha256": "22121fd4000dad3355eac1f00fadcfd0eba0636a45cd4d6212c240e7690f3c53",
+      "lines": 61720
+    },
+    {
+      "name": "events.jsonl",
+      "sha256": "97258b7cfb7c3f258c7234bc876841b4d7b9280a5f27b40b9c783277a05503a2",
+      "lines": 1203
+    },
+    {
+      "name": "analysis-input.json",
+      "sha256": "007a8cdfe0a25fa3406e0662feefa4dc515f1a8d3c233ec5c8bf6cb4a696468a"
+    },
+    {
+      "name": "summary.json",
+      "sha256": "8bdc3205b19e522d465bc93ffa9e66405bd60bb4d2de1e17e7069e203a4d74a0"
+    },
+    {
+      "name": "health.json",
+      "sha256": "bc07ab9b7743d2c2a74c279933892a9572cddbf5dff7857fbb21e2426b6c0f0c"
+    },
+    {
+      "name": "metadata.json",
+      "sha256": "39578a97499c01da8bc668315d3613dfd59bfb7a8bf83c13bda2ad256fb1b4f0"
+    }
+  ],
+  "source_sha256": {
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+    "wake-rtc-20260929/guard.py": "9a1bc1461c874fde35d682d7a0f32e9d7cd0ee119ea41994f6f06d8ee9963195",
+    "wake-rtc-20260929/compare_ram.py": "85a29c43eeeeae06e336eaa24f7086e7e0985370f6746b9e4ef80f2bbbba83e9",
+    "wake-rtc-20260929/analyze_compare_ram.py": "50e56b42dbd08883e70c4c26e841fa15d9b0720ba97eb5173b6368e91906da49"
+  },
+  "analyzer_sha256": "50e56b42dbd08883e70c4c26e841fa15d9b0720ba97eb5173b6368e91906da49",
+  "frozen_dependency_sha256": {
+    "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+    "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45"
+  },
+  "checks": {
+    "gap_s": 0.2,
+    "edge_s": 0.1,
+    "nominal_density_fraction": 0.99,
+    "nominal_Hz": 100,
+    "count_boundary_allowance": 4,
+    "complete_host_model_coverage": true,
+    "sleep_ACK_offsets_s": [
+      60,
+      280
+    ],
+    "drift_ACK_offsets_s": [
+      60,
+      120,
+      180,
+      240,
+      280
+    ],
+    "duration_eligibility_host_s": [
+      297,
+      330
+    ]
+  },
+  "trace_bins": {
+    "file": "trace-bins.csv",
+    "width_s": 1,
+    "rows": 617,
+    "origin_host_monotonic_ns": 534197367802708
+  },
+  "offset_subtracted": false,
+  "zeros_or_outliers_removed": false,
+  "limitations": [
+    "New quiet200 RAM fixture; does not reclassify prior 300-second failures.",
+    "READY-to-READY includes RAM upload, host ACK delay, reset/reconnect and panel preparation.",
+    "Four samples share each real host frame receipt; no device timestamps or exact dropped count.",
+    "Trapezoid frame mean(U*I) with linear boundary clipping; no bridge across invalid frame or >0.2s gap.",
+    "Nominal10ms/sample integral is sensitivity only, not a confidence interval or exact energy.",
+    "Two cycles, equal weights and min/max; no precision, steady-state or causal IRQ claim.",
+    "Complete USB assembly at meter input; 10uA resolution is not verified absolute calibration."
+  ]
+}

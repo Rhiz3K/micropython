@@ -1,0 +1,912 @@
+{
+  "functional": [
+    {
+      "label": "candidate-smoke3",
+      "status": "PASS",
+      "reported_result": "PASS",
+      "last_protocol_status": "PASS",
+      "protocol_status_counts": {
+        "PASS": 1,
+        "READY": 4,
+        "SLEEP": 3
+      }
+    },
+    {
+      "label": "candidate-cycles100",
+      "status": "PASS",
+      "reported_result": "PASS",
+      "last_protocol_status": "PASS",
+      "protocol_status_counts": {
+        "PASS": 1,
+        "READY": 101,
+        "SLEEP": 100
+      }
+    },
+    {
+      "label": "candidate-long30",
+      "status": "PASS",
+      "reported_result": "PASS",
+      "last_protocol_status": "PASS",
+      "protocol_status_counts": {
+        "PASS": 1,
+        "READY": 2,
+        "SLEEP": 1
+      }
+    },
+    {
+      "label": "candidate-long75",
+      "status": "PASS",
+      "reported_result": "PASS",
+      "last_protocol_status": "PASS",
+      "protocol_status_counts": {
+        "PASS": 1,
+        "READY": 2,
+        "SLEEP": 1
+      }
+    }
+  ],
+  "comparative_measurements": [
+    {
+      "sequence": "cmp300",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "FAIL",
+          "run": {
+            "label": "cmp300-a-sleep-reset",
+            "status": "NOT_RUN",
+            "reason": "No run directory at export snapshot"
+          },
+          "analysis_status": "NOT_RUN",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.556309+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": false,
+          "analysis_source_hash_links": {
+            "frames.jsonl": false,
+            "samples.jsonl": false,
+            "events.jsonl": false,
+            "summary.json": false,
+            "events-private.jsonl": false
+          },
+          "complete_cycle_energy_publishable": false,
+          "diagnostic_only": true
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "sequence": "cmp300cont1",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "FAIL",
+          "run": {
+            "label": "cmp300cont1-b-lightsleep-reset",
+            "status": "NOT_RUN",
+            "reason": "No run directory at export snapshot"
+          },
+          "analysis_status": "NOT_RUN",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.560531+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "DEGRADED",
+            "capture_result": "PASS",
+            "data_quality": "DEGRADED",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": false,
+          "analysis_source_hash_links": {
+            "frames.jsonl": false,
+            "samples.jsonl": false,
+            "events.jsonl": false,
+            "summary.json": false,
+            "events-private.jsonl": false
+          },
+          "complete_cycle_energy_publishable": false,
+          "diagnostic_only": true
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "sequence": "cmp300cont2",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "FAIL",
+          "run": {
+            "label": "cmp300cont2-b-lightsleep-reset",
+            "status": "FAIL",
+            "reported_result": "FAIL",
+            "last_protocol_status": "FAIL",
+            "protocol_status_counts": {
+              "FAIL": 1,
+              "READY": 1,
+              "SLEEP": 1
+            }
+          },
+          "analysis_status": "NOT_RUN",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.564337+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": false,
+          "analysis_source_hash_links": {
+            "frames.jsonl": false,
+            "samples.jsonl": false,
+            "events.jsonl": false,
+            "summary.json": false,
+            "events-private.jsonl": false
+          },
+          "complete_cycle_energy_publishable": false,
+          "diagnostic_only": true
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "sequence": "cmp300deep",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "PASS",
+          "run": {
+            "label": "cmp300deep-c-deepsleep-never",
+            "status": "PASS",
+            "reported_result": "PASS",
+            "last_protocol_status": "PASS",
+            "protocol_status_counts": {
+              "PASS": 1,
+              "READY": 4,
+              "SLEEP": 3
+            }
+          },
+          "analysis_status": "PASS",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.614708+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": true,
+          "analysis_source_hash_links": {
+            "frames.jsonl": true,
+            "samples.jsonl": true,
+            "events.jsonl": true,
+            "summary.json": true,
+            "events-private.jsonl": true
+          },
+          "complete_cycle_energy_publishable": true,
+          "diagnostic_only": false
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "PASS",
+          "run": {
+            "label": "cmp300deep-c-deepsleep-sta",
+            "status": "PASS",
+            "reported_result": "PASS",
+            "last_protocol_status": "PASS",
+            "protocol_status_counts": {
+              "PASS": 1,
+              "READY": 4,
+              "SLEEP": 3
+            }
+          },
+          "analysis_status": "PASS",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.672669+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": true,
+          "analysis_source_hash_links": {
+            "frames.jsonl": true,
+            "samples.jsonl": true,
+            "events.jsonl": true,
+            "summary.json": true,
+            "events-private.jsonl": true
+          },
+          "complete_cycle_energy_publishable": true,
+          "diagnostic_only": false
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "PASS",
+          "run": {
+            "label": "cmp300deep-c-helper-sta",
+            "status": "PASS",
+            "reported_result": "PASS",
+            "last_protocol_status": "PASS",
+            "protocol_status_counts": {
+              "PASS": 1,
+              "READY": 4,
+              "SLEEP": 3
+            }
+          },
+          "analysis_status": "PASS",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.726015+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": true,
+          "analysis_source_hash_links": {
+            "frames.jsonl": true,
+            "samples.jsonl": true,
+            "events.jsonl": true,
+            "summary.json": true,
+            "events-private.jsonl": true
+          },
+          "complete_cycle_energy_publishable": true,
+          "diagnostic_only": false
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "sequence": "cmp300refusbq",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "FAIL",
+          "run": {
+            "label": "cmp300refusbq-b-upstream-usbfix",
+            "status": "FAIL",
+            "reported_result": "FAIL",
+            "last_protocol_status": "FAIL",
+            "protocol_status_counts": {
+              "FAIL": 1,
+              "READY": 1,
+              "SLEEP": 1
+            }
+          },
+          "analysis_status": "NOT_RUN",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.737890+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": false,
+          "analysis_source_hash_links": {
+            "frames.jsonl": false,
+            "samples.jsonl": false,
+            "events.jsonl": false,
+            "summary.json": false,
+            "events-private.jsonl": false
+          },
+          "complete_cycle_energy_publishable": false,
+          "diagnostic_only": true
+        }
+      ]
+    },
+    {
+      "sequence": "cmp300refvanilla",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "FAIL",
+          "run": {
+            "label": "cmp300refvanilla-b-upstream-vanilla",
+            "status": "FAIL",
+            "reported_result": "FAIL",
+            "last_protocol_status": "FAIL",
+            "protocol_status_counts": {
+              "FAIL": 1,
+              "READY": 1,
+              "SLEEP": 1
+            }
+          },
+          "analysis_status": "NOT_RUN",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.747293+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": false,
+          "analysis_source_hash_links": {
+            "frames.jsonl": false,
+            "samples.jsonl": false,
+            "events.jsonl": false,
+            "summary.json": false,
+            "events-private.jsonl": false
+          },
+          "complete_cycle_energy_publishable": false,
+          "diagnostic_only": true
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "sequence": "cmp300v2",
+      "status": "FAIL",
+      "profiles": [
+        {
+          "profile": "a-sleep-reset",
+          "status": "PASS",
+          "run": {
+            "label": "cmp300v2-a-sleep-reset",
+            "status": "PASS",
+            "reported_result": "PASS",
+            "last_protocol_status": "PASS",
+            "protocol_status_counts": {
+              "PASS": 1,
+              "READY": 4,
+              "SLEEP": 3
+            }
+          },
+          "analysis_status": "PASS",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.808659+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": true,
+          "analysis_source_hash_links": {
+            "frames.jsonl": true,
+            "samples.jsonl": true,
+            "events.jsonl": true,
+            "summary.json": true,
+            "events-private.jsonl": true
+          },
+          "complete_cycle_energy_publishable": true,
+          "diagnostic_only": false
+        },
+        {
+          "profile": "b-lightsleep-reset",
+          "status": "FAIL",
+          "run": {
+            "label": "cmp300v2-b-lightsleep-reset",
+            "status": "FAIL",
+            "reported_result": "FAIL",
+            "last_protocol_status": "FAIL",
+            "protocol_status_counts": {
+              "FAIL": 1,
+              "READY": 1,
+              "SLEEP": 1
+            }
+          },
+          "analysis_status": "NOT_RUN",
+          "capture": {
+            "capture_state": "FINALIZED",
+            "snapshot_utc": "2026-09-29T19:33:11.822006+00:00",
+            "final_summary_present": true,
+            "finished_health_present": true,
+            "reader_matches_frozen_source": true,
+            "started_time_consistent": true,
+            "terminal_time_order_verified": true,
+            "reported_result": "PASS",
+            "capture_result": "PASS",
+            "data_quality": "PASS",
+            "stop_reason": "stop_file",
+            "raw_file_hash_count": 3,
+            "all_three_raw_file_hashes_present": true,
+            "raw_replay_performed_by_exporter": false,
+            "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+          },
+          "analysis_hash_matches_profile_result": false,
+          "analysis_source_hash_links": {
+            "frames.jsonl": false,
+            "samples.jsonl": false,
+            "events.jsonl": false,
+            "summary.json": false,
+            "events-private.jsonl": false
+          },
+          "complete_cycle_energy_publishable": false,
+          "diagnostic_only": true
+        },
+        {
+          "profile": "c-deepsleep-never",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-deepsleep-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "c-helper-sta",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-vanilla",
+          "status": "NOT_RUN"
+        },
+        {
+          "profile": "b-upstream-usbfix",
+          "status": "NOT_RUN"
+        }
+      ]
+    }
+  ],
+  "combined_comparative_summary": {
+    "status": "FAIL",
+    "source": "combined-final/aggregate.json",
+    "public_summary": "combined/aggregate.json",
+    "export_publication": {
+      "overall_status_retained": "FAIL",
+      "profile_values_publishable": {
+        "A": true,
+        "C-never": true,
+        "C-STA": true,
+        "C+helper-STA": true,
+        "B-upstream-vanilla": false,
+        "B-upstream-usbfix": false,
+        "B-LS": false
+      },
+      "comparisons": [
+        {
+          "baseline": "A",
+          "target": "B-LS",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "A",
+          "target": "C-never",
+          "sleep_current_saving_percent_publishable": true,
+          "whole_cycle_energy_saving_percent_publishable": true
+        },
+        {
+          "baseline": "A",
+          "target": "B-upstream-vanilla",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "A",
+          "target": "B-upstream-usbfix",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "B-LS",
+          "target": "C-never",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "B-upstream-vanilla",
+          "target": "C-never",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "B-upstream-usbfix",
+          "target": "C-never",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "B-upstream-vanilla",
+          "target": "B-upstream-usbfix",
+          "sleep_current_saving_percent_publishable": false,
+          "whole_cycle_energy_saving_percent_publishable": false
+        },
+        {
+          "baseline": "C-STA",
+          "target": "C+helper-STA",
+          "sleep_current_saving_percent_publishable": true,
+          "whole_cycle_energy_saving_percent_publishable": true
+        }
+      ],
+      "note": "B-LS overall FAIL is retained. Comparable percentages concern only their two proven profiles; firmware candidate restoration is separate from restoration of original user files."
+    },
+    "aggregation_executed_by_exporter": false
+  },
+  "functional_meter_capture": {
+    "capture_state": "FINALIZED",
+    "snapshot_utc": "2026-09-29T19:33:11.551309+00:00",
+    "final_summary_present": true,
+    "finished_health_present": true,
+    "reader_matches_frozen_source": true,
+    "started_time_consistent": true,
+    "terminal_time_order_verified": true,
+    "reported_result": "DEGRADED",
+    "capture_result": "PASS",
+    "data_quality": "DEGRADED",
+    "stop_reason": "stop_file",
+    "raw_file_hash_count": 3,
+    "all_three_raw_file_hashes_present": true,
+    "raw_replay_performed_by_exporter": false,
+    "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+  },
+  "orchestration_revision": {
+    "status": "V2_FROZEN_SOURCE_VERIFIED",
+    "review_attempt_status_snapshot": "NOT_STARTED"
+  },
+  "comparison_continuation": {
+    "status": "CONTINUATION_FROZEN_PROOF_VERIFIED",
+    "hardware_result_inferred_from_provenance": false
+  },
+  "later_comparison_continuations": {
+    "cont2": {
+      "status": "FROZEN_SOURCE_PROOF_VERIFIED",
+      "hardware_result_inferred_from_provenance": false
+    },
+    "deep": {
+      "status": "FROZEN_SOURCE_PROOF_VERIFIED",
+      "hardware_result_inferred_from_provenance": false
+    }
+  },
+  "single_reference_provenance": {
+    "cmp300refvanilla": {
+      "status": "REFERENCE_FROZEN_PROOF_VERIFIED",
+      "hardware_result_inferred_from_provenance": false
+    },
+    "cmp300refusbq": {
+      "status": "REFERENCE_FROZEN_PROOF_VERIFIED",
+      "hardware_result_inferred_from_provenance": false
+    }
+  },
+  "restoration": "PASS",
+  "restoration_evidence": {
+    "selected": "no-load-final2/restoration.json",
+    "earlier_restoration_result": "PASS",
+    "earlier_restoration_is_historical_after_final2_preparation": true
+  },
+  "final_evidence": {
+    "candidate_final_smoke": {
+      "label": "candidate-final-smoke",
+      "status": "PASS",
+      "reported_result": "PASS",
+      "last_protocol_status": "PASS",
+      "protocol_status_counts": {
+        "PASS": 1,
+        "READY": 2,
+        "SLEEP": 1
+      }
+    },
+    "lightsleep_diagnostic": "COMPLETE",
+    "final_display_automatic": "PASS",
+    "final_display_physical_confirmation": "USER_CONFIRMED",
+    "no_load_reference": {
+      "status": "FAIL",
+      "physical_confirmation": "USER_CONFIRMED_WITHOUT_VERIFIED_WINDOW",
+      "scope": "Separate no-load reference; no offset subtraction.",
+      "analysis_status": "NOT_RUN",
+      "watcher_result": "FAIL",
+      "capture": {
+        "capture_state": "FINALIZED",
+        "snapshot_utc": "2026-09-29T19:33:11.889687+00:00",
+        "final_summary_present": true,
+        "finished_health_present": true,
+        "reader_matches_frozen_source": true,
+        "started_time_consistent": true,
+        "terminal_time_order_verified": true,
+        "reported_result": "ERROR",
+        "capture_result": "ERROR",
+        "data_quality": "PASS",
+        "stop_reason": "error",
+        "raw_file_hash_count": 3,
+        "all_three_raw_file_hashes_present": true,
+        "raw_replay_performed_by_exporter": false,
+        "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+      },
+      "post_hoc_diagnostic": {
+        "result": "POST_HOC_DIAGNOSTIC",
+        "window_quality": "PASS",
+        "public_path": "no-load-final2/posthoc-diagnostic.json",
+        "complete_no_load_reference": false,
+        "standard_no_load_analysis": "NOT_RUN",
+        "whole_capture_promoted_to_PASS": false
+      },
+      "attempt": "final2",
+      "attempt_present": true,
+      "guard_preparation": "PASS",
+      "restoration": "PASS"
+    },
+    "no_load_selected_attempt": "final2",
+    "no_load_attempts": {
+      "final1": {
+        "status": "FAIL",
+        "physical_confirmation": "USER_CONFIRMED_LATE_NO_VERIFIED_WINDOW",
+        "scope": "Separate no-load reference; no offset subtraction.",
+        "analysis_status": "NOT_RUN",
+        "watcher_result": "FAIL",
+        "capture": {
+          "capture_state": "FINALIZED",
+          "snapshot_utc": "2026-09-29T19:33:11.878514+00:00",
+          "final_summary_present": true,
+          "finished_health_present": true,
+          "reader_matches_frozen_source": true,
+          "started_time_consistent": true,
+          "terminal_time_order_verified": true,
+          "reported_result": "PASS",
+          "capture_result": "PASS",
+          "data_quality": "PASS",
+          "stop_reason": "stop_file",
+          "raw_file_hash_count": 3,
+          "all_three_raw_file_hashes_present": true,
+          "raw_replay_performed_by_exporter": false,
+          "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+        },
+        "attempt": "final1",
+        "attempt_present": true,
+        "guard_preparation": "NOT_APPLICABLE",
+        "restoration": "NOT_RUN"
+      },
+      "final2": {
+        "status": "FAIL",
+        "physical_confirmation": "USER_CONFIRMED_WITHOUT_VERIFIED_WINDOW",
+        "scope": "Separate no-load reference; no offset subtraction.",
+        "analysis_status": "NOT_RUN",
+        "watcher_result": "FAIL",
+        "capture": {
+          "capture_state": "FINALIZED",
+          "snapshot_utc": "2026-09-29T19:33:11.889687+00:00",
+          "final_summary_present": true,
+          "finished_health_present": true,
+          "reader_matches_frozen_source": true,
+          "started_time_consistent": true,
+          "terminal_time_order_verified": true,
+          "reported_result": "ERROR",
+          "capture_result": "ERROR",
+          "data_quality": "PASS",
+          "stop_reason": "error",
+          "raw_file_hash_count": 3,
+          "all_three_raw_file_hashes_present": true,
+          "raw_replay_performed_by_exporter": false,
+          "scope": "File-based reader finalization evidence; not independent HID close verification. Finalized ERROR/DEGRADED captures remain failures/diagnostics. Without finalization these are control-file snapshots only."
+        },
+        "post_hoc_diagnostic": {
+          "result": "POST_HOC_DIAGNOSTIC",
+          "window_quality": "PASS",
+          "public_path": "no-load-final2/posthoc-diagnostic.json",
+          "complete_no_load_reference": false,
+          "standard_no_load_analysis": "NOT_RUN",
+          "whole_capture_promoted_to_PASS": false
+        },
+        "attempt": "final2",
+        "attempt_present": true,
+        "guard_preparation": "PASS",
+        "restoration": "PASS"
+      }
+    }
+  },
+  "note": "NOT_RUN means absent evidence; FAIL means recorded failure; INCOMPLETE/RUNNING are never promoted to PASS."
+}

@@ -1,0 +1,180 @@
+# Excerpts from meter_reader.py; complete private source SHA256 a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45
+
+def crc8(data: bytes) -> int:
+    """CRC-8, poly=0x39, init=0, nonreflected, xorout=0, includes AA byte."""
+    value = 0
+    for byte in data:
+        value ^= byte
+        for _ in range(8):
+            value = ((value << 1) ^ (0x39 if value & 0x80 else 0)) & 0xFF
+    return value
+
+def command_report(command: int) -> bytes:
+    if type(command) is not int or command not in COMMANDS:
+        raise ValueError("Only measurement handshake/keepalive 0x81, 0x82, 0x83 allowed")
+    frame = bytes((0xAA, command)) + bytes(61)
+    checksum = crc8(frame)
+    if checksum != COMMANDS[command]:
+        raise RuntimeError("Internal command CRC self-check failed")
+    return b"\x00" + frame + bytes((checksum,))
+
+def parse_frame(raw: bytes) -> dict:
+    """Parse one HID read, without assuming an unobserved device clock or sequence."""
+    raw = bytes(raw)
+    had_report_id = len(raw) == 65 and raw[:2] == b"\x00\xaa"
+    data = raw[1:] if had_report_id else raw
+    result = {"raw_hex": raw.hex(), "read_length": len(raw),
+              "report_id_zero_present": had_report_id, "valid": False}
+    if len(data) != 64:
+        return result | {"error": "length", "samples": []}
+    if data[0] != 0xAA:
+        return result | {"error": "header", "samples": []}
+    expected = crc8(data[:-1])
+    result |= {"crc_received": data[-1], "crc_expected": expected,
+               "frame_type": data[1]}
+    if expected != data[-1]:
+        return result | {"error": "crc", "samples": []}
+    result |= {"valid": True, "unknown_byte_62": data[62], "samples": []}
+    if data[1] != 0x04:
+        return result
+    samples = []
+    for index in range(4):
+        chunk = data[2 + 15 * index:2 + 15 * (index + 1)]
+        voltage_raw, current_raw, dp_raw, dn_raw, temp_sign, temp_raw = struct.unpack("<IIHHBH", chunk)
+        samples.append({
+            "sample_in_frame": index,
+            "voltage_raw": voltage_raw, "current_raw": current_raw,
+            "voltage_V": voltage_raw / 100000.0,
+            "current_A": current_raw / 100000.0,
+            "power_W_calculated": voltage_raw * current_raw / 10000000000.0,
+            "dp_raw": dp_raw, "dn_raw": dn_raw,
+            "dp_V": dp_raw / 1000.0, "dn_V": dn_raw / 1000.0,
+            "temperature_sign_raw": temp_sign, "temperature_magnitude_raw": temp_raw,
+        })
+    result["samples"] = samples
+    return result
+
+class RunningStats:
+    """Constant-memory moments; never filters zero or outlier observations."""
+    def __init__(self):
+        self.n = 0
+        self.mean = self.m2 = 0.0
+        self.minimum = self.maximum = None
+    def add(self, value):
+        if not math.isfinite(value):
+            raise ValueError("Nonfinite sample")
+        self.n += 1
+        delta = value - self.mean
+        self.mean += delta / self.n
+        self.m2 += delta * (value - self.mean)
+        self.minimum = value if self.minimum is None else min(self.minimum, value)
+        self.maximum = value if self.maximum is None else max(self.maximum, value)
+    def snapshot(self):
+        return {"count": self.n, "mean": self.mean if self.n else None,
+                "min": self.minimum, "max": self.maximum,
+                "population_stddev": math.sqrt(max(0, self.m2 / self.n)) if self.n else None,
+                "median": None, "p05": None, "p95": None,
+                "quantiles_note": "Not accumulated online; compute from preserved raw samples offline."}
+
+class StreamAccounting:
+    def __init__(self):
+        self.counts = collections.Counter()
+        self.invalid_reasons = collections.Counter()
+        self.types = collections.Counter()
+        self.metrics = {key: RunningStats() for key in ("voltage_V", "current_A", "power_W_calculated")}
+        self.first_ns = self.last_ns = self.previous_frame_index = None
+        self.max_gap_ns = self.gap_count = 0
+        self.gap_examples = []  # Hard limit20; full list remains in events.jsonl.
+        self.previous_integration = None
+        self.nominal_current_raw_sum = self.nominal_power_raw_product_sum = 0
+        self.host_charge_As = self.host_energy_J = self.host_covered_s = 0.0
+        self.host_integration_segments = 0
+        self.zero_samples = 0
+    def add(self, frame, phase, receipt_ns, frame_index):
+        self.counts["frames_total"] += 1
+        notifications = []
+        if not frame["valid"]:
+            self.counts["invalid_frames"] += 1
+            self.invalid_reasons[frame["error"]] += 1
+            if phase == "recording":
+                self.previous_integration = None
+            return [{"event": "invalid_frame", "frame_index": frame_index, "reason": frame["error"]}]
+        self.counts["valid_frames"] += 1
+        self.types[f"0x{frame['frame_type']:02x}"] += 1
+        rows = frame["samples"]
+        if not rows:
+            self.counts["other_valid_frames"] += 1
+            return notifications
+        self.counts["measurement_frames"] += 1
+        self.counts["samples_total"] += len(rows)
+        if phase != "recording":
+            self.counts["drain_measurement_frames"] += 1
+            return notifications
+        self.counts["recording_measurement_frames"] += 1
+        self.counts["recording_samples"] += len(rows)
+        if self.first_ns is None:
+            self.first_ns = receipt_ns
+        if self.last_ns is not None:
+            gap_ns = receipt_ns - self.last_ns
+            if gap_ns < 0:
+                raise RuntimeError("Monotonic receipt clock moved backwards")
+            self.max_gap_ns = max(self.max_gap_ns, gap_ns)
+            if gap_ns > 200000000:
+                self.gap_count += 1
+                gap = {"event": "receipt_gap", "after_frame_index": self.previous_frame_index,
+                       "before_frame_index": frame_index, "gap_s": gap_ns / 1e9}
+                notifications.append(gap)
+                if len(self.gap_examples) < 20:
+                    self.gap_examples.append(gap)
+                self.previous_integration = None
+        self.last_ns, self.previous_frame_index = receipt_ns, frame_index
+        mean_i = sum(row["current_A"] for row in rows) / len(rows)
+        mean_p = sum(row["power_W_calculated"] for row in rows) / len(rows)
+        if self.previous_integration is None:
+            self.host_integration_segments += 1
+        else:
+            previous_ns, previous_i, previous_p = self.previous_integration
+            delta_s = (receipt_ns - previous_ns) / 1e9
+            self.host_charge_As += (previous_i + mean_i) * 0.5 * delta_s
+            self.host_energy_J += (previous_p + mean_p) * 0.5 * delta_s
+            self.host_covered_s += delta_s
+        self.previous_integration = (receipt_ns, mean_i, mean_p)
+        for row in rows:
+            for key, values in self.metrics.items():
+                values.add(row[key])
+            self.nominal_current_raw_sum += row["current_raw"]
+            self.nominal_power_raw_product_sum += row["voltage_raw"] * row["current_raw"]
+            self.zero_samples += row["current_raw"] == 0
+        return notifications
+    def snapshot(self):
+        span = (self.last_ns - self.first_ns) / 1e9 if self.first_ns is not None else None
+        frames = self.counts["recording_measurement_frames"]
+        count_names = ("frames_total", "valid_frames", "invalid_frames", "measurement_frames",
+                       "other_valid_frames", "samples_total", "recording_measurement_frames",
+                       "recording_samples", "drain_measurement_frames")
+        return {**{k: self.counts[k] for k in count_names},
+                "invalid_reasons": dict(self.invalid_reasons), "valid_frame_type_counts": dict(self.types),
+                "first_measurement_receipt_monotonic_ns": self.first_ns,
+                "last_measurement_receipt_monotonic_ns": self.last_ns,
+                "recording_receipt_span_s": span,
+                "observed_nominal_sample_rate_hz": ((frames - 1) * 4 / span if span else None),
+                "receipt_gap_count_over_200ms": self.gap_count,
+                "receipt_gaps_over_200ms_first20": self.gap_examples,
+                "maximum_interframe_receipt_gap_s": self.max_gap_ns / 1e9,
+                "samples_exactly_zero_current": self.zero_samples,
+                "dropped_frames": None, "dropped_samples": None,
+                "drop_accounting": "No known device sequence counter; exact missing counts unknown. All detected gaps logged in events.jsonl.",
+                **{k: v.snapshot() for k, v in self.metrics.items()},
+                "integral_estimates": {
+                    "nominal_10ms_per_received_sample": {
+                        "recorded_nominal_duration_s": self.counts["recording_samples"] / 100,
+                        "charge_As": self.nominal_current_raw_sum / 10000000,
+                        "energy_J": self.nominal_power_raw_product_sum / 1000000000000,
+                        "energy_Wh": self.nominal_power_raw_product_sum / 3600000000000000,
+                        "assumption": "Exactly100Hz nominal device cadence; only received valid samples counted. Missing samples not invented; calibration/cadence error not bounded."},
+                    "host_receipt_frame_mean_trapezoid": {
+                        "covered_host_s": self.host_covered_s, "segments": self.host_integration_segments,
+                        "charge_As": self.host_charge_As, "energy_J": self.host_energy_J,
+                        "energy_Wh": self.host_energy_J / 3600,
+                        "assumption": "Trapezoid of frame-mean current/power at host receipt times; split at invalid frames or gaps>0.2s. No gap interpolation. Host buffering/timing may bias results."},
+                    "precision_claim": "Approximate model estimates, not exact physical energy. No offset subtraction or missing-data compensation."}}

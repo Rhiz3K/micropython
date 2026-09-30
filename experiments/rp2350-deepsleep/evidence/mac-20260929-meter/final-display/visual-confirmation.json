@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "result": "USER_CONFIRMED",
+  "expected_text": "B: METER REVIEW OK",
+  "text_confirmed": true,
+  "right_black_rectangle_confirmed": true,
+  "render_result_sha256": "ce709719848338627c653e1d597693c211d63fdae379aacf5601e2396b658831",
+  "recorded_utc": "2026-09-29T19:08:41.821701+00:00",
+  "source": "User reply in this conversation; physical confirmation separate from automatic rendering"
+}

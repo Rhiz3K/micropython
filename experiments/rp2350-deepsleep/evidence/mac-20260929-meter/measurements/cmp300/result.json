@@ -1,0 +1,58 @@
+{
+  "result": "FAIL",
+  "started": {
+    "utc": "2026-09-29T16:11:36.609490+00:00",
+    "monotonic_ns": 519232626288083
+  },
+  "candidate_restored": false,
+  "root_recovery_required": true,
+  "error_type": "RuntimeError",
+  "reason": "Meter startup cadence outside 95..105 Hz",
+  "failed_phase": "meter_startup",
+  "note": "No automatic retry/rollback/reset after failure; preserve logs and let root assess live state.",
+  "finished": {
+    "utc": "2026-09-29T16:11:41.418007+00:00",
+    "monotonic_ns": 519237434819208
+  },
+  "elapsed_s": 4.808566041989252,
+  "profiles": [
+    {
+      "result": "FAIL",
+      "run_label": "cmp300-a-sleep-reset",
+      "profile": "A",
+      "artifact": "candidate-91e91",
+      "functional_result": "NOT_RUN",
+      "capture_result": "PASS",
+      "energy_result": "NOT_RUN",
+      "started": {
+        "utc": "2026-09-29T16:11:36.611366+00:00",
+        "monotonic_ns": 519232628163750
+      },
+      "error_type": "RuntimeError",
+      "reason": "Meter startup cadence outside 95..105 Hz",
+      "complete_cycle_energy_model_valid": false,
+      "root_recovery_required": true,
+      "failed_phase": "meter_startup",
+      "finished": {
+        "utc": "2026-09-29T16:11:41.413196+00:00",
+        "monotonic_ns": 519237430017000
+      },
+      "cleanup_errors": []
+    }
+  ],
+  "cleanup_errors": [],
+  "firmware_switches": [
+    {
+      "artifact": "baseline-09f5",
+      "label": "cmp300-switch-vanilla"
+    },
+    {
+      "artifact": "baseline-09f5-usbq",
+      "label": "cmp300-switch-usbfix"
+    },
+    {
+      "artifact": "candidate-91e91",
+      "label": "cmp300-return-candidate"
+    }
+  ]
+}

@@ -1,0 +1,244 @@
+diff --git a/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h b/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
+index f270df2f7..300b014d9 100644
+--- a/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
++++ b/ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h
+@@ -1,4 +1,5 @@
+ // Board and hardware specific configuration
++#define MICROPY_HW_LIGHTSLEEP_RAM_DIAG       (1)
+ #define MICROPY_HW_BOARD_NAME                   "Raspberry Pi Pico 2 W"
+ #define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP       (PICO_ARM)
+ // Wireless CS also enables the board's VSYS monitor path.
+diff --git a/ports/rp2/modmachine.c b/ports/rp2/modmachine.c
+index 8ba14e86b..1c058b11b 100644
+--- a/ports/rp2/modmachine.c
++++ b/ports/rp2/modmachine.c
+@@ -97,8 +97,11 @@ void machine_deepsleep_init(void) {
+ #define RP2_DEEPSLEEP_GLOBALS
+ #endif
+ 
++#include "lightsleep_diag.h"
++
+ #define MICROPY_PY_MACHINE_EXTRA_GLOBALS \
+     RP2_DEEPSLEEP_GLOBALS \
++    RP2_LIGHTSLEEP_DIAG_GLOBALS \
+     { MP_ROM_QSTR(MP_QSTR_Pin),                 MP_ROM_PTR(&machine_pin_type) }, \
+     { MP_ROM_QSTR(MP_QSTR_RTC),                 MP_ROM_PTR(&machine_rtc_type) }, \
+     { MP_ROM_QSTR(MP_QSTR_Timer),               MP_ROM_PTR(&machine_timer_type) }, \
+@@ -207,12 +210,22 @@ static void alarm_sleep_callback(uint alarm_id) {
+ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+     mp_int_t delay_ms = 0;
+     bool use_timer_alarm = false;
++    #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++    volatile ls_diag_record_t *diag = ls_diag_begin();
++    #endif
+ 
+     if (n_args == 1) {
+         delay_ms = mp_obj_get_int(args[0]);
++        #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++        diag->requested_ms = (uint32_t)delay_ms;
++        #endif
+         if (delay_ms <= 1) {
+             // Sleep is too small, just use standard delay.
+             mp_hal_delay_ms(delay_ms);
++            #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++            diag->reason = LS_DIAG_SHORT_DELAY;
++            diag->complete = 1;
++            #endif
+             return;
+         }
+         use_timer_alarm = delay_ms < (1ULL << 32) / 1000;
+@@ -227,6 +240,11 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+     uint32_t my_interrupts = MICROPY_BEGIN_ATOMIC_SECTION();
+     #if MICROPY_PY_NETWORK_CYW43
+     if (cyw43_poll_is_pending()) {
++        #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++        diag->reason = LS_DIAG_CYW43_PENDING;
++        ls_diag_snapshot(&diag->after);
++        diag->after_valid = diag->complete = 1;
++        #endif
+         MICROPY_END_ATOMIC_SECTION(my_interrupts);
+         return;
+     }
+@@ -236,6 +254,11 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+     static bool in_lightsleep;
+     if (in_lightsleep) {
+         // The other CPU is also in machine.lightsleep()
++        #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++        diag->reason = LS_DIAG_OTHER_CORE;
++        ls_diag_snapshot(&diag->after);
++        diag->after_valid = diag->complete = 1;
++        #endif
+         MICROPY_END_ATOMIC_SECTION(my_interrupts);
+         return;
+     }
+@@ -249,6 +272,9 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+     #else
+     bool disable_usb = true;
+     #endif
++    #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++    diag->usb_clock_disabled = disable_usb;
++    #endif
+     if (disable_usb) {
+         clock_stop(clk_usb);
+     }
+@@ -303,6 +329,9 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+         gpio_set_dormant_irq_enabled(CYW43_PIN_WL_HOST_WAKE, GPIO_IRQ_LEVEL_HIGH, true);
+         #endif
+         xosc_dormant();
++        #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++        diag->reason = LS_DIAG_DORMANT_RETURN;
++        #endif
+     } else {
+         uint32_t save_sleep_en0 = clocks_hw->sleep_en0;
+         uint32_t save_sleep_en1 = clocks_hw->sleep_en1;
+@@ -327,6 +356,14 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+             if (hardware_alarm_set_target(MICROPY_HW_LIGHTSLEEP_ALARM_NUM, make_timeout_time_ms(delay_ms)) == PICO_OK) {
+                 alarm_armed = true;
+             }
++            #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++            diag->alarm_armed = alarm_armed;
++            if (!alarm_armed) {
++                diag->reason = LS_DIAG_ALARM_MISSED;
++                ls_diag_snapshot(&diag->after);
++                diag->after_valid = 1;
++            }
++            #endif
+         } else {
+             // TODO: Use RTC alarm to wake.
+             clocks_hw->sleep_en0 = 0x0;
+@@ -357,7 +394,16 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+ 
+         // Go into low-power mode.
+         if (alarm_armed) {
++            #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++            ls_diag_snapshot(&diag->before);
++            diag->before_valid = 1;
++            #endif
+             __wfi();
++            #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++            ls_diag_snapshot(&diag->after);
++            diag->after_valid = 1;
++            diag->reason = LS_DIAG_WFI_RETURN;
++            #endif
+ 
+             #if DEBUG_LIGHTSLEEP
+             #if PICO_RP2040
+@@ -419,6 +465,9 @@ static void mp_machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+     if (frequency_overrides[0] != MP_OBJ_NULL) {
+         mp_machine_set_freq(1 + (frequency_overrides[1] != NULL ? 1 : 0), frequency_overrides);
+     }
++    #if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++    diag->complete = 1;
++    #endif
+ }
+ 
+ #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
+diff --git a/ports/rp2/lightsleep_diag.h b/ports/rp2/lightsleep_diag.h
+new file mode 100644
+index 000000000..02298722c
+--- /dev/null
++++ b/ports/rp2/lightsleep_diag.h
+@@ -0,0 +1,103 @@
++/* Private RAM-only lightsleep instrumentation; not an upstream API. */
++#ifndef MICROPY_INCLUDED_RP2_LIGHTSLEEP_DIAG_H
++#define MICROPY_INCLUDED_RP2_LIGHTSLEEP_DIAG_H
++#ifndef MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++#define MICROPY_HW_LIGHTSLEEP_RAM_DIAG (0)
++#endif
++
++#if MICROPY_HW_LIGHTSLEEP_RAM_DIAG
++#if !PICO_RP2350 || !PICO_ARM
++#error Private lightsleep diagnostics require RP2350 ARM
++#endif
++#include "hardware/structs/nvic.h"
++#include "hardware/structs/scb.h"
++#include "hardware/timer.h"
++
++enum {
++    LS_DIAG_ENTERED, LS_DIAG_SHORT_DELAY, LS_DIAG_CYW43_PENDING,
++    LS_DIAG_OTHER_CORE, LS_DIAG_ALARM_MISSED, LS_DIAG_WFI_RETURN,
++    LS_DIAG_DORMANT_RETURN,
++};
++
++typedef struct {
++    uint64_t time_us;
++    uint32_t pending[2], enabled[2], icsr;
++    uint32_t timer_armed, timer_intr, timer_ints, alarm_target;
++} ls_diag_snapshot_t;
++
++typedef struct {
++    uint32_t sequence, requested_ms, core, reason, complete;
++    uint32_t before_valid, after_valid, alarm_armed, usb_clock_disabled;
++    ls_diag_snapshot_t before, after;
++} ls_diag_record_t;
++
++static volatile ls_diag_record_t ls_diag_records[2];
++
++static volatile ls_diag_record_t *ls_diag_begin(void) {
++    uint core = get_core_num();
++    volatile ls_diag_record_t *record = &ls_diag_records[core];
++    ls_diag_record_t next = { .sequence = record->sequence + 1, .core = core };
++    *record = next;
++    return record;
++}
++
++static void ls_diag_snapshot(volatile ls_diag_snapshot_t *snapshot) {
++    // Read only; called while the original lightsleep atomic section is held.
++    snapshot->time_us = time_us_64();
++    snapshot->pending[0] = nvic_hw->ispr[0];
++    snapshot->pending[1] = nvic_hw->ispr[1];
++    snapshot->enabled[0] = nvic_hw->iser[0];
++    snapshot->enabled[1] = nvic_hw->iser[1];
++    snapshot->icsr = scb_hw->icsr;
++    snapshot->timer_armed = timer_hw->armed;
++    snapshot->timer_intr = timer_hw->intr;
++    snapshot->timer_ints = timer_hw->ints;
++    snapshot->alarm_target = timer_hw->alarm[MICROPY_HW_LIGHTSLEEP_ALARM_NUM];
++}
++
++static void ls_diag_put(mp_obj_t dict, qstr key, uint32_t value) {
++    mp_obj_dict_store(dict, MP_OBJ_NEW_QSTR(key), mp_obj_new_int_from_uint(value));
++}
++
++static mp_obj_t ls_diag_snapshot_obj(const ls_diag_snapshot_t *s) {
++    mp_obj_t result = mp_obj_new_dict(0);
++    mp_obj_dict_store(result, MP_OBJ_NEW_QSTR(MP_QSTR_time_us), mp_obj_new_int_from_ull(s->time_us));
++    mp_obj_t pending[] = { mp_obj_new_int_from_uint(s->pending[0]), mp_obj_new_int_from_uint(s->pending[1]) };
++    mp_obj_t enabled[] = { mp_obj_new_int_from_uint(s->enabled[0]), mp_obj_new_int_from_uint(s->enabled[1]) };
++    mp_obj_dict_store(result, MP_OBJ_NEW_QSTR(MP_QSTR_pending), mp_obj_new_tuple(2, pending));
++    mp_obj_dict_store(result, MP_OBJ_NEW_QSTR(MP_QSTR_enabled), mp_obj_new_tuple(2, enabled));
++    ls_diag_put(result, MP_QSTR_icsr, s->icsr);
++    ls_diag_put(result, MP_QSTR_timer_armed, s->timer_armed);
++    ls_diag_put(result, MP_QSTR_timer_intr, s->timer_intr);
++    ls_diag_put(result, MP_QSTR_timer_ints, s->timer_ints);
++    ls_diag_put(result, MP_QSTR_alarm_target, s->alarm_target);
++    return result;
++}
++
++static mp_obj_t machine_lightsleep_diag(void) {
++    // Allocation/formatting occurs only in an explicitly invoked later getter.
++    uint32_t irq_state = MICROPY_BEGIN_ATOMIC_SECTION();
++    ls_diag_record_t record = ls_diag_records[get_core_num()];
++    MICROPY_END_ATOMIC_SECTION(irq_state);
++    mp_obj_t result = mp_obj_new_dict(0);
++    ls_diag_put(result, MP_QSTR_schema, 1);
++    ls_diag_put(result, MP_QSTR_sequence, record.sequence);
++    ls_diag_put(result, MP_QSTR_requested_ms, record.requested_ms);
++    ls_diag_put(result, MP_QSTR_core, record.core);
++    ls_diag_put(result, MP_QSTR_reason, record.reason);
++    ls_diag_put(result, MP_QSTR_complete, record.complete);
++    ls_diag_put(result, MP_QSTR_alarm_armed, record.alarm_armed);
++    ls_diag_put(result, MP_QSTR_usb_clock_disabled, record.usb_clock_disabled);
++    mp_obj_dict_store(result, MP_OBJ_NEW_QSTR(MP_QSTR_before),
++        record.before_valid ? ls_diag_snapshot_obj(&record.before) : mp_const_none);
++    mp_obj_dict_store(result, MP_OBJ_NEW_QSTR(MP_QSTR_after),
++        record.after_valid ? ls_diag_snapshot_obj(&record.after) : mp_const_none);
++    return result;
++}
++static MP_DEFINE_CONST_FUN_OBJ_0(machine_lightsleep_diag_obj, machine_lightsleep_diag);
++#define RP2_LIGHTSLEEP_DIAG_GLOBALS \
++    { MP_ROM_QSTR(MP_QSTR__lightsleep_diag), MP_ROM_PTR(&machine_lightsleep_diag_obj) },
++#else
++#define RP2_LIGHTSLEEP_DIAG_GLOBALS
++#endif
++#endif

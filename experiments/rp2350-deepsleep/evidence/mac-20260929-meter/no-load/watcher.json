@@ -1,0 +1,21 @@
+{
+  "result": "FAIL",
+  "board_alias": "test-board-2",
+  "provenance": {
+    "guard_proof_sha256": "835b264ad8fcab286f61af899de5197bc5237e471df9a4b4a6dec653b2ca6542",
+    "meter_metadata_sha256": "2e09c1afd70d92483fd21e0a47f63eae716f144c92b038bf85dbaa2391c3ac6b",
+    "root_attestation_not_rechecked_via_serial": true,
+    "watcher_sha256": "23c20584d1df2db6b14ac3296b16212c752f14638531e628057f296b8d27b8ca",
+    "timing_logic_sha256": "94be9c900183020abe23a39575dbc45c27793cf225305d2cd19980a665fac041"
+  },
+  "started_utc": "2026-09-29T18:36:02.728898+00:00",
+  "serial_opened": false,
+  "usb_interface_opened": false,
+  "reset_performed": false,
+  "capture_started": false,
+  "deadline_s": 180.0,
+  "error_type": "ValueError",
+  "reason": "Watcher deadline exceeded; no automatic retry",
+  "phase": "READY_TO_UNPLUG",
+  "finished_utc": "2026-09-29T18:39:02.953501+00:00"
+}

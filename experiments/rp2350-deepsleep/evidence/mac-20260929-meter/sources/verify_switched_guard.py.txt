@@ -1,0 +1,138 @@
+"""Explicit root-only supplemental verification; never changes a switch FAIL."""
+import argparse
+from datetime import datetime, timezone
+import contextlib
+import fcntl
+import json
+import os
+from pathlib import Path
+import signal
+import time
+
+from common import ROOT, UID, connect, friendly, inventory, mapping, require, sha, stamp, state
+
+GUARD_SHA = '6a87053a2e980a5aecb8c4fb757163fd3bc2e5319a571cab7215170c29921be3'
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def save(path, value):
+    with path.open('x') as stream:
+        json.dump(value, stream, indent=2, allow_nan=False)
+        stream.write('\n')
+
+
+def seconds(rtc):
+    return datetime(rtc[0], rtc[1], rtc[2], rtc[4], rtc[5], rtc[6], tzinfo=timezone.utc).timestamp()
+
+
+def verify(artifact, label, out):
+    require(out.resolve().is_relative_to(ROOT.resolve()) and not out.exists(), 'New private output required')
+    require('/' not in label and label not in ('.', '..'), 'Invalid switch label')
+    for p in (ROOT/'measurements').glob('*/progress.json'):
+        require(read(p).get('result') != 'RUNNING', 'Measurement active')
+    for p in (ROOT/'runs').glob('*/progress-public.json'):
+        require(not read(p).get('running'), 'Suite active')
+    expected = read(ROOT/'expected-firmware.json')
+    require(expected['artifact'] == artifact, 'Expected artifact differs')
+    manifest = read(ROOT/'artifacts'/artifact/'build-manifest.json')
+    binary = ROOT/'artifacts'/artifact/'firmware.bin'
+    require(sha(binary) == expected['bin_sha256'] == manifest['artifacts']['bin']['sha256'], 'BIN proof differs')
+    require(0 < binary.stat().st_size < 0x180000, 'BIN overlaps filesystem')
+    require(expected['substring'] == manifest['runtime_version'], 'Runtime prefix differs')
+    sw = ROOT/'firmware-switches'/label
+    sr = read(sw/'result-private.json')
+    require(sr['artifact'] == artifact, 'Switch artifact differs')
+    rtc_failed = sr['result'] == 'FAIL'
+    if rtc_failed:
+        require(sr.get('phase') == 'ordinary-reset'
+                and sr.get('reason') == 'RTC continuity differs from host elapsed time by more than 5 seconds'
+                and sr.get('expected_firmware_updated') is True,
+                'Only this specific RTC continuity failure permits supplemental review')
+    else:
+        require(sr['result'] == 'PASS' and sr.get('guarded_repl') is True, 'Switch not complete')
+    before_switch = read(sw/'before-private.json')
+    guarded = mapping(read(sw/'guarded-inventory-private.json'))
+    original = mapping(read(ROOT/'inventory-before-private.json'))
+    require(len(original) == 29, 'Wrong original count')
+    for path, entry in original.items():
+        actual = '/rp2350_meter_parked_main_20260929.py' if path == '/main.py' else path
+        require(guarded.get(actual) == entry, 'Guarded proof does not preserve an original')
+    guard = ROOT/'safe-guarded-main.py'
+    require(sha(guard) == GUARD_SHA and guarded['/main.py'] == (guard.stat().st_size, GUARD_SHA), 'Guard differs')
+    out.mkdir(mode=0o700)
+    board = None
+    phase = 'connect'
+    try:
+        board = connect()
+        start_before = time.monotonic()
+        first = state(board)
+        start_after = time.monotonic()
+        require(first['version'].split(' on ')[0] == expected['substring'], 'Runtime differs')
+        require(not first['wdt_ctrl'] & 0x40000000 and first['reset_cause'] == 3
+                and first['wdt_reason'] & 2, 'Ordinary reset/WDT state differs')
+        require(first['backup'][2] == before_switch['state']['backup'][2], 'POWMAN backup differs')
+        rows = inventory(board)
+        require(mapping(rows) == guarded, 'Full guarded inventory differs')
+        phase = 'read_actual_firmware'
+        code = ('import uctypes,hashlib,binascii\nprint(binascii.hexlify(hashlib.sha256('
+                'uctypes.bytearray_at(0x10000000,%d)).digest()).decode())' % binary.stat().st_size)
+        require(board.exec_(code, timeout=20).decode().strip() == expected['bin_sha256'], 'Actual firmware BIN differs')
+        phase = 'idle_rtc_observation'
+        time.sleep(10)
+        end_before = time.monotonic()
+        final = state(board)
+        end_after = time.monotonic()
+        rtc_elapsed = seconds(final['rtc']) - seconds(first['rtc'])
+        host_elapsed = (end_before + end_after - start_before - start_after) / 2
+        require(abs(rtc_elapsed - host_elapsed) <= 2, 'Current idle RTC rate differs')
+        require(final['backup'] == first['backup'] and final['wdt_ctrl'] == first['wdt_ctrl']
+                and final['reset_cause'] == first['reset_cause'], 'State changed during observation')
+        phase = 'friendly_repl'
+        friendly(board)
+        board.close(); board = None
+        private = {'uid': UID, 'first': first, 'final': final, 'inventory': rows,
+                   'first_read_bracket_monotonic': [start_before, start_after],
+                   'final_read_bracket_monotonic': [end_before, end_after],
+                   'expected_firmware': expected, 'switch_result_sha256': sha(sw/'result-private.json')}
+        save(out/'proof-private.json', private)
+        result = {'schema': 1, 'result': 'GUARD_VERIFIED_FOR_FRESH_FIXTURE', 'artifact': artifact,
+                  'runtime_prefix': expected['substring'], 'bin_sha256': expected['bin_sha256'],
+                  'runtime_flash_bytes_verified': True, 'main_sha256': GUARD_SHA,
+                  'guarded_inventory_unchanged': True, 'original_files_verified': 29,
+                  'powman_backup_unchanged': True, 'watchdog_enabled': False, 'reset_cause': 3,
+                  'friendly_repl_verified': True, 'serial_owner_closed': True,
+                  'rtc_written': False, 'reset_performed': False, 'original_application_started': False,
+                  'switch_label': label, 'switch_result': sr['result'],
+                  'rtc_continuity': 'FAIL' if rtc_failed else 'PASS',
+                  'rtc_continuity_failure_accepted_only_for_fresh_fixture': rtc_failed,
+                  'idle_rtc_elapsed_s': rtc_elapsed, 'idle_host_elapsed_s': host_elapsed,
+                  'idle_rate_tolerance_s': 2,
+                  'observed_utc': stamp()['host_utc'], 'observed_host_monotonic_ns': time.monotonic_ns(),
+                  'host_source_sha256': sha(Path(__file__)), 'private_proof_sha256': sha(out/'proof-private.json')}
+        save(out/'result-public.json', result)
+        print(json.dumps(result), flush=True)
+    except BaseException as exc:
+        save(out/'failure-private.json', {'phase': phase, 'type': type(exc).__name__, 'error': str(exc), **stamp()})
+        raise
+    finally:
+        if board is not None: board.close()
+
+
+if __name__ == '__main__':
+    os.umask(0o077)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--execute', action='store_true', required=True)
+    parser.add_argument('--artifact', choices=['baseline-09f5', 'baseline-09f5-usbq', 'candidate-91e91'], required=True)
+    parser.add_argument('--switch-label', required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    def expired(*_): raise TimeoutError('Supplemental guard verification deadline')
+    signal.signal(signal.SIGALRM, expired); signal.alarm(70)
+    with contextlib.ExitStack() as stack:
+        for name in ('.measure-variants.lock', '.meter-reader.lock'):
+            lock = stack.enter_context((ROOT/name).open('a'))
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        verify(args.artifact, args.switch_label, args.output.resolve())

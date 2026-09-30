@@ -1,0 +1,82 @@
+# Excerpts from run_suite.py; complete private source SHA256 f5a1e7d0b8d75ebce175ff043b24a41a95c3cd3b45e69ab3a93b3a617725cf09
+
+def install(out):
+ config=json.loads((out/'config.json').read_text())
+ plan=json.loads((out/'plan.json').read_text())
+ original=mapping(json.loads((ROOT/'inventory-before-private.json').read_text()))
+ provenance=json.loads((ROOT/'staging/provenance.json').read_text())
+ source='device-helper.py' if plan['helper'] else 'device-panelmeta.py'
+ staged=DEPENDENCIES+(['pico2w_vsys_lowpower.py'] if plan['helper'] else [])
+ for name in staged+[source]:require(sha(ROOT/'staging'/name)==provenance['artifacts'][name]['sha256'],'Staging hash mismatch')
+ require(not any('/'+n in original for n in OWNED),'Owned name collides with original file')
+ b=connect()
+ try:
+  before=inventory(b); before_map=mapping(before); s=state(b)
+  require(not s['wdt_ctrl']&0x40000000,'Watchdog enabled before suite install')
+  for name,value in original.items():
+   if name!='/main.py':require(before_map.get(name)==value,'Original file changed before install')
+  require(before_map.get('/rp2350_meter_parked_main_20260929.py')==original['/main.py'],'Parked application mismatch')
+  require(set(before_map)<=set(original)|{'/'+n for n in OWNED},'Unexpected file outside owned set')
+  (out/'before-private.json').write_text(json.dumps(dict(s,inventory=before,**stamp()),indent=2)+'\n')
+  b.fs_get('main.py',str(out/'main-before-install.py'))
+  for name in staged:
+   if before_map.get('/'+name)!=( (ROOT/'staging'/name).stat().st_size,sha(ROOT/'staging'/name)):
+    b.fs_put(str(ROOT/'staging'/name),name)
+  b.fs_put(str(ROOT/'staging'/source),'main.py')
+  b.fs_put(str(out/'config.json'),'deepsleep-config.json')
+  b.exec_("with open('deepsleep-sentinel.bin','wb') as f: f.write(b'RP2350 deepsleep filesystem sentinel\\n')\nos.sync()",timeout=8)
+  after=inventory(b); after_map=mapping(after)
+  for name in staged:require(after_map['/'+name]==((ROOT/'staging'/name).stat().st_size,sha(ROOT/'staging'/name)),'Dependency readback mismatch')
+  require(after_map['/main.py']==((ROOT/'staging'/source).stat().st_size,sha(ROOT/'staging'/source)),'Main readback mismatch')
+  require(after_map['/deepsleep-config.json']==((out/'config.json').stat().st_size,sha(out/'config.json')),'Config readback mismatch')
+  for name,value in original.items():
+   if name!='/main.py':require(after_map.get(name)==value,'Original file changed during install')
+  (out/'installed-inventory-private.json').write_text(json.dumps(after,indent=2)+'\n')
+  write_json(out/'install-result.json',{'result':'PASS','main_source':source,'main_sha256':sha(ROOT/'staging'/source),'original_files_unchanged_except_guarded_main':True,'readback_verified':True,**stamp()})
+  b.exec_("machine.mem_backup(2)[0]=0",timeout=8)
+  b.exec_raw_no_follow('time.sleep_ms(150); machine.reset()')
+ finally:b.close()
+
+def run(args):
+ os.umask(0o077)
+ observer=ROOT/'host_meter.py' if args.meter_observer else HOST
+ require(args.label.replace('-','').replace('_','').isalnum(),'Invalid label')
+ out=ROOT/'runs'/args.label;out.mkdir(parents=True,mode=0o700)
+ config={'run':'meter-20260929-'+args.label,'cycles':args.cycles,'sleep_ms':args.sleep_ms,'radio':args.radio,'mode':args.mode,'expect_deep_cause':not args.expect_normal,'rtc_tolerance_s':args.rtc_tolerance,'host_tolerance_s':args.host_tolerance}
+ write_json(out/'config.json',config)
+ plan={'helper':args.helper,'timeout_per_boot_s':args.timeout,'overall_observer_deadline_s':args.deadline,'install_deadline_s':120,'firmware':json.loads((ROOT/'expected-firmware.json').read_text()),'host_source_sha256':sha(observer),'host_observer':observer.name,'runner_source_sha256':sha(Path(__file__).resolve()),'created':stamp()}
+ write_json(out/'plan.json',plan)
+ started=time.monotonic();result={'result':'INCOMPLETE','label':args.label,'phase':'install'}
+ child=None;caffeinate=None
+ try:
+  with (out/'installer-private.log').open('xb') as f:
+   p=subprocess.run([PY,str(Path(__file__).resolve()),'--install-worker',str(out)],stdout=f,stderr=subprocess.STDOUT,timeout=120)
+  require(p.returncode==0,'Installer failed; see private log')
+  result['phase']='observe'
+  cmd=[PY,str(observer),'run','--manifest',str(ROOT/'manifest.json'),'--config',str(out/'config.json'),'--allow-run','--timeout',str(args.timeout),'--log',str(out/'events-private.jsonl')]
+  with (out/'observer-private.log').open('xb') as f:
+   child=subprocess.Popen(cmd,stdout=f,stderr=subprocess.STDOUT,start_new_session=True)
+   caffeinate=subprocess.Popen(['/usr/bin/caffeinate','-i','-w',str(child.pid)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+   write_json(out/'process-public.json',{'runner_pid':os.getpid(),'observer_pid':child.pid,'observer_command':cmd,'caffeinate_pid':caffeinate.pid,**stamp()})
+   deadline=time.monotonic()+args.deadline
+   while child.poll() is None:
+    write_json(out/'progress-public.json',dict(progress(out),running=True,**stamp()))
+    if time.monotonic()>=deadline:
+     stop_child(child,group=True)
+     raise TimeoutError('Overall observer deadline exceeded')
+    time.sleep(2)
+  last=progress(out)
+  require(child.returncode==0 and last.get('status')=='PASS','Observer failed; full log retained')
+  require(last['completed']==args.cycles,'Wrong completed count')
+  result.update(result='PASS',phase='complete',observed=last,returncode=child.returncode)
+ except BaseException as e:
+  result.update(result='FAIL',error=str(e),exception_type=type(e).__name__,observed=progress(out))
+ finally:
+  for process,group in ((child,True),(caffeinate,False)):
+   try:stop_child(process,group)
+   except Exception as e:result.setdefault('cleanup_errors',[]).append(str(e))
+  result.update(elapsed_host_s=time.monotonic()-started,finished=stamp())
+  write_json(out/'result-public.json',result)
+  write_json(out/'progress-public.json',dict(progress(out),running=False,**stamp()))
+  print(json.dumps(result),flush=True)
+ return 0 if result['result']=='PASS' else 1

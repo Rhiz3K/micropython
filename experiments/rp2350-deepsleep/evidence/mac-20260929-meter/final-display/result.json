@@ -1,0 +1,72 @@
+{
+  "result": "PASS",
+  "board_alias": "test-board-2",
+  "render": {
+    "full_refresh_count": 1,
+    "park_registers_verified": true,
+    "original_application_started": false,
+    "backup_unchanged": true,
+    "visual_result": "NOT_VERIFIED",
+    "busy_waits": [
+      {
+        "initial": 0,
+        "final": 0,
+        "elapsed_ms": 0
+      },
+      {
+        "initial": 1,
+        "final": 0,
+        "elapsed_ms": 10
+      },
+      {
+        "initial": 0,
+        "final": 0,
+        "elapsed_ms": 0
+      },
+      {
+        "initial": 0,
+        "final": 0,
+        "elapsed_ms": 0
+      },
+      {
+        "initial": 0,
+        "final": 0,
+        "elapsed_ms": 0
+      },
+      {
+        "initial": 1,
+        "final": 0,
+        "elapsed_ms": 2494
+      },
+      {
+        "initial": 0,
+        "final": 0,
+        "elapsed_ms": 0
+      }
+    ],
+    "event": "RENDERED_AND_PARKED",
+    "elapsed_ms": 5157,
+    "reset_performed": false,
+    "automatic_checks": "PASS",
+    "expected_text": "B: METER REVIEW OK",
+    "expected_black_rectangle": {
+      "y": 64,
+      "x": 232,
+      "height": 44,
+      "width": 52
+    },
+    "vendor_sleep_completed": true
+  },
+  "render_source_sha256": "02fff0cd54415e51763c3c280c51a6c04e8658064e8eea7ddcf30e56e877fff4",
+  "final_inventory_only_main_changed": true,
+  "sentinel_restored": true,
+  "guard_main_verified": true,
+  "actual_candidate_flash_readback_verified": true,
+  "original_files_verified": 29,
+  "all_three_backup_regions_unchanged": true,
+  "friendly_repl_verified": true,
+  "serial_owner_closed": true,
+  "reset_performed": false,
+  "host_utc": "2026-09-29T18:35:33.864638+00:00",
+  "host_monotonic": 527869.885004458
+}

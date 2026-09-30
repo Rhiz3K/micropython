@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "variant": "candidate-91e91-lsdiag1",
+  "native_build": "PASS",
+  "file_inspection": "PASS",
+  "hardware_validation": "NOT_RUN",
+  "device_access": "NONE",
+  "created_utc": "2026-09-29T20:07:50.406893+00:00",
+  "source_sha": "91e91d58de8513fbf3f3e2829e49bf22843fac86",
+  "source_files": {
+    "ports/rp2/modmachine.c": "36205cb02dff1f02a49ea2c2efa927ede869923a14d36d1b39b4280e27992f3e",
+    "ports/rp2/boards/RPI_PICO2_W/mpconfigboard.h": "a96b9dd26cb5334e807ac18d6bb1e371eff40c7f046adba189758a36a7ad6f9e",
+    "ports/rp2/lightsleep_diag.h": "5368184b008f7042c55a2f4bd1cd1c66cf974359b40d6aa3e3f1f6dc84749dca"
+  },
+  "runtime_prefix": "v1.30.0-preview.104.g91e91d58de.dirty.lsdiag1",
+  "runtime_version": "v1.30.0-preview.104.g91e91d58de.dirty.lsdiag1",
+  "board": "RPI_PICO2_W",
+  "platform": "rp2350-arm-s",
+  "gcc": "14.3.1",
+  "dependencies": {
+    "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+    "btstack": "77e752abd6a0992334047a48038a5a3960e5c6bc",
+    "cyw43-driver": "055d64274b014dd7b1c2fc94d26e8a18face7124",
+    "lwip": "77dcd25a72509eb83f72b033d219b1d40cd8eb95",
+    "mbedtls": "0bebf8b8c7f07abe3571ded48a11aa907a1ffb20",
+    "micropython-lib": "ee4bb8ff139e24c42b739935fbd8ec7c4d061e02",
+    "tinyusb": "b549ac1d84cbbe550c9590951e2290098b3fb16c"
+  },
+  "tinyusb_patched_files": {
+    "src/device/usbd.c": "79abb088c6dbecb1a4c8a3872baf518ce84cc24a3e4d22c63ce024b463746a19",
+    "test/unit-test/test/device/usbd/test_usbd.c": "2fdf3d24b88e3611e4c1b99debdfb005bf800105081ffb72980ac28b117c9653"
+  },
+  "tinyusb_patch_sha256": "ffbadfaa2a51af420e64e1bdb4fad55f1621646eb3bcd98e3d93eaa921076e4e",
+  "flash_layout": {
+    "file_blocks": 3481,
+    "arm_secure_blocks": 3480,
+    "bin_start": "0x10000000",
+    "bin_end_exclusive": "0x100d97c0",
+    "sector_erase_end_exclusive": "0x100da000",
+    "filesystem_start": "0x10180000",
+    "filesystem_end": "0x10400000",
+    "arm_uf2_end_exclusive": "0x100d9800",
+    "arm_uf2_matches_bin": true,
+    "firmware_does_not_overlap_filesystem": true,
+    "extra_uf2_blocks": [
+      {
+        "address": "0x10ffff00",
+        "family": "0xe48bff57",
+        "rp2_ignore_block": true,
+        "purpose": "RP2350-E10 absolute workaround"
+      }
+    ],
+    "assumptions": "Standard RPI_PICO2_W 4MiB flash layout. This is static file evidence; fresh board backup, identity, current filesystem geometry and flash verification remain required."
+  },
+  "diagnostic_api": {
+    "getter": "machine._lightsleep_diag()",
+    "schema": 1,
+    "core": "calling core only",
+    "reason": {
+      "0": "entered/incomplete",
+      "1": "short delay",
+      "2": "cyw43 pending early return",
+      "3": "other core already lightsleep",
+      "4": "alarm target missed; WFI skipped",
+      "5": "WFI returned",
+      "6": "dormant returned"
+    },
+    "limits": [
+      "Diagnostic instrumentation changes WFI timing slightly.",
+      "Register reads are sequential, not a simultaneous snapshot.",
+      "Pending and enabled IRQ bits are candidate wake sources, not proof of one causal IRQ.",
+      "No print at sleep boundary. Getter allocations occur only when explicitly requested after lightsleep.",
+      "Firmware build/inspection is not hardware validation."
+    ]
+  },
+  "artifacts": {
+    "bin": {
+      "bytes": 890816,
+      "sha256": "650e07b9c8f02807e2281143ffbf55dab440eb007114c4e0cba4311980f2ff51"
+    },
+    "elf": {
+      "bytes": 8889104,
+      "sha256": "a87698858cdeef41467c33812a3fc0abaa59eb46229d31ee826093c780a90339"
+    },
+    "uf2": {
+      "bytes": 1782272,
+      "sha256": "35b7f15a483669d77b92b17c6553464ced84c99b648ff0b08e6a46fe26998704"
+    }
+  },
+  "diagnostic_patch": {
+    "sha256": "96c7f9166548b7313ae37abef9ddddd46ba8b46c99177f382cbbe2ff5271da9e",
+    "file": "diagnostic.patch"
+  }
+}

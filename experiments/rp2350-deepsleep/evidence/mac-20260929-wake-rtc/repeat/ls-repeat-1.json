@@ -1,0 +1,583 @@
+{
+  "schema": 1,
+  "execution_result": "COMPLETE",
+  "hardware_result": "OBSERVATION_ONLY",
+  "board_alias": "test-board-2",
+  "requested_ms": 2500,
+  "trial_count": 32,
+  "repeats_per_condition": 8,
+  "block_orders": [
+    [
+      0,
+      1,
+      3,
+      2
+    ],
+    [
+      1,
+      2,
+      0,
+      3
+    ],
+    [
+      2,
+      3,
+      1,
+      0
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      1,
+      3,
+      2
+    ],
+    [
+      1,
+      2,
+      0,
+      3
+    ],
+    [
+      2,
+      3,
+      1,
+      0
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ]
+  ],
+  "conditions": [
+    [
+      false,
+      0
+    ],
+    [
+      true,
+      0
+    ],
+    [
+      false,
+      200
+    ],
+    [
+      true,
+      200
+    ]
+  ],
+  "fixed_trial_plan": [
+    [
+      1,
+      false,
+      0
+    ],
+    [
+      2,
+      true,
+      0
+    ],
+    [
+      3,
+      true,
+      200
+    ],
+    [
+      4,
+      false,
+      200
+    ],
+    [
+      5,
+      true,
+      0
+    ],
+    [
+      6,
+      false,
+      200
+    ],
+    [
+      7,
+      false,
+      0
+    ],
+    [
+      8,
+      true,
+      200
+    ],
+    [
+      9,
+      false,
+      200
+    ],
+    [
+      10,
+      true,
+      200
+    ],
+    [
+      11,
+      true,
+      0
+    ],
+    [
+      12,
+      false,
+      0
+    ],
+    [
+      13,
+      true,
+      200
+    ],
+    [
+      14,
+      false,
+      0
+    ],
+    [
+      15,
+      false,
+      200
+    ],
+    [
+      16,
+      true,
+      0
+    ],
+    [
+      17,
+      false,
+      0
+    ],
+    [
+      18,
+      true,
+      0
+    ],
+    [
+      19,
+      true,
+      200
+    ],
+    [
+      20,
+      false,
+      200
+    ],
+    [
+      21,
+      true,
+      0
+    ],
+    [
+      22,
+      false,
+      200
+    ],
+    [
+      23,
+      false,
+      0
+    ],
+    [
+      24,
+      true,
+      200
+    ],
+    [
+      25,
+      false,
+      200
+    ],
+    [
+      26,
+      true,
+      200
+    ],
+    [
+      27,
+      true,
+      0
+    ],
+    [
+      28,
+      false,
+      0
+    ],
+    [
+      29,
+      true,
+      200
+    ],
+    [
+      30,
+      false,
+      0
+    ],
+    [
+      31,
+      false,
+      200
+    ],
+    [
+      32,
+      true,
+      0
+    ]
+  ],
+  "identity_scope": "Exact runtime and CDC identity; CDC enumeration is not a full USB topology proof.",
+  "firmware_hash_scope": "Read-only SHA256 of actual mapped candidate BIN bytes before any trial/RTC mutation.",
+  "actual_firmware_hash_verified": true,
+  "original_files_verified": true,
+  "directories_unchanged": true,
+  "reset_requested": false,
+  "device_file_writes": false,
+  "radio_calls": false,
+  "rtc_restored": true,
+  "friendly_repl_verified": true,
+  "backup_unchanged": true,
+  "inventory_unchanged": true,
+  "nonce_survived": true,
+  "trials": [
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790712017,
+      "elapsed_rtc_s": 0,
+      "trial": 1,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 43,
+      "rtc_before_s": 1790712017
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 2,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 41,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 3,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380803,
+      "elapsed_rtc_s": 3,
+      "trial": 4,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 5,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 39,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 6,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 0,
+      "trial": 7,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 38,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 8,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380803,
+      "elapsed_rtc_s": 3,
+      "trial": 9,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 10,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 11,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 39,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 12,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 40,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 13,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 0,
+      "trial": 14,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 38,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380803,
+      "elapsed_rtc_s": 3,
+      "trial": 15,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 16,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 38,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 17,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 38,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 18,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 39,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 19,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380803,
+      "elapsed_rtc_s": 3,
+      "trial": 20,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 21,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 37,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 22,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 0,
+      "trial": 23,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 39,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 24,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380803,
+      "elapsed_rtc_s": 3,
+      "trial": 25,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 26,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 27,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 38,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 28,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 39,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 2,
+      "trial": 29,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380798
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380800,
+      "elapsed_rtc_s": 0,
+      "trial": 30,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 37,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 200,
+      "rtc_after_s": 1790380803,
+      "elapsed_rtc_s": 3,
+      "trial": 31,
+      "seed": false,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 2500,
+      "rtc_before_s": 1790380800
+    },
+    {
+      "quiet_ms": 0,
+      "rtc_after_s": 1790380798,
+      "elapsed_rtc_s": 0,
+      "trial": 32,
+      "seed": true,
+      "requested_ms": 2500,
+      "elapsed_ticks_ms": 41,
+      "rtc_before_s": 1790380798
+    }
+  ],
+  "scope": "Does not explain or replace the two previous 300-second B-LS failures.",
+  "entry_state": "exact_restored_original_files",
+  "rtc_restore_quantization_s": 1,
+  "rtc_anchor_transport_bracket_s": 0.04730479198042303,
+  "rtc_restore_transport_bracket_s": 0.039562584017403424,
+  "finished": {
+    "utc": "2026-09-29T20:01:05.695182+00:00",
+    "monotonic_ns": 533001720261708
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "board_identity_verified": true,
+  "firmware": "candidate-91e91",
+  "actual_bin_verified": true,
+  "original_files": 29,
+  "directories": 7,
+  "own_backup_verified": true,
+  "watchdog_enabled": false,
+  "panel_parked": true,
+  "friendly_repl": true,
+  "no_reset": true,
+  "host_utc": "2026-09-29T19:54:23.505142+00:00",
+  "host_monotonic": 532599.529920333
+}

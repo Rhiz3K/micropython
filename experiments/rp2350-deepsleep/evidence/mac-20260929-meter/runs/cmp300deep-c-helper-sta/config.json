@@ -1,0 +1,10 @@
+{
+  "run": "meter-20260929-cmp300deep-c-helper-sta",
+  "cycles": 3,
+  "sleep_ms": 300000,
+  "radio": "sta",
+  "mode": "deepsleep",
+  "expect_deep_cause": true,
+  "rtc_tolerance_s": 10.0,
+  "host_tolerance_s": 3.0
+}

@@ -1,0 +1,1935 @@
+{
+  "schema": 1,
+  "execution_result": "COMPLETE",
+  "hardware_result": "OBSERVATION_ONLY",
+  "board_alias": "test-board-2",
+  "requested_ms": 2500,
+  "trial_count": 32,
+  "repeats_per_condition": 8,
+  "block_orders": [
+    [
+      0,
+      1,
+      3,
+      2
+    ],
+    [
+      1,
+      2,
+      0,
+      3
+    ],
+    [
+      2,
+      3,
+      1,
+      0
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      1,
+      3,
+      2
+    ],
+    [
+      1,
+      2,
+      0,
+      3
+    ],
+    [
+      2,
+      3,
+      1,
+      0
+    ],
+    [
+      3,
+      0,
+      2,
+      1
+    ]
+  ],
+  "conditions": [
+    [
+      false,
+      0
+    ],
+    [
+      true,
+      0
+    ],
+    [
+      false,
+      200
+    ],
+    [
+      true,
+      200
+    ]
+  ],
+  "fixed_trial_plan": [
+    [
+      1,
+      false,
+      0
+    ],
+    [
+      2,
+      true,
+      0
+    ],
+    [
+      3,
+      true,
+      200
+    ],
+    [
+      4,
+      false,
+      200
+    ],
+    [
+      5,
+      true,
+      0
+    ],
+    [
+      6,
+      false,
+      200
+    ],
+    [
+      7,
+      false,
+      0
+    ],
+    [
+      8,
+      true,
+      200
+    ],
+    [
+      9,
+      false,
+      200
+    ],
+    [
+      10,
+      true,
+      200
+    ],
+    [
+      11,
+      true,
+      0
+    ],
+    [
+      12,
+      false,
+      0
+    ],
+    [
+      13,
+      true,
+      200
+    ],
+    [
+      14,
+      false,
+      0
+    ],
+    [
+      15,
+      false,
+      200
+    ],
+    [
+      16,
+      true,
+      0
+    ],
+    [
+      17,
+      false,
+      0
+    ],
+    [
+      18,
+      true,
+      0
+    ],
+    [
+      19,
+      true,
+      200
+    ],
+    [
+      20,
+      false,
+      200
+    ],
+    [
+      21,
+      true,
+      0
+    ],
+    [
+      22,
+      false,
+      200
+    ],
+    [
+      23,
+      false,
+      0
+    ],
+    [
+      24,
+      true,
+      200
+    ],
+    [
+      25,
+      false,
+      200
+    ],
+    [
+      26,
+      true,
+      200
+    ],
+    [
+      27,
+      true,
+      0
+    ],
+    [
+      28,
+      false,
+      0
+    ],
+    [
+      29,
+      true,
+      200
+    ],
+    [
+      30,
+      false,
+      0
+    ],
+    [
+      31,
+      false,
+      200
+    ],
+    [
+      32,
+      true,
+      0
+    ]
+  ],
+  "identity_scope": "Exact runtime and CDC identity; CDC enumeration is not a full USB topology proof.",
+  "firmware_hash_scope": "Read-only SHA256 of actual mapped candidate BIN bytes before any trial/RTC mutation.",
+  "actual_firmware_hash_verified": true,
+  "original_files_verified": true,
+  "directories_unchanged": true,
+  "reset_requested": false,
+  "device_file_writes": false,
+  "radio_calls": false,
+  "rtc_restored": true,
+  "friendly_repl_verified": true,
+  "backup_unchanged": true,
+  "inventory_unchanged": true,
+  "nonce_survived": true,
+  "trials": [
+    {
+      "seed": false,
+      "rtc_after_s": 1790713081,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 1,
+      "lightsleep_diag": {
+        "sequence": 33,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 376835554,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 379335402
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 377025006,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 379335402
+        }
+      },
+      "rtc_before_s": 1790713081,
+      "elapsed_ticks_ms": 191
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 2,
+      "lightsleep_diag": {
+        "sequence": 34,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 377046008,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 379545865
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 377229005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 379545865
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 184
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 3,
+      "lightsleep_diag": {
+        "sequence": 35,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 377448681,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 379948540
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 379948545,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 379948540
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380803,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 3,
+      "trial": 4,
+      "lightsleep_diag": {
+        "sequence": 36,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 380167628,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 382667491
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 382667496,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 382667491
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 5,
+      "lightsleep_diag": {
+        "sequence": 37,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 382687316,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 385187173
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 382871005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 385187173
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 185
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 6,
+      "lightsleep_diag": {
+        "sequence": 38,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 383090639,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 385590501
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 385590506,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 385590501
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380801,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 1,
+      "trial": 7,
+      "lightsleep_diag": {
+        "sequence": 39,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 385608778,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 388108642
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 385794005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 388108642
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 186
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 8,
+      "lightsleep_diag": {
+        "sequence": 40,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 386015683,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 388515536
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 388515541,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 388515536
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380803,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 3,
+      "trial": 9,
+      "lightsleep_diag": {
+        "sequence": 41,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 388735628,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 391235489
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 391235494,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 391235489
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 10,
+      "lightsleep_diag": {
+        "sequence": 42,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 391455670,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 393955522
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 393955527,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 393955522
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 11,
+      "lightsleep_diag": {
+        "sequence": 43,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 393975574,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 396475432
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 394159005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 396475432
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 184
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 12,
+      "lightsleep_diag": {
+        "sequence": 44,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 394181483,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 396681340
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 394363005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 396681340
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 182
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 13,
+      "lightsleep_diag": {
+        "sequence": 45,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 394584677,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 397084533
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 397084538,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 397084533
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 14,
+      "lightsleep_diag": {
+        "sequence": 46,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 397105752,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 399605616
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 397288005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 399605616
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 183
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380803,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 3,
+      "trial": 15,
+      "lightsleep_diag": {
+        "sequence": 47,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 397508635,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 400008491
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400008496,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 400008491
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 16,
+      "lightsleep_diag": {
+        "sequence": 48,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400027586,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 402527440
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400212009,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 402527440
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 185
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 17,
+      "lightsleep_diag": {
+        "sequence": 49,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400234082,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 402733942
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400416005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 402733942
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 183
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 18,
+      "lightsleep_diag": {
+        "sequence": 50,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400441247,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 402941102
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400621005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 402941102
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 181
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 19,
+      "lightsleep_diag": {
+        "sequence": 51,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 400840653,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 403340511
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 403340516,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 403340511
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380803,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 3,
+      "trial": 20,
+      "lightsleep_diag": {
+        "sequence": 52,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 403561648,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 406061506
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 406061511,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 406061506
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 21,
+      "lightsleep_diag": {
+        "sequence": 53,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 406079198,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 408579061
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 406265006,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 408579061
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 187
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 22,
+      "lightsleep_diag": {
+        "sequence": 54,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 406484641,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 408984494
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 408984499,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 408984494
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380801,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 1,
+      "trial": 23,
+      "lightsleep_diag": {
+        "sequence": 55,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 409002241,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 411502102
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 409188005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 411502102
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 187
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 24,
+      "lightsleep_diag": {
+        "sequence": 56,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 409400690,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 411900540
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 411900545,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 411900540
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380803,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 3,
+      "trial": 25,
+      "lightsleep_diag": {
+        "sequence": 57,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 412120637,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 414620499
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 414620504,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 414620499
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 26,
+      "lightsleep_diag": {
+        "sequence": 58,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 414839672,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 417339530
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 417339535,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 417339530
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 27,
+      "lightsleep_diag": {
+        "sequence": 59,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 417353940,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 419853796
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 417543006,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 419853796
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 190
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 28,
+      "lightsleep_diag": {
+        "sequence": 60,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 417564304,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 420064154
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 417747005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 420064154
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 184
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 2,
+      "trial": 29,
+      "lightsleep_diag": {
+        "sequence": 61,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 417967681,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 420467537
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 420467542,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 420467537
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380800,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 30,
+      "lightsleep_diag": {
+        "sequence": 62,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 420486673,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 422986528
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 420671005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 422986528
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 185
+    },
+    {
+      "seed": false,
+      "rtc_after_s": 1790380803,
+      "quiet_ms": 200,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 3,
+      "trial": 31,
+      "lightsleep_diag": {
+        "sequence": 63,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 420890649,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 423390508
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 423390513,
+          "pending": [
+            2,
+            0
+          ],
+          "timer_armed": 0,
+          "timer_intr": 2,
+          "timer_ints": 2,
+          "icsr": 4263936,
+          "alarm_target": 423390508
+        }
+      },
+      "rtc_before_s": 1790380800,
+      "elapsed_ticks_ms": 2501
+    },
+    {
+      "seed": true,
+      "rtc_after_s": 1790380798,
+      "quiet_ms": 0,
+      "requested_ms": 2500,
+      "elapsed_rtc_s": 0,
+      "trial": 32,
+      "lightsleep_diag": {
+        "sequence": 64,
+        "complete": 1,
+        "core": 0,
+        "reason": 5,
+        "alarm_armed": 1,
+        "schema": 1,
+        "before": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 423411088,
+          "pending": [
+            0,
+            0
+          ],
+          "timer_armed": 10,
+          "timer_intr": 0,
+          "timer_ints": 0,
+          "icsr": 0,
+          "alarm_target": 425910951
+        },
+        "usb_clock_disabled": 0,
+        "requested_ms": 2500,
+        "after": {
+          "enabled": [
+            35667982,
+            0
+          ],
+          "time_us": 423594005,
+          "pending": [
+            8,
+            0
+          ],
+          "timer_armed": 2,
+          "timer_intr": 8,
+          "timer_ints": 8,
+          "icsr": 4272128,
+          "alarm_target": 425910951
+        }
+      },
+      "rtc_before_s": 1790380798,
+      "elapsed_ticks_ms": 184
+    }
+  ],
+  "scope": "Does not explain or replace the two previous 300-second B-LS failures.",
+  "entry_state": "exact_phase_guard33_original29_preserved",
+  "rtc_restore_quantization_s": 1,
+  "rtc_anchor_transport_bracket_s": 0.055230166064575315,
+  "rtc_restore_transport_bracket_s": 0.0397777920588851,
+  "finished": {
+    "utc": "2026-09-29T20:17:28.492174+00:00",
+    "monotonic_ns": 533984516500458
+  },
+  "poll_timeout_ms": 200,
+  "original_irq_host_sha256": "4993f47714e61cd513759a584d5bbe636c6ff1b4fc3525585aa2f6094b949f68",
+  "diagnostic_artifact": "candidate-91e91-lsdiag1",
+  "diagnostic_manifest_sha256": "b5d859d21755dc40fc727ac10ab43415b1d03ccf93a4f9dd11075e64e7018e45",
+  "diagnostic_schema": 1,
+  "guard_files_verified": 33,
+  "elapsed_ticks_scope": "Includes immediate diagnostic getter allocation after lightsleep returns.",
+  "interpretation": "RAM snapshots include instrumentation overhead; pending bits alone do not establish a sole causal IRQ. No prior 300-second FAIL is reclassified."
+}

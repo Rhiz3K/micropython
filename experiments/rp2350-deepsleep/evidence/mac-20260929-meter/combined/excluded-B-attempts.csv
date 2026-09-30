@@ -1,0 +1,4 @@
+sequence,profile,status,functional,capture,energy,valid_current,valid_energy,valid_current_mA,valid_energy_J
+cmp300v2,B-LS,FAIL,FAIL,PASS,NOT_RUN,False,False,,
+cmp300cont2,B-LS,FAIL,FAIL,PASS,NOT_RUN,False,False,,
+cmp300cont1,B-LS,FAIL,NOT_RUN,DEGRADED,NOT_RUN,False,False,,

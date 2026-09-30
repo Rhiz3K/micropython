@@ -1,0 +1,25 @@
+{
+  "raw_data_published": false,
+  "hashes_recorded_only_after_finalization": true,
+  "files": [
+    {
+      "name": "frames.jsonl",
+      "sha256": "a66b8ea7f20756c255e9b5b0daaf388253f6969c832916f37d5a88b2a55b2935",
+      "bytes": 2509982,
+      "published": false
+    },
+    {
+      "name": "samples.jsonl",
+      "sha256": "6e3a371c10a45574615f558a3bd66e4d9acb9c448db6ae4fbfc349f127859ffc",
+      "bytes": 9789248,
+      "published": false
+    },
+    {
+      "name": "events.jsonl",
+      "sha256": "b483951550ac7c48c2ac3cd37cb0549bc40949d6dc1165fe15a81947b7bc24d1",
+      "bytes": 326277,
+      "published": false
+    }
+  ],
+  "skip_reason": null
+}

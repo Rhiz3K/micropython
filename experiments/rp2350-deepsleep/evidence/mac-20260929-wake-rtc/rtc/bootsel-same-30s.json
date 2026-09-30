@@ -1,0 +1,85 @@
+{
+  "action": "bootsel",
+  "label": "bootsel-same-30s",
+  "result": "COMPLETE",
+  "started": {
+    "host_utc": "2026-09-29T20:04:26.914600+00:00",
+    "host_monotonic": 533202.939908333
+  },
+  "bootsel_host_residence_s": 30.00748837494757,
+  "transition": {
+    "aon_elapsed_s": 64.354,
+    "host_elapsed_lower_s": 32.687762832967564,
+    "host_elapsed_upper_s": 32.79823029204272,
+    "aon_minus_host_midpoint_s": 31.61100343749486,
+    "within_transport_bracket_plus_20ms": false,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "post_bootrom_reset": {
+    "aon_elapsed_s": 0.912,
+    "host_elapsed_lower_s": 0.8505194170866162,
+    "host_elapsed_upper_s": 0.9692727079382166,
+    "aon_minus_host_midpoint_s": 0.0021039374875836403,
+    "within_transport_bracket_plus_20ms": true,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "steady_rate": {
+    "aon_elapsed_s": 5.081,
+    "host_elapsed_lower_s": 5.011774666956626,
+    "host_elapsed_upper_s": 5.138242125045508,
+    "aon_minus_host_midpoint_s": 0.0059916039989333925,
+    "within_transport_bracket_plus_20ms": true,
+    "clock_before": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    },
+    "clock_after": {
+      "timer": 65538,
+      "lposc_int": 32,
+      "lposc_frac": 50332,
+      "xosc_int": 12000,
+      "xosc_frac": 0
+    }
+  },
+  "hardware_result": "OBSERVATION_ONLY",
+  "files_unchanged": true,
+  "powman_backup_unchanged": true,
+  "firmware": "candidate-91e91",
+  "friendly_repl": true,
+  "rtc_written": false,
+  "original_application_started": false,
+  "finished": {
+    "host_utc": "2026-09-29T20:05:07.950187+00:00",
+    "host_monotonic": 533243.975430958
+  },
+  "source_sha256": "6c44689d29088f05fbe50ac9e7141995fc610b3d14637598f2695d14ea192730"
+}

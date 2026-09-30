@@ -1,0 +1,23 @@
+{
+  "result": "FAIL",
+  "run_label": "cmp300cont1-b-lightsleep-reset",
+  "profile": "B-LS",
+  "artifact": "candidate-91e91",
+  "functional_result": "NOT_RUN",
+  "capture_result": "DEGRADED",
+  "energy_result": "NOT_RUN",
+  "started": {
+    "utc": "2026-09-29T16:46:50.412173+00:00",
+    "monotonic_ns": 521346427636666
+  },
+  "error_type": "RuntimeError",
+  "reason": "Meter startup quality failed",
+  "complete_cycle_energy_model_valid": false,
+  "root_recovery_required": true,
+  "failed_phase": "meter_startup",
+  "finished": {
+    "utc": "2026-09-29T16:46:59.276430+00:00",
+    "monotonic_ns": 521355291917291
+  },
+  "cleanup_errors": []
+}

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "created_utc": "2026-09-29T16:57:19.644526+00:00",
+  "prior_sequence": "cmp300cont2",
+  "failure_phase": "suite",
+  "failed_profile": "B-LS",
+  "B_LS_actual_attempts": 2,
+  "B_LS_result": "FAIL",
+  "B_LS_valid_current_or_energy": false,
+  "failed_wake": {
+    "boot": 2,
+    "completed": 0,
+    "cause": 3,
+    "requested_ms": 300000,
+    "rtc_elapsed_s": 2
+  },
+  "cause": "UNRESOLVED early lightsleep return; normal reset follows in unchanged harness. Do not attribute to a specific IRQ or claim a firmware repair.",
+  "action": "Continue independent profiles03..07 as cmp300deep, retain valid A externally, retain both B failures and all startup failures. No further B retry; first subsequent failure stops the sequence.",
+  "firmware_or_sleep_harness_changed": false,
+  "explicit_root_review_completed": true,
+  "hardware_state": "Candidate unchanged; last installed B test stopped in repeated FAIL. Next installer must use controlled REPL and normal staged reset as before."
+}

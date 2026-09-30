@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "original_files_verified": 29,
+  "original_directories_verified": 7,
+  "actual_candidate_flash_verified": true,
+  "fresh_original_main_backup_verified": true,
+  "all_three_backup_regions_unchanged": true,
+  "guard_main_verified": true,
+  "panel_dependency_files_added": 3,
+  "friendly_repl_verified": true,
+  "serial_owner_closed": true,
+  "reset_performed": false,
+  "original_application_started": false,
+  "host_source_sha256": "69adf7b735563c1557d16d32fe9987ff0ba082f17ca63e5b56442b365f502266",
+  "host_utc": "2026-09-29T19:21:23.682296+00:00",
+  "host_monotonic": 530619.70657175
+}

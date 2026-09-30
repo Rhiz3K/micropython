@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "source_inputs": [
+    {
+      "file": "compare-runs/quiet200-ls-2/result-public.json",
+      "sha256": "37dc323513a581dbcff09998a72355f721f7ed8b56405dacefe65ce441076031"
+    },
+    {
+      "file": "compare-runs/quiet200-ls-2/analysis/analysis.json",
+      "sha256": "3c7282332eacb5d6322131b473a489da95ad11968394aab4a917fce6c0569f1f"
+    },
+    {
+      "file": "compare-runs/quiet200-deep-retention-2/result-public.json",
+      "sha256": "18a92305014bcccf189f96be584778e8686dfc073247019dba1dca7815012b03"
+    },
+    {
+      "file": "compare-runs/quiet200-deep-retention-2/analysis/analysis.json",
+      "sha256": "48ad9e28611feb5f7d54c4daa673d084b194da3331105b4645c2dd76b6f38129"
+    },
+    {
+      "file": "compare-runs/quiet200-usbq-1/result-public.json",
+      "sha256": "9d1aee1f2a39c22332287616f816a30afd31a6e8ffba470160a7448b6b998cc6",
+      "role": "Closed FAIL/NOT_RUN reference; no metric is plotted"
+    },
+    {
+      "file": "compare-runs/quiet200-deep-1/result-public.json",
+      "sha256": "4a5dc6b3907c253abfd999509a1d15e75fb38bc1be7def33b4714fd1c6c1cc4f",
+      "role": "Prior all-region retention FAIL/NOT_RUN preserved; no metric is plotted"
+    },
+    {
+      "file": "compare-runs/quiet200-deep-retention-1/result-public.json",
+      "sha256": "af15d2d15a05af665d13bfd81c658c1dd5bd772c224b59a32baab2e8a66e0d05",
+      "role": "Prior startup meter-gap FAIL/NOT_RUN, zero completed cycles; no metric plotted"
+    },
+    {
+      "file": "compare-runs/quiet200-deep-retention-1/meter/summary.json",
+      "sha256": "4dbfae49acc48e350eecadfc48805fd30fc063222194cac9c87caed4cf084738",
+      "role": "Prior startup meter-gap FAIL/NOT_RUN, zero completed cycles; no metric plotted"
+    }
+  ],
+  "plot_source_sha256": "6981cb03d0780ae9e2b2fd4a6288060fe203efabc3d29d7cca14edb733a6dc4e",
+  "run_labels": [
+    "quiet200-ls-2",
+    "quiet200-deep-retention-2"
+  ],
+  "plotted_profiles_closed_PASS_only": true,
+  "missing_reference": {
+    "label": "quiet200-usbq-1",
+    "result": "FAIL",
+    "analysis_result": "NOT_RUN",
+    "metrics_plotted": false
+  },
+  "prior_deep_failure": {
+    "label": "quiet200-deep-1",
+    "result": "FAIL",
+    "analysis_result": "NOT_RUN",
+    "metrics_plotted": false,
+    "original_all_region_gate_preserved": true
+  },
+  "prior_startup_failure": {
+    "label": "quiet200-deep-retention-1",
+    "result": "FAIL",
+    "analysis_result": "NOT_RUN",
+    "completed_cycles": 0,
+    "capture_data_quality": "DEGRADED",
+    "receipt_gap_count_over_200ms": 1,
+    "metrics_plotted": false
+  },
+  "source_sha256_by_profile": {
+    "candidate-ls": {
+      "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+      "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+      "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+      "wake-rtc-20260929/guard.py": "9a1bc1461c874fde35d682d7a0f32e9d7cd0ee119ea41994f6f06d8ee9963195",
+      "wake-rtc-20260929/compare_ram.py": "85a29c43eeeeae06e336eaa24f7086e7e0985370f6746b9e4ef80f2bbbba83e9",
+      "wake-rtc-20260929/analyze_compare_ram.py": "50e56b42dbd08883e70c4c26e841fa15d9b0720ba97eb5173b6368e91906da49"
+    },
+    "candidate-deep": {
+      "meter_reader.py": "a3ba544decdd0efd311e53106b7e319fb0f6490debdb2c84648c710f4263fe45",
+      "analyze_stream.py": "60e5609454bb88f6187ed4f5a8fa2d832c436c6371be07caa0873b773adfb630",
+      "lightsleep-repeat/host.py": "39dce5ea3829f829658d471d134f824f903071e50a5991672f1e430f6d80e79f",
+      "wake-rtc-20260929/guard_deep2.py": "0136ea63241d973fb595a66b2c7305e31da91ad90a0f71d23c9344e4073d4a9a",
+      "wake-rtc-20260929/compare_ram_deep_retention.py": "2e0e7a0337d196c2c2338d7e284be41e8386884ead673635e415cca3e396aa79",
+      "wake-rtc-20260929/analyze_compare_deep_retention.py": "83e352a3cbd343e0770aaf85b08961e372d067aa3b569e2814f1ad1ac5e7b047"
+    }
+  },
+  "fixture_by_profile": {
+    "candidate-ls": "ram_compare_quiet200_no_refresh",
+    "candidate-deep": "ram_compare_deep_retention_quiet200_no_refresh"
+  },
+  "deep_retention_policy": {
+    "required_equal_regions": [
+      2
+    ],
+    "observed_regions": [
+      0,
+      1,
+      2
+    ],
+    "nonretained_regions": [
+      0,
+      1
+    ],
+    "comparison": "entry_snapshot",
+    "final_restoration": "separate_root_owned_all_three_regions"
+  },
+  "READY0_requires_all_three_equal": true,
+  "different_retention_gate": true,
+  "identical_current_energy_methodology": true,
+  "final_all_three_restoration_is_separate": true,
+  "derivative_parent_sha256": "55bb72508200b800fed0a5cac30a43344f576e7de6322bc079897ced2295efe1",
+  "raw_files_read": false,
+  "hardware_access": false,
+  "offset_subtracted": false,
+  "confidence_intervals": false,
+  "means": "Equal weights for the two measured cycles"
+}

@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "run_label": "cmp300v2-a-sleep-reset",
+  "profile": "A",
+  "artifact": "candidate-91e91",
+  "functional_result": "PASS",
+  "capture_result": "PASS",
+  "energy_result": "PASS",
+  "started": {
+    "utc": "2026-09-29T16:17:09.499278+00:00",
+    "monotonic_ns": 519565515985000
+  },
+  "analysis_sha256": "a681b4e27ac0e533e02c4aa0f78d8938f08bf901c73df8947df1706adc00e8f6",
+  "complete_cycle_energy_model_valid": true,
+  "finished": {
+    "utc": "2026-09-29T16:32:44.282527+00:00",
+    "monotonic_ns": 520500298372708
+  },
+  "cleanup_errors": []
+}

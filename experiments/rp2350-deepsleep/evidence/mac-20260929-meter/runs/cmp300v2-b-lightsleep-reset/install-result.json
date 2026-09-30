@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "main_source": "device-panelmeta.py",
+  "main_sha256": "cdadbbd07bc7ecd7b6c26a97641bc736bd15b19f9016f92ae1bfc8fe865d903d",
+  "original_files_unchanged_except_guarded_main": true,
+  "readback_verified": true,
+  "host_utc": "2026-09-29T16:32:55.594605+00:00",
+  "host_monotonic": 520511.610449458
+}
