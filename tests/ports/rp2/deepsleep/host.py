@@ -42,6 +42,29 @@ def validate_radio_config(config):
         raise ValueError("ap configuration requires radio=ap or sta_ap")
 
 
+def validate_watchdog_config(config):
+    after_reset = config.get("watchdog_after_reset", False)
+    if type(after_reset) is not bool:
+        raise ValueError("watchdog_after_reset must be boolean")
+    if not after_reset:
+        return
+    if config.get("watchdog") is not True:
+        raise ValueError("watchdog_after_reset requires watchdog=true")
+    cycles = config.get("cycles", 100)
+    if type(cycles) is not int or cycles < 1:
+        raise ValueError("watchdog recovery requires a positive integer cycle count")
+    if config.get("mode", "deepsleep") != "deepsleep":
+        raise ValueError("watchdog recovery requires mode=deepsleep")
+    if not config.get("expect_deep_cause", True) or config["sleep_ms"] < 2:
+        raise ValueError("watchdog recovery requires timed sleep with DEEPSLEEP_RESET")
+
+
+def expected_cycles(config):
+    if config.get("watchdog") and not config.get("watchdog_after_reset"):
+        return 0
+    return config.get("cycles", 100)
+
+
 def ports():
     from serial.tools import list_ports
 
@@ -55,8 +78,10 @@ def validate_expected_record(record, config):
         raise ValueError("record does not belong to the expected run")
     if config.get("radio") is not None and record.get("radio_mode") != config["radio"]:
         raise ValueError("record radio mode does not match configuration")
+    if config.get("watchdog_after_reset") and record.get("watchdog_after_reset") is not True:
+        raise ValueError("record lacks watchdog-after-reset scenario marker")
     if record.get("status") == "PASS":
-        expected = 0 if config.get("watchdog") else config.get("cycles", 100)
+        expected = expected_cycles(config)
         if type(record.get("completed")) is not int or record["completed"] != expected:
             raise ValueError("PASS completed count does not match configuration")
 
@@ -105,6 +130,7 @@ class RunProgress:
         self.config = config
         self.ready = None
         self.sleep_started = None
+        self.watchdog_reset_seen = False
 
     def check(self, record, now):
         if self.config is None:
@@ -114,6 +140,7 @@ class RunProgress:
         current = (record["boot"], record["completed"])
         status = record["status"]
         watchdog = self.config.get("watchdog", False)
+        after_reset = self.config.get("watchdog_after_reset", False)
         if status == "READY":
             if self.ready is None:
                 if current[1] != 0 or record.get("phase") != 0:
@@ -122,9 +149,22 @@ class RunProgress:
                 if self.sleep_started is not None:
                     raise ValueError("READY after SLEEP on the same boot")
                 return
+            elif after_reset and not self.watchdog_reset_seen and record.get("phase") == 4:
+                if (
+                    self.sleep_started is not None
+                    or self.ready[1] != 0
+                    or current != (self.ready[0] + 1, 0)
+                    or type(record.get("watchdog_reason")) is not int
+                    or not record["watchdog_reason"] & 1
+                    or type(record.get("watchdog_ctrl")) is not int
+                    or record["watchdog_ctrl"] & (1 << 30)
+                ):
+                    raise ValueError("watchdog timeout does not follow the initial READY")
+                self.watchdog_reset_seen = True
             else:
                 if (
-                    watchdog
+                    (watchdog and not after_reset)
+                    or (after_reset and not self.watchdog_reset_seen)
                     or self.sleep_started is None
                     or current != (self.ready[0] + 1, self.ready[1] + 1)
                     or record.get("phase") != 1
@@ -140,20 +180,22 @@ class RunProgress:
             self.ready = current
         elif status == "SLEEP":
             if (
-                watchdog
+                (watchdog and not after_reset)
+                or (after_reset and not self.watchdog_reset_seen)
                 or current != self.ready
                 or current[1] >= self.config.get("cycles", 100)
                 or record.get("sleep_ms") != self.config["sleep_ms"]
             ):
                 raise ValueError("SLEEP does not match READY/configuration")
         elif status == "PASS":
-            expected = 0 if watchdog else self.config.get("cycles", 100)
+            expected = expected_cycles(self.config)
             if (
                 self.ready is None
+                or (after_reset and not self.watchdog_reset_seen)
                 or self.sleep_started is not None
                 or self.ready[1] != expected
                 or current != (self.ready[0] + 1, expected)
-                or record.get("phase") != (4 if watchdog else 5)
+                or record.get("phase") != (4 if watchdog and not after_reset else 5)
             ):
                 raise ValueError("PASS lacks a complete observed run and final reset")
 
@@ -210,6 +252,7 @@ def install(args, manifest):
     if not config.get("run") or config.get("cycles", 100) < 1:
         raise ValueError("config requires a run name and positive cycle count")
     validate_radio_config(config)
+    validate_watchdog_config(config)
     sys.path.insert(0, str(HERE.parents[3] / "tools"))
     from pyboard import Pyboard
 
@@ -253,12 +296,16 @@ def install(args, manifest):
             "os.sync()\nmachine.mem_backup(2)[0] = 0\n"
             % (json.dumps(config), b"RP2350 deepsleep filesystem sentinel\n")
         )
-        board.use_raw_paste = False
-        # Allow the host to receive the command ACK and close CDC before reset.
-        board.exec_raw_no_follow("import time; time.sleep_ms(150); machine.reset()")
+        if not args.no_reset:
+            board.use_raw_paste = False
+            # Allow the host to receive the command ACK and close CDC before reset.
+            board.exec_raw_no_follow("import time; time.sleep_ms(150); machine.reset()")
     finally:
         board.close()
-    print("Installed once. Start 'run'; per-cycle progress uses POWMAN scratch only.")
+    if args.no_reset:
+        print("Installed without reset. Arrange the documented BOOTSEL/UF2 boot, then run.")
+    else:
+        print("Installed once. Start 'run'; per-cycle progress uses POWMAN scratch only.")
 
 
 def observe(args, manifest):
@@ -281,6 +328,7 @@ def observe(args, manifest):
             or not 0 <= expected["sleep_ms"] <= 2147483647
         ):
             raise ValueError("expected config requires sleep_ms in 0..2147483647")
+        validate_watchdog_config(expected)
         tolerance = expected.get("host_tolerance_s", 0)
         if not isinstance(tolerance, (int, float)) or not 0 <= tolerance < float("inf"):
             raise ValueError("host_tolerance_s must be finite and nonnegative")
@@ -397,6 +445,9 @@ def main():
             command.add_argument("--config", type=Path, required=True)
             command.add_argument("--allow-write", action="store_true")
             command.add_argument("--replace-main", action="store_true")
+            command.add_argument(
+                "--no-reset", action="store_true", help="stage files without starting the suite"
+            )
         else:
             command.add_argument(
                 "--config",

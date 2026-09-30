@@ -1,0 +1,21 @@
+# Private fixture prefix. The public device.py follows after the marker below.
+import json as _panel_json
+import time as _panel_time
+try:
+    import panel_probe as _panel_probe
+    _rp2350_panel_info = _panel_probe.prepare()
+    print("PANEL_PREP " + _panel_json.dumps(_rp2350_panel_info))
+except Exception as _panel_error:
+    _panel_failure = {"protocol": 2, "status": "FAIL",
+                      "stage": "private_panel_prefix", "error": str(_panel_error)}
+    try:
+        with open("deepsleep-config.json") as _panel_config_file:
+            _panel_config = _panel_json.load(_panel_config_file)
+        _panel_failure["run"] = _panel_config["run"]
+        if _panel_config.get("radio") is not None:
+            _panel_failure["radio_mode"] = _panel_config["radio"]
+    except Exception:
+        _panel_failure["run"] = "panel-prefix-missing-config"
+    while True:
+        print("DEEPSLEEP_TEST " + _panel_json.dumps(_panel_failure))
+        _panel_time.sleep_ms(1000)

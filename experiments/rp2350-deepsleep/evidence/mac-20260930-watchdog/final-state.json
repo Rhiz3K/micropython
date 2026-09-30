@@ -1,0 +1,28 @@
+{
+  "result": "PASS",
+  "firmware_version": "v1.30.0-preview.105.g6ce738ae0f.dirty on 2026-09-30 (GNU 14.3.1 MinSizeRel)",
+  "firmware_bin_sha256": "a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08",
+  "actual_firmware_bytes_verified": true,
+  "original_files_restored_and_verified": 29,
+  "original_directories_restored_and_verified": 7,
+  "original_main_restored_last": true,
+  "all_three_backup_regions_restored_and_verified": true,
+  "rtc_restored_from_initial_plus_elapsed_host": true,
+  "initial_rtc_capture_bracket_s": 0.03925137501209974,
+  "rtc_quantization_s": 1,
+  "panel_sleep_and_park_verified": true,
+  "panel_refreshed": false,
+  "radio_and_ble_inactive": true,
+  "removed_test_files": [
+    "/deepsleep-config.json",
+    "/deepsleep-sentinel.bin",
+    "/panel_probe.py",
+    "/pico_epaper29_lowpower.py",
+    "/rp2350_epd_vendor.py"
+  ],
+  "original_application_started": false,
+  "reset_after_restoration": false,
+  "friendly_repl_verified": true,
+  "host_utc": "2026-09-30T15:39:49.628296+00:00",
+  "host_monotonic": 603725.763551958
+}

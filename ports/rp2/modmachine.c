@@ -75,6 +75,13 @@ static bool woke_from_deepsleep;
 static void machine_deepsleep_prepare_wfi(void);
 
 void machine_deepsleep_init(void) {
+    // A watchdog timeout (including the ROM's delayed BOOTSEL reboot) can
+    // leave ENABLE set with an expired counter. Preserve any live watchdog.
+    uint32_t watchdog_ctrl = watchdog_hw->ctrl;
+    if ((watchdog_ctrl & (WATCHDOG_CTRL_ENABLE_BITS | WATCHDOG_CTRL_TIME_BITS))
+        == WATCHDOG_CTRL_ENABLE_BITS) {
+        hw_clear_bits(&watchdog_hw->ctrl, WATCHDOG_CTRL_ENABLE_BITS);
+    }
     if (watchdog_hw->reason) {
         machine_deepsleep_prepare_wfi();
     }

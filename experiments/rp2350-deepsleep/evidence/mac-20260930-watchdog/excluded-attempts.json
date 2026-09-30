@@ -1,0 +1,21 @@
+[
+  {
+    "result": "HOST_PREPARATION_WINDOW_EXPIRED",
+    "application_launch_performed": false,
+    "ondevice_test_count": 0,
+    "firmware_and_filesystem_loaded_and_verified": true,
+    "host_utc": "2026-09-30T15:29:21.350369+00:00",
+    "host_monotonic": 603097.484386916
+  },
+  {
+    "result": "INCOMPLETE_PRIVATE_HOST_FIXTURE_HASH_CHECK",
+    "alarm_cycle_observed": true,
+    "initial_boot_TIMER_reason": true,
+    "initial_boot_ENABLE_clear": true,
+    "deep_wake_cause": 4,
+    "terminal_pass_not_acknowledged": true,
+    "public_device_run_unchanged": true,
+    "host_utc": "2026-09-30T15:33:54.759929+00:00",
+    "host_monotonic": 603370.8944455
+  }
+]

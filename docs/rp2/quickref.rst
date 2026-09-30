@@ -120,7 +120,9 @@ switched core, XIP cache and both SRAM domains are powered off. The always-on
 timer wakes the chip through the normal ROM boot path. A successful timer wake
 is reported as ``machine.DEEPSLEEP_RESET`` by ``machine.reset_cause()``. The RTC
 continues using the low-power oscillator during sleep, so its accuracy differs
-from the crystal used while awake. No particular board current is guaranteed.
+from the crystal used while awake and varies with voltage and temperature.
+Applications requiring accurate wall-clock time should synchronise the RTC
+after waking. No particular board current is guaranteed.
 
 USB disconnects and must enumerate again. Pico 2 W turns off CYW43; the new
 program must reconnect Wi-Fi. After powering off CYW43, Pico 2 W also drives
@@ -141,6 +143,8 @@ core complete synchronously. DMA is stopped before requesting power-down.
 An active watchdog, a running second Python thread, a call from core 1, or an
 interrupt handler causes ``OSError(EBUSY)`` before teardown. The watchdog is not
 silently disabled: it would lose both its counter and protection in P1.7.
+An expired watchdog left enabled by a previous reboot is cleared at startup
+and does not block timed deep sleep; the recorded reset cause is preserved.
 Terminate the second thread cooperatively before calling deep sleep.
 
 Negative or out-of-range durations raise an exception.

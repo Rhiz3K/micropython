@@ -122,9 +122,24 @@ timeout is per boot; set it longer than the requested sleep plus boot and networ
 setup. A PASS means only the implemented checks passed; it is not a current or
 power-domain measurement. The final normal reset leaves the suite stopped.
 
+To test the first application boot after UF2 installation, use a separate
+one-cycle configuration (`"cycles": 1, "sleep_ms": 2500`) and add `--no-reset`
+to `install`. This stages and synchronizes the files and clears the suite's
+POWMAN progress without starting it or invoking `machine.reset()`. Then use the
+identified board's documented BOOTSEL procedure to install the exact verified
+UF2, preserving its filesystem, and observe the first normal application boot
+with `run`. Do not issue `machine.reset()`, Ctrl-D or another reset between the
+UF2 boot and the first deep sleep. Record the firmware identity/hash and the
+first READY's `cause`, `watchdog_reason` and `watchdog_ctrl`. The watchdog timeout
+path is established only when `watchdog_reason & 1` (TIMER) is set; after startup
+cleanup `watchdog_ctrl & (1 << 30)` (ENABLE) must be clear. A different reason
+can test first-boot sleep, but does not establish expired-watchdog recovery.
+BOOTSEL itself can affect RTC continuity; save/restore RTC separately and do not
+count that transition as a normal reset. The installer does not flash firmware.
+
 Pass the same private `--config` to `run` as to `install`. Before sending any
 GO, the host then rejects a different run name or radio mode, and accepts final
-PASS only with exactly the configured cycle count (zero for the watchdog
+PASS only with exactly the configured cycle count (zero for the legacy watchdog
 rejection case). It also requires the initial READY, an acknowledged SLEEP for
 each subsequent wake, consecutive boot/cycle counts, and the final ordinary
 reset. Attach before the first cycle; attaching midway cannot verify a complete
@@ -161,6 +176,16 @@ They are not evidence of hardware sleep, watchdog operation or current draw.
 
 ## Scenarios and initially unexecuted results
 
+On 2026-09-30, an ARM Pico 2 W with a prepared B/W V2 e-paper fixture passed
+both the first application boot after UF2 and the watchdog-after-reset scenario
+with one 2.5 s alarm cycle each. The latter also confirmed EBUSY while the live
+watchdog continued counting, followed by a genuine TIMER watchdog reset.
+See [the dated report](../../../../experiments/rp2350-deepsleep/RESULTS-WATCHDOG-MAC-20260930.md)
+for firmware hashes, full observed sequences, excluded fixture attempts and
+restoration. The table below retains the initial planning status; it is not a
+current hardware-results summary. A live watchdog inherited at startup remains
+untested.
+
 Each independent run requires a distinct run name/configuration/log and a new
 installation to reset its scratch state. Installation writes are per run, not
 per cycle. Preserve the complete logs and firmware hashes.
@@ -171,6 +196,8 @@ per cycle. Preserve the complete logs and firmware hashes.
 | Watchdog scratch retention | Reported independently in each wake record | NOT RUN |
 | Active CPU1 and caller on CPU1 | Add `"thread": true`; expects `OSError(EBUSY)` then successful deep sleep after CPU1 exits | NOT RUN |
 | Active watchdog | `"watchdog": true, "cycles": 1`; rejection must leave watchdog running and reboot with `WDT_RESET` | NOT RUN |
+| Deep sleep after watchdog timeout | Add `"watchdog_after_reset": true` to the active-watchdog configuration; observes timeout, then the configured timed deep cycles and final ordinary reset | NOT RUN |
+| First application boot after UF2 | Separate one-cycle run staged with `install --no-reset`; verified UF2 boot followed directly by a 2.5 s deep cycle | NOT RUN |
 | Active DMA | Add `"dma": true`; a fixed-address RAM copy must be stopped by deep-sleep teardown | NOT RUN |
 | Lightsleep immediately before deep sleep | Add `"lightsleep_before": true`; calls `lightsleep(20)` before every deep sleep | NOT RUN |
 | Wi-Fi, DHCP, DNS, HTTP, repeated reconnect | Add Wi-Fi configuration below | NOT RUN |
@@ -188,6 +215,22 @@ or continued watchdog protection during a deep sleep. A fresh boot caused by
 an unexpectedly accepted CPU1 call is a failure, not a completed cycle.
 The watchdog PASS phase is armed only after the busy rejection returns; a reset
 before that point fails even if its cause is `WDT_RESET`.
+
+`"watchdog_after_reset": true` is a separate opt-in extension; it requires
+`"watchdog": true`, `"mode": "deepsleep"` (the default), `sleep_ms >= 2` and
+`expect_deep_cause: true`. The original watchdog-only scenario still ends with
+zero completed deep cycles and PASS immediately after the confirmed timeout.
+The extension reports that timeout as READY with phase 4 and completed count
+zero, requires the TIMER reason and a cleared ENABLE bit, then proceeds without
+arming another watchdog. Every timed cycle must return `DEEPSLEEP_RESET`, and
+the final ordinary reset must clear that indication. The host requires the full
+sequence: initial READY, watchdog-timeout READY, acknowledged SLEEP, deep-wake
+READY and final PASS. A repeated or interrupted timeout result cannot skip a
+required phase. Keep a new run name and evidence log for this extension; an old
+watchdog-only PASS is not evidence of recovery into deep sleep. These tests do
+not cover a watchdog inherited while still running at boot, such as a boot ROM
+try-before-you-buy watchdog.
+
 The scripts compare `OSError` to errno 16 when `errno.EBUSY` is not exported by
 the RP2 Python module; 16 is `MP_EBUSY` in `py/mperrno.h`.
 `regressions.py` refuses to run unless the port is RP2, the chip is RP2350 and

@@ -17,6 +17,11 @@ EBUSY = getattr(errno, "EBUSY", 16)
 last_record = {}
 # Pinned lib/cyw43-driver/src/cyw43_ll.h: WPA2-PSK with AES, not an open AP.
 AP_WPA2_AES_PSK = 0x00400004
+# RP2350 hardware/regs/watchdog.h: read-only boot diagnostics.
+WATCHDOG_CTRL = 0x400D8000
+WATCHDOG_REASON = 0x400D8008
+WATCHDOG_ENABLE = 1 << 30
+WATCHDOG_REASON_TIMER = 1
 
 
 def rtc_seconds():
@@ -263,6 +268,17 @@ def run():
     global last_record
     with open("deepsleep-config.json") as f:
         config = json.load(f)
+    watchdog_after_reset = config.get("watchdog_after_reset", False)
+    check(type(watchdog_after_reset) is bool, "watchdog_after_reset must be boolean")
+    if watchdog_after_reset:
+        check(config.get("watchdog") is True, "watchdog_after_reset requires watchdog=true")
+        cycles = config.get("cycles", 100)
+        check(
+            type(cycles) is int and cycles >= 1, "watchdog recovery needs positive integer cycles"
+        )
+        check(config.get("mode", "deepsleep") == "deepsleep", "watchdog recovery needs deepsleep")
+        check(config.get("expect_deep_cause", True), "watchdog recovery needs DEEPSLEEP_RESET")
+        check(config["sleep_ms"] >= 2, "watchdog recovery needs a timed deep sleep")
     regions = machine.mem_backup(-1)
     check(len(regions) == 3 and len(regions[2]) == 8, "requires RP2350 backup regions")
     state = regions[2]
@@ -286,9 +302,13 @@ def run():
         # Startup may already have consumed/cleared CHIP_RESET status flags.
         "powman_chip_reset": machine.mem32[0x40100000 + 0x2C],
         "powman_last_swcore_pwrup": machine.mem32[0x40100000 + 0xA0],
+        "watchdog_ctrl": machine.mem32[WATCHDOG_CTRL],
+        "watchdog_reason": machine.mem32[WATCHDOG_REASON],
         "status": "READY",
     }
     last_record = record
+    if watchdog_after_reset:
+        record["watchdog_after_reset"] = True
     radio = config.get("radio")
     if radio is not None:
         check(
@@ -306,6 +326,7 @@ def run():
     check(phase != 6, "deepsleep accepted an active CPU1")
     check(phase != 7, "reset interrupted an already consumed wake result")
     check(phase != 8, "watchdog reset before deepsleep rejection was confirmed")
+    check(phase != 9, "reset interrupted an already consumed watchdog result")
     if phase in (1, 4, 5):
         expected = machine.WDT_RESET if phase == 4 else getattr(machine, "DEEPSLEEP_RESET", -1)
         if phase == 5 or (phase == 1 and not config.get("expect_deep_cause", True)):
@@ -331,7 +352,13 @@ def run():
             state[3] = 7
             state[1] += 1
             record["completed"] = state[1]
-        if phase in (4, 5):
+        if phase == 4 and watchdog_after_reset:
+            check(record["watchdog_reason"] & WATCHDOG_REASON_TIMER, "watchdog timeout required")
+            check(not record["watchdog_ctrl"] & WATCHDOG_ENABLE, "expired watchdog still enabled")
+            # Consume this timeout before reporting it. A soft reset while the
+            # host waits must not turn an unobserved timeout into a valid run.
+            state[3] = 9
+        elif phase in (4, 5):
             record["status"] = "PASS"
             state[3] = 2
             wait_for_host(record)
@@ -357,7 +384,7 @@ def run():
     if config.get("thread"):
         state[3] = 6
         thread_test()
-    if config.get("watchdog"):
+    if config.get("watchdog") and phase == 0:
         state[3] = 8
         machine.WDT(timeout=2000)
         expect_busy()
@@ -380,6 +407,8 @@ def run():
         "boot": state[5],
         "sleep_ms": config["sleep_ms"],
     }
+    if watchdog_after_reset:
+        sleep_record["watchdog_after_reset"] = True
     if radio is not None:
         sleep_record["radio_mode"] = radio
         sleep_record["radio"] = radio_state(radio, radio_handles)

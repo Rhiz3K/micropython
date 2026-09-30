@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "scenario": "first-uf2",
+  "first_boot": 1,
+  "completed_alarm_cycles": 1,
+  "requested_sleep_ms": 2500,
+  "boot_sequence": [
+    {
+      "boot": 1,
+      "phase": 0,
+      "cause": 1,
+      "watchdog_ctrl": "0x0",
+      "watchdog_reason": 1
+    },
+    {
+      "boot": 2,
+      "phase": 1,
+      "cause": 4,
+      "watchdog_ctrl": "0x7000000",
+      "watchdog_reason": 0
+    },
+    {
+      "boot": 3,
+      "phase": 5,
+      "cause": 3,
+      "watchdog_ctrl": "0x0",
+      "watchdog_reason": 2
+    }
+  ],
+  "rtc_elapsed_s": 5,
+  "host_sleep_to_ready_s": 5.838690457982011,
+  "actual_firmware_bin_sha256_verified": true,
+  "firmware_bin_sha256": "a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08",
+  "panel_prepared_every_boot_without_refresh": true,
+  "live_watchdog_ebusy_preserved": false,
+  "positive_time_samples": [],
+  "final_ordinary_reset_clears_deep_cause": true,
+  "host_utc": "2026-09-30T15:35:32.969795+00:00",
+  "host_monotonic": 603469.104633875
+}

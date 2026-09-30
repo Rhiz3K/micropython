@@ -1,0 +1,28 @@
+# Private read-only fixture hooks. Public run/phase/ACK/sleep functions untouched.
+import hashlib as _fixture_hashlib
+import uctypes as _fixture_uctypes
+_fixture_actual_bin_sha = None
+_base_emit = emit
+_base_expect_busy = expect_busy
+def emit(record):
+ global _fixture_actual_bin_sha
+ if record['status'] in ('READY','PASS') and _fixture_actual_bin_sha is None:
+  _fixture_actual_bin_sha=binascii.hexlify(_fixture_hashlib.sha256(_fixture_uctypes.bytearray_at(0x10000000,889840)).digest()).decode()
+  check(_fixture_actual_bin_sha=='a0a2107db05f6ea2246cb8540e2d715b72bbcfa7a0cae1492b25cb6b7ae2ee08','actual firmware BIN mismatch')
+ enriched=dict(record)
+ enriched['panel_prep']=_rp2350_panel_info
+ enriched['fixture_bin_size']=889840
+ enriched['fixture_bin_sha256']=_fixture_actual_bin_sha
+ enriched['fixture_runtime']=os.uname().version
+ _base_emit(enriched)
+def expect_busy():
+ state=machine.mem_backup(2)
+ if state[3]!=8: return _base_expect_busy()
+ before=machine.mem32[WATCHDOG_CTRL]
+ check(before & WATCHDOG_ENABLE and before & 0x00ffffff,'watchdog not running')
+ print('WATCHDOG_ACTIVE '+json.dumps({'stage':'before_busy','boot':state[5],'phase':state[3],'ctrl':before,'time':before & 0x00ffffff}))
+ _base_expect_busy()
+ after=machine.mem32[WATCHDOG_CTRL]
+ check(after & WATCHDOG_ENABLE and after & 0x00ffffff,'watchdog stopped after EBUSY')
+ print('WATCHDOG_ACTIVE '+json.dumps({'stage':'after_busy','boot':state[5],'phase':state[3],'ctrl':after,'time':after & 0x00ffffff,'ebusy_confirmed':True}))
+
