@@ -1,7 +1,14 @@
 {
   "schema": 1,
   "scope": "APPLICATION_PILOT3_PHYSICAL_PANEL",
-  "status": "NOT_VERIFIED",
-  "reason": "No current user visual confirmation received",
-  "electronic_refresh_count_verified": 6
+  "status": "PASS",
+  "electronic_refresh_count_verified": 6,
+  "visual_scope": "FINAL_APPLICATION_IMAGE",
+  "user_confirmed_correct_image": true,
+  "user_confirmed_correct_orientation": true,
+  "user_confirmed_black_white": true,
+  "attached_photograph_reviewed": true,
+  "photograph_sha256": "3bd403b546da24357262ad414a3ad1d0873f3fc073dba06a392eb9d154a82252",
+  "photograph_published": false,
+  "confirmation_recorded_utc": "2026-10-01T06:13:26.363693+00:00"
 }

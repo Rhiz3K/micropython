@@ -9,7 +9,8 @@ Současný konečný Mac stav: přesný experimentální BIN `a0a2107d…ee08`,
 29 původních souborů a 7 adresářů ověřeno, všechny tři backup regiony
 a RTC obnoveny, rádio/BLE vypnuté, panel zaparkovaný, friendly REPL.
 Původní aplikace byla vrácena beze změn a nespustila se; Z2 dekodér byl
-pouze součástí odstraněného testu. Fyzický obraz dosud není potvrzený.
+pouze součástí odstraněného testu. Správný konečný obraz, orientace
+a černá/bílá jsou nyní potvrzeny uživatelem a fotografií (visual PASS).
 Níže je zachováno původní předání z 29. 9., jeho počty nejsou současný stav.
 
 Připraveno 29. 9. 2026. Úkol na cílovém PC: převzít aktuální kandidát,
