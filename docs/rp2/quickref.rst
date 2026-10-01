@@ -106,6 +106,59 @@ connection succeeds or the interface gets disabled.
 .. _Pico W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#picow-technical-specification
 .. _Pico 2 W: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#pico2w-technical-specification
 
+Timed deep sleep on Pico 2 (experimental)
+-----------------------------------------
+
+The ARM builds for Pico 2 and Pico 2 W support an experimental timed power-down::
+
+    import machine
+    machine.deepsleep(5000)
+    # Execution does not continue here: boot.py and main.py run again on wake.
+
+For durations greater than 1 ms, this requests RP2350 power state P1.7: the
+switched core, XIP cache and both SRAM domains are powered off. The always-on
+timer wakes the chip through the normal ROM boot path. A successful timer wake
+is reported as ``machine.DEEPSLEEP_RESET`` by ``machine.reset_cause()``. The RTC
+continues using the low-power oscillator during sleep, so its accuracy differs
+from the crystal used while awake and varies with voltage and temperature.
+Applications requiring accurate wall-clock time should synchronise the RTC
+after waking. No particular board current is guaranteed.
+
+USB disconnects and must enumerate again. Pico 2 W turns off CYW43; the new
+program must reconnect Wi-Fi. After powering off CYW43, Pico 2 W also drives
+GP25 (wireless CS) low to disable the board's VSYS monitor path. Normal wireless
+initialisation after wake reclaims this pin. This preparation applies only to
+timed deep sleep, not to ``WLAN.active(False)`` or ``machine.lightsleep()``.
+GPIO pads retain their output state during power down; external devices and
+the board regulator/flash remain powered. Applications must prepare their own
+external peripherals for sleep. This is not a board-wide power switch. GPIO
+wake is not configured by this path.
+
+Only ``machine.mem_backup(2)`` (the eight POWMAN words) survives this power-down.
+The watchdog scratch regions 0 and 1, Python heap and peripheral state do not.
+Close or flush files before sleeping, as before a reset: ``os.sync()`` does not
+flush open littlefs file objects. Flash operations already issued on the calling
+core complete synchronously. DMA is stopped before requesting power-down.
+
+An active watchdog, a running second Python thread, a call from core 1, or an
+interrupt handler causes ``OSError(EBUSY)`` before teardown. The watchdog is not
+silently disabled: it would lose both its counter and protection in P1.7.
+An expired watchdog left enabled by a previous reboot is cleared at startup
+and does not block timed deep sleep; the recorded reset cause is preserved.
+Terminate the second thread cooperatively before calling deep sleep.
+
+Negative or out-of-range durations raise an exception.
+Zero and 1 ms use a short delay and an ordinary reset. Setup
+time counts toward the requested interval. If the alarm expires during setup,
+or hardware refuses the transition after teardown, an ordinary reset is used;
+it is not reported as ``DEEPSLEEP_RESET``. A short requested duration therefore
+does not guarantee entry to P1.7.
+
+``machine.lightsleep()`` is unchanged. Calling ``machine.deepsleep()`` without
+an argument retains the previous dormant/lightsleep-then-reset behavior, with
+no timed wake. RP2040, RISC-V builds and other board configurations retain the
+previous implementation. The P1.7 path is not enabled or verified for RISC-V.
+
 Delay and timing
 ----------------
 
