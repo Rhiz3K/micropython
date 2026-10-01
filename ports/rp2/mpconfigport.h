@@ -85,6 +85,15 @@
 #define MICROPY_HW_ENABLE_PSRAM (0)
 #endif
 
+#ifndef MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
+#define MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP (0)
+#endif
+
+// Board opt-in: hold wireless CS low after CYW43 power-off in timed deep sleep.
+#ifndef MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW
+#define MICROPY_HW_CYW43_DEEPSLEEP_CS_LOW (0)
+#endif
+
 // Memory allocation policies
 #if MICROPY_HW_ENABLE_PSRAM
 #ifdef MICROPY_GC_STACK_ENTRY_TYPE

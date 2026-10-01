@@ -93,6 +93,10 @@ bi_decl(bi_program_feature_group_with_flags(BINARY_INFO_TAG_MICROPYTHON,
     BI_NAMED_GROUP_SEPARATE_COMMAS | BI_NAMED_GROUP_SORT_ALPHA));
 
 int main(int argc, char **argv) {
+    #if MICROPY_HW_ENABLE_POWMAN_DEEPSLEEP
+    machine_deepsleep_init();
+    #endif
+
     // This is a tickless port, interrupts should always trigger SEV.
     #if PICO_ARM
     SCB->SCR |= SCB_SCR_SEVONPEND_Msk;
